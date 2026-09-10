@@ -24,15 +24,16 @@ export const UI = {
     en: "Guangzhou Visit",
     ar: "زيارة قوانغتشو",
   },
-  titleAlt: {
-    zh: "Guangzhou Visit",
-    en: "广州行程",
-    ar: "广州行程 · Guangzhou Visit",
-  },
+  // 页头只留一行标题（手机首屏很贵），双语全称在 <title> 和 metadata 里。
   dateRange: {
     zh: "2026 年 9 月 20 日 – 10 月 7 日",
     en: "20 SEP – 07 OCT 2026",
     ar: "20 سبتمبر – 7 أكتوبر 2026",
+  },
+  bannerShort: {
+    zh: "安排更新中，多项待确认",
+    en: "Plan still updating — several items unconfirmed",
+    ar: "الخطة قيد التحديث — بنود عدة غير مؤكدة",
   },
   banner: {
     zh: "安排更新中：酒店、餐厅、司机和接待联系人待确认。",
@@ -47,9 +48,9 @@ export const UI = {
   language: { zh: "语言", en: "Language", ar: "اللغة" },
   viewing: { zh: "查看", en: "Viewing", ar: "العرض" },
   everyone: { zh: "全部", en: "All", ar: "الكل" },
+  // 用户明确否定了分开的「吃住行」tab：吃住行并进了当天行程，只剩两个 tab。
   tabs: {
-    itinerary: { zh: "日程", en: "Itinerary", ar: "البرنامج" },
-    logistics: { zh: "吃住行", en: "Stay & travel", ar: "الإقامة والتنقل" },
+    itinerary: { zh: "当天行程", en: "Day by day", ar: "يومًا بيوم" },
     guide: { zh: "来华指南", en: "China guide", ar: "دليل الصين" },
   },
   status: {
@@ -120,6 +121,17 @@ export const UI = {
     en: "Without a set time",
     ar: "بدون وقت محدد",
   },
+  dayPlan: {
+    zh: "当天吃住行",
+    en: "Meals, cars and hotel",
+    ar: "الوجبات والتنقل والفندق",
+  },
+  supplement: {
+    dining: { zh: "餐饮", en: "Meals", ar: "الوجبات" },
+    transport: { zh: "用车", en: "Cars", ar: "التنقل" },
+    lodging: { zh: "住宿", en: "Hotel", ar: "الفندق" },
+  },
+  details: { zh: "详情", en: "Details", ar: "التفاصيل" },
   group: { zh: "分组", en: "Group", ar: "المجموعة" },
   team: { zh: "人员", en: "Who is travelling", ar: "المسافرون" },
   footer: {

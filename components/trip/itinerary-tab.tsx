@@ -31,12 +31,14 @@ import {
   t,
   weekdayLabel,
 } from "@/lib/trip-i18n";
+import { showsCityIdeas } from "@/lib/day-plan";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { DaySupplements } from "./day-supplements";
 import {
   BulletList,
   Ltr,
@@ -120,18 +122,31 @@ function DayNav({
   lang: Lang;
   onSelect: (date: string) => void;
 }) {
+  const scrollerRef = React.useRef<HTMLElement | null>(null);
   const activeRef = React.useRef<HTMLButtonElement | null>(null);
 
   React.useEffect(() => {
-    activeRef.current?.scrollIntoView({
-      block: "nearest",
-      inline: "center",
+    const scroller = scrollerRef.current;
+    const item = activeRef.current;
+    if (!scroller || !item) return;
+
+    const box = scroller.getBoundingClientRect();
+    const chip = item.getBoundingClientRect();
+    // 已经完整可见就不动 —— 用户刚点的那个本来就在视野里。
+    if (chip.left >= box.left && chip.right <= box.right) return;
+
+    // 只滚这个横向容器，不用 scrollIntoView：那个会连带滚动窗口纵向，
+    // 把当天标题顶到 sticky header 后面。用可视坐标差 + scrollBy，
+    // LTR / RTL 都成立（scrollLeft 在两种方向下都是向右为增）。
+    scroller.scrollBy({
+      left: chip.left + chip.width / 2 - (box.left + box.width / 2),
       behavior: "smooth",
     });
   }, [active]);
 
   return (
     <nav
+      ref={scrollerRef}
       aria-label={t(UI.tabs.itinerary, lang)}
       className="-mx-4 overflow-x-auto scrollbar-none px-4"
     >
@@ -146,20 +161,22 @@ function DayNav({
                 onClick={() => onSelect(date)}
                 aria-current={isActive ? "date" : undefined}
                 className={cn(
-                  "flex min-w-[4.25rem] flex-col items-center rounded-xl border px-3 py-2 transition-colors",
+                  "flex min-h-11 min-w-[3.75rem] flex-col items-center justify-center rounded-xl border px-2.5 py-1.5 transition-colors",
                   isActive
                     ? "border-navy bg-navy text-white"
                     : "border-line bg-white text-navy hover:border-navy/40",
                 )}
               >
-                <span className="text-sm leading-5 opacity-80">
+                <span className="text-sm leading-4 opacity-80">
                   {weekdayLabel(date, lang)}
                 </span>
-                <Ltr className="text-xl font-semibold leading-7">
-                  {dayNumber(date)}
-                </Ltr>
-                <span className="text-sm leading-5 opacity-80">
-                  {monthLabel(date, lang)}
+                <span className="flex items-baseline gap-1">
+                  <Ltr className="text-lg font-semibold leading-6">
+                    {dayNumber(date)}
+                  </Ltr>
+                  <span className="text-sm leading-4 opacity-75">
+                    {monthLabel(date, lang)}
+                  </span>
                 </span>
               </button>
             </li>
@@ -357,7 +374,7 @@ function TeamRoster({ lang, person }: { lang: Lang; person: PersonId | null }) {
     <section className="rounded-xl border border-line bg-white px-4">
       <Accordion type="single" collapsible>
         <AccordionItem value="team" className="border-b-0">
-          <AccordionTrigger className="text-base font-semibold text-navy hover:no-underline">
+          <AccordionTrigger className="py-3 text-base font-semibold text-navy hover:no-underline">
             {`${t(UI.team, lang)} · ${PEOPLE.length}`}
           </AccordionTrigger>
           <AccordionContent className="pb-4">
@@ -423,8 +440,7 @@ export function ItineraryTab({
 
   return (
     <div className="space-y-4">
-      <TeamRoster lang={lang} person={person} />
-
+      {/* 日期导航贴在最上面：选人 → 选日期 → 立刻看到当天的事。 */}
       <DayNav
         dates={dates}
         active={activeDate}
@@ -466,7 +482,13 @@ export function ItineraryTab({
         </section>
       ) : null}
 
-      {activeDate === "2026-09-26" ? <CityIdeas lang={lang} /> : null}
+      {/* 当天吃住行：和活动同页，不再单开一个 tab。 */}
+      <DaySupplements lang={lang} person={person} date={activeDate} />
+
+      {showsCityIdeas(person, activeDate) ? <CityIdeas lang={lang} /> : null}
+
+      {/* 人员名单排在日程之后：全名和职务不占首屏。 */}
+      <TeamRoster lang={lang} person={person} />
     </div>
   );
 }
