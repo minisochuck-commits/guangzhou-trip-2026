@@ -7,7 +7,7 @@
 // 所以这里不写「9/20 特殊处理」这种日期例外，而是把两层内容都规范化成一个
 // 签名字符串再比：
 //   1. 事实层 `Row`（status / text / detail / flights / copy）
-//   2. 展示层 `CellView`（lines / entry / suggestion / hidePending / routeIds / foodNoteIds）
+//   2. 展示层 `CellView`（lines / entry / hidePending / hideJourney / coordination）
 // 展示层也要比，因为它按 group 分支 —— 事实一样但展示不一样的两行合并会骗人。
 //
 // 事实正本 lib/trip-data.ts 与 lib/person-day-plan.ts 不因为合并而改动。
@@ -66,11 +66,9 @@ function viewSignature(view: CellView): unknown {
   return [
     view.entry ?? "",
     l10nList(view.lines),
-    view.suggestion ? l10n(view.suggestion) : "",
     Boolean(view.hidePending),
+    Boolean(view.hideJourney),
     l10nList(view.coordination),
-    [...(view.routeIds ?? [])],
-    [...(view.foodNoteIds ?? [])],
   ];
 }
 
