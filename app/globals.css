@@ -1,0 +1,157 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "../vendor/shadcn-tailwind-4.13.0.css";
+
+@utility scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+@utility scrollbar-none {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility scrollbar-gutter-stable {
+  scrollbar-gutter: stable;
+}
+
+/*
+ * MINISO 行程单配色：品牌红 + 深海军蓝 + 白底。
+ * 这是一份行程单，不是营销落地页 —— 红色只用于强调与「待确认」，
+ * 大面积文本用海军蓝，底色始终是白。
+ * 页面固定浅色：深色模式会破坏白底行程单的观感，因此不提供 dark 变体。
+ */
+:root {
+  color-scheme: light;
+
+  --miniso-red: #e4002b;
+  --miniso-red-strong: #b8001f;
+  --miniso-red-tint: #fff1f3;
+  --navy: #0e2240;
+  --navy-soft: #33496b;
+  --navy-tint: #eef2f8;
+  --line: #dfe4ec;
+
+  --background: #ffffff;
+  --foreground: #0e2240;
+  --card: #ffffff;
+  --card-foreground: #0e2240;
+  --popover: #ffffff;
+  --popover-foreground: #0e2240;
+  --primary: #e4002b;
+  --primary-foreground: #ffffff;
+  --secondary: #eef2f8;
+  --secondary-foreground: #0e2240;
+  --muted: #f4f6fa;
+  --muted-foreground: #5a6b85;
+  --accent: #eef2f8;
+  --accent-foreground: #0e2240;
+  --destructive: #e4002b;
+  --border: #dfe4ec;
+  --input: #dfe4ec;
+  --ring: #0e2240;
+  --chart-1: #e4002b;
+  --chart-2: #0e2240;
+  --chart-3: #33496b;
+  --chart-4: #b8001f;
+  --chart-5: #8fa2bd;
+  --radius: 0.75rem;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #0e2240;
+  --sidebar-primary: #e4002b;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #eef2f8;
+  --sidebar-accent-foreground: #0e2240;
+  --sidebar-border: #dfe4ec;
+  --sidebar-ring: #0e2240;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-miniso-red: var(--miniso-red);
+  --color-miniso-red-strong: var(--miniso-red-strong);
+  --color-miniso-red-tint: var(--miniso-red-tint);
+  --color-navy: var(--navy);
+  --color-navy-soft: var(--navy-soft);
+  --color-navy-tint: var(--navy-tint);
+  --color-line: var(--line);
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial,
+    "Noto Sans", "Noto Sans Arabic", "Noto Naskh Arabic", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+}
+
+html,
+body {
+  /* 手机上禁止左右橡皮筋，避免误以为页面横向溢出 */
+  overscroll-behavior-x: none;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+html {
+  /* 正文基准 16px，绝不缩小 */
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+/* 姓名、航班号、时间在阿语 RTL 下保持 LTR 且不被标点翻转 */
+.ltr-token {
+  direction: ltr;
+  unicode-bidi: isolate;
+  display: inline-block;
+}
+
+/* 阿语下适当放大，保证可读性 */
+[dir="rtl"] body,
+[dir="rtl"] .trip-root {
+  line-height: 1.85;
+}
