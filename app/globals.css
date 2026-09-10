@@ -155,3 +155,21 @@ body {
 [dir="rtl"] .trip-root {
   line-height: 1.85;
 }
+
+/*
+ * 行程矩阵的滚动面板。
+ *
+ * shadcn 的 <Table> 自带一层 [data-slot="table-container"]，只有 overflow-x-auto。
+ * 那一层会成为最近的 scrollport，所以 sticky 表头必须相对它生效；
+ * 如果在外面再套一个纵向滚动的 div，表头就会跟着内容一起走。
+ * 这里不改 vendored 组件，直接从外层给那一层加高度和纵向滚动 ——
+ * 一个容器同时管左右和上下，固定表头与固定首列才可靠。
+ */
+.matrix-scroll [data-slot="table-container"] {
+  max-height: min(68dvh, 34rem);
+  overflow: auto;
+  overscroll-behavior: contain;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--background);
+}
