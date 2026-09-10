@@ -181,10 +181,24 @@ export const DIET_ASK: L10n = {
   ar: "إن كنت تحتاج طعامًا حلالًا أو لديك حساسية أو قيود أخرى، فأخبرهم مسبقًا واسأل عن المكوّنات وطريقة الإعداد عند الطلب.",
 };
 
-const VENUE_TBD: L10n = {
-  zh: "往返会场的用车安排待定。",
-  en: "Transport to and from the venue is still to be arranged.",
-  ar: "التنقل من وإلى مكان الفعالية لم يُرتَّب بعد.",
+/**
+ * 用户确认：总部会议就在住宿酒店内开，参会日不需要往返用车。
+ * 这是已定的事实，不是待定项 —— 所有参会日的交通一律 `row("confirmed", HOTEL_VENUE)`。
+ */
+const HOTEL_VENUE: L10n = {
+  zh: "会议在住宿酒店内举行，不需要往返用车。",
+  en: "The meeting is held inside the hotel where you are staying; no transport is needed.",
+  ar: "يُعقد الاجتماع داخل الفندق الذي تقيم فيه؛ ولا حاجة إلى تنقل.",
+};
+
+/**
+ * Reham 9/23 与 9/24 择一参加的巡店在酒店外，往返交通仍未安排。
+ * 会议在酒店内，不代表这一趟外出也不用车。
+ */
+const OFFSITE_TOUR_TRANSPORT: L10n = {
+  zh: "外出巡店的往返交通待安排。",
+  en: "Transport to and from the offsite store visit is still to be arranged.",
+  ar: "التنقل من وإلى جولة المتاجر خارج الفندق لم يُرتَّب بعد.",
 };
 
 const CITY_SELF: L10n = {
@@ -423,9 +437,9 @@ function arrivalDay21(): PersonDayCard[] {
       lodging: row(
         "confirmed",
         {
-          zh: "广州保利洲际酒店，单间。",
-          en: "InterContinental Guangzhou Exhibition Center, single room.",
-          ar: "فندق إنتركونتيننتال قوانغتشو، غرفة مفردة.",
+          zh: "广州保利洲际酒店，双人标间。",
+          en: "InterContinental Guangzhou Exhibition Center, twin room.",
+          ar: "فندق إنتركونتيننتال قوانغتشو، غرفة مزدوجة بسريرين.",
         },
         { detail: HOTEL_DETAIL, copy: HOTEL_COPY },
       ),
@@ -482,9 +496,9 @@ function interconLodging(who: "qiuting" | "rahma" | "study" | "reham"): Row {
   return row(
     "confirmed",
     {
-      zh: "广州保利洲际酒店，单间。",
-      en: "InterContinental Guangzhou Exhibition Center, single room.",
-      ar: "فندق إنتركونتيننتال قوانغتشو، غرفة مفردة.",
+      zh: "广州保利洲际酒店，双人标间。",
+      en: "InterContinental Guangzhou Exhibition Center, twin room.",
+      ar: "فندق إنتركونتيننتال قوانغتشو، غرفة مزدوجة بسريرين.",
     },
     { detail: HOTEL_DETAIL, copy: HOTEL_COPY },
   );
@@ -513,7 +527,7 @@ function sessionsDay(dayIndex: 22 | 23): PersonDayCard[] {
       lodging: interconLodging("qiuting"),
       activity: row("confirmed", ATTEND_SESSIONS, { detail: SESSIONS_DETAIL }),
       dining: row("confirmed", MEALS_COMPANY, { detail: [DIET_ASK] }),
-      transport: row("pending", VENUE_TBD),
+      transport: row("confirmed", HOTEL_VENUE),
     },
     {
       id: `${key}-rahma`,
@@ -521,7 +535,7 @@ function sessionsDay(dayIndex: 22 | 23): PersonDayCard[] {
       lodging: interconLodging("rahma"),
       activity: row("confirmed", ATTEND_SESSIONS, { detail: SESSIONS_DETAIL }),
       dining: row("confirmed", MEALS_COMPANY, { detail: [DIET_ASK] }),
-      transport: row("pending", VENUE_TBD),
+      transport: row("confirmed", HOTEL_VENUE),
     },
     {
       id: `${key}-study`,
@@ -533,7 +547,7 @@ function sessionsDay(dayIndex: 22 | 23): PersonDayCard[] {
         en: "Meals while attending the sessions are arranged by the company.",
         ar: "وجبات فترة حضور الجلسات ترتّبها الشركة.",
       }, { detail: [DIET_ASK] }),
-      transport: row("pending", VENUE_TBD),
+      transport: row("confirmed", HOTEL_VENUE),
     },
     dayIndex === 22
       ? {
@@ -550,14 +564,11 @@ function sessionsDay(dayIndex: 22 | 23): PersonDayCard[] {
             en: "Session meals are arranged by the company; you do not have to join them if you go out in the afternoon.",
             ar: "وجبات الجلسات ترتّبها الشركة؛ ولستِ مضطرة للانضمام إن خرجتِ بعد الظهر.",
           }, { detail: [DIET_ASK] }),
-          transport: row("pending", VENUE_TBD, {
-            detail: [
-              {
-                zh: "下午自由外出的交通自行安排。",
-                en: "Getting around on your own in the afternoon is self-arranged.",
-                ar: "التنقل بمفردك بعد الظهر مُرتَّب ذاتيًا.",
-              },
-            ],
+          // 上午的会议在酒店内（已定）；下午自己外出的交通自理，也是已定的口径。
+          transport: row("confirmed", {
+            zh: "会议在住宿酒店内举行，不需要往返用车；下午自由外出的交通自行安排。",
+            en: "The meeting is held inside the hotel where you are staying, so no transport is needed; getting around on your own in the afternoon is self-arranged.",
+            ar: "يُعقد الاجتماع داخل الفندق الذي تقيمين فيه فلا حاجة إلى تنقل؛ أما التنقل بمفردك بعد الظهر فمُرتَّب ذاتيًا.",
           }),
           freeTime: true,
           // 只有下午自由：西关老城要占一整个白天，会跟上午的会议冲突，所以不给。
@@ -573,7 +584,8 @@ function sessionsDay(dayIndex: 22 | 23): PersonDayCard[] {
             en: "Session meals are arranged by the company; you do not have to join them when you are out.",
             ar: "وجبات الجلسات ترتّبها الشركة؛ ولستِ مضطرة للانضمام عند الخروج.",
           }, { detail: [DIET_ASK] }),
-          transport: row("pending", VENUE_TBD),
+          // 9/23 与 9/24 择一的巡店在酒店外，往返交通仍未安排。
+          transport: row("pending", OFFSITE_TOUR_TRANSPORT),
         },
   ];
 }
@@ -590,7 +602,8 @@ function day24(): PersonDayCard[] {
         ar: "حضور معرض الطلبيات في المقر صباحًا.",
       }),
       dining: row("confirmed", MEALS_COMPANY, { detail: [DIET_ASK] }),
-      transport: row("pending", VENUE_TBD, { detail: [QIUTING_TRAVEL_SELF] }),
+      // 会议在酒店内（已定）；返乡交通自理这条细节保留。
+      transport: row("confirmed", HOTEL_VENUE, { detail: [QIUTING_TRAVEL_SELF] }),
     },
     {
       id: "0924-rahma",
@@ -602,7 +615,7 @@ function day24(): PersonDayCard[] {
         ar: "حضور معرض الطلبيات في المقر صباحًا.",
       }),
       dining: row("confirmed", MEALS_COMPANY, { detail: [DIET_ASK] }),
-      transport: row("pending", VENUE_TBD),
+      transport: row("confirmed", HOTEL_VENUE),
     },
     {
       id: "0924-study",
@@ -630,7 +643,8 @@ function day24(): PersonDayCard[] {
         en: "Session meals are arranged by the company; you do not have to join them when you are out.",
         ar: "وجبات الجلسات ترتّبها الشركة؛ ولستِ مضطرة للانضمام عند الخروج.",
       }, { detail: [DIET_ASK] }),
-      transport: row("pending", VENUE_TBD),
+      // 择一的巡店在酒店外，往返交通仍未安排。
+      transport: row("pending", OFFSITE_TOUR_TRANSPORT),
     },
   ];
 }

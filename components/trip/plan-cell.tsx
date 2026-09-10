@@ -7,7 +7,6 @@ import { DIET_ASK, type Row } from "@/lib/person-day-plan";
 import type { CellView } from "@/lib/plan-presentation";
 import {
   CHENGDU_TRANSFER,
-  FOOD_NOTES,
   PERSON_MAP,
   type Lang,
   type PersonId,
@@ -22,9 +21,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { CopyChinese, Ltr, PendingHint, SectionHeading, SourceLink } from "./ui";
+import { CopyChinese, Ltr, PendingHint } from "./ui";
 import { FlightDetails } from "./flight-details";
-import { RouteList } from "./routes";
 
 /**
  * 矩阵里的一个字段格。
@@ -70,20 +68,13 @@ export function PlanCell({
       item !== DIET_ASK &&
       !copyChinese.has(normalizeChinese(item.zh)),
   );
-  const hasRoutes = Boolean(view.routeIds?.length);
-  const foodNotes = view.foodNoteIds
-    ? FOOD_NOTES.filter((note) => view.foodNoteIds?.includes(note.id))
-    : [];
   const coordination = view.coordination ?? [];
+  // 抵达日不再重复出发日那条完整航程。
+  const showJourney = hasFlights && !view.hideJourney;
 
   // 弹窗里真有东西才挂按钮。以前有些格子点开只是把表里那句话再念一遍。
   const hasSheetContent =
-    hasFlights ||
-    sheetDetail.length > 0 ||
-    coordination.length > 0 ||
-    hasCopy ||
-    hasRoutes ||
-    foodNotes.length > 0;
+    showJourney || sheetDetail.length > 0 || coordination.length > 0 || hasCopy;
 
   const entryLabel =
     view.entry && hasSheetContent ? t(UI.entries[view.entry], lang) : null;
@@ -109,12 +100,6 @@ export function PlanCell({
       {view.hidePending ? null : (
         <PendingHint status={row.status} lang={lang} className="mt-1" />
       )}
-
-      {view.suggestion ? (
-        <p className="mt-1 rounded-md bg-navy-tint px-2 py-1 text-sm leading-5 text-navy-soft">
-          {t(view.suggestion, lang)}
-        </p>
-      ) : null}
 
       {entryLabel ? (
         <Sheet>
@@ -156,7 +141,7 @@ export function PlanCell({
             <div className="space-y-4 px-4 pb-8">
               {/* 整条旅程排最前。标题栏已经写着「航班与行李」，不再加一个同名小标题；
                   表里的短句也不在这里重念一遍 —— 弹窗只给表里没有的东西。 */}
-              {hasFlights ? (
+              {showJourney ? (
                 <FlightDetails ids={row.flights ?? []} lang={lang} />
               ) : null}
 
@@ -186,45 +171,7 @@ export function PlanCell({
                 </div>
               ) : null}
 
-              {hasRoutes ? (
-                <section className="space-y-2">
-                  <SectionHeading className="text-base">
-                    {t(UI.entries.routes, lang)}
-                  </SectionHeading>
-                  <RouteList lang={lang} ids={view.routeIds} />
-                </section>
-              ) : null}
-
-              {foodNotes.length > 0 ? (
-                <section className="space-y-2">
-                  <SectionHeading className="text-base">
-                    {t(UI.foodIdeas, lang)}
-                  </SectionHeading>
-                  <ul className="space-y-3">
-                    {foodNotes.map((note) => (
-                      <li key={note.id}>
-                        <p className="text-base font-semibold leading-6 text-navy">
-                          {t(note.title, lang)}
-                        </p>
-                        <p className="text-base leading-relaxed text-navy-soft">
-                          {t(note.body, lang)}
-                        </p>
-                        {note.url ? (
-                          <SourceLink
-                            label={{
-                              zh: "官方来源",
-                              en: "Official source",
-                              ar: "المصدر الرسمي",
-                            }}
-                            url={note.url}
-                            lang={lang}
-                          />
-                        ) : null}
-                      </li>
-                    ))}
-                  </ul>
-                </section>
-              ) : null}
+              {/* 游玩路线与美食文化只在「来华指南」里，日程弹窗不再放建议。 */}
             </div>
           </SheetContent>
         </Sheet>

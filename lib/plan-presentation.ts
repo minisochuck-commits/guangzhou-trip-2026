@@ -37,8 +37,6 @@ export type CellView = {
   lines: L10n[];
   /** 没有可看内容时为 null —— 不挂没用的按钮。 */
   entry: EntryKind | null;
-  /** 建议行（自由日一条路线 / 自由日一样吃的），14px，显示在短行之后。 */
-  suggestion?: L10n;
   /**
    * 短行里已经写清「待定的是什么」时置 true：
    * 再挂一行红色「待定」只是重复，还白白拉高整行。
@@ -50,10 +48,11 @@ export type CellView = {
    * 到机场时刻已经在旅程里了，不要在这里重复一遍。
    */
   coordination?: L10n[];
-  /** 弹窗里要展示的路线（自由日）。 */
-  routeIds?: string[];
-  /** 弹窗里要展示的美食文化条目（自理餐食）。 */
-  foodNoteIds?: string[];
+  /**
+   * 抵达日置 true：完整航程只挂在**出发日**那一行，抵达行不再重复同一个弹窗。
+   * 抵达时刻、航站楼与接机协调仍留在表里和协调事项里。
+   */
+  hideJourney?: boolean;
 };
 
 function L(zh: string, en: string, ar: string): L10n {
@@ -72,46 +71,6 @@ function isQiutingPersonal(date: string, group: GroupKey): boolean {
 }
 
 /* ------------------------------------------------------------------ */
-/* 建议句（主表只露一条，短；其余选项和「未预订」在弹窗）              */
-/* ------------------------------------------------------------------ */
-
-/** 路线的短地名。主表放不下 ROUTES 里的完整标题。 */
-const ROUTE_SHORT: Record<string, L10n> = {
-  huangpu: L("黄埔古港", "Huangpu Ancient Port", "ميناء هوانغبو"),
-  xiguan: L("西关老城", "Old Xiguan", "شيغوان القديمة"),
-  huacheng: L("珠江夜景", "Pearl River at night", "نهر اللؤلؤ ليلاً"),
-};
-
-function optional(label: L10n): L10n {
-  return L(`可选：${label.zh}`, `Optional: ${label.en}`, `اختياري: ${label.ar}`);
-}
-
-/** 主表只给第一条；点开「游玩路线」才看到全部选项与「未预订」说明。 */
-function routeSuggestion(ids: string[]): L10n | undefined {
-  const first = ids.find((id) => ROUTE_SHORT[id]);
-  return first ? optional(ROUTE_SHORT[first]) : undefined;
-}
-
-/** 自由日的吃什么。一天一条，按日期换，别每格都是「早茶/肠粉/甜品」长句。 */
-const FOOD_SHORT: Record<string, L10n> = {
-  "changfen": L("肠粉", "rice noodle rolls", "لفائف الأرز"),
-  "morning-tea": L("早茶", "morning tea", "شاي الصباح"),
-  "dessert": L("广州甜品", "a Guangzhou dessert", "حلوى من قوانغتشو"),
-};
-
-/** 只有真正自由的那几天给「吃什么」建议：学习日和返程日不塞耗时推荐。 */
-const FOOD_PICK: Record<string, string> = {
-  "2026-09-25|rahma": "changfen",
-  "2026-09-25|reham": "changfen",
-  "2026-09-26|rahma": "dessert",
-  "2026-09-26|reham": "dessert",
-  "2026-09-26|study": "morning-tea",
-};
-
-/** 弹窗「用餐说明」里给的美食条目 —— 食材与做法的提醒在这里，不占主表。 */
-const FOOD_NOTE_IDS = ["morning-tea", "changfen", "dessert"];
-
-/* ------------------------------------------------------------------ */
 /* 住宿                                                                */
 /* ------------------------------------------------------------------ */
 
@@ -128,7 +87,8 @@ const ROOM_STUDY = L(
   "Ahmed and Mohamed share",
   "Ahmed و Mohamed في غرفة واحدة",
 );
-const ROOM_SINGLE = L("单住", "Single room", "غرفة مفردة");
+/** Reham 9/21–26 是双人标间，不是单间。Rahma 9/25–26 的公司另订仍是单间。 */
+const ROOM_TWIN = L("双人标间", "Twin room", "غرفة مزدوجة بسريرين");
 
 const HOTEL_NAME_TBD = L("酒店名待定", "Hotel name to be set", "اسم الفندق لم يُحدَّد");
 
@@ -218,7 +178,7 @@ function lodgingView(date: string, group: GroupKey): CellView {
 
   // reham
   if (date <= "2026-09-26") {
-    return { lines: [HOTEL_NAME_SHORT, ROOM_SINGLE], entry: "hotelAddress" };
+    return { lines: [HOTEL_NAME_SHORT, ROOM_TWIN], entry: "hotelAddress" };
   }
   // 夜航离境 / 不再住一晚在活动格和航班里已经看得到，这里不重复占行。
   return {
@@ -236,32 +196,14 @@ function lodgingView(date: string, group: GroupKey): CellView {
 /* ------------------------------------------------------------------ */
 
 /**
- * 自由日给哪几条路线。第一条就是主表露出的那条。
- * 半天自由不给要占一整个白天的西关；返程日不新增耗时路线；
- * Li/Qiuting 在中国的个人行程完全不出现广州路线。
+ * 行程表只写「当天安排是什么」。
+ * 游玩路线、美食与文化介绍**只在来华指南里**，不再挂进日程格 ——
+ * 那些是可选建议，不是当天的安排；真实排好的巡店（study 9/24–25、Reham 9/23 或 9/24）
+ * 连同它的交通待定照旧保留。
  */
-const FREE_ROUTES: Record<string, string[]> = {
-  "2026-09-22|reham": ["huacheng", "huangpu"],
-  "2026-09-25|rahma": ["xiguan"],
-  "2026-09-25|reham": ["xiguan"],
-  "2026-09-26|rahma": ["huangpu", "huacheng"],
-  "2026-09-26|reham": ["huacheng"],
-  "2026-09-26|study": ["huangpu", "xiguan"],
-};
+const FREE_DAY = L("自由安排", "Free day", "يوم حر");
 
-export function routesFor(date: string, group: GroupKey): string[] | undefined {
-  return FREE_ROUTES[`${date}|${group}`];
-}
-
-function activityView(date: string, group: GroupKey, card: PersonDayCard): CellView {
-  const ids = routesFor(date, group);
-  const withRoutes = (lines: L10n[]): CellView => ({
-    lines,
-    entry: "routes",
-    suggestion: ids ? routeSuggestion(ids) : undefined,
-    routeIds: ids ?? card.freeRoutes,
-  });
-
+function activityView(date: string, group: GroupKey): CellView {
   if (date === "2026-09-20") {
     if (group === "reham") {
       return {
@@ -329,10 +271,13 @@ function activityView(date: string, group: GroupKey, card: PersonDayCard): CellV
       };
     }
     if (date === "2026-09-25" || date === "2026-09-26") {
-      return withRoutes([
-        L("留在广州", "Staying in Guangzhou", "البقاء في قوانغتشو"),
-        L("自由安排", "Free day", "يوم حر"),
-      ]);
+      return {
+        lines: [
+          L("留在广州", "Staying in Guangzhou", "البقاء في قوانغتشو"),
+          FREE_DAY,
+        ],
+        entry: null,
+      };
     }
     return { lines: [L("返回埃及", "Returning to Egypt", "العودة إلى مصر")], entry: null };
   }
@@ -354,17 +299,20 @@ function activityView(date: string, group: GroupKey, card: PersonDayCard): CellV
       };
     }
     if (date === "2026-09-26") {
-      return withRoutes([L("自由活动", "Free day", "يوم حر")]);
+      return { lines: [FREE_DAY], entry: null };
     }
     return { lines: [L("返回埃及", "Returning to Egypt", "العودة إلى مصر")], entry: null };
   }
 
   // reham
   if (date === "2026-09-22") {
-    return withRoutes([
-      L("上午 总部会议", "Morning: HQ sessions", "صباحًا: جلسات المقر"),
-      L("下午 自由", "Afternoon: free", "بعد الظهر: وقت حر"),
-    ]);
+    return {
+      lines: [
+        L("上午 总部会议", "Morning: HQ sessions", "صباحًا: جلسات المقر"),
+        L("下午 自由", "Afternoon: free", "بعد الظهر: وقت حر"),
+      ],
+      entry: null,
+    };
   }
   if (date === "2026-09-23" || date === "2026-09-24") {
     return {
@@ -378,9 +326,9 @@ function activityView(date: string, group: GroupKey, card: PersonDayCard): CellV
     };
   }
   if (date === "2026-09-25" || date === "2026-09-26") {
-    return withRoutes([L("自由安排", "Free day", "يوم حر")]);
+    return { lines: [FREE_DAY], entry: null };
   }
-  // 9/27：夜航前不新增耗时路线
+  // 9/27：夜航前不新增耗时安排
   return {
     lines: [
       L("白天在广州自由", "Free during the day in Guangzhou", "وقت حر نهارًا في قوانغتشو"),
@@ -422,15 +370,12 @@ export const FOOD_ADVICE: L10n[] = [
 
 const SELF_MEALS_LINE = L("餐食自理", "Meals self-arranged", "الوجبات ذاتية الترتيب");
 
-/** 自理餐食：主表只给一条短建议（仅自由日），食材与做法提醒在「用餐说明」里。 */
-function selfMeals(date: string, group: GroupKey): CellView {
-  const pick = FOOD_PICK[`${date}|${group}`];
-  return {
-    lines: [SELF_MEALS_LINE],
-    entry: "meals",
-    suggestion: pick ? optional(FOOD_SHORT[pick]) : undefined,
-    foodNoteIds: FOOD_NOTE_IDS,
-  };
+/**
+ * 餐饮格只写「谁负责、定了没有」。
+ * 吃什么、去哪吃属于建议，**只在来华指南里**，不挂弹窗也不给推荐。
+ */
+function selfMeals(): CellView {
+  return { lines: [SELF_MEALS_LINE], entry: null };
 }
 
 function diningView(date: string, group: GroupKey): CellView {
@@ -441,7 +386,7 @@ function diningView(date: string, group: GroupKey): CellView {
 
   // 出行日的「待定」是通用的特殊餐提醒，不是某个没定下来的订餐，不挂红标。
   if (date === "2026-09-20") {
-    return { lines: MEALS_ONBOARD_SHORT, entry: "meals", hidePending: true };
+    return { lines: MEALS_ONBOARD_SHORT, entry: null, hidePending: true };
   }
   if (date === "2026-09-28" || date === "2026-10-06" || date === "2026-10-07") {
     return { lines: MEALS_ONBOARD_SHORT, entry: null, hidePending: true };
@@ -454,7 +399,7 @@ function diningView(date: string, group: GroupKey): CellView {
           L("自报到起 公司安排", "Company-arranged from check-in", "الشركة ترتّبها من التسجيل"),
           L("具体时间未明确", "Exact times not specified", "الأوقات الدقيقة غير محددة"),
         ],
-        entry: "meals",
+        entry: null,
       };
     }
     // 「未指定餐厅」是「用餐时间未明确」的同一件事，不再单占一行。
@@ -462,7 +407,7 @@ function diningView(date: string, group: GroupKey): CellView {
       lines: [
         L("用餐时间未明确", "Meal times not given", "أوقات الوجبات غير محددة"),
       ],
-      entry: "meals",
+      entry: null,
       hidePending: true,
     };
   }
@@ -471,27 +416,26 @@ function diningView(date: string, group: GroupKey): CellView {
     if (date <= "2026-09-24") {
       return {
         lines: [L("会议期间 公司安排", "Company-arranged during sessions", "الشركة ترتّبها أثناء الجلسات")],
-        entry: "meals",
+        entry: null,
       };
     }
-    return selfMeals(date, group);
+    return selfMeals();
   }
 
   if (group === "study") {
     if (date === "2026-09-22" || date === "2026-09-23") {
       return {
         lines: [L("参会期间 公司安排", "Company-arranged while attending", "الشركة ترتّبها أثناء الحضور")],
-        entry: "meals",
+        entry: null,
       };
     }
     if (date === "2026-09-24") {
       return {
         lines: [L("9/24 起 餐食自理", "Self-arranged from 24 Sep", "ذاتية الترتيب من 24 سبتمبر")],
-        entry: "meals",
-        foodNoteIds: FOOD_NOTE_IDS,
+        entry: null,
       };
     }
-    return selfMeals(date, group);
+    return selfMeals();
   }
 
   // reham 9/22–9/24 会议餐；9/25 起自理
@@ -501,20 +445,31 @@ function diningView(date: string, group: GroupKey): CellView {
         L("会议餐 公司安排", "Session meals company-arranged", "وجبات الجلسات ترتّبها الشركة"),
         L("外出时可不参加", "You need not join when out", "لست مضطرة للانضمام عند الخروج"),
       ],
-      entry: "meals",
+      entry: null,
     };
   }
-  return selfMeals(date, group);
+  return selfMeals();
 }
 
 /* ------------------------------------------------------------------ */
 /* 交通                                                                */
 /* ------------------------------------------------------------------ */
 
-const VENUE_TBD_LINE = L(
-  "往返会场用车待定",
-  "Venue transport to be arranged",
-  "التنقل من وإلى المكان لم يُرتَّب",
+/** 用户确认：总部会议就在住宿酒店内，参会日不需要用车。 */
+const HOTEL_VENUE_LINE = L(
+  "酒店内参会",
+  "Meeting inside the hotel",
+  "الاجتماع داخل الفندق",
+);
+
+/**
+ * 外出巡店的往返交通仍未安排 —— 这跟「酒店内参会」是两回事，
+ * 不能因为会议在酒店里就把所有出行都说成不用车。
+ */
+const OFFSITE_TOUR_TRANSPORT_TBD = L(
+  "外出巡店往返交通待定",
+  "Transport for the offsite store visit is not arranged",
+  "تنقل جولة المتاجر خارج الفندق لم يُرتَّب",
 );
 
 const CITY_SELF_LINE = L(
@@ -554,6 +509,8 @@ function transportView(date: string, group: GroupKey): CellView {
     };
   }
 
+  // 抵达日：完整航程已经挂在出发日那一行了，这里不再重复同一个弹窗。
+  // 抵达时刻、航站楼保留在表里；接机协调仍由 detail / coordination 带出来。
   if (date === "2026-09-21") {
     if (group === "reham") {
       return {
@@ -562,7 +519,8 @@ function transportView(date: string, group: GroupKey): CellView {
           L("公司接机 · Rahma 对接", "Company pickup · via Rahma", "استقبال من الشركة · عبر Rahma"),
           L("车辆与时间待定", "Vehicle and time to be set", "المركبة والوقت لم يُحدَّدا"),
         ],
-        entry: "flights",
+        entry: "transfer",
+        hideJourney: true,
         hidePending: true,
       };
     }
@@ -572,7 +530,8 @@ function transportView(date: string, group: GroupKey): CellView {
         L("成都中转 T1 → T2", "Chengdu transfer T1 → T2", "ترانزيت تشنغدو من صالة 1 إلى 2"),
         L("落地接送待确认", "Transfer into the city to confirm", "التنقل إلى المدينة بانتظار التأكيد"),
       ],
-      entry: "flights",
+      entry: "transfer",
+      hideJourney: true,
       hidePending: true,
     };
   }
@@ -584,7 +543,8 @@ function transportView(date: string, group: GroupKey): CellView {
           L("04:50 抵开罗 T3", "04:50 at Cairo T3", "04:50 في القاهرة صالة 3"),
           L("MS959", "MS959", "MS959"),
         ],
-        entry: "flights",
+        entry: null,
+        hideJourney: true,
       };
     }
     return {
@@ -592,7 +552,8 @@ function transportView(date: string, group: GroupKey): CellView {
         L("06:50 抵开罗 T2", "06:50 at Cairo T2", "06:50 في القاهرة صالة 2"),
         L("3U3863", "3U3863", "3U3863"),
       ],
-      entry: "flights",
+      entry: null,
+      hideJourney: true,
     };
   }
 
@@ -664,9 +625,10 @@ function transportView(date: string, group: GroupKey): CellView {
     }
   }
 
+  // 9/22–9/24 的总部会议在住宿酒店里开，参会日不需要往返用车。
   if (group === "qiuting") {
     return {
-      lines: [VENUE_TBD_LINE],
+      lines: [HOTEL_VENUE_LINE],
       entry: date === "2026-09-24" ? "transfer" : null,
       hidePending: true,
     };
@@ -692,29 +654,36 @@ function transportView(date: string, group: GroupKey): CellView {
         entry: "transfer",
       };
     }
-    return { lines: [VENUE_TBD_LINE], entry: null, hidePending: true };
+    // study 9/22、9/23 是参会日 —— 会议在酒店内。
+    return { lines: [HOTEL_VENUE_LINE], entry: null, hidePending: true };
   }
 
   if (group === "rahma") {
     if (date <= "2026-09-24") {
-      return { lines: [VENUE_TBD_LINE], entry: null, hidePending: true };
+      return { lines: [HOTEL_VENUE_LINE], entry: null, hidePending: true };
     }
     return { lines: [CITY_SELF_LINE], entry: null };
   }
 
   // reham
   if (date === "2026-09-22") {
+    // 两行已经把「酒店内参会」和「下午自理」说完了，弹窗里没有别的内容可给。
     return {
       lines: [
-        VENUE_TBD_LINE,
+        HOTEL_VENUE_LINE,
         L("下午外出自理", "Afternoon outings self-arranged", "الخروج بعد الظهر ذاتي الترتيب"),
       ],
-      entry: "transfer",
+      entry: null,
       hidePending: true,
     };
   }
+  // 9/23 与 9/24 择一的巡店在酒店外，往返交通仍未安排。
   if (date === "2026-09-23" || date === "2026-09-24") {
-    return { lines: [VENUE_TBD_LINE], entry: null, hidePending: true };
+    return {
+      lines: [OFFSITE_TOUR_TRANSPORT_TBD],
+      entry: null,
+      hidePending: true,
+    };
   }
   return { lines: [CITY_SELF_LINE], entry: null };
 }
@@ -731,7 +700,7 @@ export function cellView(
     case "lodging":
       return lodgingView(date, group);
     case "activity":
-      return activityView(date, group, card);
+      return activityView(date, group);
     case "dining":
       return diningView(date, group);
     case "transport":
