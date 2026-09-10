@@ -1,65 +1,30 @@
 "use client";
 
-import * as React from "react";
-import { CheckIcon, CopyIcon, ExternalLinkIcon } from "lucide-react";
-
-import { COPY_ADDRESSES, GUIDE, OFFICIAL_LINKS, type Lang } from "@/lib/trip-data";
+import {
+  COPY_ADDRESSES,
+  FOOD_NOTES,
+  OFFICIAL_LINKS,
+  PHRASES,
+  PREP,
+  type Lang,
+} from "@/lib/trip-data";
 import { UI, t } from "@/lib/trip-i18n";
-import { BulletList, Ltr, SectionHeading } from "./ui";
-
-function CopyRow({ id, label, chinese, lang }: {
-  id: string;
-  label: string;
-  chinese: string;
-  lang: Lang;
-}) {
-  const [copied, setCopied] = React.useState(false);
-
-  React.useEffect(() => {
-    if (!copied) return;
-    const timer = window.setTimeout(() => setCopied(false), 1800);
-    return () => window.clearTimeout(timer);
-  }, [copied]);
-
-  async function copy() {
-    try {
-      await navigator.clipboard.writeText(chinese);
-      setCopied(true);
-    } catch {
-      // 剪贴板不可用（旧浏览器或非安全上下文）时，地址本身仍然显示在页面上可手动选中。
-      setCopied(false);
-    }
-  }
-
-  return (
-    <li className="rounded-lg border border-line bg-white p-3">
-      <p className="text-sm text-navy-soft">{label}</p>
-      <p lang="zh-CN" dir="ltr" className="mt-1 text-base font-medium text-navy">
-        {chinese}
-      </p>
-      <button
-        type="button"
-        onClick={copy}
-        aria-label={`${t(UI.copy, lang)} ${label}`}
-        data-address={id}
-        className="mt-2 inline-flex items-center gap-1.5 rounded-lg border border-navy/25 px-2.5 py-1 text-sm font-medium text-navy transition-colors hover:border-navy/50"
-      >
-        {copied ? (
-          <CheckIcon className="size-4" aria-hidden="true" />
-        ) : (
-          <CopyIcon className="size-4" aria-hidden="true" />
-        )}
-        {copied ? t(UI.copied, lang) : t(UI.copy, lang)}
-      </button>
-    </li>
-  );
-}
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { BaggageLines } from "./flight-details";
+import { RouteList } from "./routes";
+import { BulletList, CopyChinese, SectionHeading, SourceLink } from "./ui";
 
 export function GuideTab({ lang }: { lang: Lang }) {
   return (
     <div className="space-y-6">
       <section className="space-y-3">
-        {GUIDE.map((item) => (
+        <SectionHeading>{t(UI.prep, lang)}</SectionHeading>
+        {PREP.map((item) => (
           <article
             key={item.id}
             className="rounded-xl border border-line bg-white p-4 shadow-sm"
@@ -73,45 +38,79 @@ export function GuideTab({ lang }: { lang: Lang }) {
       </section>
 
       <section className="space-y-3">
+        <SectionHeading>{t(UI.baggage, lang)}</SectionHeading>
+        <article className="rounded-xl border border-line bg-white p-4 shadow-sm">
+          <BaggageLines profile="sichuanEconomy" lang={lang} withSources />
+        </article>
+        <article className="rounded-xl border border-line bg-white p-4 shadow-sm">
+          <BaggageLines profile="egyptairBusiness" lang={lang} withSources />
+        </article>
+      </section>
+
+      <section className="space-y-3">
         <SectionHeading>{t(UI.copyAddresses, lang)}</SectionHeading>
-        <ul className="space-y-2">
-          {COPY_ADDRESSES.map((address) => (
-            <CopyRow
-              key={address.id}
-              id={address.id}
-              label={t(address.label, lang)}
-              chinese={address.chinese}
-              lang={lang}
-            />
+        <div className="space-y-2">
+          {COPY_ADDRESSES.map((entry) => (
+            <CopyChinese key={entry.id} entry={entry} lang={lang} />
           ))}
-        </ul>
+        </div>
+      </section>
+
+      <section className="space-y-3">
+        <SectionHeading>{t(UI.phrases, lang)}</SectionHeading>
+        <div className="space-y-2">
+          {PHRASES.map((entry) => (
+            <CopyChinese key={entry.id} entry={entry} lang={lang} />
+          ))}
+        </div>
+      </section>
+
+      <section className="space-y-3">
+        <SectionHeading>{t(UI.routes, lang)}</SectionHeading>
+        <RouteList lang={lang} />
+      </section>
+
+      <section className="space-y-3">
+        <SectionHeading>{t(UI.food, lang)}</SectionHeading>
+        <Accordion type="multiple" className="space-y-2">
+          {FOOD_NOTES.map((note) => (
+            <AccordionItem
+              key={note.id}
+              value={note.id}
+              className="rounded-xl border border-line bg-white px-3"
+            >
+              <AccordionTrigger className="min-h-11 py-3 text-base font-semibold text-navy hover:no-underline">
+                {t(note.title, lang)}
+              </AccordionTrigger>
+              <AccordionContent className="space-y-2 pb-4">
+                <p className="text-base leading-relaxed text-navy-soft">
+                  {t(note.body, lang)}
+                </p>
+                {note.url ? (
+                  <SourceLink
+                    label={{
+                      zh: "官方来源",
+                      en: "Official source",
+                      ar: "المصدر الرسمي",
+                    }}
+                    url={note.url}
+                    lang={lang}
+                  />
+                ) : null}
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
       </section>
 
       <section className="space-y-3">
         <SectionHeading>{t(UI.officialSources, lang)}</SectionHeading>
         <ul className="space-y-2">
           {OFFICIAL_LINKS.map((link) => (
-            <li
-              key={link.id}
-              className="rounded-lg border border-line bg-white p-3"
-            >
-              <a
-                href={link.url}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-start gap-1.5 text-base font-semibold text-miniso-red-strong underline underline-offset-4"
-              >
-                <ExternalLinkIcon
-                  className="mt-1 size-4 shrink-0 rtl:-scale-x-100"
-                  aria-hidden="true"
-                />
-                <span>{t(link.title, lang)}</span>
-              </a>
+            <li key={link.id} className="rounded-lg border border-line bg-white p-3">
+              <SourceLink label={link.title} url={link.url} lang={lang} />
               <p className="mt-1 text-base leading-relaxed text-navy-soft">
                 {t(link.note, lang)}
-              </p>
-              <p className="mt-1 break-all text-sm text-navy-soft/80">
-                <Ltr>{link.url}</Ltr>
               </p>
             </li>
           ))}

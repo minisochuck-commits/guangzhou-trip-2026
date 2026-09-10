@@ -1,14 +1,13 @@
 "use client";
 
 import * as React from "react";
-import { AlertTriangleIcon } from "lucide-react";
+import { CheckIcon, CopyIcon, ExternalLinkIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import type { L10n, Lang, PersonId, Status } from "@/lib/trip-data";
-import { PERSON_MAP } from "@/lib/trip-data";
+import type { CopyEntry, L10n, Lang, Status } from "@/lib/trip-data";
 import { UI, t } from "@/lib/trip-i18n";
 
-/** 姓名、航班号、时间：在阿语 RTL 下必须保持从左到右。 */
+/** 航班号、机场码、时间：在阿语 RTL 下必须保持从左到右。 */
 export function Ltr({
   children,
   className,
@@ -23,13 +22,11 @@ export function Ltr({
   );
 }
 
-const STATUS_STYLE: Record<Status, string> = {
-  confirmed: "bg-navy text-white",
-  suggested: "border border-dashed border-navy/35 bg-white text-navy-soft",
-  pending: "bg-miniso-red-tint text-miniso-red-strong",
-};
-
-export function StatusPill({
+/**
+ * 只有「待定」才提示。已定的直接看正文 —— 每行都挂一个深色徽章既抢宽度又是噪音。
+ * 提示独占一行放在摘要下面，不跟正文左右抢列（阿语的待定文案更长）。
+ */
+export function PendingHint({
   status,
   lang,
   className,
@@ -38,96 +35,31 @@ export function StatusPill({
   lang: Lang;
   className?: string;
 }) {
+  if (status !== "pending") return null;
   return (
-    <span
+    <p
       className={cn(
-        "inline-flex shrink-0 items-center rounded-full px-2.5 py-0.5 text-sm font-medium leading-6",
-        STATUS_STYLE[status],
+        "mt-1.5 inline-flex items-center rounded-md bg-miniso-red-tint px-2 py-0.5 text-sm font-medium leading-5 text-miniso-red-strong",
         className,
       )}
     >
-      {t(UI.status[status], lang)}
-    </span>
+      {t(UI.status.pending, lang)}
+    </p>
   );
 }
 
-/**
- * 事件卡上的参与者只显示票面短名（角色在「人员」名单里给一次，不在每张卡上重复）。
- */
-export function PersonTag({
-  id,
-  lang,
-  active = false,
-}: {
-  id: PersonId;
-  lang: Lang;
-  active?: boolean;
-}) {
-  const person = PERSON_MAP[id];
-  return (
-    <span
-      className={cn(
-        "inline-flex items-center rounded-full px-2.5 py-0.5 text-sm leading-6",
-        active ? "bg-navy text-white" : "bg-navy-tint text-navy",
-      )}
-      title={`${person.ticketName} · ${t(person.role, lang)}`}
-    >
-      <Ltr className="font-semibold tracking-wide">{person.short}</Ltr>
-    </span>
-  );
-}
-
-export function PeopleRow({
-  people,
-  lang,
-  focus,
-}: {
-  people: PersonId[];
-  lang: Lang;
-  focus?: PersonId | null;
-}) {
-  if (people.length === 0) return null;
-  return (
-    <div className="flex flex-wrap gap-1.5">
-      {people.map((id) => (
-        <PersonTag key={id} id={id} lang={lang} active={focus === id} />
-      ))}
-    </div>
-  );
-}
-
-export function PendingList({
+export function BulletList({
   items,
   lang,
+  className,
 }: {
   items: L10n[];
   lang: Lang;
+  className?: string;
 }) {
   if (items.length === 0) return null;
   return (
-    <div className="rounded-lg bg-miniso-red-tint px-3 py-2.5">
-      <div className="mb-1 flex items-center gap-1.5 text-sm font-semibold text-miniso-red-strong">
-        <AlertTriangleIcon className="size-4 shrink-0" aria-hidden="true" />
-        {t(UI.toConfirmLabel, lang)}
-      </div>
-      <ul className="space-y-1.5">
-        {items.map((item, index) => (
-          <li
-            key={index}
-            className="text-base leading-relaxed text-navy ps-4 relative before:absolute before:start-0 before:top-[0.7em] before:size-1.5 before:rounded-full before:bg-miniso-red"
-          >
-            {t(item, lang)}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
-export function BulletList({ items, lang }: { items: L10n[]; lang: Lang }) {
-  if (items.length === 0) return null;
-  return (
-    <ul className="space-y-1.5">
+    <ul className={cn("space-y-1.5", className)}>
       {items.map((item, index) => (
         <li
           key={index}
@@ -160,5 +92,135 @@ export function SectionHeading({
       />
       {children}
     </h2>
+  );
+}
+
+/** 复制中文文本。剪贴板不可用时按钮无反馈，但文本本身仍在页面上可手选。 */
+export function CopyChinese({
+  entry,
+  lang,
+  compact = false,
+}: {
+  entry: CopyEntry;
+  lang: Lang;
+  compact?: boolean;
+}) {
+  const [copied, setCopied] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!copied) return;
+    const timer = window.setTimeout(() => setCopied(false), 1800);
+    return () => window.clearTimeout(timer);
+  }, [copied]);
+
+  async function copy() {
+    try {
+      await navigator.clipboard.writeText(entry.chinese);
+      setCopied(true);
+    } catch {
+      setCopied(false);
+    }
+  }
+
+  return (
+    <div
+      className={cn(
+        "rounded-lg border border-line bg-white",
+        compact ? "p-2.5" : "p-3",
+      )}
+    >
+      <p className="text-sm text-navy-soft">{t(entry.label, lang)}</p>
+      <p lang="zh-CN" dir="ltr" className="mt-1 text-base font-medium text-navy">
+        {entry.chinese}
+      </p>
+      <button
+        type="button"
+        onClick={copy}
+        aria-label={`${t(UI.copy, lang)} ${t(entry.label, lang)}`}
+        data-copy={entry.id}
+        className="mt-2 inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-navy/25 px-3 text-sm font-medium text-navy transition-colors hover:border-navy/50"
+      >
+        {copied ? (
+          <CheckIcon className="size-4" aria-hidden="true" />
+        ) : (
+          <CopyIcon className="size-4" aria-hidden="true" />
+        )}
+        {copied ? t(UI.copied, lang) : t(UI.copy, lang)}
+      </button>
+    </div>
+  );
+}
+
+/**
+ * 只有一个按钮的紧凑版复制。用在小表的住宿行 ——
+ * 完整中文地址在同一行的「详情」里，复制失败时还能手选。
+ */
+export function CopyButton({
+  entry,
+  lang,
+}: {
+  entry: CopyEntry;
+  lang: Lang;
+}) {
+  const [copied, setCopied] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!copied) return;
+    const timer = window.setTimeout(() => setCopied(false), 1800);
+    return () => window.clearTimeout(timer);
+  }, [copied]);
+
+  async function copy() {
+    try {
+      await navigator.clipboard.writeText(entry.chinese);
+      setCopied(true);
+    } catch {
+      setCopied(false);
+    }
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={copy}
+      data-copy={entry.id}
+      className="mt-2 inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-navy/25 px-3 text-sm font-medium text-navy transition-colors hover:border-navy/50"
+    >
+      {copied ? (
+        <CheckIcon className="size-4 shrink-0" aria-hidden="true" />
+      ) : (
+        <CopyIcon className="size-4 shrink-0" aria-hidden="true" />
+      )}
+      <span className="text-start">
+        {copied
+          ? t(UI.copied, lang)
+          : `${t(UI.copy, lang)}${lang === "zh" ? "" : " "}${t(entry.label, lang)}`}
+      </span>
+    </button>
+  );
+}
+
+export function SourceLink({
+  label,
+  url,
+  lang,
+}: {
+  label: L10n;
+  url: string;
+  lang: Lang;
+}) {
+  return (
+    <a
+      href={url}
+      target="_blank"
+      rel="noreferrer"
+      className="inline-flex items-start gap-1.5 text-sm font-medium text-miniso-red-strong underline underline-offset-4"
+    >
+      <ExternalLinkIcon
+        className="mt-0.5 size-4 shrink-0 rtl:-scale-x-100"
+        aria-hidden="true"
+      />
+      <span>{t(label, lang)}</span>
+    </a>
   );
 }

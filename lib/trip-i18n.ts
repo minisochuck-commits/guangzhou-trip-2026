@@ -1,6 +1,7 @@
-// 界面文案（三语）与日期格式化。行程内容本身在 lib/trip-data.ts。
+// 界面文案（三语）与日期格式化。行程事实在 lib/trip-data.ts，
+// 每天每人的四行在 lib/person-day-plan.ts。
 
-import type { EventKind, L10n, Lang, Status, TimeZoneTag } from "./trip-data";
+import type { L10n, Lang, Status, TimeZoneTag } from "./trip-data";
 
 export const LANGS: { id: Lang; label: string; dir: "ltr" | "rtl" }[] = [
   { id: "zh", label: "中文", dir: "ltr" },
@@ -19,128 +20,98 @@ export function t(value: L10n, lang: Lang): string {
 }
 
 export const UI = {
-  title: {
-    zh: "广州行程",
-    en: "Guangzhou Visit",
-    ar: "زيارة قوانغتشو",
-  },
-  // 页头只留一行标题（手机首屏很贵），双语全称在 <title> 和 metadata 里。
-  dateRange: {
-    zh: "2026 年 9 月 20 日 – 10 月 7 日",
-    en: "20 SEP – 07 OCT 2026",
-    ar: "20 سبتمبر – 7 أكتوبر 2026",
-  },
-  bannerShort: {
-    zh: "安排更新中，多项待确认",
-    en: "Plan still updating — several items unconfirmed",
-    ar: "الخطة قيد التحديث — بنود عدة غير مؤكدة",
-  },
-  banner: {
-    zh: "安排更新中：酒店、餐厅、司机和接待联系人待确认。",
-    en: "Plan still being updated: hotel, restaurants, drivers and host contacts are not confirmed yet.",
-    ar: "الخطة قيد التحديث: الفندق والمطاعم والسائقون وجهات اتصال الاستضافة لم تُؤكَّد بعد.",
-  },
-  bannerNote: {
-    zh: "标「建议安排」的都还没预订，标「待确认」的还没定下来。",
-    en: "Anything marked “Suggested” is not booked, and anything marked “To confirm” is not settled.",
-    ar: "كل ما هو «مقترح» غير محجوز، وكل ما هو «بانتظار التأكيد» غير محسوم.",
-  },
+  title: { zh: "广州行程", en: "Guangzhou Visit", ar: "زيارة قوانغتشو" },
   language: { zh: "语言", en: "Language", ar: "اللغة" },
   viewing: { zh: "查看", en: "Viewing", ar: "العرض" },
   everyone: { zh: "全部", en: "All", ar: "الكل" },
-  // 用户明确否定了分开的「吃住行」tab：吃住行并进了当天行程，只剩两个 tab。
+
   tabs: {
-    itinerary: { zh: "当天行程", en: "Day by day", ar: "يومًا بيوم" },
+    day: { zh: "当天行程", en: "Day by day", ar: "يومًا بيوم" },
     guide: { zh: "来华指南", en: "China guide", ar: "دليل الصين" },
   },
+
+  /** 四行标签 —— 用户点名的顺序：住宿、活动、餐饮、交通。 */
+  rows: {
+    lodging: { zh: "住宿", en: "Stay", ar: "الإقامة" },
+    activity: { zh: "活动", en: "Plan", ar: "البرنامج" },
+    dining: { zh: "餐饮", en: "Meals", ar: "الوجبات" },
+    transport: { zh: "交通", en: "Travel", ar: "التنقل" },
+  },
+
   status: {
-    confirmed: { zh: "已确定", en: "Confirmed", ar: "مؤكد" },
-    suggested: { zh: "建议安排", en: "Suggested", ar: "مقترح" },
-    pending: { zh: "待确认", en: "To confirm", ar: "بانتظار التأكيد" },
+    confirmed: { zh: "已定", en: "Set", ar: "مؤكد" },
+    pending: { zh: "待定", en: "To confirm", ar: "بانتظار التأكيد" },
   } satisfies Record<Status, L10n>,
-  kind: {
-    flight: { zh: "航班", en: "Flight", ar: "رحلة" },
-    ground: { zh: "地面", en: "Ground", ar: "تنقل" },
-    hotel: { zh: "住宿", en: "Hotel", ar: "الفندق" },
-    meeting: { zh: "会议", en: "Sessions", ar: "جلسات" },
-    study: { zh: "学习", en: "Training", ar: "تدريب" },
-    hosting: { zh: "接待", en: "Hosting", ar: "استضافة" },
-    free: { zh: "自由活动", en: "Free time", ar: "وقت حر" },
-    note: { zh: "提示", en: "Note", ar: "ملاحظة" },
-  } satisfies Record<EventKind, L10n>,
+
   tz: {
     cairo: { zh: "开罗时间", en: "Cairo time", ar: "بتوقيت القاهرة" },
     beijing: { zh: "北京时间", en: "Beijing time", ar: "بتوقيت بكين" },
+  } satisfies Record<TimeZoneTag, L10n>,
+
+  details: { zh: "详情", en: "Details", ar: "التفاصيل" },
+  flightDetails: {
+    zh: "航班与行李",
+    en: "Flights and baggage",
+    ar: "الرحلات والأمتعة",
   },
-  who: { zh: "参与", en: "Who", ar: "المشاركون" },
-  toConfirmLabel: { zh: "待确认", en: "To confirm", ar: "بانتظار التأكيد" },
-  noEvents: {
+  nextDay: { zh: "次日抵达", en: "arrives next day", ar: "الوصول اليوم التالي" },
+  baggage: { zh: "免费行李额", en: "Free baggage allowance", ar: "الأمتعة المجانية" },
+  checked: { zh: "托运", en: "Checked", ar: "المسجَّلة" },
+  carryOn: { zh: "手提", en: "Carry-on", ar: "اليدوية" },
+
+  team: { zh: "人员详情", en: "Traveller details", ar: "بيانات المسافرين" },
+  ticketName: { zh: "票面姓名", en: "Name on ticket", ar: "الاسم في التذكرة" },
+
+  copy: { zh: "复制", en: "Copy", ar: "نسخ" },
+  copied: { zh: "已复制", en: "Copied", ar: "تم النسخ" },
+
+  noPlan: {
     zh: "这一天没有属于该视图的安排。",
-    en: "Nothing scheduled for this view on this day.",
-    ar: "لا يوجد شيء مجدول لهذا العرض في هذا اليوم.",
+    en: "Nothing for this view on this day.",
+    ar: "لا يوجد شيء لهذا العرض في هذا اليوم.",
   },
-  nextDayArrival: {
-    zh: "次日抵达",
-    en: "arrives next day",
-    ar: "الوصول اليوم التالي",
+
+  freeTimeIdeas: {
+    zh: "自由时间可以去哪（未预订）",
+    en: "Ideas for free time (nothing booked)",
+    ar: "أفكار لوقت الفراغ (دون أي حجز)",
   },
-  openItems: {
-    zh: "待确认清单",
-    en: "Open items",
-    ar: "بنود بانتظار التأكيد",
+  routes: {
+    zh: "半日建议路线",
+    en: "Half-day route suggestions",
+    ar: "مسارات مقترحة لنصف يوم",
   },
-  openItemsNote: {
-    zh: "以下每一条定下来之前，相关安排都不能当成已落实。",
-    en: "Until each line below is settled, the related arrangement is not in place.",
-    ar: "إلى أن يُحسم كل بند أدناه، فإن الترتيب المرتبط به غير قائم.",
+  routeDuration: { zh: "时长", en: "Length", ar: "المدة" },
+  routeBestFor: { zh: "适合", en: "Best for", ar: "مناسب لـ" },
+  routeSteps: { zh: "顺序", en: "Order", ar: "الترتيب" },
+  routeTransport: { zh: "怎么去", en: "Getting there", ar: "كيفية الوصول" },
+  routeTickets: { zh: "门票与开放", en: "Tickets and opening", ar: "التذاكر والفتح" },
+  routesNote: {
+    zh: "都是建议，全部未预订。时长是规划参考，不含临时变化；不写未核实的票价与营业时间。",
+    en: "All suggestions, none booked. Durations are planning estimates, not promises; no unverified prices or opening hours are given.",
+    ar: "كلها اقتراحات وغير محجوزة. والمدد تقديرات تخطيطية لا وعود؛ ولا تُذكر أسعار أو مواعيد غير مُتحقَّق منها.",
   },
-  cityOptions: {
-    zh: "9/26 城市体验建议（未预订）",
-    en: "26 Sep city ideas (not booked)",
-    ar: "أفكار ليوم 26 سبتمبر في المدينة (غير محجوزة)",
+
+  prep: { zh: "出发前准备", en: "Before you fly", ar: "قبل السفر" },
+  food: { zh: "吃什么 · 文化小知识", en: "What to eat · a little context", ar: "ماذا تأكل · لمحة ثقافية" },
+  phrases: {
+    zh: "可复制的中文短句",
+    en: "Chinese phrases you can copy",
+    ar: "عبارات صينية يمكن نسخها",
   },
   copyAddresses: {
     zh: "可复制的中文地址",
     en: "Chinese addresses you can copy",
     ar: "عناوين بالصينية يمكن نسخها",
   },
-  copy: { zh: "复制", en: "Copy", ar: "نسخ" },
-  copied: { zh: "已复制", en: "Copied", ar: "تم النسخ" },
-  officialSources: {
-    zh: "官方来源",
-    en: "Official sources",
-    ar: "مصادر رسمية",
-  },
-  reference: {
-    zh: "参考：总部通知",
-    en: "Reference: HQ notice",
-    ar: "مرجع: إشعار المقر",
-  },
-  untimed: {
-    zh: "时间待定的安排",
-    en: "Without a set time",
-    ar: "بدون وقت محدد",
-  },
-  dayPlan: {
-    zh: "当天吃住行",
-    en: "Meals, cars and hotel",
-    ar: "الوجبات والتنقل والفندق",
-  },
-  supplement: {
-    dining: { zh: "餐饮", en: "Meals", ar: "الوجبات" },
-    transport: { zh: "用车", en: "Cars", ar: "التنقل" },
-    lodging: { zh: "住宿", en: "Hotel", ar: "الفندق" },
-  },
-  details: { zh: "详情", en: "Details", ar: "التفاصيل" },
-  group: { zh: "分组", en: "Group", ar: "المجموعة" },
-  team: { zh: "人员", en: "Who is travelling", ar: "المسافرون" },
+  officialSources: { zh: "官方来源", en: "Official sources", ar: "مصادر رسمية" },
+  reference: { zh: "参考：总部通知", en: "Reference: HQ notice", ar: "مرجع: إشعار المقر" },
+
   footer: {
-    zh: "航班按票面当地时间；建议及待确认安排尚未落实。",
-    en: "Flight times are the ticket's local times; suggested and to-be-confirmed items are not in place yet.",
-    ar: "أوقات الرحلات بالتوقيت المحلي كما في التذكرة؛ والبنود المقترحة أو التي بانتظار التأكيد لم تُنفَّذ بعد.",
+    zh: "航班按票面当地时间；标「待定」的还没落实。",
+    en: "Flight times are the ticket's local times; anything marked “to confirm” is not settled.",
+    ar: "أوقات الرحلات بالتوقيت المحلي كما في التذكرة؛ وكل ما هو «بانتظار التأكيد» غير محسوم.",
   },
-  expand: { zh: "展开", en: "Show", ar: "عرض" },
-  collapse: { zh: "收起", en: "Hide", ar: "إخفاء" },
 } as const;
 
 /* ---------------- 日期 ---------------- */
@@ -157,7 +128,7 @@ const MONTHS: Record<Lang, Record<number, string>> = {
   ar: { 9: "سبتمبر", 10: "أكتوبر" },
 };
 
-export function parseDate(iso: string): { y: number; m: number; d: number; weekday: number } {
+export function parseDate(iso: string) {
   const [y, m, d] = iso.split("-").map(Number);
   // UTC 构造，避免本地时区把日期推前一天。
   const weekday = new Date(Date.UTC(y, m - 1, d)).getUTCDay();
@@ -181,55 +152,11 @@ export function fullDateLabel(iso: string, lang: Lang): string {
   const { m, d } = parseDate(iso);
   const weekday = weekdayLabel(iso, lang);
   if (lang === "zh") return `${m} 月 ${d} 日 · ${weekday}`;
-  if (lang === "en") return `${weekday} ${d} ${MONTHS.en[m]}`;
-  return `${weekday} ${d} ${MONTHS.ar[m]}`;
+  return `${weekday} ${d} ${MONTHS[lang][m]}`;
 }
 
 export function shortDateLabel(iso: string, lang: Lang): string {
   const { m, d } = parseDate(iso);
   if (lang === "zh") return `${m}/${d}`;
   return `${d} ${MONTHS[lang][m]}`;
-}
-
-export function rangeLabel(from: string, to: string, lang: Lang): string {
-  return `${shortDateLabel(from, lang)} – ${shortDateLabel(to, lang)}`;
-}
-
-/** [from, to] 之间的每一天（含首尾），用于跨日事件逐日显示。 */
-export function datesBetween(from: string, to: string): string[] {
-  if (to < from) return [from];
-  const { y, m, d } = parseDate(from);
-  const cursor = new Date(Date.UTC(y, m - 1, d));
-  const out: string[] = [];
-  // 本次行程最长跨度是 9/25–10/5，上限留足余量同时保证不会死循环。
-  for (let guard = 0; guard < 400; guard++) {
-    const iso = cursor.toISOString().slice(0, 10);
-    out.push(iso);
-    if (iso >= to) break;
-    cursor.setUTCDate(cursor.getUTCDate() + 1);
-  }
-  return out;
-}
-
-/**
- * 各机场时区相对 UTC 的偏移（小时）。
- *
- * 中国全年 UTC+8。埃及自 2023 年恢复夏令时，起止是「4 月最后一个周五 – 10 月最后一个
- * 周四」；2026 年 10 月最后一个周四是 10/29，所以本行程涉及的 9/20 – 10/7 全部落在
- * 夏令时区间内，开罗一律 UTC+3。行程只有这两个时区，因此直接写死映射，
- * 不引入运行时时区数据库。
- */
-const UTC_OFFSET_HOURS: Record<TimeZoneTag, number> = {
-  beijing: 8,
-  cairo: 3,
-};
-
-/**
- * 把「某地当地日期 + 当地时刻」换算成真实时间轴上的毫秒数，用于同一天内跨时区排序。
- * 例如 9/21 00:20 开罗 = 9/20 21:20 UTC，早于 9/21 08:00 北京（= 9/21 00:00 UTC）。
- */
-export function instantOf(date: string, time: string, tz: TimeZoneTag): number {
-  const { y, m, d } = parseDate(date);
-  const [hh, mm] = time.split(":").map(Number);
-  return Date.UTC(y, m - 1, d, hh, mm) - UTC_OFFSET_HOURS[tz] * 3_600_000;
 }
