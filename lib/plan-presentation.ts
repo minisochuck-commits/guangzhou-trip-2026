@@ -45,6 +45,11 @@ export type CellView = {
    * 完整状态仍在弹窗里显示。
    */
   hidePending?: boolean;
+  /**
+   * 弹窗里当天特有的协调事项。只写旅程里没有的东西 ——
+   * 到机场时刻已经在旅程里了，不要在这里重复一遍。
+   */
+  coordination?: L10n[];
   /** 弹窗里要展示的路线（自由日）。 */
   routeIds?: string[];
   /** 弹窗里要展示的美食文化条目（自理餐食）。 */
@@ -152,10 +157,10 @@ function lodgingView(date: string, group: GroupKey): CellView {
   }
 
   if (date === "2026-09-20" || date === "2026-10-06") {
+    // 「当晚在飞机上」已经说明没有酒店，不再补一行「不住酒店」。
     return {
       lines: [
         L("当晚在飞机上", "Overnight on the plane", "المبيت على متن الطائرة"),
-        L("不住酒店", "No hotel", "دون فندق"),
       ],
       entry: null,
     };
@@ -390,9 +395,29 @@ function activityView(date: string, group: GroupKey, card: PersonDayCard): CellV
 /* 餐饮                                                                */
 /* ------------------------------------------------------------------ */
 
+/**
+ * 出行日主表只写这一句。特殊餐怎么申请是**每天都一样**的通用提醒，
+ * 挂在 8 个出行日格子里就是噪音 —— 统一挪到指南的「吃什么」里说一次（FOOD_ADVICE）。
+ */
 const MEALS_ONBOARD_SHORT: L10n[] = [
-  L("机场与机上餐食", "Airport and on-board meals", "وجبات المطار والطائرة"),
-  L("特殊餐需出发前问航司", "Ask the airline about special meals", "اسأل شركة الطيران عن الوجبات الخاصة"),
+  L("机场 / 机上用餐", "Airport and on-board meals", "وجبات المطار والطائرة"),
+];
+
+/**
+ * 通用饮食提醒，整站只在指南的「吃什么」出现一次。
+ * 第一句沿用 person-day-plan 的 DIET_ASK 原文，第二句是原来贴在每个出行日的特殊餐提醒。
+ */
+export const FOOD_ADVICE: L10n[] = [
+  L(
+    "有清真、过敏或忌口需求，请提前告知，并在点餐时问清食材与做法。",
+    "If you need halal food or have allergies or other restrictions, say so in advance and ask about ingredients and preparation when ordering.",
+    "إن كنت تحتاج طعامًا حلالًا أو لديك حساسية أو قيود أخرى، فأخبرهم مسبقًا واسأل عن المكوّنات وطريقة الإعداد عند الطلب.",
+  ),
+  L(
+    "机上特殊餐需出发前直接向航空公司申请。",
+    "Special in-flight meals must be requested from the airline before departure.",
+    "تُطلب الوجبات الخاصة على متن الطائرة من شركة الطيران قبل السفر.",
+  ),
 ];
 
 const SELF_MEALS_LINE = L("餐食自理", "Meals self-arranged", "الوجبات ذاتية الترتيب");
@@ -414,11 +439,12 @@ function diningView(date: string, group: GroupKey): CellView {
     return { lines: [SELF_MEALS_LINE], entry: null };
   }
 
+  // 出行日的「待定」是通用的特殊餐提醒，不是某个没定下来的订餐，不挂红标。
   if (date === "2026-09-20") {
-    return { lines: MEALS_ONBOARD_SHORT, entry: "meals" };
+    return { lines: MEALS_ONBOARD_SHORT, entry: "meals", hidePending: true };
   }
   if (date === "2026-09-28" || date === "2026-10-06" || date === "2026-10-07") {
-    return { lines: MEALS_ONBOARD_SHORT, entry: null };
+    return { lines: MEALS_ONBOARD_SHORT, entry: null, hidePending: true };
   }
 
   if (date === "2026-09-21") {
@@ -431,10 +457,10 @@ function diningView(date: string, group: GroupKey): CellView {
         entry: "meals",
       };
     }
+    // 「未指定餐厅」是「用餐时间未明确」的同一件事，不再单占一行。
     return {
       lines: [
         L("用餐时间未明确", "Meal times not given", "أوقات الوجبات غير محددة"),
-        L("未指定餐厅", "No restaurant named", "لم يُذكر أي مطعم"),
       ],
       entry: "meals",
       hidePending: true,
@@ -593,6 +619,13 @@ function transportView(date: string, group: GroupKey): CellView {
         ],
         entry: "flights",
         hidePending: true,
+        coordination: [
+          L(
+            "送机由公司安排，Rahma 提前协调；具体车辆与出发时间待定。",
+            "The company arranges the ride and Rahma coordinates it in advance; the vehicle and departure time are still to be set.",
+            "ترتّب الشركة التوصيل وتنسّقه Rahma مسبقًا؛ والمركبة ووقت الانطلاق لم يُحدَّدا بعد.",
+          ),
+        ],
       };
     }
     if (group === "rahma") {
@@ -603,6 +636,13 @@ function transportView(date: string, group: GroupKey): CellView {
         ],
         entry: "flights",
         hidePending: true,
+        coordination: [
+          L(
+            "去机场的交通由 Rahma 向董事长确认，安排待定。",
+            "Rahma confirms airport transport with the chairman; the arrangement is pending.",
+            "تؤكّد Rahma تنقل المطار مع رئيس مجلس الإدارة؛ والترتيب لم يُحسم بعد.",
+          ),
+        ],
       };
     }
     if (group === "study") {
@@ -613,6 +653,13 @@ function transportView(date: string, group: GroupKey): CellView {
         ],
         entry: "flights",
         hidePending: true,
+        coordination: [
+          L(
+            "同日的机场交通向 Rahma 确认，安排待定。",
+            "Confirm the same-day airport transport with Rahma; the arrangement is pending.",
+            "أكّد تنقل المطار في اليوم نفسه مع Rahma؛ والترتيب لم يُحسم بعد.",
+          ),
+        ],
       };
     }
   }

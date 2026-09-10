@@ -353,6 +353,13 @@ export const BAGGAGE: Record<BaggageProfile, BaggageInfo> = {
  * 再跟一句 BAGGAGE_VERIFIED 就是同一件事说两遍。有 caveat 时只补这一句
  * ——它带的是 caveat 没有的信息：查阅日期和「不含额外购买」。
  */
+/** 主区常显的一句：不藏不确定性，但也不占三行。完整说法在折叠里。 */
+export const BAGGAGE_SHORT_CAVEAT: L10n = {
+  zh: "重量按官网标准，订单待核实",
+  en: "Weights follow the airline website; this booking is not confirmed",
+  ar: "الأوزان حسب موقع الشركة؛ ولم يُؤكَّد هذا الحجز",
+};
+
 export const BAGGAGE_SCOPE: L10n = {
   zh: "官网查阅日期 2026-09-10；不含额外购买或会员加赠。",
   en: "Websites read on 2026-09-10; excludes purchased or status extras.",
@@ -401,14 +408,14 @@ export const PREP: PrepItem[] = [
     },
     lines: [
       {
-        zh: "Chuck 提供 1 张中国 SIM 卡给 Mohamed，返程时归还。出发前先插卡，确认手机能识别这张卡。",
-        en: "Chuck provides one China SIM card for Mohamed, to be returned after the trip. Insert it before departure and confirm the phone recognises the card.",
-        ar: "يوفّر Chuck شريحة صينية واحدة لـ Mohamed تُعاد بعد الرحلة. ضعها في الهاتف قبل السفر وتأكد من أن الهاتف يتعرّف عليها.",
+        zh: "Chuck 给 Mohamed 1 张中国 SIM 卡，返程后归还 Chuck。出发前插卡，确认手机能识别。",
+        en: "Chuck gives Mohamed one China SIM card, returned to Chuck after the trip. Insert it before departure and check the phone recognises it.",
+        ar: "يعطي Chuck لـ Mohamed شريحة صينية واحدة تُعاد إلى Chuck بعد الرحلة. ضعها قبل السفر وتأكد من تعرّف الهاتف عليها.",
       },
       {
-        zh: "抵达中国后测试本地流量是否正常。只有一张卡，如果两人的手机支持，可以由 Mohamed 开热点共享给 Ahmed，落地后一起测一次。",
-        en: "After landing in China, test that local data works. There is only one card, so if both phones support it, Mohamed can share a hotspot with Ahmed — test that together once you arrive.",
-        ar: "بعد الوصول إلى الصين، اختبر عمل بيانات الإنترنت المحلية. توجد شريحة واحدة فقط، فإن كان الهاتفان يدعمان ذلك يمكن لـ Mohamed مشاركة نقطة اتصال مع Ahmed — جرّبا ذلك معًا بعد الوصول.",
+        zh: "落地后测本地流量。只有一张卡，Mohamed 可开热点给 Ahmed，落地一起测一次。",
+        en: "Test local data after landing. Only one card, so Mohamed can share a hotspot with Ahmed — test it together on arrival.",
+        ar: "اختبر بيانات الإنترنت بعد الهبوط. الشريحة واحدة فقط، فيمكن لـ Mohamed مشاركة نقطة اتصال مع Ahmed — جرّباها معًا عند الوصول.",
       },
     ],
   },
@@ -421,14 +428,14 @@ export const PREP: PrepItem[] = [
     },
     lines: [
       {
-        zh: "出发前在手机上安装并配置 VPN 与 ChatGPT，用于翻译和现场求助，并在出发前测试一次。",
-        en: "Before departure, install and set up a VPN and ChatGPT on your phone for translation and on-the-spot help, and test them once before you fly.",
-        ar: "قبل السفر، ثبّت وأعدّ شبكة VPN وتطبيق ChatGPT على هاتفك للترجمة وطلب المساعدة، وجرّبهما مرة قبل المغادرة.",
+        zh: "出发前装好并配置 VPN 与 ChatGPT，用于翻译和求助，出发前测试一次。",
+        en: "Install and set up a VPN and ChatGPT before departure for translation and help, and test them once.",
+        ar: "ثبّت وأعدّ VPN و ChatGPT قبل السفر للترجمة وطلب المساعدة، وجرّبهما مرة.",
       },
       {
-        zh: "中国大陆不在 ChatGPT 官方支持地区之列，装了 VPN 也不保证一定可用。请同时准备可离线的中文翻译，以及本页可复制的中文地址与求助短句作为备选。",
-        en: "Mainland China is not on ChatGPT's list of supported countries, and a VPN does not guarantee access. Also prepare an offline Chinese translation option, plus the copyable Chinese addresses and phrases on this page as a fallback.",
-        ar: "الصين ليست ضمن قائمة الدول المدعومة لدى ChatGPT، ووجود VPN لا يضمن الوصول. جهّز أيضًا ترجمة صينية تعمل دون إنترنت، إضافة إلى العناوين والعبارات الصينية القابلة للنسخ في هذه الصفحة كبديل.",
+        zh: "在中国不保证可用。另备可离线的中文翻译，以及本页可复制的中文地址与求助短句。",
+        en: "Access is not guaranteed in China. Also keep an offline Chinese translation option, plus the copyable Chinese addresses and phrases on this page.",
+        ar: "الوصول غير مضمون في الصين. احتفظ أيضًا بترجمة صينية تعمل دون إنترنت، وبالعناوين والعبارات القابلة للنسخ في هذه الصفحة.",
       },
     ],
   },
@@ -441,19 +448,14 @@ export const PREP: PrepItem[] = [
     },
     lines: [
       {
-        zh: "Chuck 会提供备用金。",
-        en: "Chuck will provide a cash float.",
-        ar: "سيوفّر Chuck مبلغًا احتياطيًا.",
+        zh: "Chuck 提供备用金。出发前确认支付宝已开通、备用金已到账，并做一笔小额试付。",
+        en: "Chuck provides a cash float. Before departure, confirm Alipay is activated and the float has arrived, then make one small test payment.",
+        ar: "يوفّر Chuck مبلغًا احتياطيًا. وقبل السفر تأكد من تفعيل «أليباي» ووصول المبلغ، ثم نفّذ دفعة تجريبية صغيرة.",
       },
       {
-        zh: "出发前确认支付宝已开通、备用金已到账，并完成一笔小额试付。",
-        en: "Before departure, confirm Alipay is activated and the float has arrived, then make one small test payment.",
-        ar: "قبل السفر، تأكد من تفعيل «أليباي» ووصول المبلغ الاحتياطي، ثم نفّذ دفعة تجريبية صغيرة.",
-      },
-      {
-        zh: "同时带少量现金备用。",
-        en: "Carry a small amount of cash as backup.",
-        ar: "احمل مبلغًا نقديًا صغيرًا احتياطيًا.",
+        zh: "另带少量现金备用。",
+        en: "Also carry a small amount of cash as backup.",
+        ar: "واحمل أيضًا مبلغًا نقديًا صغيرًا احتياطيًا.",
       },
     ],
   },

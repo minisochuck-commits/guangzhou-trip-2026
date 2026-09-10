@@ -68,6 +68,7 @@ function viewSignature(view: CellView): unknown {
     l10nList(view.lines),
     view.suggestion ? l10n(view.suggestion) : "",
     Boolean(view.hidePending),
+    l10nList(view.coordination),
     [...(view.routeIds ?? [])],
     [...(view.foodNoteIds ?? [])],
   ];

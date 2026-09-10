@@ -156,6 +156,25 @@ export function journeySteps(journey: Journey): JourneyStep[] {
 /* 文案                                                                */
 /* ------------------------------------------------------------------ */
 
+/** 中转条上的紧凑时长：2 小时 50 分 / 2h 50m / 2 س 50 د。 */
+export function shortDuration(minutes: number): L10n {
+  const hours = Math.floor(minutes / 60);
+  const rest = minutes % 60;
+  return {
+    zh: rest ? `${hours} 小时 ${rest} 分` : `${hours} 小时`,
+    en: rest ? `${hours}h ${rest}m` : `${hours}h`,
+    ar: rest ? `${hours} س ${rest} د` : `${hours} س`,
+  };
+}
+
+/** 「成都天府中转」这样的短标签。 */
+export function transferCityLabel(iata: AirportCode, lang: Lang): string {
+  const city = AIRPORTS[iata].city[lang];
+  if (lang === "zh") return `${city}中转`;
+  if (lang === "en") return `${city} transfer`;
+  return `ترانزيت ${city}`;
+}
+
 export function durationLabel(minutes: number): L10n {
   const hours = Math.floor(minutes / 60);
   const rest = minutes % 60;

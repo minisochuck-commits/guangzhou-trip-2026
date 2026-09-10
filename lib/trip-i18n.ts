@@ -104,6 +104,13 @@ export const UI = {
     leg: { zh: "航段", en: "Flight", ar: "الرحلة" },
     transfer: { zh: "中转", en: "Transfer", ar: "الترانزيت" },
     arrive: { zh: "抵达", en: "Arrival", ar: "الوصول" },
+    depart: { zh: "出发", en: "Departure", ar: "المغادرة" },
+    /** 一条脚注顶掉每个时刻后面的时区标注。 */
+    localTimeNote: {
+      zh: "时间均为机场当地时间",
+      en: "All times are local to each airport",
+      ar: "جميع الأوقات بالتوقيت المحلي لكل مطار",
+    },
     /** 中转格里那两个时刻各是什么，必须标出来。 */
     transferIn: { zh: "抵达", en: "Arrive", ar: "الوصول" },
     transferOut: {
@@ -128,6 +135,11 @@ export const UI = {
     },
   },
   baggage: { zh: "免费行李额", en: "Free baggage allowance", ar: "الأمتعة المجانية" },
+  baggageRules: {
+    zh: "行李规则与来源",
+    en: "Baggage rules and sources",
+    ar: "قواعد الأمتعة والمصادر",
+  },
   checked: { zh: "托运", en: "Checked", ar: "المسجَّلة" },
   carryOn: { zh: "手提", en: "Carry-on", ar: "اليدوية" },
 
