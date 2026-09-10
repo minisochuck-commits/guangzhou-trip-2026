@@ -119,7 +119,7 @@ export function DayTab({
           // table-fixed 的均分规则一致，两边逐像素对齐，也不用同步滚动位置。
           <div
             aria-hidden="true"
-            className="mt-2 flex rounded-t-xl border border-b-0 border-line bg-navy-tint"
+            className="mt-2 flex rounded-t-xl border border-b-0 border-card-line bg-navy-tint shadow-[0_-1px_0_rgba(14,34,64,0.03)]"
           >
             <div className="w-[var(--col-date)] shrink-0 border-e border-line px-2 py-2 text-[13px] font-semibold leading-4 text-navy">
               {firstColLabel}
@@ -278,7 +278,7 @@ export function DayTab({
 
 function MiniLabel({ children }: { children: React.ReactNode }) {
   return (
-    <span className="mb-0.5 block text-[13px] font-semibold leading-4 text-navy-soft">
+    <span className="mb-0.5 block text-[11px] font-semibold uppercase leading-4 tracking-[0.09em] text-navy-soft/70">
       {children}
     </span>
   );

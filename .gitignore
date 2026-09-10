@@ -44,3 +44,4 @@ tsconfig.tsbuildinfo
 /.codex/
 /outputs/
 /work/
+.claude/

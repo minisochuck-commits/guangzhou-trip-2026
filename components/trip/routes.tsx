@@ -35,7 +35,7 @@ export function RouteList({
           <AccordionItem
             key={route.id}
             value={route.id}
-            className="rounded-xl border border-line bg-white px-3 border-b"
+            className="trip-card px-3 border-b"
           >
             <AccordionTrigger className="min-h-11 py-3 hover:no-underline">
               <span className="flex min-w-0 flex-col items-start gap-0.5 text-start">

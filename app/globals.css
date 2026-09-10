@@ -35,6 +35,24 @@
   --navy-tint: #eef2f8;
   --line: #dfe4ec;
 
+  /*
+   * 纸张层次：底色带一点海军蓝，卡片留纯白。
+   * 之前整页和卡片都是白的，边框只有 1px —— 什么都在同一层，看着就平。
+   * 现在是「浅蓝的桌面 + 白色的卡」，层次靠底色和阴影分，不靠加边框。
+   */
+  /*
+   * 底色走宣纸的暖中性，配朱红和墨蓝 —— 中国风的「高级」靠留白、
+   * 纸色和字，不靠灯笼和龙纹。卡片仍是纯白，行程表要保持清爽好读。
+   */
+  --page: #efece5;
+  --sheet: #f7f5f1;
+  --card-line: #e6e2d9;
+  --seal-red: #c8102e;
+  --shadow-card:
+    0 1px 2px rgba(14, 34, 64, 0.05), 0 2px 10px -4px rgba(14, 34, 64, 0.08);
+  --shadow-raised:
+    0 2px 4px rgba(14, 34, 64, 0.06), 0 12px 28px -16px rgba(14, 34, 64, 0.35);
+
   --background: #ffffff;
   --foreground: #0e2240;
   --card: #ffffff;
@@ -112,6 +130,9 @@
   --color-navy-soft: var(--navy-soft);
   --color-navy-tint: var(--navy-tint);
   --color-line: var(--line);
+  --color-page: var(--page);
+  --color-sheet: var(--sheet);
+  --color-card-line: var(--card-line);
   --font-sans:
     -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial,
     "Noto Sans", "Noto Sans Arabic", "Noto Naskh Arabic", "PingFang SC",
@@ -119,6 +140,16 @@
   --font-mono:
     ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
     "Courier New", monospace;
+
+  /*
+   * 标题用衬线：中文落到宋体，拉丁落到 Georgia，阿语落到 Naskh。
+   * 字体回退是逐字符的，所以拉丁衬线放前面不会抢走汉字。
+   * 全是系统自带字体 —— 不联网、在中国大陆也一样显示。
+   */
+  --font-display:
+    Georgia, "Times New Roman", "Songti SC", STSong, STZhongsong, SimSun,
+    "Noto Serif CJK SC", "Source Han Serif SC", "Noto Serif SC",
+    "Noto Naskh Arabic", "Al Bayan", "Geeza Pro", serif;
 }
 
 html,
@@ -136,11 +167,85 @@ html {
 }
 
 body {
-  background: var(--background);
+  background: var(--page);
   color: var(--foreground);
   font-family: var(--font-sans);
   font-size: 1rem;
   line-height: 1.65;
+}
+
+/*
+ * 一张卡的标准长相：白底、淡描边、极轻的阴影。
+ * 整站的卡片都走这一个类，不要各处各写一串 border/shadow ——
+ * 那正是之前每个块看起来都一样、分不出主次的原因。
+ */
+.trip-card {
+  background: #ffffff;
+  border: 1px solid var(--card-line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+}
+
+/* 需要被看见的那一张（礼拜提示、当天高亮）才用得上这一层。 */
+.trip-card-accent {
+  background: linear-gradient(180deg, #fff6f8 0%, #ffffff 62%);
+  border: 1px solid rgba(228, 0, 43, 0.22);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+}
+
+/* 举给司机看的那行中文：底纹 + 大字，隔一臂也读得清。 */
+.trip-show-panel {
+  background: var(--navy-tint);
+  border-radius: calc(var(--radius) - 2px);
+}
+
+/* 标题的衬线 */
+.trip-display {
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+/*
+ * 印章。中国的印是红方章，MINISO 的标也是红方块 —— 同一个形状，
+ * 一个记号同时说清「这是中国」和「这是 MINISO」，不用摆两套符号。
+ * 「穗」是广州的简称。
+ */
+.trip-seal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 2.125rem;
+  height: 2.125rem;
+  border-radius: 5px;
+  background: var(--seal-red);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.28),
+    0 1px 3px rgba(140, 12, 32, 0.35);
+}
+
+/*
+ * 回纹底纹：「回」本身就是方中套方，直接用它做单元，
+ * 比画一圈云龙克制得多，而且几何母题和伊斯兰纹样同源，两边看着都顺眼。
+ * 内联 data URI，不额外发请求，离线照样有。
+ */
+.trip-fret {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 11 11'%3E%3Crect x='1.75' y='1.75' width='7.5' height='7.5' fill='none' stroke='%23c8102e' stroke-width='1'/%3E%3Crect x='4.5' y='4.5' width='2' height='2' fill='%23c8102e'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-position: center;
+}
+
+/* 木棉是广州市花，红的 —— 当页头的水印，比任何「中国元素」都更点题。 */
+.trip-kapok {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke='%23c8102e' stroke-width='1.6' stroke-linecap='round'%3E%3Cpath d='M50 50 L50 18 M50 50 L80 34 M50 50 L74 76 M50 50 L26 76 M50 50 L20 34'/%3E%3Cpath d='M50 18c7 6 9 16 4 24-6-3-11-3-17 0-5-8-3-18 4-24 3-2 6-2 9 0z'/%3E%3Cpath d='M80 34c1 9-4 18-13 21-2-6-6-10-12-12 1-9 8-16 17-17 3 0 6 3 8 8z'/%3E%3Cpath d='M74 76c-8 4-18 2-24-6 5-4 7-9 7-15 9-1 17 4 20 13 1 3-1 6-3 8z'/%3E%3Cpath d='M26 76c-3-8 0-18 8-22 3 5 8 8 14 8 2 9-3 17-12 20-3 1-7-2-10-6z'/%3E%3Cpath d='M20 34c8-4 18-1 23 7-5 3-8 8-9 14-9 0-16-6-17-15 0-3 1-5 3-6z'/%3E%3Ccircle cx='50' cy='50' r='5'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: no-repeat;
 }
 
 /* 姓名、航班号、时间在阿语 RTL 下保持 LTR 且不被标点翻转 */
@@ -188,9 +293,11 @@ body {
 
 .trip-matrix [data-slot="table-container"] {
   overflow: visible;
-  border: 1px solid var(--line);
+  border: 1px solid var(--card-line);
   border-top: 0;
   border-bottom-left-radius: var(--radius);
   border-bottom-right-radius: var(--radius);
-  background: var(--background);
+  background: #ffffff;
+  /* 表头条 + 表体连成一张浮起来的卡，而不是贴在底色上的一块围栏 */
+  box-shadow: var(--shadow-card);
 }

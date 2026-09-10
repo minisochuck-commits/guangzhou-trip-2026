@@ -63,7 +63,7 @@ export function BulletList({
       {items.map((item, index) => (
         <li
           key={index}
-          className="relative ps-4 text-base leading-relaxed text-navy-soft before:absolute before:start-0 before:top-[0.7em] before:size-1.5 before:rounded-full before:bg-navy/25"
+          className="relative ps-4 text-base leading-relaxed text-navy-soft before:absolute before:start-0 before:top-[0.72em] before:size-1.5 before:rounded-full before:bg-miniso-red/45"
         >
           {t(item, lang)}
         </li>
@@ -82,13 +82,13 @@ export function SectionHeading({
   return (
     <h2
       className={cn(
-        "flex items-center gap-2 text-lg font-semibold tracking-tight text-navy",
+        "trip-display flex items-center gap-2.5 pt-1 text-[1.375rem] leading-9 tracking-tight text-navy",
         className,
       )}
     >
       <span
         aria-hidden="true"
-        className="inline-block h-4 w-1 rounded-full bg-miniso-red"
+        className="inline-block h-5 w-[3px] rounded-full bg-miniso-red"
       />
       {children}
     </h2>
@@ -100,10 +100,13 @@ export function CopyChinese({
   entry,
   lang,
   compact = false,
+  showBig = false,
 }: {
   entry: CopyEntry;
   lang: Lang;
   compact?: boolean;
+  /** 这句是要举给司机或店员看的：字号加大，隔着一臂也读得清。 */
+  showBig?: boolean;
 }) {
   const [copied, setCopied] = React.useState(false);
 
@@ -125,12 +128,25 @@ export function CopyChinese({
   return (
     <div
       className={cn(
-        "rounded-lg border border-line bg-white",
-        compact ? "p-2.5" : "p-3",
+        // showBig 的那张是嵌在地点卡里面的，自己不再当卡片 ——
+        // 卡中卡会叠两层阴影，正是「什么都长一个样」的来源。
+        showBig ? "" : cn("trip-card", compact ? "p-2.5" : "p-3"),
       )}
     >
-      <p className="text-sm text-navy-soft">{t(entry.label, lang)}</p>
-      <p lang="zh-CN" dir="ltr" className="mt-1 text-base font-medium text-navy">
+      {/* 标签只是眉批，中文那行才是要被读的东西 —— 字号和底纹都归它 */}
+      <p className="text-[0.8125rem] font-medium uppercase tracking-[0.06em] text-navy-soft/80">
+        {t(entry.label, lang)}
+      </p>
+      <p
+        lang="zh-CN"
+        dir="ltr"
+        className={cn(
+          "mt-1.5 font-medium text-navy",
+          showBig
+            ? "trip-show-panel px-3 py-2.5 text-lg leading-8"
+            : "text-base",
+        )}
+      >
         {entry.chinese}
       </p>
       <button
@@ -138,7 +154,7 @@ export function CopyChinese({
         onClick={copy}
         aria-label={`${t(UI.copy, lang)} ${t(entry.label, lang)}`}
         data-copy={entry.id}
-        className="mt-2 inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-navy/25 px-3 text-sm font-medium text-navy transition-colors hover:border-navy/50"
+        className="mt-2 inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-navy/20 bg-white px-3 text-sm font-medium text-navy transition-colors hover:border-navy/45 hover:bg-navy-tint"
       >
         {copied ? (
           <CheckIcon className="size-4" aria-hidden="true" />

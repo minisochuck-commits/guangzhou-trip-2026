@@ -178,6 +178,22 @@ export const UI = {
   },
 
   prep: { zh: "出发前准备", en: "Before you fly", ar: "قبل السفر" },
+
+  /** 五人里四位是穆斯林 —— 礼拜与清真餐单独成节，排在指南靠前的位置。 */
+  halal: {
+    zh: "礼拜与清真餐",
+    en: "Prayer and halal food",
+    ar: "الصلاة والطعام الحلال",
+  },
+  mosques: { zh: "清真寺", en: "Mosques", ar: "المساجد" },
+  halalDining: { zh: "清真餐厅", en: "Halal restaurants", ar: "مطاعم حلال" },
+  jumuah: { zh: "主麻日", en: "Friday prayer", ar: "صلاة الجمعة" },
+  /** 卡片上那行开放 / 营业信息，都要标明来源与是否核实。 */
+  placeMeta: {
+    zh: "营业与开放",
+    en: "Hours and opening",
+    ar: "المواعيد والفتح",
+  },
   food: { zh: "吃什么 · 文化小知识", en: "What to eat · a little context", ar: "ماذا تأكل · لمحة ثقافية" },
   phrases: {
     zh: "可复制的中文短句",
