@@ -348,6 +348,17 @@ export const BAGGAGE: Record<BaggageProfile, BaggageInfo> = {
   },
 };
 
+/**
+ * `caveat` 已经说清「件数来自票面、重量来自官网、这张订单没核实」，
+ * 再跟一句 BAGGAGE_VERIFIED 就是同一件事说两遍。有 caveat 时只补这一句
+ * ——它带的是 caveat 没有的信息：查阅日期和「不含额外购买」。
+ */
+export const BAGGAGE_SCOPE: L10n = {
+  zh: "官网查阅日期 2026-09-10；不含额外购买或会员加赠。",
+  en: "Websites read on 2026-09-10; excludes purchased or status extras.",
+  ar: "قُرئت المواقع بتاريخ 2026-09-10؛ ولا يشمل ذلك الأمتعة المشتراة أو مزايا العضوية.",
+};
+
 export const BAGGAGE_VERIFIED: L10n = {
   zh: "件数按所提供机票；重量与尺寸按航空公司官网（2026-09-10 查阅）。不含额外购买或会员加赠。",
   en: "Piece counts from the issued tickets; weights and dimensions from the airlines' public websites (read 2026-09-10). Excludes purchased or status extras.",

@@ -6,6 +6,7 @@ import { ChevronDownIcon } from "lucide-react";
 import type { Row } from "@/lib/person-day-plan";
 import type { CellView } from "@/lib/plan-presentation";
 import {
+  CHENGDU_TRANSFER,
   FOOD_NOTES,
   PERSON_MAP,
   type Lang,
@@ -46,9 +47,15 @@ export function PlanCell({
   /** 这一行涉及的人，用于弹窗标题。 */
   people: PersonId[];
 }) {
-  const hasDetail = Boolean(row.detail?.length);
   const hasFlights = Boolean(row.flights?.length);
   const hasCopy = Boolean(row.copy?.length);
+
+  // CHENGDU_TRANSFER 是一段「去程 T1→T2、回程 T2→T1」混在一起的抽象说明。
+  // 现在时间轴按方向给出真实的到达/起飞航站楼、日期和停留时长，这句话在弹窗里
+  // 只会重复且更含糊，所以从展示中拿掉。事实正本 person-day-plan 不动。
+  const sheetDetail = (row.detail ?? []).filter(
+    (item) => item !== CHENGDU_TRANSFER,
+  );
   const hasRoutes = Boolean(view.routeIds?.length);
   const foodNotes = view.foodNoteIds
     ? FOOD_NOTES.filter((note) => view.foodNoteIds?.includes(note.id))
@@ -122,6 +129,17 @@ export function PlanCell({
             </SheetHeader>
 
             <div className="space-y-4 px-4 pb-8">
+              {/* 有航班时，**整条旅程排最前** —— 先看清今天怎么走，
+                  当天的接送 / 对接安排跟在下面。 */}
+              {hasFlights ? (
+                <section className="space-y-2">
+                  <SectionHeading className="text-base">
+                    {t(UI.entries.flights, lang)}
+                  </SectionHeading>
+                  <FlightDetails ids={row.flights ?? []} lang={lang} />
+                </section>
+              ) : null}
+
               {/* 完整原文：表内是压过的短句，这里必须给回未删减的那一段 */}
               <section className="space-y-1">
                 <p className="text-sm font-semibold uppercase tracking-wide text-navy-soft">
@@ -133,9 +151,9 @@ export function PlanCell({
                 <PendingHint status={row.status} lang={lang} />
               </section>
 
-              {hasDetail ? (
+              {sheetDetail.length > 0 ? (
                 <ul className="space-y-1.5">
-                  {row.detail?.map((item, index) => (
+                  {sheetDetail.map((item, index) => (
                     <li
                       key={index}
                       className="relative ps-4 text-base leading-relaxed text-navy-soft before:absolute before:start-0 before:top-[0.7em] before:size-1.5 before:rounded-full before:bg-navy/25"
@@ -152,15 +170,6 @@ export function PlanCell({
                     <CopyChinese key={entry.id} entry={entry} lang={lang} />
                   ))}
                 </div>
-              ) : null}
-
-              {hasFlights ? (
-                <section className="space-y-2">
-                  <SectionHeading className="text-base">
-                    {t(UI.entries.flights, lang)}
-                  </SectionHeading>
-                  <FlightDetails ids={row.flights ?? []} lang={lang} />
-                </section>
               ) : null}
 
               {hasRoutes ? (

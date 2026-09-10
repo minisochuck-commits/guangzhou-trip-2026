@@ -126,7 +126,9 @@ Li/Qiuting、Rahma、Reham 各自一行。选中单人时首列只写那一个�
 | MS959 · 9/27 CAN T3 | 23:20 | 20:20 |
 | 3U6704 · 10/6 CAN T2 | 17:25 | 14:25 |
 
-成都中转**不再套 3 小时**，按票面衔接时间，只提示需要换航站楼。
+成都中转**不再套 3 小时**，按票面衔接时间。弹窗里的时间轴按方向给出真实的
+到达 / 起飞航站楼、两侧日期和停留时长（去程 T1→T2 停 2 小时 50 分；
+回程 T2→T1 停 6 小时且跨零点），不再用一段去程回程混写的抽象说明。
 所有时间都标了所属机场的当地时区。**航班日期、时刻、航站楼一律按票面，不得改动。**
 
 ### 免费行李额（按无额外购买）
@@ -161,13 +163,14 @@ Li/Qiuting、Rahma、Reham 各自一行。选中单人时首列只写那一个�
 | 事实 | `lib/trip-data.ts` | 人员、8 段航班、行李额、酒店、出发前准备、可复制中文、三条路线、美食文化、官方链接、参考图 |
 | 事实 | `lib/person-day-plan.ts` | **唯一的业务派生**：`cardsFor(date)` 返回当天的人员记录；`cardsForPerson` 按人筛；`datesForPerson` 给日期跳转条 |
 | 展示 | `lib/plan-presentation.ts` | 表内的 2–4 行短摘要、弹窗入口类型、自由日路线选择、餐饮建议 |
+| 展示 | `lib/journeys.ts` | 航段 → 完整旅程（到机场 / 各段 / 中转 / 抵达）；中转航站楼与停留时长由票面算出 |
 | 展示 | `lib/merge-rows.ts` | 同一天内容逐字一致的人合成一行；`displayedPeople()` 决定首列写谁 |
 | 自检 | `lib/merge-rows.test.ts` | 合并 / 不合并 / 筛人的断言，见下面「怎么跑」 |
 | 文案 | `lib/trip-i18n.ts` | 界面文案与日期格式化 |
 
 组件：`components/trip/`
 （`trip-view.tsx` 壳 + 页头高度测量 · `day-tab.tsx` **横向字段表 + sticky 列头条 + 日期跳转** ·
-`plan-cell.tsx` 单元格摘要与内容化弹窗 · `flight-details.tsx` 航班与行李 ·
+`plan-cell.tsx` 单元格摘要与内容化弹窗 · `flight-details.tsx` 完整旅程时间轴 + 行李额 ·
 `routes.tsx` 半日路线 · `guide-tab.tsx` 指南 · `ui.tsx` 公共件）。
 
 列宽变量和表格容器样式在 `app/globals.css` 的 `.matrix-scroll` / `.matrix-headbar`
@@ -184,6 +187,10 @@ Li/Qiuting、Rahma、Reham 各自一行。选中单人时首列只写那一个�
 
 - `text` 是**完整原文**，显示在弹窗的「完整说明」里。
 - `flights` 填 `trip-data.ts` 里 `FLIGHTS` 的 `id`，弹窗里会出现「航班与行李」。
+  **只挂一段也没关系** —— `lib/journeys.ts` 会把它解析成整条旅程（到机场 → 各航段 →
+  中转 → 抵达），所以从去程 9/20 或 9/21 任一天进来看到的都是同一条完整路线。
+  新增航段时同时在 `JOURNEYS` 里登记它属于哪条旅程；同航班号不同日期靠航段 id 区分
+  （`3U6704-0927` vs `3U6704-1006`）。Reham 的 MS958 / MS959 各自单段，保持直飞。
 - `copy` 填 `CopyEntry`，弹窗里会出现完整中文原文 + 复制按钮。
   完整中文也要放 `detail`，三语版本都保留中文原文，复制失败时才能手选给司机看。
 - 未定的一律 `"pending"` + 明确写出待定什么。
