@@ -8,6 +8,7 @@ import {
   PREP,
   type Lang,
 } from "@/lib/trip-data";
+import { FOOD_ADVICE } from "@/lib/plan-presentation";
 import { UI, t } from "@/lib/trip-i18n";
 import {
   Accordion,
@@ -40,10 +41,10 @@ export function GuideTab({ lang }: { lang: Lang }) {
       <section className="space-y-3">
         <SectionHeading>{t(UI.baggage, lang)}</SectionHeading>
         <article className="rounded-xl border border-line bg-white p-4 shadow-sm">
-          <BaggageLines profile="sichuanEconomy" lang={lang} withSources />
+          <BaggageLines profile="sichuanEconomy" lang={lang} />
         </article>
         <article className="rounded-xl border border-line bg-white p-4 shadow-sm">
-          <BaggageLines profile="egyptairBusiness" lang={lang} withSources />
+          <BaggageLines profile="egyptairBusiness" lang={lang} />
         </article>
       </section>
 
@@ -72,6 +73,10 @@ export function GuideTab({ lang }: { lang: Lang }) {
 
       <section className="space-y-3">
         <SectionHeading>{t(UI.food, lang)}</SectionHeading>
+        {/* 清真 / 过敏 / 食材、机上特殊餐 —— 整站只在这里说一次 */}
+        <div className="rounded-xl border border-line bg-white p-4">
+          <BulletList items={FOOD_ADVICE} lang={lang} />
+        </div>
         <Accordion type="multiple" className="space-y-2">
           {FOOD_NOTES.map((note) => (
             <AccordionItem
@@ -103,18 +108,27 @@ export function GuideTab({ lang }: { lang: Lang }) {
         </Accordion>
       </section>
 
-      <section className="space-y-3">
-        <SectionHeading>{t(UI.officialSources, lang)}</SectionHeading>
-        <ul className="space-y-2">
-          {OFFICIAL_LINKS.map((link) => (
-            <li key={link.id} className="rounded-lg border border-line bg-white p-3">
-              <SourceLink label={link.title} url={link.url} lang={lang} />
-              <p className="mt-1 text-base leading-relaxed text-navy-soft">
-                {t(link.note, lang)}
-              </p>
-            </li>
-          ))}
-        </ul>
+      {/* 官方来源默认折叠：查证时才需要，不该占着页尾 */}
+      <section className="rounded-xl border border-line bg-white px-4">
+        <Accordion type="single" collapsible>
+          <AccordionItem value="sources" className="border-b-0">
+            <AccordionTrigger className="min-h-11 py-3 text-base font-semibold text-navy hover:no-underline">
+              {t(UI.officialSources, lang)}
+            </AccordionTrigger>
+            <AccordionContent className="pb-4">
+              <ul className="space-y-2">
+                {OFFICIAL_LINKS.map((link) => (
+                  <li key={link.id}>
+                    <SourceLink label={link.title} url={link.url} lang={lang} />
+                    <p className="mt-1 text-base leading-relaxed text-navy-soft">
+                      {t(link.note, lang)}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
       </section>
     </div>
   );

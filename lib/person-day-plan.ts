@@ -174,7 +174,8 @@ const MEALS_OWN_TODAY: L10n = {
   ar: "وجبات هذا اليوم تُرتَّب ذاتيًا.",
 };
 
-const DIET_ASK: L10n = {
+/** 导出只是为了让展示层能按引用把它从每个格子的弹窗里滤掉；文案本身没动。 */
+export const DIET_ASK: L10n = {
   zh: "有清真、过敏或忌口需求，请提前告知，并在点餐时问清食材与做法。",
   en: "If you need halal food or have allergies or other restrictions, say so in advance and ask about ingredients and preparation when ordering.",
   ar: "إن كنت تحتاج طعامًا حلالًا أو لديك حساسية أو قيود أخرى، فأخبرهم مسبقًا واسأل عن المكوّنات وطريقة الإعداد عند الطلب.",

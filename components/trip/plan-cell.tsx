@@ -3,7 +3,7 @@
 import * as React from "react";
 import { ChevronDownIcon } from "lucide-react";
 
-import type { Row } from "@/lib/person-day-plan";
+import { DIET_ASK, type Row } from "@/lib/person-day-plan";
 import type { CellView } from "@/lib/plan-presentation";
 import {
   CHENGDU_TRANSFER,
@@ -33,6 +33,11 @@ import { RouteList } from "./routes";
  * 加一条可选建议。完整原文、细节、地址、航班、路线、美食都在弹窗里，
  * 按钮文字按内容命名 —— 「酒店地址」「航班与行李」「巡店安排」…… 不再统称「详情」。
  */
+/** 去掉空白和句末标点再比 —— 详情里的地址句尾多一个「。」，复制串没有。 */
+function normalizeChinese(value: string): string {
+  return value.replace(/\s+/g, "").replace(/[。.．]+$/, "");
+}
+
 export function PlanCell({
   row,
   view,
@@ -50,18 +55,38 @@ export function PlanCell({
   const hasFlights = Boolean(row.flights?.length);
   const hasCopy = Boolean(row.copy?.length);
 
-  // CHENGDU_TRANSFER 是一段「去程 T1→T2、回程 T2→T1」混在一起的抽象说明。
-  // 现在时间轴按方向给出真实的到达/起飞航站楼、日期和停留时长，这句话在弹窗里
-  // 只会重复且更含糊，所以从展示中拿掉。事实正本 person-day-plan 不动。
+  // 弹窗里滤掉三类重复内容。事实正本 person-day-plan 不动，只是不再重复展示：
+  //   1. CHENGDU_TRANSFER —— 「去程 T1→T2、回程 T2→T1」混在一起的抽象说明，
+  //      路线里已经按方向给了真实航站楼、日期和停留时长。
+  //   2. DIET_ASK —— 每个餐饮格都挂同一句通用饮食提醒，整站只该说一次，
+  //      现在统一放在指南的「吃什么」里。
+  //   3. 与复制卡片同一段中文地址的那条 —— 下面的 CopyChinese 已经把它整段显示出来了。
+  const copyChinese = new Set(
+    (row.copy ?? []).map((entry) => normalizeChinese(entry.chinese)),
+  );
   const sheetDetail = (row.detail ?? []).filter(
-    (item) => item !== CHENGDU_TRANSFER,
+    (item) =>
+      item !== CHENGDU_TRANSFER &&
+      item !== DIET_ASK &&
+      !copyChinese.has(normalizeChinese(item.zh)),
   );
   const hasRoutes = Boolean(view.routeIds?.length);
   const foodNotes = view.foodNoteIds
     ? FOOD_NOTES.filter((note) => view.foodNoteIds?.includes(note.id))
     : [];
+  const coordination = view.coordination ?? [];
 
-  const entryLabel = view.entry ? t(UI.entries[view.entry], lang) : null;
+  // 弹窗里真有东西才挂按钮。以前有些格子点开只是把表里那句话再念一遍。
+  const hasSheetContent =
+    hasFlights ||
+    sheetDetail.length > 0 ||
+    coordination.length > 0 ||
+    hasCopy ||
+    hasRoutes ||
+    foodNotes.length > 0;
+
+  const entryLabel =
+    view.entry && hasSheetContent ? t(UI.entries[view.entry], lang) : null;
   const names = people.map((id) => PERSON_MAP[id].name).join(" · ");
 
   return (
@@ -129,31 +154,16 @@ export function PlanCell({
             </SheetHeader>
 
             <div className="space-y-4 px-4 pb-8">
-              {/* 有航班时，**整条旅程排最前** —— 先看清今天怎么走，
-                  当天的接送 / 对接安排跟在下面。 */}
+              {/* 整条旅程排最前。标题栏已经写着「航班与行李」，不再加一个同名小标题；
+                  表里的短句也不在这里重念一遍 —— 弹窗只给表里没有的东西。 */}
               {hasFlights ? (
-                <section className="space-y-2">
-                  <SectionHeading className="text-base">
-                    {t(UI.entries.flights, lang)}
-                  </SectionHeading>
-                  <FlightDetails ids={row.flights ?? []} lang={lang} />
-                </section>
+                <FlightDetails ids={row.flights ?? []} lang={lang} />
               ) : null}
 
-              {/* 完整原文：表内是压过的短句，这里必须给回未删减的那一段 */}
-              <section className="space-y-1">
-                <p className="text-sm font-semibold uppercase tracking-wide text-navy-soft">
-                  {t(UI.fullText, lang)}
-                </p>
-                <p className="text-base leading-relaxed text-navy">
-                  {t(row.text, lang)}
-                </p>
-                <PendingHint status={row.status} lang={lang} />
-              </section>
-
-              {sheetDetail.length > 0 ? (
+              {/* 当天特有的协调事项 + 细节。到机场时刻已在旅程里，这里不重复。 */}
+              {coordination.length > 0 || sheetDetail.length > 0 ? (
                 <ul className="space-y-1.5">
-                  {sheetDetail.map((item, index) => (
+                  {[...coordination, ...sheetDetail].map((item, index) => (
                     <li
                       key={index}
                       className="relative ps-4 text-base leading-relaxed text-navy-soft before:absolute before:start-0 before:top-[0.7em] before:size-1.5 before:rounded-full before:bg-navy/25"
@@ -163,6 +173,10 @@ export function PlanCell({
                   ))}
                 </ul>
               ) : null}
+
+              {view.hidePending ? null : (
+                <PendingHint status={row.status} lang={lang} />
+              )}
 
               {hasCopy ? (
                 <div className="space-y-2">
