@@ -97,6 +97,36 @@ export const UI = {
     ar: "الرحلات والأمتعة",
   },
   nextDay: { zh: "次日抵达", en: "arrives next day", ar: "الوصول اليوم التالي" },
+
+  /** 完整旅程时间轴的步骤标签。 */
+  journey: {
+    report: { zh: "到机场", en: "At the airport", ar: "الوصول إلى المطار" },
+    leg: { zh: "航段", en: "Flight", ar: "الرحلة" },
+    transfer: { zh: "中转", en: "Transfer", ar: "الترانزيت" },
+    arrive: { zh: "抵达", en: "Arrival", ar: "الوصول" },
+    /** 中转格里那两个时刻各是什么，必须标出来。 */
+    transferIn: { zh: "抵达", en: "Arrive", ar: "الوصول" },
+    transferOut: {
+      zh: "下一段起飞",
+      en: "Next departure",
+      ar: "إقلاع الرحلة التالية",
+    },
+    overnight: {
+      zh: "跨零点",
+      en: "crosses midnight",
+      ar: "يمتد بعد منتصف الليل",
+    },
+    changeTerminal: {
+      zh: "需换航站楼",
+      en: "terminal change",
+      ar: "تغيير الصالة",
+    },
+    sameTerminal: {
+      zh: "同一航站楼",
+      en: "same terminal",
+      ar: "الصالة نفسها",
+    },
+  },
   baggage: { zh: "免费行李额", en: "Free baggage allowance", ar: "الأمتعة المجانية" },
   checked: { zh: "托运", en: "Checked", ar: "المسجَّلة" },
   carryOn: { zh: "手提", en: "Carry-on", ar: "اليدوية" },
