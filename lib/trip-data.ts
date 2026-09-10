@@ -1132,8 +1132,27 @@ export const CITY_EVENING_NOTE: L10n = {
 /* 吃住行                                                              */
 /* ------------------------------------------------------------------ */
 
+/**
+ * 吃住行事实的正本。页面上没有独立的「吃住行」tab —— 这些事实由
+ * `lib/day-plan.ts` 按日期和人员挑出来，拼进当天行程里。
+ * 逐条引用这里的 `lines`，不要在别处另抄一份，否则两边会漂。
+ */
+export type LogisticsBlockId =
+  | "stay-study"
+  | "stay-host"
+  | "stay-qiuting"
+  | "stay-rule"
+  | "dining-needs"
+  | "dining-meeting"
+  | "dining-suggested"
+  | "transport-arrival"
+  | "transport-daily"
+  | "transport-departure"
+  | "transport-transfer"
+  | "transport-baggage";
+
 export type InfoBlock = {
-  id: string;
+  id: LogisticsBlockId;
   title: L10n;
   status: Status;
   people?: PersonId[];
@@ -1406,6 +1425,17 @@ export const LOGISTICS: InfoSection[] = [
     ],
   },
 ];
+
+const LOGISTICS_BY_ID = Object.fromEntries(
+  LOGISTICS.flatMap((section) =>
+    section.blocks.map((block) => [block.id, block] as const),
+  ),
+) as Record<LogisticsBlockId, InfoBlock>;
+
+/** 按 id 取吃住行事实原句。id 是联合类型，写错编译期就会报。 */
+export function logisticsLines(blockId: LogisticsBlockId): L10n[] {
+  return LOGISTICS_BY_ID[blockId].lines;
+}
 
 /* ------------------------------------------------------------------ */
 /* 待确认总表                                                          */
