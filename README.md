@@ -6,21 +6,30 @@ MINISO Egypt 一行 5 人赴广州的行程分享页。手机优先，三语（�
 - 设计与取舍记录：[`DESIGN_NOTES.md`](DESIGN_NOTES.md)
 - 站点 starter 文档（vinext / Sites 生命周期、Wrangler 等）：[`docs/VINEXT_STARTER.md`](docs/VINEXT_STARTER.md)
 
+> **本轮（三列表 + 默认看 Reham）待 owner 验收。** 只改了展示与文档：表格从四字段横滑宽表
+> 改成固定三列、默认人选改成 Reham、桌面放宽到 1200px、删掉「人员详情」与「参考：总部通知」。
+> 两份事实文件逐字未动。构建、类型检查、lint、回归脚本和浏览器验证都**还没跑**。
+> 详见 `DESIGN_NOTES.md` 开头那节。
+
 ## 页面结构
 
-主体是**一张横向字段表**：字段做列头，每一行是「某天的某个人」。
+主体是**一张三列行程表**：每一行是「某天的某个人」，四个字段两两合成两列。
 所有日期、所有人共用同一张表。
 
-| 固定首列 | 活动 | 交通 | 餐饮 | 住宿 |
-| --- | --- | --- | --- | --- |
-| 日期 + 人员（纵向两行） | … | … | … | … |
+| 首列 | 活动与交通 | 食宿 |
+| --- | --- | --- |
+| 单人：日 / 月 / 周几；全员：再加人名 | 活动，一条细线，交通 | 餐（标签），住（标签） |
 
-列的显示顺序由 `components/trip/day-tab.tsx` 的 `FIELDS` 决定，表头和表体都读它。
+合的只是**显示**：每一段照旧由 `PlanCell` 按 `activity` / `transport` / `dining` /
+`lodging` 各自渲染，弹窗、按钮、待定标记都在原处。
+**默认看的是 Reham**（`trip-view.tsx` 的 `DEFAULT_PERSON`），不是全部。
 
-- **只有一个纵向滚动条**：页面负责上下，表格只负责左右。
+- **只有一个纵向滚动条**：三列在 390px 上全放得下，**表格不横向滚动**。
+  首列宽度是 `app/globals.css` 的 `--col-date`（3.5rem，全员 4.75rem，阿语各再加 1rem），
+  后两列不写宽度、由 `table-fixed` 对半分；列头条用同一个变量 + 两个 `flex-1` 对齐。
   日期条 + 列头一起 sticky 在页头下面（页头高度由 `ResizeObserver` 量出来写进
-  `--trip-header-h`）；可见列头是表格外面那条 bar，用 `scrollLeft` 和表格双向同步，
-  表里的真 `<thead>` 保留 `sr-only` 给读屏。**首列在表内 sticky，背景不透明。**
+  `--trip-header-h`）；可见列头是表格外面那条 bar，和 `<colgroup>` 读同一组变量，
+  表里的真 `<thead>` 保留 `sr-only` 给读屏。
 - **日期按钮是跳转**：点一下把窗口滚到那一天的第一行并把它标成选中，
   不是「只显示这一天」。重复点同一个已选中的日期也会跳回去 ——
   跳转是点击直接触发的，不依赖 state 变化。选中只是跳转目标，不影响任何一行是否显示。
@@ -35,17 +44,18 @@ MINISO Egypt 一行 5 人赴广州的行程分享页。手机优先，三语（�
   底部 Sheet **只给表里没有的东西**：完整路线、行李额、当天协调事项、
   中文地址、路线、美食与来源 —— 不再把表里那句话重念一遍。
   **没有额外内容的格子不挂按钮。**
-- 列宽：首列 104px，四个字段列各 168px，总宽 776px。
+- 窄屏正文 14px、按钮 13px 且**允许换行**（`h-auto` + `min-h-11` 保住 44px 点击高度），
+  ≥768px 回到 16px / 14px。桌面容器放宽到 1200px，列跟着长，右边不会被切。
 
 顶部（sticky，三行）：一行标题 + 紧凑语言切换 / 日期区间 + **当前正在看谁** /
 查看对象横滑（≥44px 点击高度，选中的 chip 会自动滚进视野）。
 
 | Tab | 内容 |
 | --- | --- |
-| 全部行程 Itinerary | 日期跳转条 → 横向字段表（18 天 · 45 条记录合并后 42 行）→ 人员详情（折叠，票面全名只在这里） |
+| 全部行程 Itinerary | 日期跳转条 → 三列行程表（18 天 · 45 条记录合并后 42 行；默认 Reham 视图 9 行） |
 | 来华指南 | 出发前准备（上网 / 翻译 / 支付）、免费行李额、可复制中文地址、可复制中文短句、三条半日路线、吃什么与文化、官方来源 |
 
-页尾：折叠的「参考：总部通知」+ 一行页脚。
+页尾：一行页脚。**没有「人员详情」，也没有「参考：总部通知」** —— 两块都已删除。
 
 **Ahmed 与 Mohamed 同房同活动，数据里就是一条记录，全部视图合并成一行**；
 Li/Qiuting、Rahma、Reham 各自一行。选中单人时首列只写那一个名字，
@@ -53,16 +63,18 @@ Li/Qiuting、Rahma、Reham 各自一行。选中单人时首列只写那一个�
 
 查看对象切换只是阅读筛选，不是权限隔离 —— 页面本身公开。
 
-> **表格方向是用户确认的结构，不要再改。** 上一版同样是这张表，
-> 但列宽 976px、交通格塞整句原文（Reham 9/27 那一行被撑到 233px）、
-> 表格自己带纵向滚动、按钮统称「详情」、自由日只写「自由安排」——
-> 那些是**实现不足**，已在本版替代。更早的长事件流、独立「吃住行」tab、
-> 每人一张四行小表都是历史方案。`DESIGN_NOTES.md` 里记了为什么。
+> **「每行是某天的某个人、选人只筛行」是用户确认的结构，不要再改。**
+> 变的只是列数：上一版四个字段各占一列、总宽 776px、要横向滑动；
+> 再上一版还有 976px 宽表、整句原文塞进格子、表格自己带纵向滚动、
+> 按钮统称「详情」。那些都是**实现不足**，已被替代。
+> 更早的长事件流、独立「吃住行」tab、每人一张四行小表也是历史方案。
+> `DESIGN_NOTES.md` 里记了为什么。
 
 ## 姓名口径
 
 正文一律用正常大小写的显示名：**Li/Qiuting、Rahma、Ahmed、Mohamed、Reham**。
-票面全名（`LI/QIUTING`、`HASSAN/MOHAMEDMOHAMED` 等）**只出现在「人员详情」折叠里**。
+票面全名（`LI/QIUTING`、`HASSAN/MOHAMEDMOHAMED` 等）**页面上不再出现** ——
+装它的「人员详情」折叠已删除，事实仍留在 `lib/trip-data.ts` 的 `ticketName`。
 航班号和机场三字码保持大写（`3U3864`、`MS958`、`CAN`、`T2`）。
 
 代码里 Mohamed 的 id 仍是 `hassan`（沿用票面首字段，避免改 id 引发连锁改动）。
@@ -180,16 +192,20 @@ Li/Qiuting、Rahma、Reham 各自一行。选中单人时首列只写那一个�
 | 文案 | `lib/trip-i18n.ts` | 界面文案与日期格式化 |
 
 组件：`components/trip/`
-（`trip-view.tsx` 壳 + 页头高度测量 · `day-tab.tsx` **横向字段表 + sticky 列头条 + 日期跳转** ·
-`plan-cell.tsx` 单元格摘要与内容化弹窗 · `flight-details.tsx` 完整旅程时间轴 + 行李额 ·
-`routes.tsx` 半日路线 · `guide-tab.tsx` 指南 · `ui.tsx` 公共件）。
+（`trip-view.tsx` 壳 + 页头高度测量 + 默认人选 · `day-tab.tsx` **三列行程表 +
+sticky 列头条 + 日期跳转** · `plan-cell.tsx` 单元格摘要与内容化弹窗 ·
+`flight-details.tsx` 完整旅程时间轴 + 行李额 · `routes.tsx` 半日路线 ·
+`guide-tab.tsx` 指南 · `ui.tsx` 公共件）。
 
-列宽变量和表格容器样式在 `app/globals.css` 的 `.matrix-scroll` / `.matrix-headbar`
-—— **不改 vendored 的 `components/ui/table.tsx`**，原因见 `DESIGN_NOTES.md`。
+列宽变量和表格容器样式在 `app/globals.css` 的 `.trip-matrix`（含把容器 overflow
+覆盖成 `visible` 那条）—— **不改 vendored 的 `components/ui/table.tsx`**，
+原因见 `DESIGN_NOTES.md`。
 
 **以下旧模块已删除或置空，由上述新入口替代：**
 `lib/day-plan.ts`、`components/trip/itinerary-tab.tsx`、`components/trip/day-supplements.tsx`、
 `components/trip/open-items.tsx`、`components/trip/person-day-table.tsx`（每人四行小表，已作废）。
+`day-tab.tsx` 里的 `TeamDetails`、`trip-view.tsx` 里的 `ReferenceBlock` 也已删除；
+`trip-data.ts` 的 `REFERENCE_IMAGES` 留在数据里，暂时没有引用。
 
 ### 改一天的安排（事实）
 

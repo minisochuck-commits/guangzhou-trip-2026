@@ -39,7 +39,10 @@ export const UI = {
   },
   close: { zh: "关闭", en: "Close", ar: "إغلاق" },
 
-  /** 四个字段 —— 用户点名的顺序：住宿、活动、餐饮、交通。现在是表格的列头。 */
+  /**
+   * 四个字段。现在两两合进一列（活动+交通 / 餐+住），
+   * 只有食宿格里那两个短标签还用得上；另外两个留着给弹窗与文档口径。
+   */
   rows: {
     lodging: { zh: "住宿", en: "Stay", ar: "الإقامة" },
     activity: { zh: "活动", en: "Plan", ar: "البرنامج" },
@@ -47,18 +50,19 @@ export const UI = {
     transport: { zh: "交通", en: "Travel", ar: "التنقل" },
   },
 
-  /** 矩阵固定首列的表头：日期与人员纵向排在同一格。 */
+  /** 全员视图首列的表头：日期与人员纵向排在同一格。 */
   matrixCorner: {
     zh: "日期 / 人员",
     en: "Date / person",
     ar: "التاريخ / الشخص",
   },
-  matrixHint: {
-    zh: "左右滑动查看，点日期定位。",
-    en: "Swipe sideways; tap a date to jump.",
-    ar: "اسحب أفقيًا؛ واضغط على تاريخ للانتقال.",
-  },
 
+  /** 三列表头。单人视图首列只写日期（顶部已经显示在看谁）。 */
+  cols: {
+    date: { zh: "日期", en: "Date", ar: "التاريخ" },
+    plan: { zh: "活动与交通", en: "Plan & travel", ar: "البرنامج والتنقل" },
+    stay: { zh: "食宿", en: "Meals & stay", ar: "الوجبات والإقامة" },
+  },
   status: {
     confirmed: { zh: "已定", en: "Set", ar: "مؤكد" },
     pending: { zh: "待定", en: "To confirm", ar: "بانتظار التأكيد" },
@@ -143,9 +147,6 @@ export const UI = {
   checked: { zh: "托运", en: "Checked", ar: "المسجَّلة" },
   carryOn: { zh: "手提", en: "Carry-on", ar: "اليدوية" },
 
-  team: { zh: "人员详情", en: "Traveller details", ar: "بيانات المسافرين" },
-  ticketName: { zh: "票面姓名", en: "Name on ticket", ar: "الاسم في التذكرة" },
-
   copy: { zh: "复制", en: "Copy", ar: "نسخ" },
   copied: { zh: "已复制", en: "Copied", ar: "تم النسخ" },
 
@@ -189,7 +190,6 @@ export const UI = {
     ar: "عناوين بالصينية يمكن نسخها",
   },
   officialSources: { zh: "官方来源", en: "Official sources", ar: "مصادر رسمية" },
-  reference: { zh: "参考：总部通知", en: "Reference: HQ notice", ar: "مرجع: إشعار المقر" },
 
   footer: {
     zh: "航班按票面当地时间；标「待定」的还没落实。",

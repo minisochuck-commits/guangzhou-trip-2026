@@ -7,28 +7,23 @@ import { datesForPerson } from "@/lib/person-day-plan";
 import {
   PEOPLE,
   PERSON_MAP,
-  REFERENCE_IMAGES,
   type Lang,
   type PersonId,
 } from "@/lib/trip-data";
 import { DEFAULT_LANG, LANGS, UI, dirOf, t } from "@/lib/trip-i18n";
 import { DirectionProvider } from "@/components/ui/direction";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DayTab } from "./day-tab";
 import { GuideTab } from "./guide-tab";
 import { Ltr } from "./ui";
 
 const FIRST_DATE = "2026-09-20";
+/** 默认看 Reham 的行程（用户拍板），不是全员。 */
+const DEFAULT_PERSON: PersonId = "reham";
 
 export function TripView() {
   const [lang, setLang] = React.useState<Lang>(DEFAULT_LANG);
-  const [person, setPerson] = React.useState<PersonId | null>(null);
+  const [person, setPerson] = React.useState<PersonId | null>(DEFAULT_PERSON);
   const [activeDate, setActiveDate] = React.useState<string>(FIRST_DATE);
 
   const dir = dirOf(lang);
@@ -69,7 +64,7 @@ export function TripView() {
         ref={rootRef}
         dir={dir}
         lang={lang}
-        className="trip-root mx-auto flex min-h-dvh w-full max-w-[42rem] flex-col bg-white"
+        className="trip-root mx-auto flex min-h-dvh w-full max-w-[42rem] flex-col bg-white md:max-w-[75rem]"
       >
         <Header
           ref={headerRef}
@@ -79,7 +74,7 @@ export function TripView() {
           onPerson={setPerson}
         />
 
-        <main className="flex-1 px-4 pb-10 pt-3">
+        <main className="flex-1 px-4 pb-10 pt-3 md:px-8">
           <Tabs defaultValue="day" className="gap-4">
             <TabsList className="h-auto w-full">
               <TabsTrigger value="day" className="py-2 text-base">
@@ -104,8 +99,6 @@ export function TripView() {
               <GuideTab lang={lang} />
             </TabsContent>
           </Tabs>
-
-          <ReferenceBlock lang={lang} />
 
           <p className="mt-6 text-sm leading-relaxed text-navy-soft">
             {t(UI.footer, lang)}
@@ -258,37 +251,3 @@ function PersonChip({
   );
 }
 
-/* ---------------- 底部：总部通知参考 ---------------- */
-
-function ReferenceBlock({ lang }: { lang: Lang }) {
-  return (
-    <section className="mt-4 rounded-xl border border-line bg-white px-4">
-      <Accordion type="single" collapsible>
-        <AccordionItem value="reference" className="border-b-0">
-          <AccordionTrigger className="min-h-11 py-3 text-base font-semibold text-navy hover:no-underline">
-            {t(UI.reference, lang)}
-          </AccordionTrigger>
-          <AccordionContent className="pb-4">
-            <ul className="space-y-3">
-              {REFERENCE_IMAGES.map((image) => (
-                <li key={image.id}>
-                  {/* 参考图按原图比例展示，不做裁切，不当 hero 用 */}
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={image.src}
-                    alt={t(image.caption, lang)}
-                    loading="lazy"
-                    className="w-full rounded-lg border border-line"
-                  />
-                  <p className="mt-1.5 text-base leading-relaxed text-navy-soft">
-                    {t(image.caption, lang)}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
-    </section>
-  );
-}

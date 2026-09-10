@@ -82,13 +82,14 @@ export function PlanCell({
 
   return (
     <div className="space-y-1">
+      {/* 窄屏三列并排，正文降到 14px；≥768px 回到 16px。 */}
       {view.lines.map((line, index) => (
         <p
           key={index}
           className={
             index === 0
-              ? "text-base leading-6 text-navy"
-              : "text-base leading-6 text-navy-soft"
+              ? "text-sm leading-5 text-navy md:text-base md:leading-6"
+              : "text-sm leading-5 text-navy-soft md:text-base md:leading-6"
           }
         >
           {t(line, lang)}
@@ -103,7 +104,8 @@ export function PlanCell({
 
       {entryLabel ? (
         <Sheet>
-          <SheetTrigger className="mt-1 inline-flex min-h-11 items-center gap-1 rounded-lg border border-navy/25 px-2.5 text-start text-sm font-medium text-navy transition-colors hover:border-navy/50">
+          {/* 窄列里按钮文字必须能换行，同时保持 44px 可点高度、不被裁掉。 */}
+          <SheetTrigger className="mt-1 inline-flex h-auto min-h-11 w-full max-w-full items-center justify-start gap-1 whitespace-normal break-words rounded-lg border border-navy/25 px-2 py-1.5 text-start text-[13px] font-medium leading-4 text-navy transition-colors hover:border-navy/50 md:w-auto md:px-2.5 md:text-sm">
             {entryLabel}
             <ChevronDownIcon className="size-4 shrink-0" aria-hidden="true" />
           </SheetTrigger>

@@ -5,22 +5,15 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { cardsForPerson } from "@/lib/person-day-plan";
 import { displayedPeople, mergeRows, type MergedRow } from "@/lib/merge-rows";
-import { cellView, type Field } from "@/lib/plan-presentation";
-import { PEOPLE, PERSON_MAP, type Lang, type PersonId } from "@/lib/trip-data";
+import { cellView } from "@/lib/plan-presentation";
+import { PERSON_MAP, type Lang, type PersonId } from "@/lib/trip-data";
 import {
   UI,
   dayNumber,
   monthLabel,
-  shortDateLabel,
   t,
   weekdayLabel,
 } from "@/lib/trip-i18n";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import {
   Table,
   TableBody,
@@ -32,9 +25,6 @@ import {
 import { PlanCell } from "./plan-cell";
 import { Ltr } from "./ui";
 
-/** 显示顺序（用户拍板）：日期/人员 → 活动 → 交通 → 餐饮 → 住宿。 */
-const FIELDS: Field[] = ["activity", "transport", "dining", "lodging"];
-
 type MatrixRow = {
   row: MergedRow;
   /** 这一天的第一行，用来画日期分组线并作为跳转锚点。 */
@@ -42,12 +32,14 @@ type MatrixRow = {
 };
 
 /**
- * 一张表放下所有日期 × 所有人。字段是列头，每一行是「某天的某个人」。
+ * 三列行程表：日期（单人）/ 日期·人员（全员）｜活动与交通｜食宿。
  *
- * 滚动分工：**页面负责纵向，表格只负责横向**，不再出现两个纵向滚动面板。
- * 代价是表里的 <thead> 没法相对视口 sticky（外层容器是 scrollport），
- * 所以可见列头是表格外面那条 headbar，用 scrollLeft 跟表格同步；
- * <thead> 保留在 DOM 里给读屏用（sr-only）。
+ * 列宽按比例分（见 globals.css 的 `.trip-matrix`），390px 也放得下三列，
+ * **不再横向滚动** —— 所以外层容器的 overflow 被改回 visible，
+ * 表头那条也不用再跟表格同步 scrollLeft 了。页面只有一个纵向滚动。
+ *
+ * 活动与交通、餐与住各自仍用原来的 `PlanCell` 渲染，弹窗、按钮、数据都没变；
+ * 这里只是把它们两两放进同一格，中间用细线或小标签分开。
  */
 export function DayTab({
   lang,
@@ -75,43 +67,7 @@ export function DayTab({
   }, [dates, person]);
 
   const stickyRef = React.useRef<HTMLDivElement | null>(null);
-  const wrapRef = React.useRef<HTMLDivElement | null>(null);
-  const headBarRef = React.useRef<HTMLDivElement | null>(null);
   const dateRowRefs = React.useRef(new Map<string, HTMLTableRowElement>());
-
-  const bodyScroller = React.useCallback(
-    () =>
-      wrapRef.current?.querySelector<HTMLElement>(
-        '[data-slot="table-container"]',
-      ) ?? null,
-    [],
-  );
-
-  // 列头条和表格是两个独立的横向滚动容器，互相同步 scrollLeft。
-  // syncing 这把锁防止「A 滚 → 设 B → B 触发 scroll → 又设 A」的来回抖动。
-  React.useEffect(() => {
-    const body = bodyScroller();
-    const head = headBarRef.current;
-    if (!body || !head) return;
-
-    let syncing = false;
-    const mirror = (from: HTMLElement, to: HTMLElement) => () => {
-      if (syncing) return;
-      syncing = true;
-      to.scrollLeft = from.scrollLeft;
-      requestAnimationFrame(() => {
-        syncing = false;
-      });
-    };
-    const onBody = mirror(body, head);
-    const onHead = mirror(head, body);
-    body.addEventListener("scroll", onBody, { passive: true });
-    head.addEventListener("scroll", onHead, { passive: true });
-    return () => {
-      body.removeEventListener("scroll", onBody);
-      head.removeEventListener("scroll", onHead);
-    };
-  }, [bodyScroller, rows.length]);
 
   /**
    * 跳到某一天的第一行。滚的是**窗口**，偏移量按 sticky 条的实际底边算，
@@ -129,177 +85,202 @@ export function DayTab({
     });
   }, []);
 
-  // 切人 / 切语言后横向回到第一列（住宿）。scrollLeft 用 0 —— 按规范 RTL 下 0 也是行首。
-  React.useEffect(() => {
-    bodyScroller()?.scrollTo({ left: 0 });
-    if (headBarRef.current) headBarRef.current.scrollLeft = 0;
-  }, [person, lang, bodyScroller]);
-
   // 兜底：筛人或切语言之后行的位置和高度都变了，把选中日期重新带回视野。
   React.useEffect(() => {
     jumpToDate(activeDate);
   }, [person, lang, activeDate, jumpToDate]);
 
+  const firstColLabel = person
+    ? t(UI.cols.date, lang)
+    : t(UI.matrixCorner, lang);
+
   return (
-    <div className="space-y-3">
-      <p className="text-sm leading-relaxed text-navy-soft">
-        {t(UI.matrixHint, lang)}
-      </p>
+    <div
+      className="trip-matrix"
+      data-view={person ? "single" : "all"}
+    >
+      {/* 日期条 + 列头一起粘在页头下面；页头高度由 trip-view 量出来写进 CSS 变量 */}
+      <div
+        ref={stickyRef}
+        className="sticky top-[var(--trip-header-h,0px)] z-10 -mx-4 bg-white px-4 pt-1 md:-mx-8 md:px-8"
+      >
+        <DayNav
+          dates={dates}
+          active={activeDate}
+          lang={lang}
+          onSelect={(date) => {
+            onSelectDate(date);
+            jumpToDate(date);
+          }}
+        />
 
-      <div>
-        {/* 日期条 + 列头一起粘在页头下面；页头高度由 trip-view 量出来写进 CSS 变量 */}
-        <div
-          ref={stickyRef}
-          className="sticky top-[var(--trip-header-h,0px)] z-10 -mx-4 bg-white px-4 pt-1"
-        >
-          <DayNav
-            dates={dates}
-            active={activeDate}
-            lang={lang}
-            onSelect={(date) => {
-              onSelectDate(date);
-              jumpToDate(date);
-            }}
-          />
-
-          {rows.length > 0 ? (
-            <div className="matrix-headbar mt-2 overflow-hidden rounded-t-xl border border-b-0 border-line bg-navy-tint">
-              <div
-                ref={headBarRef}
-                aria-hidden="true"
-                className="overflow-x-auto scrollbar-none"
-              >
-                <div className="flex w-max">
-                  <div className="sticky start-0 z-10 w-[var(--col-first)] min-w-[var(--col-first)] max-w-[var(--col-first)] border-e border-line bg-navy-tint px-2 py-2 text-sm font-semibold leading-5 text-navy">
-                    {t(UI.matrixCorner, lang)}
-                  </div>
-                  {FIELDS.map((key) => (
-                    <div
-                      key={key}
-                      className="w-[var(--col-field)] min-w-[var(--col-field)] max-w-[var(--col-field)] bg-navy-tint px-3 py-2 text-sm font-semibold leading-5 text-navy"
-                    >
-                      {t(UI.rows[key], lang)}
-                    </div>
-                  ))}
-                </div>
-              </div>
+        {rows.length > 0 ? (
+          // 首列读同一个 --col-date，后两列 flex-1 对半分 —— 和表体
+          // table-fixed 的均分规则一致，两边逐像素对齐，也不用同步滚动位置。
+          <div
+            aria-hidden="true"
+            className="mt-2 flex rounded-t-xl border border-b-0 border-line bg-navy-tint"
+          >
+            <div className="w-[var(--col-date)] shrink-0 border-e border-line px-2 py-2 text-[13px] font-semibold leading-4 text-navy">
+              {firstColLabel}
             </div>
-          ) : null}
-        </div>
-
-        {rows.length === 0 ? (
-          <p className="rounded-xl border border-dashed border-line bg-white px-4 py-6 text-center text-base text-navy-soft">
-            {t(UI.noPlan, lang)}
-          </p>
-        ) : (
-          /* isolate + z-0：表体里的 sticky 首列自己有 z-10，如果和上面的
-             sticky 日期条 / 列头条同处一个层叠上下文，纵向滚动时首列会盖到它们上面
-             （真机截图：9/26 的首列贴到了日期按钮和列头上）。
-             这里给表格开一个局部层叠上下文，把整块压在控件条下面。
-             层级：页头 z-20 > 日期条 + 列头条 z-10 > 表体（isolate 内部） */
-          <div ref={wrapRef} className="matrix-scroll relative isolate z-0">
-            <Table className="w-auto border-separate border-spacing-0 text-base">
-              {/* 语义列头保留给读屏；可见的那条在表格外面 */}
-              <TableHeader className="sr-only">
-                <TableRow>
-                  <TableHead scope="col">{t(UI.matrixCorner, lang)}</TableHead>
-                  {FIELDS.map((key) => (
-                    <TableHead key={key} scope="col">
-                      {t(UI.rows[key], lang)}
-                    </TableHead>
-                  ))}
-                </TableRow>
-              </TableHeader>
-
-              <TableBody>
-                {rows.map(({ row, firstOfDate }) => {
-                  const { date, card } = row;
-                  const isActive = date === activeDate;
-                  // sticky 首列必须**不透明**：半透明底色会让横滑过去的活动/餐饮
-                  // 从姓名底下透出来。
-                  const tint = isActive ? "bg-miniso-red-tint" : "bg-white";
-                  const topLine = firstOfDate
-                    ? "border-t-2 border-t-navy/15"
-                    : "";
-                  // 筛单人时第一格只写选中的那个名字，不带出同行的人；
-                  // 全员视图才列出合并进这一行的所有人。室友关系仍在住宿正文里。
-                  const shown = displayedPeople(row, person);
-
-                  return (
-                    <TableRow
-                      key={row.key}
-                      ref={
-                        firstOfDate
-                          ? (node) => {
-                              if (node) dateRowRefs.current.set(date, node);
-                              else dateRowRefs.current.delete(date);
-                            }
-                          : undefined
-                      }
-                      className="hover:bg-transparent"
-                    >
-                      <TableHead
-                        scope="row"
-                        className={cn(
-                          "sticky start-0 z-10 h-auto w-[var(--col-first)] min-w-[var(--col-first)] max-w-[var(--col-first)] whitespace-normal border-b border-e border-line px-2 py-3 text-start align-top",
-                          tint,
-                          topLine,
-                        )}
-                      >
-                        {/* 日期不包 Ltr：中英文容器本来就是 LTR，阿语下这里是阿拉伯文月份，
-                            强制 LTR 反而会把它翻错。 */}
-                        <span className="block text-sm leading-5 text-navy-soft">
-                          {shortDateLabel(date, lang)}
-                          <span className="ms-1">
-                            {weekdayLabel(date, lang)}
-                          </span>
-                        </span>
-                        <span className="mt-0.5 block text-sm font-semibold leading-5 text-navy">
-                          {shown.map((id, index) => (
-                            <React.Fragment key={id}>
-                              {index > 0 ? (
-                                <span
-                                  aria-hidden="true"
-                                  className="text-navy/30"
-                                >
-                                  {" · "}
-                                </span>
-                              ) : null}
-                              <Ltr>{PERSON_MAP[id].name}</Ltr>
-                            </React.Fragment>
-                          ))}
-                        </span>
-                      </TableHead>
-
-                      {FIELDS.map((field) => (
-                        <TableCell
-                          key={field}
-                          className={cn(
-                            "w-[var(--col-field)] min-w-[var(--col-field)] max-w-[var(--col-field)] whitespace-normal break-words border-b border-line px-3 py-3 align-top",
-                            tint,
-                            topLine,
-                          )}
-                        >
-                          <PlanCell
-                            row={card[field]}
-                            view={cellView(field, date, card)}
-                            lang={lang}
-                            date={date}
-                            people={shown}
-                          />
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
+            <div className="min-w-0 flex-1 border-e border-line px-2 py-2 text-[13px] font-semibold leading-4 text-navy md:px-3">
+              {t(UI.cols.plan, lang)}
+            </div>
+            <div className="min-w-0 flex-1 px-2 py-2 text-[13px] font-semibold leading-4 text-navy md:px-3">
+              {t(UI.cols.stay, lang)}
+            </div>
           </div>
-        )}
+        ) : null}
       </div>
 
-      <TeamDetails lang={lang} person={person} />
+      {rows.length === 0 ? (
+        <p className="rounded-xl border border-dashed border-line bg-white px-4 py-6 text-center text-base text-navy-soft">
+          {t(UI.noPlan, lang)}
+        </p>
+      ) : (
+        // isolate + z-0：表体压在 sticky 日期条 / 列头条下面。
+        <div className="relative isolate z-0">
+          <Table className="w-full table-fixed border-separate border-spacing-0 text-sm md:text-base">
+            {/* 后两列不写宽度：table-fixed 会把剩余宽度对半分给它们。 */}
+            <colgroup>
+              <col className="w-[var(--col-date)]" />
+              <col />
+              <col />
+            </colgroup>
+
+            {/* 语义列头保留给读屏；可见的那条在表格外面 */}
+            <TableHeader className="sr-only">
+              <TableRow>
+                <TableHead scope="col">{firstColLabel}</TableHead>
+                <TableHead scope="col">{t(UI.cols.plan, lang)}</TableHead>
+                <TableHead scope="col">{t(UI.cols.stay, lang)}</TableHead>
+              </TableRow>
+            </TableHeader>
+
+            <TableBody>
+              {rows.map(({ row, firstOfDate }) => {
+                const { date, card } = row;
+                const isActive = date === activeDate;
+                const tint = isActive ? "bg-miniso-red-tint" : "bg-white";
+                const topLine = firstOfDate ? "border-t-2 border-t-navy/15" : "";
+                // 筛了人就只认那一个人：合并行里同卡的其他人不该出现在弹窗标题里
+                // （筛 Ahmed 时不能带出 Mohamed）。
+                const people = displayedPeople(row, person);
+                // 单人视图首列不重复写名字（顶部已经显示在看谁）；全员视图才列名字。
+                const shown = person ? [] : people;
+
+                return (
+                  <TableRow
+                    key={row.key}
+                    ref={
+                      firstOfDate
+                        ? (node) => {
+                            if (node) dateRowRefs.current.set(date, node);
+                            else dateRowRefs.current.delete(date);
+                          }
+                        : undefined
+                    }
+                    className="hover:bg-transparent"
+                  >
+                    <TableHead
+                      scope="row"
+                      className={cn(
+                        "h-auto whitespace-normal break-words border-b border-e border-line px-2 py-2 text-start align-top md:py-3",
+                        tint,
+                        topLine,
+                      )}
+                    >
+                      {/* 窄列里日期竖着排：日 / 月 / 周几，英阿的月份才放得下 */}
+                      <span className="block text-base font-semibold leading-5 text-navy">
+                        <Ltr>{dayNumber(date)}</Ltr>
+                      </span>
+                      <span className="block text-[13px] leading-4 text-navy-soft">
+                        {monthLabel(date, lang)}
+                      </span>
+                      <span className="block text-[13px] leading-4 text-navy-soft">
+                        {weekdayLabel(date, lang)}
+                      </span>
+                      {shown.length > 0 ? (
+                        <span className="mt-1 block text-[13px] font-semibold leading-4 text-navy">
+                          {shown.map((id) => (
+                            <span key={id} className="block">
+                              <Ltr>{PERSON_MAP[id].name}</Ltr>
+                            </span>
+                          ))}
+                        </span>
+                      ) : null}
+                    </TableHead>
+
+                    {/* 活动与交通：两段之间一条细线，不加重复的小标题 */}
+                    <TableCell
+                      className={cn(
+                        "whitespace-normal break-words border-b border-e border-line px-2 py-2 align-top md:px-3 md:py-3",
+                        tint,
+                        topLine,
+                      )}
+                    >
+                      <PlanCell
+                        row={card.activity}
+                        view={cellView("activity", date, card)}
+                        lang={lang}
+                        date={date}
+                        people={people}
+                      />
+                      <div className="mt-2 border-t border-line/70 pt-2">
+                        <PlanCell
+                          row={card.transport}
+                          view={cellView("transport", date, card)}
+                          lang={lang}
+                          date={date}
+                          people={people}
+                        />
+                      </div>
+                    </TableCell>
+
+                    {/* 食宿：两段各带一个短标签，免得混在一起 */}
+                    <TableCell
+                      className={cn(
+                        "whitespace-normal break-words border-b border-line px-2 py-2 align-top md:px-3 md:py-3",
+                        tint,
+                        topLine,
+                      )}
+                    >
+                      <MiniLabel>{t(UI.rows.dining, lang)}</MiniLabel>
+                      <PlanCell
+                        row={card.dining}
+                        view={cellView("dining", date, card)}
+                        lang={lang}
+                        date={date}
+                        people={people}
+                      />
+                      <div className="mt-2 border-t border-line/70 pt-2">
+                        <MiniLabel>{t(UI.rows.lodging, lang)}</MiniLabel>
+                        <PlanCell
+                          row={card.lodging}
+                          view={cellView("lodging", date, card)}
+                          lang={lang}
+                          date={date}
+                          people={people}
+                        />
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </div>
+      )}
     </div>
+  );
+}
+
+function MiniLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="mb-0.5 block text-[13px] font-semibold leading-4 text-navy-soft">
+      {children}
+    </span>
   );
 }
 
@@ -343,7 +324,7 @@ function DayNav({
     <nav
       ref={scrollerRef}
       aria-label={t(UI.jumpToDate, lang)}
-      className="-mx-4 overflow-x-auto scrollbar-none px-4"
+      className="-mx-4 overflow-x-auto scrollbar-none px-4 md:-mx-8 md:px-8"
     >
       <ul className="flex w-max gap-2 pb-1">
         {dates.map((date) => {
@@ -379,63 +360,5 @@ function DayNav({
         })}
       </ul>
     </nav>
-  );
-}
-
-/* ---------------- 人员详情（票面全名只在这里） ---------------- */
-
-function TeamDetails({
-  lang,
-  person,
-}: {
-  lang: Lang;
-  person: PersonId | null;
-}) {
-  return (
-    <section className="rounded-xl border border-line bg-white px-4">
-      <Accordion type="single" collapsible>
-        <AccordionItem value="team" className="border-b-0">
-          <AccordionTrigger className="min-h-11 py-3 text-base font-semibold text-navy hover:no-underline">
-            {`${t(UI.team, lang)} · ${PEOPLE.length}`}
-          </AccordionTrigger>
-          <AccordionContent className="pb-4">
-            <ul className="space-y-2">
-              {PEOPLE.map((item) => (
-                <li
-                  key={item.id}
-                  className={cn(
-                    "rounded-lg px-3 py-2",
-                    person === item.id ? "bg-navy text-white" : "bg-navy-tint",
-                  )}
-                >
-                  <p className="text-base font-semibold leading-6">
-                    <Ltr>{PERSON_MAP[item.id].name}</Ltr>
-                    <span
-                      className={cn(
-                        "ms-2 text-sm font-normal",
-                        person === item.id ? "text-white/85" : "text-navy-soft",
-                      )}
-                    >
-                      {t(item.role, lang)}
-                    </span>
-                  </p>
-                  <p
-                    className={cn(
-                      "text-sm leading-5",
-                      person === item.id ? "text-white/75" : "text-navy-soft",
-                    )}
-                  >
-                    {t(UI.ticketName, lang)}:{" "}
-                    <Ltr className="font-medium tracking-wide">
-                      {item.ticketName}
-                    </Ltr>
-                  </p>
-                </li>
-              ))}
-            </ul>
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
-    </section>
   );
 }
