@@ -39,26 +39,35 @@ export function BaggageLines({
   profile,
   lang,
   withSources = false,
+  fromCairo = false,
 }: {
   profile: BaggageProfile;
   lang: Lang;
   withSources?: boolean;
+  /** 只有从开罗出发的那一段才用「开罗出发」抬头；回程和指南页用通用说法。 */
+  fromCairo?: boolean;
 }) {
   const info = BAGGAGE[profile];
+  const opening =
+    fromCairo && info.openingFromCairo ? info.openingFromCairo : info.opening;
   return (
     <div className="space-y-1">
       <p className="text-base font-medium leading-6 text-navy">
         {t(info.title, lang)}
       </p>
-      <p className="text-base leading-relaxed text-navy-soft">
-        {t(info.checked, lang)}
+      {/* 主行：票面确认的件数 */}
+      <p className="text-base font-medium leading-relaxed text-navy">
+        {t(opening, lang)}
       </p>
-      <p className="text-base leading-relaxed text-navy-soft">
-        {t(info.cabin, lang)}
-      </p>
-      <p className="text-base leading-relaxed text-navy-soft">
-        {t(info.note, lang)}
-      </p>
+      {/* 次要行：官网标准的重量与尺寸 */}
+      {info.lines.map((line, index) => (
+        <p key={index} className="text-base leading-relaxed text-navy-soft">
+          {t(line, lang)}
+        </p>
+      ))}
+      {info.caveat ? (
+        <p className="text-sm leading-5 text-navy-soft">{t(info.caveat, lang)}</p>
+      ) : null}
       <p className="text-sm leading-5 text-navy-soft/80">
         {t(BAGGAGE_VERIFIED, lang)}
       </p>
@@ -116,7 +125,16 @@ export function FlightDetails({ ids, lang }: { ids: string[]; lang: Lang }) {
         </p>
         <div className="space-y-3">
           {profiles.map((profile) => (
-            <BaggageLines key={profile} profile={profile} lang={lang} />
+            <BaggageLines
+              key={profile}
+              profile={profile}
+              lang={lang}
+              // 这组航段里有没有真的从开罗起飞的一段？只有去程才有。
+              fromCairo={flights.some(
+                (flight) =>
+                  flight.baggage === profile && flight.from.iata === "CAI",
+              )}
+            />
           ))}
         </div>
       </div>

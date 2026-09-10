@@ -228,35 +228,62 @@ export const CHENGDU_TRANSFER: L10n = {
 /* 免费行李额（核实日期 2026-09-10，仅票价所含，不含额外购买）          */
 /* ------------------------------------------------------------------ */
 
+/**
+ * 免费行李额。
+ *
+ * 口径分两层，不能混：
+ *   - `opening`：**票面确认**的件数。这是我们真正看到的东西。
+ *   - `lines`：**航空公司官网标准**推出来的重量与尺寸。不是这张订单的确认值。
+ *   - `caveat`：明说具体订单的重量额度还没有向航司或出票方核实过。
+ *
+ * 不得声称查过航司订座后台。
+ */
 export type BaggageInfo = {
   title: L10n;
-  checked: L10n;
-  cabin: L10n;
-  note: L10n;
+  /** 主行：票面件数。 */
+  opening: L10n;
+  /** 只在从开罗出发的那一段用；回程不能套「开罗出发」这个抬头。 */
+  openingFromCairo?: L10n;
+  /** 次要行：官网重量、尺寸。 */
+  lines: L10n[];
+  /** 票面 / 官网的区分与未核实声明。 */
+  caveat?: L10n;
   sources: { label: L10n; url: string }[];
 };
 
 export const BAGGAGE: Record<BaggageProfile, BaggageInfo> = {
   sichuanEconomy: {
     title: {
-      zh: "四川航空 · 经济舱（票面 1 件）",
-      en: "Sichuan Airlines · Economy (1 piece on the ticket)",
-      ar: "الخطوط الجوية السيتشوانية · الدرجة السياحية (قطعة واحدة على التذكرة)",
+      zh: "四川航空 · 经济舱",
+      en: "Sichuan Airlines · Economy",
+      ar: "الخطوط الجوية السيتشوانية · الدرجة السياحية",
     },
-    checked: {
-      zh: "托运：1 件，每件不超过 23 kg，三边之和不超过 158 cm。",
-      en: "Checked: 1 piece, up to 23 kg, total of three dimensions up to 158 cm.",
-      ar: "المسجَّلة: قطعة واحدة حتى 23 كجم، ومجموع الأبعاد الثلاثة حتى 158 سم.",
+    opening: {
+      zh: "票面含 1 件免费托运行李",
+      en: "The ticket includes 1 free checked bag",
+      ar: "التذكرة تشمل قطعة أمتعة مسجَّلة مجانية واحدة",
     },
-    cabin: {
-      zh: "手提：1 件，不超过 8 kg，不超过 55×40×20 cm。",
-      en: "Carry-on: 1 piece, up to 8 kg, up to 55×40×20 cm.",
-      ar: "اليدوية: قطعة واحدة حتى 8 كجم، وحتى 55×40×20 سم.",
+    openingFromCairo: {
+      zh: "开罗出发：票面含 1 件免费托运行李",
+      en: "Departing Cairo: the ticket includes 1 free checked bag",
+      ar: "المغادرة من القاهرة: التذكرة تشمل قطعة أمتعة مسجَّلة مجانية واحدة",
     },
-    note: {
-      zh: "这趟成都—广州段属于国际联程，沿用国际免费额度，不适用单独国内经济舱的 20 kg。",
-      en: "The Chengdu–Guangzhou leg is part of international carriage, so the international allowance applies — not the 20 kg of a standalone domestic economy ticket.",
-      ar: "رحلة تشنغدو–قوانغتشو جزء من نقل دولي، لذا ينطبق الحد الدولي وليس 20 كجم الخاص بتذكرة داخلية منفصلة.",
+    lines: [
+      {
+        zh: "官网标准：该件最多 23 公斤；另可随身带 1 件最多 8 公斤。",
+        en: "Airline website standard: up to 23 kg for that bag, plus 1 carry-on up to 8 kg.",
+        ar: "معيار موقع الشركة: حتى 23 كجم لتلك القطعة، بالإضافة إلى قطعة يدوية واحدة حتى 8 كجم.",
+      },
+      {
+        zh: "尺寸：托运件三边之和不超过 158 厘米；随身件不超过 55×40×20 厘米。",
+        en: "Dimensions: checked bag up to 158 cm in total; carry-on up to 55×40×20 cm.",
+        ar: "الأبعاد: القطعة المسجَّلة حتى 158 سم إجمالًا؛ واليدوية حتى 55×40×20 سم.",
+      },
+    ],
+    caveat: {
+      zh: "件数来自票面，重量与尺寸来自官网标准。具体订单的重量额度尚未向川航或出票方核实。",
+      en: "The piece count comes from the ticket; the weights and dimensions come from the airline's public website. The weight allowance for this specific booking has not been checked with Sichuan Airlines or the ticket issuer.",
+      ar: "عدد القطع مأخوذ من التذكرة، والأوزان والأبعاد من الموقع الرسمي للشركة. أما حد الوزن لهذا الحجز تحديدًا فلم يُتحقَّق منه مع سيتشوان أو جهة إصدار التذكرة.",
     },
     sources: [
       {
@@ -269,11 +296,11 @@ export const BAGGAGE: Record<BaggageProfile, BaggageInfo> = {
       },
       {
         label: {
-          zh: "四川航空：随身携带行李",
-          en: "Sichuan Airlines: carry-on baggage",
-          ar: "الخطوط السيتشوانية: الأمتعة اليدوية",
+          zh: "四川航空：免费行李额说明",
+          en: "Sichuan Airlines: free baggage allowance",
+          ar: "الخطوط السيتشوانية: حد الأمتعة المجاني",
         },
-        url: "https://flights.sichuanair.com/baggage-service/carry-on-baggage.html",
+        url: "https://serviceapp.sichuanair.com/views/staticinfo/static7b2817c998e244adbf77f258a8b88995.html",
       },
     ],
   },
@@ -283,21 +310,23 @@ export const BAGGAGE: Record<BaggageProfile, BaggageInfo> = {
       en: "EGYPTAIR · Business (2 pieces on the ticket)",
       ar: "مصر للطيران · درجة رجال الأعمال (قطعتان على التذكرة)",
     },
-    checked: {
+    opening: {
       zh: "托运：2 件，每件不超过 32 kg，每件三边之和不超过 158 cm。",
       en: "Checked: 2 pieces, up to 32 kg each, total of three dimensions up to 158 cm per piece.",
       ar: "المسجَّلة: قطعتان حتى 32 كجم لكل قطعة، ومجموع الأبعاد الثلاثة حتى 158 سم لكل قطعة.",
     },
-    cabin: {
-      zh: "手提：2 件，每件不超过 8 kg，每件不超过 55×40×23 cm。",
-      en: "Carry-on: 2 pieces, up to 8 kg each, up to 55×40×23 cm each.",
-      ar: "اليدوية: قطعتان حتى 8 كجم لكل قطعة، وحتى 55×40×23 سم لكل قطعة.",
-    },
-    note: {
-      zh: "限重按每件计算：64 kg 不能装进一个箱子。",
-      en: "The limit is per piece: 64 kg cannot go into a single bag.",
-      ar: "الحد لكل قطعة: لا يمكن وضع 64 كجم في حقيبة واحدة.",
-    },
+    lines: [
+      {
+        zh: "手提：2 件，每件不超过 8 kg，每件不超过 55×40×23 cm。",
+        en: "Carry-on: 2 pieces, up to 8 kg each, up to 55×40×23 cm each.",
+        ar: "اليدوية: قطعتان حتى 8 كجم لكل قطعة، وحتى 55×40×23 سم لكل قطعة.",
+      },
+      {
+        zh: "限重按每件计算：64 kg 不能装进一个箱子。",
+        en: "The limit is per piece: 64 kg cannot go into a single bag.",
+        ar: "الحد لكل قطعة: لا يمكن وضع 64 كجم في حقيبة واحدة.",
+      },
+    ],
     sources: [
       {
         label: {
@@ -320,9 +349,9 @@ export const BAGGAGE: Record<BaggageProfile, BaggageInfo> = {
 };
 
 export const BAGGAGE_VERIFIED: L10n = {
-  zh: "按所提供机票与航空公司官网核实，核实日期 2026-09-10；不含额外购买或会员加赠。",
-  en: "Checked against the issued tickets and the airlines' own websites on 2026-09-10; excludes purchased or status extras.",
-  ar: "تم التحقق من التذاكر الصادرة ومواقع شركات الطيران الرسمية بتاريخ 2026-09-10؛ ولا يشمل ذلك الأمتعة المشتراة أو مزايا العضوية.",
+  zh: "件数按所提供机票；重量与尺寸按航空公司官网（2026-09-10 查阅）。不含额外购买或会员加赠。",
+  en: "Piece counts from the issued tickets; weights and dimensions from the airlines' public websites (read 2026-09-10). Excludes purchased or status extras.",
+  ar: "عدد القطع من التذاكر الصادرة؛ والأوزان والأبعاد من المواقع الرسمية لشركات الطيران (بتاريخ 2026-09-10). ولا يشمل ذلك الأمتعة المشتراة أو مزايا العضوية.",
 };
 
 /* ------------------------------------------------------------------ */
