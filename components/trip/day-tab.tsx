@@ -3,7 +3,8 @@
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
-import { cardsForPerson, type PersonDayCard } from "@/lib/person-day-plan";
+import { cardsForPerson } from "@/lib/person-day-plan";
+import { displayedPeople, mergeRows, type MergedRow } from "@/lib/merge-rows";
 import { cellView, type Field } from "@/lib/plan-presentation";
 import { PEOPLE, PERSON_MAP, type Lang, type PersonId } from "@/lib/trip-data";
 import {
@@ -34,8 +35,7 @@ import { Ltr } from "./ui";
 const FIELDS: Field[] = ["lodging", "activity", "dining", "transport"];
 
 type MatrixRow = {
-  date: string;
-  card: PersonDayCard;
+  row: MergedRow;
   /** 这一天的第一行，用来画日期分组线并作为跳转锚点。 */
   firstOfDate: boolean;
 };
@@ -64,8 +64,10 @@ export function DayTab({
   const rows = React.useMemo(() => {
     const out: MatrixRow[] = [];
     for (const date of dates) {
-      cardsForPerson(person, date).forEach((card, index) => {
-        out.push({ date, card, firstOfDate: index === 0 });
+      // 同一天里安排逐字一致的人合成一行（9/20 出发日就是这种情况）。
+      // 筛单人时每天最多一张卡，mergeRows 是恒等变换。
+      mergeRows(date, cardsForPerson(person, date)).forEach((row, index) => {
+        out.push({ row, firstOfDate: index === 0 });
       });
     }
     return out;
@@ -209,7 +211,8 @@ export function DayTab({
               </TableHeader>
 
               <TableBody>
-                {rows.map(({ date, card, firstOfDate }) => {
+                {rows.map(({ row, firstOfDate }) => {
+                  const { date, card } = row;
                   const isActive = date === activeDate;
                   // sticky 首列必须**不透明**：半透明底色会让横滑过去的活动/餐饮
                   // 从姓名底下透出来。
@@ -217,12 +220,13 @@ export function DayTab({
                   const topLine = firstOfDate
                     ? "border-t-2 border-t-navy/15"
                     : "";
-                  // 单人视图第一格只写选中的那个名字；室友关系仍在住宿正文里。
-                  const shown = person ? [person] : card.people;
+                  // 筛单人时第一格只写选中的那个名字，不带出同行的人；
+                  // 全员视图才列出合并进这一行的所有人。室友关系仍在住宿正文里。
+                  const shown = displayedPeople(row, person);
 
                   return (
                     <TableRow
-                      key={card.id}
+                      key={row.key}
                       ref={
                         firstOfDate
                           ? (node) => {
