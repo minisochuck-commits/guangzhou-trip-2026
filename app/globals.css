@@ -157,19 +157,28 @@ body {
 }
 
 /*
- * 行程矩阵的滚动面板。
+ * 行程矩阵。
  *
- * shadcn 的 <Table> 自带一层 [data-slot="table-container"]，只有 overflow-x-auto。
- * 那一层会成为最近的 scrollport，所以 sticky 表头必须相对它生效；
- * 如果在外面再套一个纵向滚动的 div，表头就会跟着内容一起走。
- * 这里不改 vendored 组件，直接从外层给那一层加高度和纵向滚动 ——
- * 一个容器同时管左右和上下，固定表头与固定首列才可靠。
+ * 只做**横向**滚动：表格容器不再限高，页面自然向下滚，不出现「页面 + 表格」
+ * 两个纵向滚动条。代价是 shadcn <Table> 自带的 [data-slot="table-container"]
+ * （overflow-x-auto，按 CSS 规则 overflow-y 也会变成 auto）会成为 scrollport，
+ * 真实 <thead> 没法相对视口 sticky —— 所以可见的列头是表格外面那条
+ * .matrix-headbar，用 scrollLeft 跟主容器同步；表里的 <thead> 保留语义，sr-only。
+ *
+ * 列宽写成变量，列头条和表格必须用同一份，否则横滑会错位。
  */
+.matrix-scroll,
+.matrix-headbar {
+  --col-first: 6.5rem; /* 104px */
+  --col-field: 10.5rem; /* 168px */
+}
+
 .matrix-scroll [data-slot="table-container"] {
-  max-height: min(68dvh, 34rem);
-  overflow: auto;
-  overscroll-behavior: contain;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
   border: 1px solid var(--line);
-  border-radius: var(--radius);
+  border-top: 0;
+  border-bottom-left-radius: var(--radius);
+  border-bottom-right-radius: var(--radius);
   background: var(--background);
 }

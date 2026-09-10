@@ -15,16 +15,22 @@ MINISO Egypt 一行 5 人赴广州的行程分享页。手机优先，三语（�
 | --- | --- | --- | --- | --- |
 | 日期 + 人员（纵向两行） | … | … | … | … |
 
-- 手机上**固定表头 + 固定首列**：左右滑动看四个字段，上下滑动走日期。
-  滚动限制在表格容器内（高度适配手机可视区），不带动整页。
-- **日期按钮是跳转**：点一下滚到那一天的第一行并把它标成选中，不是「只显示这一天」。
-  重复点同一个已选中的日期也会跳回去（手动滑走之后最常用）—— 跳转是点击直接触发的，
-  不依赖 state 变化。选中只是跳转目标，不影响任何一行是否显示。
+- **只有一个纵向滚动条**：页面负责上下，表格只负责左右。
+  日期条 + 列头一起 sticky 在页头下面（页头高度由 `ResizeObserver` 量出来写进
+  `--trip-header-h`）；可见列头是表格外面那条 bar，用 `scrollLeft` 和表格双向同步，
+  表里的真 `<thead>` 保留 `sr-only` 给读屏。**首列在表内 sticky，背景不透明。**
+- **日期按钮是跳转**：点一下把窗口滚到那一天的第一行并把它标成选中，
+  不是「只显示这一天」。重复点同一个已选中的日期也会跳回去 ——
+  跳转是点击直接触发的，不依赖 state 变化。选中只是跳转目标，不影响任何一行是否显示。
 - **选人只筛行，不转置**。筛完之后日期列表只剩他有安排的日子，跳过去一定落在有内容的行。
-- 格子里是**摘要 + 待定提示 + 「详情」按钮**；详情、可复制中文地址、航班与行李、
-  自由行建议都在底部 Sheet 里，不把主表行撑满屏。
+- 格子里是**2–4 行短摘要 + 待定提示 + 可选建议 + 一个按内容命名的按钮**
+  （酒店地址 / 航班与行李 / 巡店安排 / 用餐说明 / 游玩路线 / 接送安排 …）。
+  完整原文、中文地址、航班行李、路线、美食都在底部 Sheet 里。
+  没有额外内容的格子不挂按钮。
+- 列宽：首列 104px，四个字段列各 168px，总宽 776px。
 
-顶部（sticky，三行）：一行标题 + 紧凑语言切换 / 日期区间 / 查看对象横滑（≥44px 点击高度）。
+顶部（sticky，三行）：一行标题 + 紧凑语言切换 / 日期区间 + **当前正在看谁** /
+查看对象横滑（≥44px 点击高度，选中的 chip 会自动滚进视野）。
 
 | Tab | 内容 |
 | --- | --- |
@@ -39,8 +45,11 @@ Li/Qiuting、Rahma、Reham 各自一行。选中单人时首列只写那一个�
 
 查看对象切换只是阅读筛选，不是权限隔离 —— 页面本身公开。
 
-> 历史：更早的版本用过长事件流、独立「吃住行」tab、以及**每人一张四行小表**。
-> 都已被上面这张表替代。`DESIGN_NOTES.md` 里记了为什么。
+> **表格方向是用户确认的结构，不要再改。** 上一版同样是这张表，
+> 但列宽 976px、交通格塞整句原文（Reham 9/27 那一行被撑到 233px）、
+> 表格自己带纵向滚动、按钮统称「详情」、自由日只写「自由安排」——
+> 那些是**实现不足**，已在本版替代。更早的长事件流、独立「吃住行」tab、
+> 每人一张四行小表都是历史方案。`DESIGN_NOTES.md` 里记了为什么。
 
 ## 姓名口径
 
@@ -126,39 +135,65 @@ Li/Qiuting、Rahma、Reham 各自一行。选中单人时首列只写那一个�
 
 ## 数据与代码入口
 
-| 文件 | 放什么 |
-| --- | --- |
-| `lib/trip-data.ts` | 事实正本：人员、8 段航班、行李额、酒店、出发前准备、可复制中文、三条路线、美食文化、官方链接、参考图 |
-| `lib/person-day-plan.ts` | **唯一的业务派生**：`cardsFor(date)` 返回当天的人员记录；`cardsForPerson` 按人筛；`datesForPerson` 给日期跳转条 |
-| `lib/trip-i18n.ts` | 界面文案与日期格式化 |
+**事实层和展示层是分开的两件事，别混。**
+
+| 层 | 文件 | 放什么 |
+| --- | --- | --- |
+| 事实 | `lib/trip-data.ts` | 人员、8 段航班、行李额、酒店、出发前准备、可复制中文、三条路线、美食文化、官方链接、参考图 |
+| 事实 | `lib/person-day-plan.ts` | **唯一的业务派生**：`cardsFor(date)` 返回当天的人员记录；`cardsForPerson` 按人筛；`datesForPerson` 给日期跳转条 |
+| 展示 | `lib/plan-presentation.ts` | 表内的 2–4 行短摘要、弹窗入口类型、自由日路线选择、餐饮建议 |
+| 文案 | `lib/trip-i18n.ts` | 界面文案与日期格式化 |
 
 组件：`components/trip/`
-（`trip-view.tsx` 壳 · `day-tab.tsx` **横向字段表 + 日期跳转 + 人员详情** ·
-`plan-cell.tsx` 单元格摘要与详情 Sheet · `flight-details.tsx` 航班与行李 ·
+（`trip-view.tsx` 壳 + 页头高度测量 · `day-tab.tsx` **横向字段表 + sticky 列头条 + 日期跳转** ·
+`plan-cell.tsx` 单元格摘要与内容化弹窗 · `flight-details.tsx` 航班与行李 ·
 `routes.tsx` 半日路线 · `guide-tab.tsx` 指南 · `ui.tsx` 公共件）。
 
-表格滚动面板的高度靠 `app/globals.css` 里的 `.matrix-scroll [data-slot="table-container"]`
-撑起来 —— **不改 vendored 的 `components/ui/table.tsx`**，原因见 `DESIGN_NOTES.md`。
+列宽变量和表格容器样式在 `app/globals.css` 的 `.matrix-scroll` / `.matrix-headbar`
+—— **不改 vendored 的 `components/ui/table.tsx`**，原因见 `DESIGN_NOTES.md`。
 
 **以下旧模块已删除或置空，由上述新入口替代：**
 `lib/day-plan.ts`、`components/trip/itinerary-tab.tsx`、`components/trip/day-supplements.tsx`、
 `components/trip/open-items.tsx`、`components/trip/person-day-table.tsx`（每人四行小表，已作废）。
 
-### 改一天的安排
+### 改一天的安排（事实）
 
 改 `lib/person-day-plan.ts` 里对应日期的函数。每条记录的四个字段都是
 `row(status, text, { detail, flights, copy })`：
 
-- `text` 是**格子里始终可见**的一句摘要，`detail` 进详情 Sheet。
-- `flights` 填 `trip-data.ts` 里 `FLIGHTS` 的 `id`，交通格的 Sheet 里会出现「航班与行李」。
-- `copy` 填 `CopyEntry`，Sheet 里会出现完整中文原文 + 复制按钮。
+- `text` 是**完整原文**，显示在弹窗的「完整说明」里。
+- `flights` 填 `trip-data.ts` 里 `FLIGHTS` 的 `id`，弹窗里会出现「航班与行李」。
+- `copy` 填 `CopyEntry`，弹窗里会出现完整中文原文 + 复制按钮。
   完整中文也要放 `detail`，三语版本都保留中文原文，复制失败时才能手选给司机看。
-- 未定的一律 `"pending"` + 明确写出待定什么。交通格的**对接人写进摘要**，不要藏进 `detail`。
-- `freeTime: true` 才在活动格的 Sheet 里出现自由行建议；
-  只有半天自由时用 `freeRoutes` 限定路线 id。
+- 未定的一律 `"pending"` + 明确写出待定什么。
 
 `DATES` 覆盖 9/20–10/7 全程共 18 天，含 9/29–10/5（那七天只有 Li/Qiuting 一行）。
 全部视图共 45 行。
+
+### 改表里显示什么（展示）
+
+改 `lib/plan-presentation.ts`。`cellView(field, date, card, lang)` 按
+(日期 × 人员 × 字段) 返回：
+
+- `lines`：表内 2–4 短行。**手写**，不做截断、不用正则剪、不用 `line-clamp` ——
+  交通格必须保留「几点到哪个机场哪个航站楼、谁负责」。
+- `entry`：弹窗入口类型（`hotelAddress` / `flights` / `storeVisit` / `meals` /
+  `routes` / `transfer` / `sessions` / `stayNote` / `notes`），文案在 `UI.entries`。
+  `null` = 这个格子没有额外内容，不挂按钮。
+- `suggestion`：表里直接看得见的一条 14px 建议 —— **只一条、只短地名 / 只一样吃的**。
+  其余选项和「未预订」说明在弹窗里。
+- `hidePending`：短行里已经写清「待定的是什么」时置 true，
+  不再另挂一行红色「待定」拉高行高；完整状态在弹窗里仍然显示。
+- `routeIds` / `foodNoteIds`：弹窗里展开哪几条已有路线 / 美食条目。
+
+自由日给哪条路线写在同文件的 `FREE_ROUTES`（数组第一条 = 主表露出的那条），
+吃什么写在 `FOOD_PICK`，都按 `日期|人员` 定。
+
+⚠️ **按日期分支之前先判 `isQiutingPersonal`**：Li/Qiuting 9/25–10/5 在中国走个人行程，
+不能被 9/28「抵达开罗」这类一刀切分支吃掉。
+
+**改短摘要时先对一遍原文，别把关键事实漏掉** ——
+交通必须留「几点到哪个机场哪个航站楼 + 谁负责」，住宿必须留「谁订的」。
 
 ## 本地命令
 
