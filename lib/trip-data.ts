@@ -459,6 +459,36 @@ export const PREP: PrepItem[] = [
       },
     ],
   },
+  {
+    id: "weather",
+    title: {
+      zh: "天气与穿什么",
+      en: "Weather and what to wear",
+      ar: "الطقس وماذا ترتدي",
+    },
+    lines: [
+      {
+        zh: "九月下旬的广州还是夏天：往年这个月白天平均 32℃ 上下、夜里 24℃ 上下，空气潮，走一段路就出汗。带轻薄透气的衣服。",
+        en: "Late September in Guangzhou is still summer: in an average September the days run around 32°C and the nights around 24°C, and the air is humid enough that a short walk makes you sweat. Pack light, breathable clothes.",
+        ar: "أواخر سبتمبر في قوانغتشو لا يزال صيفًا: في سبتمبر المعتاد تبلغ حرارة النهار نحو 32 درجة والليل نحو 24 درجة، والجو رطب إلى حدّ يجعل المشي القصير يُعرِّق. فاحمل ملابس خفيفة تسمح بمرور الهواء.",
+      },
+      {
+        zh: "九月也是雨月，月均降水接近 190 毫米。带一把折叠伞，别指望天天晴。",
+        en: "September is also a wet month — close to 190 mm of rain on average. Bring a folding umbrella; don't count on clear days.",
+        ar: "وسبتمبر شهر ممطر أيضًا، إذ يبلغ متوسط الأمطار نحو 190 ملم. فخذ مظلة قابلة للطي ولا تعوّل على صفاء الجو.",
+      },
+      {
+        zh: "室内冷气开得足，会议室、商场和车里都偏凉，随身带一件薄外套。",
+        en: "Air conditioning indoors is strong — meeting rooms, malls and cars all run cold. Keep a light jacket with you.",
+        ar: "والتكييف داخل المباني قوي، فقاعات الاجتماعات والمراكز التجارية والسيارات باردة. احتفظ بسترة خفيفة معك.",
+      },
+      {
+        zh: "以上是往年九月的月平均值，不是这几天的预报。出发前和每天早上看一次当天预报。",
+        en: "These are average figures for September in past years, not a forecast for these particular days. Check the actual forecast before you fly and again each morning.",
+        ar: "هذه متوسطات سبتمبر في السنوات الماضية وليست توقعًا لهذه الأيام تحديدًا. راجع النشرة الفعلية قبل السفر وكل صباح.",
+      },
+    ],
+  },
 ];
 
 /* ------------------------------------------------------------------ */
@@ -533,6 +563,43 @@ export const PHRASES: CopyEntry[] = [
       ar: "اطلب شرح قائمة الطعام",
     },
     chinese: "请帮我看一下这份菜单，告诉我每道菜的食材和价格。",
+  },
+  /* 全程打车，下面几句是坐车时真正用得上的。 */
+  {
+    id: "call-taxi",
+    label: {
+      zh: "请前台帮忙叫车",
+      en: "Ask the front desk to call a taxi",
+      ar: "اطلب من الاستقبال طلب سيارة أجرة",
+    },
+    chinese: "麻烦帮我叫一辆车，我要去这个地址。",
+  },
+  {
+    id: "meter",
+    label: {
+      zh: "给司机看：请打表或用导航",
+      en: "Show the driver: please use the meter or navigation",
+      ar: "أظهرها للسائق: من فضلك شغّل العدّاد أو استخدم الملاحة",
+    },
+    chinese: "麻烦打表，或者按导航走，谢谢。",
+  },
+  {
+    id: "stop-here",
+    label: {
+      zh: "给司机看：在这里停",
+      en: "Show the driver: stop here please",
+      ar: "أظهرها للسائق: توقّف هنا من فضلك",
+    },
+    chinese: "麻烦在这里停一下，谢谢。",
+  },
+  {
+    id: "how-much",
+    label: {
+      zh: "问价格：这个多少钱",
+      en: "Ask the price: how much is this",
+      ar: "اسأل عن السعر: بكم هذا",
+    },
+    chinese: "请问这个多少钱？",
   },
 ];
 
@@ -808,6 +875,199 @@ export const FOOD_NOTES: FoodNote[] = [
       en: "A qilou is the covered walkway under the street-front buildings, shading you from sun and rain; Enning Road is a good place to see them. Cantonese opera and crafts are part of local life, but no performance or open workshop is guaranteed on any given day.",
       ar: "«تشي لو» ممر مسقوف أسفل المباني المطلّة على الشارع، يقي من الشمس والمطر، وشارع إن نينغ مكان جيد لمشاهدته. وأوبرا كانتون والحِرف جزء من الحياة المحلية، لكن لا ضمان لوجود عرض أو ورشة مفتوحة في يوم بعينه.",
     },
+  },
+];
+
+/* ------------------------------------------------------------------ */
+/* 清真与礼拜                                                          */
+/*                                                                     */
+/* 五人里四位是穆斯林，这是这趟最实际的一项生活需求。                   */
+/* 纪律：清真寺按政府门户的地址与说明写；餐厅只写「是清真馆子」这个     */
+/* 事实，不替任何一家做清真认证，营业时间标明来源与未核实。             */
+/* ------------------------------------------------------------------ */
+
+export type PlaceCard = {
+  id: string;
+  name: L10n;
+  /** 一句话特点。 */
+  note: L10n;
+  /** 给司机看的中文地址。 */
+  copy: CopyEntry;
+  /** 开放 / 营业信息，允许写「未核实」。 */
+  meta?: L10n;
+  sources: { label: L10n; url: string }[];
+};
+
+export const MOSQUES: PlaceCard[] = [
+  {
+    id: "xianxian",
+    name: {
+      zh: "清真先贤古墓",
+      en: "Xianxian Ancient Tomb Mosque",
+      ar: "مقبرة شيان شيان ومسجدها",
+    },
+    note: {
+      zh: "唐代来华传教的先贤宛葛素长眠于此，在兰圃公园西侧。2010 年建成的礼拜大殿能容纳近 2500 人，是广东省最大的清真寺，每周五来做主麻的穆斯林约 9000 人。",
+      en: "Burial place of Abi Waqqas, who brought Islam to China in the Tang dynasty, just west of Lanpu Park. The prayer hall built in 2010 holds nearly 2,500 people — the largest mosque in Guangdong — and about 9,000 Muslims come for Friday prayer.",
+      ar: "هنا يرقد أبو وقاص الذي حمل الإسلام إلى الصين في عهد أسرة تانغ، غربَ حديقة لانبو. تتّسع قاعة الصلاة المبنية عام 2010 لنحو 2500 مصلٍّ، وهي أكبر مسجد في قوانغدونغ، ويحضر صلاة الجمعة نحو 9000 مسلم.",
+    },
+    copy: {
+      id: "xianxian-addr",
+      label: {
+        zh: "给司机看：清真先贤古墓",
+        en: "Show the driver: Xianxian Ancient Tomb",
+        ar: "أظهرها للسائق: مقبرة شيان شيان",
+      },
+      chinese: "请带我去清真先贤古墓，广州市越秀区解放北路901号之一。",
+    },
+    sources: [
+      {
+        label: {
+          zh: "广州市人民政府：先贤古墓",
+          en: "Guangzhou municipal government: Xianxian Ancient Tomb",
+          ar: "حكومة بلدية قوانغتشو: مقبرة شيان شيان",
+        },
+        url: "https://www.gz.gov.cn/zlgz/gzly/wzgz/zjcs/yslj/content/post_7760215.html",
+      },
+    ],
+  },
+  {
+    id: "huaisheng",
+    name: {
+      zh: "怀圣寺（光塔寺）",
+      en: "Huaisheng Mosque (Guangta Mosque)",
+      ar: "مسجد هوايشنغ (مسجد المنارة)",
+    },
+    note: {
+      zh: "始建于唐代，是中国现存最早的清真寺之一；寺里那座光塔立了一千多年，是广州老城的地标。就在老城中心，和光塔路一带的清真馆子挨着。",
+      en: "Founded in the Tang dynasty and among the oldest surviving mosques in China. Its light tower has stood for over a thousand years and is a landmark of the old city — right beside the halal eateries around Guangta Road.",
+      ar: "أُسّس في عهد أسرة تانغ وهو من أقدم المساجد الباقية في الصين، ومنارته قائمة منذ أكثر من ألف عام وتُعدّ معلمًا للمدينة القديمة — إلى جوار مطاعم الحلال في شارع قوانغتا.",
+    },
+    copy: {
+      id: "huaisheng-addr",
+      label: {
+        zh: "给司机看：怀圣寺",
+        en: "Show the driver: Huaisheng Mosque",
+        ar: "أظهرها للسائق: مسجد هوايشنغ",
+      },
+      chinese: "请带我去怀圣寺（光塔寺），广州市越秀区光塔路56号。",
+    },
+    sources: [
+      {
+        label: {
+          zh: "广东省人民政府：怀圣寺和光塔",
+          en: "Guangdong provincial government: Huaisheng Mosque and the light tower",
+          ar: "حكومة مقاطعة قوانغدونغ: مسجد هوايشنغ والمنارة",
+        },
+        url: "http://www.gd.gov.cn/zjgd/lyxx/lydt/content/post_73432.html",
+      },
+      {
+        label: {
+          zh: "越秀区人民政府：怀圣寺",
+          en: "Yuexiu District government: Huaisheng Mosque",
+          ar: "حكومة منطقة يوى شيو: مسجد هوايشنغ",
+        },
+        url: "https://www.yuexiu.gov.cn/zjyx/yxjd/zjwh/content/post_8665060.html",
+      },
+    ],
+  },
+  {
+    id: "haopan",
+    name: {
+      zh: "濠畔清真寺",
+      en: "Haopan Mosque",
+      ar: "مسجد هاوبان",
+    },
+    note: {
+      zh: "明朝成化年间所建，五百多年历史，广州市文物保护单位。藏在老城濠畔街的市井当中，比前两处安静。",
+      en: "Built in the Chenghua reign of the Ming dynasty, over 500 years old, and a municipal heritage site. Tucked into the everyday streets of Haopan Street — quieter than the other two.",
+      ar: "بُني في عهد تشنغهوا من أسرة مينغ قبل أكثر من 500 عام، وهو موقع تراثي بلدي. يقع بين أزقة شارع هاوبان اليومية، وهو أهدأ من المسجدين الآخرين.",
+    },
+    copy: {
+      id: "haopan-addr",
+      label: {
+        zh: "给司机看：濠畔清真寺",
+        en: "Show the driver: Haopan Mosque",
+        ar: "أظهرها للسائق: مسجد هاوبان",
+      },
+      chinese: "请带我去濠畔清真寺，广州市越秀区濠畔街378号。",
+    },
+    sources: [
+      {
+        label: {
+          zh: "广州市人民政府：濠畔清真寺",
+          en: "Guangzhou municipal government: Haopan Mosque",
+          ar: "حكومة بلدية قوانغتشو: مسجد هاوبان",
+        },
+        url: "https://www.gz.gov.cn/zlgz/gzly/wzgz/zjcs/yslj/content/post_7760218.html",
+      },
+    ],
+  },
+];
+
+/** 9/25 是周五：唯一一个在广州的主麻日，而那天多数人是自由安排。 */
+export const JUMUAH_NOTE: L10n = {
+  zh: "9 月 25 日是这趟在广州唯一的周五。主麻的具体时间各寺不同，去之前先打电话或到寺里问当天时间。",
+  en: "Friday 25 September is the only Friday of this stay in Guangzhou. Jumu'ah times differ by mosque — call ahead or ask at the mosque for that day's time.",
+  ar: "الجمعة 25 سبتمبر هي الجمعة الوحيدة في هذه الإقامة بقوانغتشو. وتختلف مواقيت الجمعة بين المساجد، فاتصل مسبقًا أو اسأل في المسجد عن موعد ذلك اليوم.",
+};
+
+export const HALAL_DINING: PlaceCard[] = [
+  {
+    id: "huimin",
+    name: {
+      zh: "广州市回民饭店",
+      en: "Guangzhou Hui Min Restaurant",
+      ar: "مطعم قوانغتشو هوي مين",
+    },
+    note: {
+      zh: "1956 年开的老字号，当年就是为在广州的穆斯林和回族开的，1975 年迁到现址。清真菜用粤菜的做法，牛肉烧麦、雪山牛肉包、羊杂汤是它的招牌。离怀圣寺很近。",
+      en: "An old establishment opened in 1956 specifically to serve Muslims and Hui people in Guangzhou; it moved to this address in 1975. Halal cooking in the Cantonese manner — beef siumai, snow-top beef buns and mutton offal soup are what it is known for. Close to Huaisheng Mosque.",
+      ar: "مطعم عريق افتُتح عام 1956 خصيصًا لخدمة المسلمين وقومية هوي في قوانغتشو، وانتقل إلى هذا العنوان عام 1975. طبخ حلال بالأسلوب الكانتوني، ويشتهر بسيوماي اللحم البقري وفطائر اللحم وشوربة أحشاء الضأن. وهو قريب من مسجد هوايشنغ.",
+    },
+    copy: {
+      id: "huimin-addr",
+      label: {
+        zh: "给司机看：回民饭店",
+        en: "Show the driver: Hui Min Restaurant",
+        ar: "أظهرها للسائق: مطعم هوي مين",
+      },
+      chinese: "请带我去广州市回民饭店，广州市越秀区中山六路325号。",
+    },
+    meta: {
+      zh: "点评网站挂的营业时间是 09:00–21:00、电话 020-81303991 —— 没有向店家核实，以当天现场为准。",
+      en: "Listing sites give 09:00–21:00 and the phone 020-81303991 — not verified with the restaurant; go by what you find on the day.",
+      ar: "تذكر مواقع الأدلة أن الدوام 09:00–21:00 والهاتف 020-81303991 — لم يُتحقَّق منها مع المطعم، فاعتمد على الواقع يوم زيارتك.",
+    },
+    sources: [
+      {
+        label: {
+          zh: "维基百科：广州回民饭店",
+          en: "Wikipedia: Guangzhou Hui Min Restaurant",
+          ar: "ويكيبيديا: مطعم قوانغتشو هوي مين",
+        },
+        url: "https://zh.wikipedia.org/zh-hans/%E5%BB%A3%E5%B7%9E%E5%9B%9E%E6%B0%91%E9%A3%AF%E5%BA%97",
+      },
+    ],
+  },
+];
+
+/** 别让人以为楼下就有清真餐 —— 位置这件事要先说清楚。 */
+export const HALAL_WHERE: L10n[] = [
+  {
+    zh: "广州的清真馆子集中在越秀老城光塔路、中山六路一带，也就是怀圣寺周边。保利洲际在琶洲，隔着一段路，去要打车，按地址卡上的中文导航。",
+    en: "Guangzhou's halal restaurants cluster in the old city around Guangta Road and Zhongshan Liu Road — the streets by Huaisheng Mosque. The InterContinental is out at Pazhou, a drive away; take a taxi using the Chinese address cards.",
+    ar: "تتجمّع مطاعم الحلال في قوانغتشو داخل المدينة القديمة حول شارعي قوانغتا وتشونغشان الستة، أي في محيط مسجد هوايشنغ. أما فندق إنتركونتيننتال فيقع في بازو على مسافة، فاذهب بسيارة أجرة مستعينًا ببطاقات العناوين الصينية.",
+  },
+  {
+    zh: "酒店能不能安排清真餐食，直接问前台或礼宾；这一页不代替酒店承诺任何事。",
+    en: "Whether the hotel can arrange halal meals is a question for the front desk or concierge; this page does not promise anything on the hotel's behalf.",
+    ar: "أما إمكانية تدبير وجبات حلال في الفندق فاسأل عنها الاستقبال أو الكونسيرج؛ وهذه الصفحة لا تَعِد بشيء نيابةً عن الفندق.",
+  },
+  {
+    zh: "在任何餐厅点菜前，都用下面那几句中文问清食材和做法 —— 菜名里没有猪肉，不等于做法里没有猪油或酒。",
+    en: "Before ordering anywhere, use the Chinese phrases below to ask about ingredients and cooking method — a dish without pork in its name may still be cooked with lard or wine.",
+    ar: "وقبل الطلب في أي مطعم، استخدم العبارات الصينية أدناه للسؤال عن المكوّنات وطريقة الطهي — فالطبق الخالي من لحم الخنزير في اسمه قد يُطهى بشحمه أو بالخمر.",
   },
 ];
 
