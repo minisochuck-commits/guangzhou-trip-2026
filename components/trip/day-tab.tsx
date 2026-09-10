@@ -32,7 +32,8 @@ import {
 import { PlanCell } from "./plan-cell";
 import { Ltr } from "./ui";
 
-const FIELDS: Field[] = ["lodging", "activity", "dining", "transport"];
+/** 显示顺序（用户拍板）：日期/人员 → 活动 → 交通 → 餐饮 → 住宿。 */
+const FIELDS: Field[] = ["activity", "transport", "dining", "lodging"];
 
 type MatrixRow = {
   row: MergedRow;
