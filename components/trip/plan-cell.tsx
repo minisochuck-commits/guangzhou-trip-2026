@@ -4,7 +4,13 @@ import * as React from "react";
 import { ChevronDownIcon } from "lucide-react";
 
 import type { Row } from "@/lib/person-day-plan";
-import { PERSON_MAP, type Lang, type PersonId } from "@/lib/trip-data";
+import type { CellView } from "@/lib/plan-presentation";
+import {
+  FOOD_NOTES,
+  PERSON_MAP,
+  type Lang,
+  type PersonId,
+} from "@/lib/trip-data";
 import { UI, fullDateLabel, t } from "@/lib/trip-i18n";
 import {
   Sheet,
@@ -15,55 +21,73 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { CopyChinese, Ltr, PendingHint, SectionHeading } from "./ui";
+import { CopyChinese, Ltr, PendingHint, SectionHeading, SourceLink } from "./ui";
 import { FlightDetails } from "./flight-details";
 import { RouteList } from "./routes";
 
 /**
- * 矩阵里的一个字段格（住宿 / 活动 / 餐饮 / 交通）。
+ * 矩阵里的一个字段格。
  *
- * 内容沿用原来 PlanRow 的那一套：摘要常显 → 待定提示 → 详情。
- * 区别是详情不再在格子里就地展开 —— 列只有十几 rem 宽，
- * 航班块和完整中文地址在里面会把整行撑到满屏。所以改用底部 Sheet，
- * 宽度不受列宽限制，三语都读得完整。
+ * 表内只放 `view.lines`（2–4 短行，来自 lib/plan-presentation.ts 手写的短句）
+ * 加一条可选建议。完整原文、细节、地址、航班、路线、美食都在弹窗里，
+ * 按钮文字按内容命名 —— 「酒店地址」「航班与行李」「巡店安排」…… 不再统称「详情」。
  */
 export function PlanCell({
   row,
+  view,
   lang,
-  label,
   date,
   people,
-  showRoutes = false,
-  routeIds,
 }: {
   row: Row;
+  view: CellView;
   lang: Lang;
-  /** 列名，也用作 Sheet 标题的一部分。 */
-  label: string;
   date: string;
-  /** 这一行涉及的人，用于 Sheet 标题。 */
+  /** 这一行涉及的人，用于弹窗标题。 */
   people: PersonId[];
-  /** 只有活动列、且当天确实自由时才给自由行建议。 */
-  showRoutes?: boolean;
-  routeIds?: string[];
 }) {
   const hasDetail = Boolean(row.detail?.length);
   const hasFlights = Boolean(row.flights?.length);
   const hasCopy = Boolean(row.copy?.length);
-  const hasMore = hasDetail || hasFlights || hasCopy || showRoutes;
+  const hasRoutes = Boolean(view.routeIds?.length);
+  const foodNotes = view.foodNoteIds
+    ? FOOD_NOTES.filter((note) => view.foodNoteIds?.includes(note.id))
+    : [];
 
+  const entryLabel = view.entry ? t(UI.entries[view.entry], lang) : null;
   const names = people.map((id) => PERSON_MAP[id].name).join(" · ");
 
   return (
-    <div className="space-y-1.5">
-      <p className="text-base leading-relaxed text-navy">{t(row.text, lang)}</p>
+    <div className="space-y-1">
+      {view.lines.map((line, index) => (
+        <p
+          key={index}
+          className={
+            index === 0
+              ? "text-base leading-6 text-navy"
+              : "text-base leading-6 text-navy-soft"
+          }
+        >
+          {t(line, lang)}
+        </p>
+      ))}
 
-      <PendingHint status={row.status} lang={lang} className="mt-0" />
+      {/* 短行里已经写清「待定的是什么」时不再挂通用的红色「待定」——
+          重复一遍只是白白拉高整行。完整状态在弹窗里仍然显示。 */}
+      {view.hidePending ? null : (
+        <PendingHint status={row.status} lang={lang} className="mt-1" />
+      )}
 
-      {hasMore ? (
+      {view.suggestion ? (
+        <p className="mt-1 rounded-md bg-navy-tint px-2 py-1 text-sm leading-5 text-navy-soft">
+          {t(view.suggestion, lang)}
+        </p>
+      ) : null}
+
+      {entryLabel ? (
         <Sheet>
-          <SheetTrigger className="inline-flex min-h-11 items-center gap-1 rounded-lg border border-navy/25 px-2.5 text-sm font-medium text-navy transition-colors hover:border-navy/50">
-            {t(UI.details, lang)}
+          <SheetTrigger className="mt-1 inline-flex min-h-11 items-center gap-1 rounded-lg border border-navy/25 px-2.5 text-start text-sm font-medium text-navy transition-colors hover:border-navy/50">
+            {entryLabel}
             <ChevronDownIcon className="size-4 shrink-0" aria-hidden="true" />
           </SheetTrigger>
           {/*
@@ -83,13 +107,12 @@ export function PlanCell({
               <div className="flex items-start gap-3">
                 <div className="min-w-0 flex-1">
                   <SheetTitle className="text-lg leading-7 text-navy">
-                    {label}
-                    <span className="ms-2 text-base font-normal text-navy-soft">
-                      <Ltr>{names}</Ltr>
-                    </span>
+                    {entryLabel}
                   </SheetTitle>
                   <SheetDescription className="text-sm text-navy-soft">
                     {fullDateLabel(date, lang)}
+                    <span className="mx-1 opacity-40">·</span>
+                    <Ltr>{names}</Ltr>
                   </SheetDescription>
                 </div>
                 <SheetClose className="inline-flex min-h-11 shrink-0 items-center rounded-lg border border-navy/25 px-3 text-sm font-medium text-navy transition-colors hover:border-navy/50">
@@ -99,12 +122,16 @@ export function PlanCell({
             </SheetHeader>
 
             <div className="space-y-4 px-4 pb-8">
-              <div>
+              {/* 完整原文：表内是压过的短句，这里必须给回未删减的那一段 */}
+              <section className="space-y-1">
+                <p className="text-sm font-semibold uppercase tracking-wide text-navy-soft">
+                  {t(UI.fullText, lang)}
+                </p>
                 <p className="text-base leading-relaxed text-navy">
                   {t(row.text, lang)}
                 </p>
                 <PendingHint status={row.status} lang={lang} />
-              </div>
+              </section>
 
               {hasDetail ? (
                 <ul className="space-y-1.5">
@@ -130,18 +157,49 @@ export function PlanCell({
               {hasFlights ? (
                 <section className="space-y-2">
                   <SectionHeading className="text-base">
-                    {t(UI.flightDetails, lang)}
+                    {t(UI.entries.flights, lang)}
                   </SectionHeading>
                   <FlightDetails ids={row.flights ?? []} lang={lang} />
                 </section>
               ) : null}
 
-              {showRoutes ? (
+              {hasRoutes ? (
                 <section className="space-y-2">
                   <SectionHeading className="text-base">
-                    {t(UI.freeTimeIdeas, lang)}
+                    {t(UI.entries.routes, lang)}
                   </SectionHeading>
-                  <RouteList lang={lang} ids={routeIds} />
+                  <RouteList lang={lang} ids={view.routeIds} />
+                </section>
+              ) : null}
+
+              {foodNotes.length > 0 ? (
+                <section className="space-y-2">
+                  <SectionHeading className="text-base">
+                    {t(UI.foodIdeas, lang)}
+                  </SectionHeading>
+                  <ul className="space-y-3">
+                    {foodNotes.map((note) => (
+                      <li key={note.id}>
+                        <p className="text-base font-semibold leading-6 text-navy">
+                          {t(note.title, lang)}
+                        </p>
+                        <p className="text-base leading-relaxed text-navy-soft">
+                          {t(note.body, lang)}
+                        </p>
+                        {note.url ? (
+                          <SourceLink
+                            label={{
+                              zh: "官方来源",
+                              en: "Official source",
+                              ar: "المصدر الرسمي",
+                            }}
+                            url={note.url}
+                            lang={lang}
+                          />
+                        ) : null}
+                      </li>
+                    ))}
+                  </ul>
                 </section>
               ) : null}
             </div>

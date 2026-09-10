@@ -54,9 +54,9 @@ export const UI = {
     ar: "التاريخ / الشخص",
   },
   matrixHint: {
-    zh: "左右滑动看住宿、活动、餐饮、交通；点上面的日期跳到那一天。",
-    en: "Swipe sideways for stay, plan, meals and travel; tap a date above to jump to that day.",
-    ar: "اسحب أفقيًا لرؤية الإقامة والبرنامج والوجبات والتنقل؛ واضغط على تاريخ بالأعلى للانتقال إلى ذلك اليوم.",
+    zh: "左右滑动查看，点日期定位。",
+    en: "Swipe sideways; tap a date to jump.",
+    ar: "اسحب أفقيًا؛ واضغط على تاريخ للانتقال.",
   },
 
   status: {
@@ -70,6 +70,27 @@ export const UI = {
   } satisfies Record<TimeZoneTag, L10n>,
 
   details: { zh: "详情", en: "Details", ar: "التفاصيل" },
+
+  /**
+   * 弹窗入口。按钮文字和弹窗标题都用这里 —— 不再一律叫「详情」，
+   * 点开之前就知道会看到什么。
+   */
+  entries: {
+    hotelAddress: { zh: "酒店地址", en: "Hotel address", ar: "عنوان الفندق" },
+    stayNote: { zh: "住宿说明", en: "Stay details", ar: "تفاصيل الإقامة" },
+    flights: { zh: "航班与行李", en: "Flights & baggage", ar: "الرحلات والأمتعة" },
+    storeVisit: { zh: "巡店安排", en: "Store visit", ar: "برنامج زيارة المتاجر" },
+    sessions: { zh: "会议安排", en: "Session details", ar: "تفاصيل الجلسات" },
+    meals: { zh: "用餐说明", en: "Meal details", ar: "تفاصيل الوجبات" },
+    routes: { zh: "游玩路线", en: "Route ideas", ar: "مسارات مقترحة" },
+    transfer: { zh: "接送安排", en: "Transport details", ar: "تفاصيل التنقل" },
+    notes: { zh: "当天说明", en: "Notes for the day", ar: "ملاحظات اليوم" },
+  },
+
+  /** 弹窗里那段完整原文的小标题。 */
+  fullText: { zh: "完整说明", en: "Full wording", ar: "النص الكامل" },
+  foodIdeas: { zh: "吃什么", en: "What to eat", ar: "ماذا تأكل" },
+  viewingNow: { zh: "正在看", en: "Viewing", ar: "المعروض الآن" },
   flightDetails: {
     zh: "航班与行李",
     en: "Flights and baggage",
