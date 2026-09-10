@@ -157,25 +157,37 @@ body {
 }
 
 /*
- * 行程矩阵。
+ * 行程表：三列。首列固定几十像素放日期（全员视图再加名字），
+ * 剩下的宽度由「活动与交通」和「食宿」对半分。
  *
- * 只做**横向**滚动：表格容器不再限高，页面自然向下滚，不出现「页面 + 表格」
- * 两个纵向滚动条。代价是 shadcn <Table> 自带的 [data-slot="table-container"]
- * （overflow-x-auto，按 CSS 规则 overflow-y 也会变成 auto）会成为 scrollport，
- * 真实 <thead> 没法相对视口 sticky —— 所以可见的列头是表格外面那条
- * .matrix-headbar，用 scrollLeft 跟主容器同步；表里的 <thead> 保留语义，sr-only。
+ * 只定首列宽度这一个变量：table-fixed 下没写宽度的列本来就均分剩余空间，
+ * 而 calc(百分比 - 像素) 那种写法浏览器在 <col> 上并不认（真机 1440px 上
+ * 表头按 58/42 排、表体按 50/50 排，两边错开近 90px）。
+ * 表头那条也用同一个变量 + 两个 flex-1，两边永远对齐。
  *
- * 列宽写成变量，列头条和表格必须用同一份，否则横滑会错位。
+ * shadcn <Table> 自带的容器写死了 overflow-x-auto，这里覆盖成 visible：
+ * 一旦它不是 scrollport，整页就只剩一个纵向滚动。
  */
-.matrix-scroll,
-.matrix-headbar {
-  --col-first: 6.5rem; /* 104px */
-  --col-field: 10.5rem; /* 168px */
+.trip-matrix {
+  --col-date: 3.5rem; /* 56px：单人视图只放日期 */
 }
 
-.matrix-scroll [data-slot="table-container"] {
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
+.trip-matrix[data-view="all"] {
+  --col-date: 4.75rem; /* 76px：全员视图首列还要放名字 */
+}
+
+/* 阿语的星期和月份词长得多（الثلاثاء / سبتمبر），首列多给几像素，
+   否则每个词都要断成两行。多出来的宽度从后两列按同一比例扣。 */
+[dir="rtl"] .trip-matrix {
+  --col-date: 4.5rem;
+}
+
+[dir="rtl"] .trip-matrix[data-view="all"] {
+  --col-date: 5.5rem;
+}
+
+.trip-matrix [data-slot="table-container"] {
+  overflow: visible;
   border: 1px solid var(--line);
   border-top: 0;
   border-bottom-left-radius: var(--radius);
