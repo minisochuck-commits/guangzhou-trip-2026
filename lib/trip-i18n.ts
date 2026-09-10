@@ -25,17 +25,38 @@ export const UI = {
   viewing: { zh: "查看", en: "Viewing", ar: "العرض" },
   everyone: { zh: "全部", en: "All", ar: "الكل" },
 
+  // 表里放的是全部 18 天，不是「当天」，所以叫全部行程。
   tabs: {
-    day: { zh: "当天行程", en: "Day by day", ar: "يومًا بيوم" },
+    day: { zh: "全部行程", en: "Itinerary", ar: "برنامج الرحلة" },
     guide: { zh: "来华指南", en: "China guide", ar: "دليل الصين" },
   },
 
-  /** 四行标签 —— 用户点名的顺序：住宿、活动、餐饮、交通。 */
+  /** 日期条是跳转，不是切换视图。 */
+  jumpToDate: {
+    zh: "跳到某一天",
+    en: "Jump to a day",
+    ar: "الانتقال إلى يوم",
+  },
+  close: { zh: "关闭", en: "Close", ar: "إغلاق" },
+
+  /** 四个字段 —— 用户点名的顺序：住宿、活动、餐饮、交通。现在是表格的列头。 */
   rows: {
     lodging: { zh: "住宿", en: "Stay", ar: "الإقامة" },
     activity: { zh: "活动", en: "Plan", ar: "البرنامج" },
     dining: { zh: "餐饮", en: "Meals", ar: "الوجبات" },
     transport: { zh: "交通", en: "Travel", ar: "التنقل" },
+  },
+
+  /** 矩阵固定首列的表头：日期与人员纵向排在同一格。 */
+  matrixCorner: {
+    zh: "日期 / 人员",
+    en: "Date / person",
+    ar: "التاريخ / الشخص",
+  },
+  matrixHint: {
+    zh: "左右滑动看住宿、活动、餐饮、交通；点上面的日期跳到那一天。",
+    en: "Swipe sideways for stay, plan, meals and travel; tap a date above to jump to that day.",
+    ar: "اسحب أفقيًا لرؤية الإقامة والبرنامج والوجبات والتنقل؛ واضغط على تاريخ بالأعلى للانتقال إلى ذلك اليوم.",
   },
 
   status: {

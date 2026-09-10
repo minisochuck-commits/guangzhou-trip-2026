@@ -8,22 +8,39 @@ MINISO Egypt 一行 5 人赴广州的行程分享页。手机优先，三语（�
 
 ## 页面结构
 
-选好人和日期之后，**每人一张紧凑小表**：标题是姓名 + 职务，下面固定四行 ——
-**住宿 / 活动 / 餐饮 / 交通**。四行摘要默认全部可见，细节和航班在行内折叠。
+主体是**一张横向字段表**：字段做列头，每一行是「某天的某个人」。
+所有日期、所有人共用同一张表。
+
+| 固定首列 | 住宿 | 活动 | 餐饮 | 交通 |
+| --- | --- | --- | --- | --- |
+| 日期 + 人员（纵向两行） | … | … | … | … |
+
+- 手机上**固定表头 + 固定首列**：左右滑动看四个字段，上下滑动走日期。
+  滚动限制在表格容器内（高度适配手机可视区），不带动整页。
+- **日期按钮是跳转**：点一下滚到那一天的第一行并把它标成选中，不是「只显示这一天」。
+  重复点同一个已选中的日期也会跳回去（手动滑走之后最常用）—— 跳转是点击直接触发的，
+  不依赖 state 变化。选中只是跳转目标，不影响任何一行是否显示。
+- **选人只筛行，不转置**。筛完之后日期列表只剩他有安排的日子，跳过去一定落在有内容的行。
+- 格子里是**摘要 + 待定提示 + 「详情」按钮**；详情、可复制中文地址、航班与行李、
+  自由行建议都在底部 Sheet 里，不把主表行撑满屏。
 
 顶部（sticky，三行）：一行标题 + 紧凑语言切换 / 日期区间 / 查看对象横滑（≥44px 点击高度）。
 
 | Tab | 内容 |
 | --- | --- |
-| 当天行程 | 日期导航 → 当天每人一张小表 → 自由日才出现的「自由时间可以去哪」折叠 → 人员详情（折叠，票面全名只在这里） |
+| 全部行程 Itinerary | 日期跳转条 → 横向字段表（18 天 × 45 行）→ 人员详情（折叠，票面全名只在这里） |
 | 来华指南 | 出发前准备（上网 / 翻译 / 支付）、免费行李额、可复制中文地址、可复制中文短句、三条半日路线、吃什么与文化、官方来源 |
 
 页尾：折叠的「参考：总部通知」+ 一行页脚。
 
-**Ahmed 与 Mohamed 同房同活动，合并成一张表**；Li/Qiuting、Rahma、Reham 各自一张。
-Rahma 和 Reham 不是全程同行组，各走各的。
+**Ahmed 与 Mohamed 同房同活动，数据里就是一条记录，全部视图合并成一行**；
+Li/Qiuting、Rahma、Reham 各自一行。选中单人时首列只写那一个名字，
+**室友关系由住宿正文体现**。Rahma 和 Reham 不是全程同行组，各走各的。
 
 查看对象切换只是阅读筛选，不是权限隔离 —— 页面本身公开。
+
+> 历史：更早的版本用过长事件流、独立「吃住行」tab、以及**每人一张四行小表**。
+> 都已被上面这张表替代。`DESIGN_NOTES.md` 里记了为什么。
 
 ## 姓名口径
 
@@ -112,31 +129,36 @@ Rahma 和 Reham 不是全程同行组，各走各的。
 | 文件 | 放什么 |
 | --- | --- |
 | `lib/trip-data.ts` | 事实正本：人员、8 段航班、行李额、酒店、出发前准备、可复制中文、三条路线、美食文化、官方链接、参考图 |
-| `lib/person-day-plan.ts` | **唯一的业务派生**：`cardsFor(date)` 返回当天的人员小表；`cardsForPerson` 按人筛；`datesForPerson` 给日期导航 |
+| `lib/person-day-plan.ts` | **唯一的业务派生**：`cardsFor(date)` 返回当天的人员记录；`cardsForPerson` 按人筛；`datesForPerson` 给日期跳转条 |
 | `lib/trip-i18n.ts` | 界面文案与日期格式化 |
 
 组件：`components/trip/`
-（`trip-view.tsx` 壳 · `day-tab.tsx` 日期导航 + 小表列表 · `person-day-table.tsx` 四行小表 ·
-`flight-details.tsx` 航班与行李 · `routes.tsx` 半日路线 · `guide-tab.tsx` 指南 · `ui.tsx` 公共件）。
+（`trip-view.tsx` 壳 · `day-tab.tsx` **横向字段表 + 日期跳转 + 人员详情** ·
+`plan-cell.tsx` 单元格摘要与详情 Sheet · `flight-details.tsx` 航班与行李 ·
+`routes.tsx` 半日路线 · `guide-tab.tsx` 指南 · `ui.tsx` 公共件）。
 
-**以下旧模块已删除，由上述新入口替代：**
+表格滚动面板的高度靠 `app/globals.css` 里的 `.matrix-scroll [data-slot="table-container"]`
+撑起来 —— **不改 vendored 的 `components/ui/table.tsx`**，原因见 `DESIGN_NOTES.md`。
+
+**以下旧模块已删除或置空，由上述新入口替代：**
 `lib/day-plan.ts`、`components/trip/itinerary-tab.tsx`、`components/trip/day-supplements.tsx`、
-`components/trip/open-items.tsx`。
+`components/trip/open-items.tsx`、`components/trip/person-day-table.tsx`（每人四行小表，已作废）。
 
 ### 改一天的安排
 
-改 `lib/person-day-plan.ts` 里对应日期的函数。每行是
+改 `lib/person-day-plan.ts` 里对应日期的函数。每条记录的四个字段都是
 `row(status, text, { detail, flights, copy })`：
 
-- `text` 是**始终可见**的一句摘要，`detail` 是折叠的细节。
-- `flights` 填 `trip-data.ts` 里 `FLIGHTS` 的 `id`，交通行下就会出现「航班与行李」折叠。
-- `copy` 填 `CopyEntry`，那一行下面就会出现一个 44px 的复制按钮
-  （`entry.label` 会拼进按钮文字，例如「复制酒店地址」）。完整中文原文放 `detail` 里，
-  三语版本都要保留中文，复制失败时才能手选给司机看。
-- 未定的一律 `"pending"` + 明确写出待定什么。交通行的**对接人写进摘要**，不要藏进 `detail`。
-- `freeTime: true` 才出现自由行入口；只有半天自由时用 `freeRoutes` 限定路线 id。
+- `text` 是**格子里始终可见**的一句摘要，`detail` 进详情 Sheet。
+- `flights` 填 `trip-data.ts` 里 `FLIGHTS` 的 `id`，交通格的 Sheet 里会出现「航班与行李」。
+- `copy` 填 `CopyEntry`，Sheet 里会出现完整中文原文 + 复制按钮。
+  完整中文也要放 `detail`，三语版本都保留中文原文，复制失败时才能手选给司机看。
+- 未定的一律 `"pending"` + 明确写出待定什么。交通格的**对接人写进摘要**，不要藏进 `detail`。
+- `freeTime: true` 才在活动格的 Sheet 里出现自由行建议；
+  只有半天自由时用 `freeRoutes` 限定路线 id。
 
-`DATES` 覆盖 9/20–10/7 全程，含 9/29–10/5（那七天只有 Li/Qiuting 的个人行程表）。
+`DATES` 覆盖 9/20–10/7 全程共 18 天，含 9/29–10/5（那七天只有 Li/Qiuting 一行）。
+全部视图共 45 行。
 
 ## 本地命令
 
