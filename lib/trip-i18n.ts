@@ -191,6 +191,13 @@ export const UI = {
     en: "The ground you are staying on",
     ar: "الأرض التي تقيمون عليها",
   },
+  /** 常见的文化差异：他们会困惑的点，先说在前面。 */
+  culture: {
+    zh: "常见的文化差异",
+    en: "Cultural differences you will run into",
+    ar: "فروق ثقافية ستواجهونها",
+  },
+
   /** 食在广州：先讲分量，再讲每一道。 */
   foodCulture: {
     zh: "食在广州",
@@ -236,6 +243,11 @@ export const UI = {
       en: "Two thousand years · three branches · a UNESCO city of gastronomy · nine dishes",
       ar: "ألفا عام · ثلاثة فروع · مدينة يونسكو لفنون الطهي · تسعة أطباق",
     },
+    culture: {
+      zh: "周五上班 · 酒桌 · 小费 · 手机支付 · 握手 · 「再研究一下」",
+      en: "Friday works · toasts · tipping · phone pay · handshakes · the soft no",
+      ar: "الجمعة يوم عمل · الأنخاب · الإكراميات · الدفع بالهاتف · المصافحة · الرفض المهذّب",
+    },
     halal: {
       zh: "三座清真寺 · 周五主麻 · 清真餐厅",
       en: "Three mosques · Friday prayer · halal food",
@@ -257,9 +269,9 @@ export const UI = {
       ar: "سيارات الأجرة · المكوّنات · الأسعار",
     },
     routes: {
-      zh: "黄埔古港 · 西关与沙面 · 珠江夜景",
-      en: "Huangpu port · Xiguan and Shamian · the Pearl River",
-      ar: "ميناء هوانغبو · شيغوان وشاميان · نهر اللؤلؤ",
+      zh: "花城广场（必去）· 登广州塔 · 珠江夜游 · 天河路太古汇 · 沙面",
+      en: "Huacheng Square (do not miss) · Canton Tower · river cruise · Tianhe Road · Shamian",
+      ar: "ساحة هواتشنغ (لا تفوّتوها) · برج كانتون · جولة النهر · شارع تيانخه · شاميان",
     },
     food: {
       zh: "早茶 · 肠粉 · 艇仔粥 · 糖水 · 骑楼",
