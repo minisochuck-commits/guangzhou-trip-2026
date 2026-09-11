@@ -36,11 +36,6 @@
   --line: #dfe4ec;
 
   /*
-   * 纸张层次：底色带一点海军蓝，卡片留纯白。
-   * 之前整页和卡片都是白的，边框只有 1px —— 什么都在同一层，看着就平。
-   * 现在是「浅蓝的桌面 + 白色的卡」，层次靠底色和阴影分，不靠加边框。
-   */
-  /*
    * 底色走宣纸的暖中性，配朱红和墨蓝 —— 中国风的「高级」靠留白、
    * 纸色和字，不靠灯笼和龙纹。卡片仍是纯白，行程表要保持清爽好读。
    */
@@ -194,6 +189,27 @@ body {
   box-shadow: var(--shadow-card);
 }
 
+/*
+ * 开篇那段故事：整页唯一一块不是白卡片的地方。
+ * 底色压深一点、配朱红细线，让它读起来像一段文章的开头，
+ * 而不是又一个盒子。
+ */
+.trip-story {
+  background:
+    linear-gradient(180deg, #fbf8f3 0%, #f5f1e8 100%);
+  border: 1px solid rgba(200, 16, 46, 0.16);
+  box-shadow: var(--shadow-card);
+}
+
+/*
+ * 卡片里面的那一层。没有阴影、只有很淡的底和描边 ——
+ * 卡中卡各带一层阴影，正是整页看着「什么都一样」的来源。
+ */
+.trip-place {
+  background: #fffdfa;
+  border: 1px solid var(--card-line);
+}
+
 /* 举给司机看的那行中文：底纹 + 大字，隔一臂也读得清。 */
 .trip-show-panel {
   background: var(--navy-tint);
@@ -229,17 +245,6 @@ body {
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.28),
     0 1px 3px rgba(140, 12, 32, 0.35);
-}
-
-/*
- * 回纹底纹：「回」本身就是方中套方，直接用它做单元，
- * 比画一圈云龙克制得多，而且几何母题和伊斯兰纹样同源，两边看着都顺眼。
- * 内联 data URI，不额外发请求，离线照样有。
- */
-.trip-fret {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 11 11'%3E%3Crect x='1.75' y='1.75' width='7.5' height='7.5' fill='none' stroke='%23c8102e' stroke-width='1'/%3E%3Crect x='4.5' y='4.5' width='2' height='2' fill='%23c8102e'/%3E%3C/svg%3E");
-  background-repeat: repeat-x;
-  background-position: center;
 }
 
 /* 木棉是广州市花，红的 —— 当页头的水印，比任何「中国元素」都更点题。 */

@@ -331,11 +331,6 @@ function Header({
         </div>
       </div>
 
-      {/* 回纹收边：页头和正文之间的一道细饰线 */}
-      <div
-        aria-hidden="true"
-        className="trip-fret h-[11px] w-full opacity-[0.14]"
-      />
     </header>
   );
 }
