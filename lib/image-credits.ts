@@ -265,6 +265,38 @@ export const IMAGE_CREDITS: ImageCredit[] = [
     "artist": "Shwangtianyuan",
     "license": "CC BY-SA 4.0",
     "page": "https://commons.wikimedia.org/wiki/File:Heytea_at_Suzhou_Incity.jpg"
+  },
+  {
+    "key": "evtolair",
+    "file": "images/evtolair.jpg",
+    "title": "亿航 EH216-S 载人航空器（广州市人民政府）",
+    "artist": "",
+    "license": "来源页",
+    "page": "https://www.gz.gov.cn/zwfw/zxfw/kjcy/content/post_10189840.html"
+  },
+  {
+    "key": "deliverybot",
+    "file": "images/deliverybot.jpg",
+    "title": "擎朗配送机器人（擎朗智能官网）",
+    "artist": "",
+    "license": "来源页",
+    "page": "https://www.keenon.com/en/product/w3"
+  },
+  {
+    "key": "grandview",
+    "file": "images/grandview.jpg",
+    "title": "正佳广场（广州市文广旅局）",
+    "artist": "",
+    "license": "来源页",
+    "page": "http://wglj.gz.gov.cn/ztmb/gzhyn/ajjq/4a/content/post_8929272.html"
+  },
+  {
+    "key": "tianhenight",
+    "file": "images/tianhenight.jpg",
+    "title": "天河路商圈夜景（天河路商会）",
+    "artist": "",
+    "license": "来源页",
+    "page": "http://www.thnet.gov.cn/zjth/tzth/zlpt/content/post_9126462.html"
   }
 ];
 export const IMG: Record<string, string> = Object.fromEntries(IMAGE_CREDITS.map((c) => [c.key, "./" + c.file]));

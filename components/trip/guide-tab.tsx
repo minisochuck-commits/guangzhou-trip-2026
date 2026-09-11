@@ -71,7 +71,7 @@ const HOTEL_LABELS = {
 const HOTEL_PHONE = "+86 20 8922 8888";
 
 /** 开篇那张全景，以及商圈末尾那张北京路 —— 数据里没有，写在这里。 */
-const INLINE_IMAGE_KEYS = ["skyline", "beijinglu"];
+const INLINE_IMAGE_KEYS = ["skyline", "beijinglu", "tianhenight"];
 
 /**
  * 页面上真正显示过的图片。图片来源那一段只列这些：
@@ -520,7 +520,15 @@ export function GuideTab({
                   <p className={cn(GUIDE.note, "mt-0.5 text-navy-soft/85")}>
                     {t(UI.techWhere, lang)}：{t(item.where, lang)}
                   </p>
-                  <p className={cn(GUIDE.body, "mt-1")}>{t(item.body, lang)}</p>
+                  {/* 正文按空行分段：先给一个看得见的画面，再让数字落下来当回响。
+                      一段连着写，两个节拍就糊成一句话了。 */}
+                  {t(item.body, lang)
+                    .split("\n")
+                    .map((paragraph, index) => (
+                      <p key={index} className={cn(GUIDE.body, "mt-1")}>
+                        {paragraph}
+                      </p>
+                    ))}
                 </li>
               ))}
             </ul>
@@ -628,6 +636,16 @@ export function GuideTab({
           <DistrictRoute lang={lang} />
 
           <div className="max-w-[44rem]">
+            {/* 天河路夜景航拍：这一节讲的是「一条路上十四家商场」，
+                一张俯瞰比两百字描述管用。 */}
+            {IMG.tianhenight ? (
+              <img
+                src={IMG.tianhenight}
+                alt=""
+                loading="lazy"
+                className="trip-photo mb-3 aspect-[16/9] w-full object-cover"
+              />
+            ) : null}
             <p className={GUIDE.lead}>{t(RETAIL_STUDY.lead, lang)}</p>
             <div className="mt-2.5 space-y-2.5">
               {RETAIL_STUDY.intro.map((paragraph, index) => (
