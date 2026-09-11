@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable @next/next/no-img-element -- 静态站、离线可用、相对路径：故意用原生 <img>，不走 next/image 的加载器 */
 
 import * as React from "react";
 
@@ -17,11 +18,14 @@ import {
   PAZHOU,
   PHRASES,
   PREP,
+  RETAIL_STUDY,
   type L10n,
   type Lang,
+  type MallCard,
   type PersonId,
   type PlaceCard,
 } from "@/lib/trip-data";
+import { IMAGE_CREDITS, IMG } from "@/lib/image-credits";
 import { FOOD_ADVICE } from "@/lib/plan-presentation";
 import { UI, t } from "@/lib/trip-i18n";
 import {
@@ -118,6 +122,7 @@ function Prose({
   sources,
   lang,
   art,
+  photo,
   children,
 }: {
   eyebrow: L10n;
@@ -126,10 +131,20 @@ function Prose({
   sources: { label: L10n; url: string }[];
   lang: Lang;
   art?: React.ReactNode;
+  /** 顶上压一张满宽照片（public/images 的 key）。 */
+  photo?: string;
   children?: React.ReactNode;
 }) {
   return (
     <section className="trip-story relative overflow-hidden rounded-2xl px-5 py-6 md:px-8 md:py-8">
+      {photo && IMG[photo] ? (
+        <img
+          src={IMG[photo]}
+          alt=""
+          loading="lazy"
+          className="trip-photo mb-5 aspect-[16/9] w-full object-cover md:aspect-[21/9]"
+        />
+      ) : null}
       {art}
       <div className={art ? "relative max-w-[36rem] pe-14 md:pe-24" : "relative max-w-[40rem]"}>
         <p className="text-[0.8125rem] font-semibold uppercase tracking-[0.14em] text-miniso-red-strong">
@@ -277,6 +292,31 @@ function PlaceCardView({ place, lang }: { place: PlaceCard; lang: Lang }) {
   );
 }
 
+/** 一家商场：图、名字、一句定位、一段事实。给做招商的人看的。 */
+function MallCardView({ mall, lang }: { mall: MallCard; lang: Lang }) {
+  return (
+    <article className="trip-place overflow-hidden rounded-xl p-4">
+      {mall.imageKey && IMG[mall.imageKey] ? (
+        <img
+          src={IMG[mall.imageKey]}
+          alt=""
+          loading="lazy"
+          className="trip-photo mb-3 aspect-[16/10] w-full object-cover"
+        />
+      ) : null}
+      <h4 className="trip-display text-lg leading-7 text-navy">
+        {t(mall.name, lang)}
+      </h4>
+      <p className="mt-0.5 text-[0.8125rem] font-semibold uppercase tracking-[0.06em] text-miniso-red-strong">
+        {t(mall.tier, lang)}
+      </p>
+      <p className="mt-2 text-[0.9375rem] leading-7 text-navy-soft">
+        {t(mall.facts, lang)}
+      </p>
+    </article>
+  );
+}
+
 export function GuideTab({
   lang,
   person,
@@ -299,6 +339,7 @@ export function GuideTab({
         paragraphs={CITY_STORY.paragraphs}
         sources={CITY_STORY.sources}
         lang={lang}
+        photo="huaisheng"
         art={
           <LightTower className="pointer-events-none absolute end-3 top-4 h-[9.5rem] w-auto text-miniso-red opacity-[0.17] md:end-8 md:h-[13rem]" />
         }
@@ -312,6 +353,7 @@ export function GuideTab({
         paragraphs={CITY_SCALE.intro}
         sources={CITY_SCALE.sources}
         lang={lang}
+        photo="skyline"
         art={
           <CantonTower className="pointer-events-none absolute end-3 top-4 h-[9.5rem] w-auto text-miniso-red opacity-[0.17] md:end-8 md:h-[13rem]" />
         }
@@ -321,7 +363,7 @@ export function GuideTab({
 
       <Accordion
         type="multiple"
-        defaultValue={["pazhou", "food"]}
+        defaultValue={["pazhou", "food", "retail"]}
         className="space-y-2.5"
       >
         <Section
@@ -392,7 +434,15 @@ export function GuideTab({
           <SubHeading>{t(UI.foodIdeas, lang)}</SubHeading>
           <div className="grid gap-3 md:grid-cols-2">
             {FOOD_NOTES.map((note) => (
-              <article key={note.id} className="trip-place rounded-xl p-4">
+              <article key={note.id} className="trip-place overflow-hidden rounded-xl p-4">
+                {note.imageKey && IMG[note.imageKey] ? (
+                  <img
+                    src={IMG[note.imageKey]}
+                    alt=""
+                    loading="lazy"
+                    className="trip-photo mb-3 aspect-[4/3] w-full object-cover"
+                  />
+                ) : null}
                 <h4 className="trip-display text-lg leading-7 text-navy">
                   {t(note.title, lang)}
                 </h4>
@@ -415,6 +465,100 @@ export function GuideTab({
               </article>
             ))}
           </div>
+        </Section>
+
+        <Section
+          id="retail"
+          title={UI.retail}
+          hint={UI.guideHints.retail}
+          lang={lang}
+        >
+          <div className="trip-place rounded-xl p-4">
+            {IMG.tianhe ? (
+              <img
+                src={IMG.tianhe}
+                alt=""
+                loading="lazy"
+                className="trip-photo mb-4 aspect-[16/9] w-full object-cover"
+              />
+            ) : null}
+            <p className="trip-display text-lg leading-7 text-navy">
+              {t(RETAIL_STUDY.lead, lang)}
+            </p>
+            <div className="mt-3 space-y-3">
+              {RETAIL_STUDY.intro.map((paragraph, index) => (
+                <p key={index} className="text-[0.9375rem] leading-7 text-navy-soft">
+                  {t(paragraph, lang)}
+                </p>
+              ))}
+            </div>
+          </div>
+
+          <SubHeading>{t(UI.retailMalls, lang)}</SubHeading>
+          <div className="grid gap-3 md:grid-cols-2">
+            {RETAIL_STUDY.malls.map((mall) => (
+              <MallCardView key={mall.id} mall={mall} lang={lang} />
+            ))}
+          </div>
+
+          {/* 用户点名的案例：二十年一家一家补位，背后是集聚与竞合。 */}
+          <SubHeading>{t(UI.retailCase, lang)}</SubHeading>
+          <div className="trip-place space-y-3 rounded-xl p-4">
+            {RETAIL_STUDY.caseStudy.map((paragraph, index) => (
+              <p key={index} className="text-[0.9375rem] leading-7 text-navy-soft">
+                {t(paragraph, lang)}
+              </p>
+            ))}
+          </div>
+
+          <SubHeading>{t(UI.retailComparables, lang)}</SubHeading>
+          <div className="grid gap-3 md:grid-cols-2">
+            {RETAIL_STUDY.comparables.map((item, index) => (
+              <article key={index} className="trip-place rounded-xl p-4">
+                <h4 className="trip-display text-lg leading-7 text-navy">
+                  {t(item.name, lang)}
+                </h4>
+                <p className="mt-1.5 text-[0.9375rem] leading-7 text-navy-soft">
+                  {t(item.body, lang)}
+                </p>
+              </article>
+            ))}
+          </div>
+
+          <div className="trip-place rounded-xl p-4">
+            {IMG.beijinglu ? (
+              <img
+                src={IMG.beijinglu}
+                alt=""
+                loading="lazy"
+                className="trip-photo mb-3 aspect-[16/9] w-full object-cover"
+              />
+            ) : null}
+            <p className="text-[0.9375rem] leading-7 text-navy-soft">
+              {t(RETAIL_STUDY.beijinglu, lang)}
+            </p>
+          </div>
+
+          <SubHeading>{t(UI.retailTakeaways, lang)}</SubHeading>
+          <div className="trip-card-accent p-4">
+            <ol className="space-y-2.5">
+              {RETAIL_STUDY.takeaways.map((item, index) => (
+                <li key={index} className="flex gap-3 text-[0.9375rem] leading-7 text-navy">
+                  <span className="trip-display shrink-0 text-lg leading-7 text-miniso-red-strong">
+                    {index + 1}
+                  </span>
+                  <span>{t(item, lang)}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+          <ul className="flex flex-wrap gap-x-5 gap-y-1">
+            {RETAIL_STUDY.sources.map((source) => (
+              <li key={source.url}>
+                <SourceLink label={source.label} url={source.url} lang={lang} />
+              </li>
+            ))}
+          </ul>
         </Section>
 
         <Section
@@ -536,6 +680,24 @@ export function GuideTab({
                 <p className="mt-1 text-sm leading-6 text-navy-soft">
                   {t(link.note, lang)}
                 </p>
+              </li>
+            ))}
+          </ul>
+          {/* CC 授权的条件：作者与授权要列出来 */}
+          <SubHeading>{t(UI.imageCredits, lang)}</SubHeading>
+          <ul className="trip-place space-y-1.5 rounded-xl p-4 text-[0.8125rem] leading-5 text-navy-soft">
+            {IMAGE_CREDITS.map((credit) => (
+              <li key={credit.key}>
+                <a
+                  href={credit.page}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="font-medium text-navy underline underline-offset-4"
+                >
+                  {credit.title}
+                </a>
+                {" — "}
+                {credit.artist || "Wikimedia Commons"}, {credit.license}
               </li>
             ))}
           </ul>
