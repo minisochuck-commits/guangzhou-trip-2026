@@ -159,7 +159,12 @@ body {
 }
 
 html {
-  /* 正文基准 16px，绝不缩小 */
+  /*
+   * 根字号保持 16px：rem 的基准、表单控件的默认字号都从这里来
+   * （iOS 只看控件自己的字号决定要不要放大页面，所以 select / input 仍是 16px）。
+   * 指南正文按用户 2026-09-11 的要求排 15px，那是组件里的 GUIDE 尺度，
+   * 不是把根字号调小 —— 理由与例外记在 docs/GUEST_GUIDE.md。
+   */
   font-size: 16px;
   -webkit-text-size-adjust: 100%;
 }
@@ -177,8 +182,8 @@ body {
  * 整站的卡片都走这一个类，不要各处各写一串 border/shadow ——
  * 那正是之前每个块看起来都一样、分不出主次的原因。
  *
- * 卡是用来分「组」的，不是用来分「条」的：一组入口共用一张卡，
- * 里面每一条只隔一条 --card-line 的细线（见指南页的 SectionGroup）。
+ * 指南里一章一张卡，章内的条目只用 --card-line 的细线分隔 ——
+ * 不要卡里再套卡，也不要一条内容一张卡。
  */
 .trip-card {
   background: #ffffff;
@@ -274,14 +279,6 @@ body {
  * 已经去掉：页头现在只有一条朱红细带、印章、标题和两个选择器。
  */
 
-/* 出发前清单里的「怎么做」：展开时箭头转过来。 */
-details[data-prep] .prep-chevron {
-  transition: transform 0.2s ease;
-}
-details[data-prep][open] .prep-chevron {
-  transform: rotate(180deg);
-}
-
 /* 姓名、航班号、时间在阿语 RTL 下保持 LTR 且不被标点翻转 */
 .ltr-token {
   direction: ltr;
@@ -317,13 +314,13 @@ details[data-prep][open] .prep-chevron {
 
 /* 阿语的星期和月份词长得多（الثلاثاء / سبتمبر），首列多给几像素，
    否则每个词都要断成两行。多出来的宽度从后两列按同一比例扣。
-   月份 / 星期从 13px 抬到 14px（窄表的下限）之后，这里也跟着补了 4px。 */
+   月份 / 星期回到 13px 之后，这里也跟着收回原来的宽度。 */
 [dir="rtl"] .trip-matrix {
-  --col-date: 4.75rem;
+  --col-date: 4.5rem;
 }
 
 [dir="rtl"] .trip-matrix[data-view="all"] {
-  --col-date: 5.75rem;
+  --col-date: 5.5rem;
 }
 
 .trip-matrix [data-slot="table-container"] {

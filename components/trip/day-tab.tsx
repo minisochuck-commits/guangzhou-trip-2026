@@ -121,13 +121,13 @@ export function DayTab({
             aria-hidden="true"
             className="mt-2 flex rounded-t-xl border border-b-0 border-card-line bg-navy-tint"
           >
-            <div className="w-[var(--col-date)] shrink-0 border-e border-card-line px-2 py-2.5 text-sm font-semibold leading-5 text-navy">
+            <div className="w-[var(--col-date)] shrink-0 border-e border-card-line px-2 py-2 text-[0.8125rem] font-semibold leading-5 text-navy">
               {firstColLabel}
             </div>
-            <div className="min-w-0 flex-1 border-e border-card-line px-2 py-2.5 text-sm font-semibold leading-5 text-navy md:px-3">
+            <div className="min-w-0 flex-1 border-e border-card-line px-2 py-2 text-[0.8125rem] font-semibold leading-5 text-navy md:px-3">
               {t(UI.cols.plan, lang)}
             </div>
-            <div className="min-w-0 flex-1 px-2 py-2.5 text-sm font-semibold leading-5 text-navy md:px-3">
+            <div className="min-w-0 flex-1 px-2 py-2 text-[0.8125rem] font-semibold leading-5 text-navy md:px-3">
               {t(UI.cols.stay, lang)}
             </div>
           </div>
@@ -141,7 +141,7 @@ export function DayTab({
       ) : (
         // isolate + z-0：表体压在 sticky 日期条 / 列头条下面。
         <div className="relative isolate z-0">
-          <Table className="w-full table-fixed border-separate border-spacing-0 text-sm md:text-base">
+          <Table className="w-full table-fixed border-separate border-spacing-0 text-sm">
             {/* 后两列不写宽度：table-fixed 会把剩余宽度对半分给它们。 */}
             <colgroup>
               <col className="w-[var(--col-date)]" />
@@ -187,24 +187,24 @@ export function DayTab({
                     <TableHead
                       scope="row"
                       className={cn(
-                        "h-auto whitespace-normal break-words border-b border-e border-card-line px-2 py-2.5 text-start align-top md:py-3.5",
+                        "h-auto whitespace-normal break-words border-b border-e border-card-line px-2 py-2 text-start align-top",
                         tint,
                         topLine,
                       )}
                     >
                       {/* 窄列里日期竖着排：日 / 月 / 周几，英阿的月份才放得下。
-                          日号是主角，月和周几压小压淡 —— 三行一样大就看不出层级。 */}
-                      <span className="block text-xl font-semibold leading-6 text-navy">
+                          日号比下面两行大一档就够认出来 —— 上一版放到 20px，太抢。 */}
+                      <span className="block text-[1.0625rem] font-semibold leading-6 text-navy">
                         <Ltr>{dayNumber(date)}</Ltr>
                       </span>
-                      <span className="mt-0.5 block text-sm leading-4 text-navy-soft">
+                      <span className="block text-[0.8125rem] leading-4 text-navy-soft">
                         {monthLabel(date, lang)}
                       </span>
-                      <span className="block text-sm leading-4 text-navy-soft/75">
+                      <span className="block text-[0.8125rem] leading-4 text-navy-soft/75">
                         {weekdayLabel(date, lang)}
                       </span>
                       {shown.length > 0 ? (
-                        <span className="mt-1.5 block text-sm font-semibold leading-4 text-navy">
+                        <span className="mt-1 block text-[0.8125rem] font-semibold leading-4 text-navy">
                           {shown.map((id) => (
                             <span key={id} className="block">
                               <Ltr>{PERSON_MAP[id].name}</Ltr>
@@ -217,7 +217,7 @@ export function DayTab({
                     {/* 活动与交通：两段之间一条细线，不加重复的小标题 */}
                     <TableCell
                       className={cn(
-                        "whitespace-normal break-words border-b border-e border-card-line px-2 py-2.5 align-top md:px-3 md:py-3.5",
+                        "whitespace-normal break-words border-b border-e border-card-line px-2 py-2 align-top md:px-3 md:py-2.5",
                         tint,
                         topLine,
                       )}
@@ -229,7 +229,7 @@ export function DayTab({
                         date={date}
                         people={people}
                       />
-                      <div className="mt-2.5 border-t border-card-line pt-2.5">
+                      <div className="mt-2 border-t border-card-line pt-2">
                         <PlanCell
                           row={card.transport}
                           view={cellView("transport", date, card)}
@@ -243,7 +243,7 @@ export function DayTab({
                     {/* 食宿：两段各带一个短标签，免得混在一起 */}
                     <TableCell
                       className={cn(
-                        "whitespace-normal break-words border-b border-card-line px-2 py-2.5 align-top md:px-3 md:py-3.5",
+                        "whitespace-normal break-words border-b border-card-line px-2 py-2 align-top md:px-3 md:py-2.5",
                         tint,
                         topLine,
                       )}
@@ -256,7 +256,7 @@ export function DayTab({
                         date={date}
                         people={people}
                       />
-                      <div className="mt-2.5 border-t border-card-line pt-2.5">
+                      <div className="mt-2 border-t border-card-line pt-2">
                         <MiniLabel>{t(UI.rows.lodging, lang)}</MiniLabel>
                         <PlanCell
                           row={card.lodging}

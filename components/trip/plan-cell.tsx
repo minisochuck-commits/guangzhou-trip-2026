@@ -82,14 +82,15 @@ export function PlanCell({
 
   return (
     <div className="space-y-1">
-      {/* 窄屏三列并排，正文降到 14px；≥768px 回到 16px。 */}
+      {/* 三列并排，正文一律 14px —— 桌面也不放大，那只会把表撑散。
+          真正要读的长句在弹窗里，那边是 15px。 */}
       {view.lines.map((line, index) => (
         <p
           key={index}
           className={
             index === 0
-              ? "text-sm leading-5 text-navy md:text-base md:leading-6"
-              : "text-sm leading-5 text-navy-soft md:text-base md:leading-6"
+              ? "text-sm leading-5 text-navy"
+              : "text-sm leading-5 text-navy-soft"
           }
         >
           {t(line, lang)}
@@ -125,10 +126,10 @@ export function PlanCell({
             <SheetHeader className="sticky top-0 z-10 gap-2 border-b border-line bg-background pb-3">
               <div className="flex items-start gap-3">
                 <div className="min-w-0 flex-1">
-                  <SheetTitle className="text-lg leading-7 text-navy">
+                  <SheetTitle className="text-[1.0625rem] font-semibold leading-6 text-navy">
                     {entryLabel}
                   </SheetTitle>
-                  <SheetDescription className="text-sm text-navy-soft">
+                  <SheetDescription className="text-[0.8125rem] text-navy-soft">
                     {fullDateLabel(date, lang)}
                     <span className="mx-1 opacity-40">·</span>
                     <Ltr>{names}</Ltr>
@@ -153,7 +154,7 @@ export function PlanCell({
                   {[...coordination, ...sheetDetail].map((item, index) => (
                     <li
                       key={index}
-                      className="relative ps-4 text-base leading-relaxed text-navy-soft before:absolute before:start-0 before:top-[0.7em] before:size-1.5 before:rounded-full before:bg-navy/25"
+                      className="relative ps-4 text-[0.9375rem] leading-[1.65] text-navy-soft before:absolute before:start-0 before:top-[0.7em] before:size-1.5 before:rounded-full before:bg-navy/25"
                     >
                       {t(item, lang)}
                     </li>

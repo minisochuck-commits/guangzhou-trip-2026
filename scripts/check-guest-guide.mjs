@@ -43,27 +43,45 @@ const view = fs.readFileSync('components/trip/guide-tab.tsx', 'utf8');
 assert(view.indexOf('id="prep"') < view.indexOf('id="story"'), 'Preparation must precede long reading');
 assert(view.includes('defaultValue={[]}'), 'Long stories must start collapsed');
 assert(!view.includes('UI.retailTakeaways'), 'Report instructions must not be rendered');
-// The guide is grouped now — practical entries first, city reading after — and every
-// section still opens on demand inside a reused Accordion.
-assert(view.indexOf('UI.guideGroups.practical') < view.indexOf('UI.guideGroups.city'), 'Practical group must come first');
-assert(view.includes('<PrepChecklist'), 'Preparation must render the tickable checklist');
 for (const reused of ['AccordionItem', 'CopyChinese', 'SourceLink']) assert(view.includes(reused), `Must reuse ${reused}`);
 
-// The prep checklist may only be stored per person, on this device, and the all view
-// gets the full guidance with no tick boxes — a tick there would read as "this person
-// is done", which nobody can know.
-const checklist = fs.readFileSync('lib/prep-checklist.ts', 'utf8');
-assert(/person \?\? "all"/.test(checklist), 'The all view needs its own bucket, never a traveller\'s');
-const component = fs.readFileSync('components/trip/prep-checklist.tsx', 'utf8');
-assert(component.includes('catch'), 'Storage failures must not break the page');
-assert(component.includes('item.lines'), 'Ticking must not remove the original instructions');
-assert(component.includes('const tickable = person !== null'), 'The all view must not offer tick boxes');
-assert(component.includes('tickable && isCheckablePrep'), 'Tick boxes are per traveller only');
+// The guide reads as one column of chapters. The owner rejected the grouped
+// "travel essentials / getting to know Guangzhou" toolbox and the tickable preparation
+// list on sight, so nothing may bring either back.
+for (const banned of ['SectionGroup', 'guideGroups', 'PrepChecklist', 'prep-checklist', 'Checkbox', 'prepCountLabel']) {
+  assert(!view.includes(banned), `The guide must stay a plain reading list, not ${banned}`);
+}
+assert(!fs.existsSync('components/trip/prep-checklist.tsx'), 'The tick-box checklist is gone, not parked');
+assert(!fs.existsSync('lib/prep-checklist.ts'), 'The checklist storage logic is gone, not parked');
+const i18n = fs.readFileSync('lib/trip-i18n.ts', 'utf8');
+for (const banned of ['guideGroups', 'prepChecklist', 'prepCountLabel']) {
+  assert(!i18n.includes(banned), `Retired interface copy must go too: ${banned}`);
+}
+// Preparation is read, not ticked: every traveller's own PREP text is rendered in full.
+assert(/PREP\.filter/.test(view), 'Preparation must render the per-person PREP text');
+assert(view.includes('items={item.lines}'), 'Preparation must show the full instructions, not a summary');
+
+// Typography: an introduction, not a poster. The shared GUIDE scale is the only place
+// that sets guide sizes, and nothing may go back to the rejected oversized type.
+const ui = fs.readFileSync('components/trip/ui.tsx', 'utf8');
+assert(/export const GUIDE/.test(ui), 'One shared type scale, not a size on every paragraph');
+assert(ui.includes('text-[0.9375rem]'), 'Guide body text is 15px');
+assert(!/!important/.test(ui + view), 'Sizes come from the shared scale, not from !important');
+for (const oversized of ['text-[1.375rem]', 'text-[1.625rem]', 'text-[1.5rem]', 'md:text-xl', 'md:text-2xl']) {
+  assert(!view.includes(oversized), `Rejected oversized guide type: ${oversized}`);
+}
+const table = fs.readFileSync('components/trip/day-tab.tsx', 'utf8');
+assert(!table.includes('md:text-base'), 'The table must not grow to 16px on desktop');
+assert(!table.includes('text-xl'), 'The day number was pulled back from 20px');
 
 // Route photos: the watermarked and the unrecognisable one stay unused, and a portrait
-// photo is fitted rather than cropped to its middle.
+// photo is fitted rather than cropped. Collapsed rows are a name and a length only.
 const routes = fs.readFileSync('components/trip/routes.tsx', 'utf8');
 assert(routes.includes('object-contain'), 'Portrait route photos must not be cropped to the waist');
+const collapsedRow = routes.slice(routes.indexOf('<AccordionTrigger'), routes.indexOf('<AccordionContent'));
+assert(!collapsedRow.includes('<img'), 'Route photos belong in the opened route, not in the collapsed row');
+assert(!collapsedRow.includes('bestFor'), 'The collapsed row is a name and a length, nothing else');
+assert(!routes.includes('line-clamp'), 'A clamped teaser in the collapsed row was rejected');
 const usedImages = new Set(data.ROUTES.map((route) => route.imageKey));
 for (const dropped of ['cbd', 'tianhe']) assert(!usedImages.has(dropped), `${dropped}.jpg was rejected on sight`);
 for (const kept of ['opera', 'taikoo']) assert(usedImages.has(kept), `${kept}.jpg should carry a route`);
@@ -74,4 +92,4 @@ assert(header.includes('NativeSelect'), 'The person picker must be a compact sel
 assert(!header.includes('PersonChip') && !header.includes('trip-kapok'), 'Six-chip scroller and the header watermark are replaced');
 assert(!fs.readFileSync('app/globals.css', 'utf8').includes('overflow-x: clip'), 'Overflow must be fixed where it happens, not clipped away');
 
-console.log('PASS: five traveller views, complete three-language prep and routes, rejected copy, grouped practical-first guide, per-person checklist, compact header, unchanged flight/baggage/hotel facts.');
+console.log('PASS: five traveller views, complete three-language prep and routes, rejected copy and rejected layout, one column of chapters at the agreed type scale, compact header, unchanged flight/baggage/hotel facts.');
