@@ -1881,7 +1881,6 @@ export const CITY_TECH: {
     },
     {
       id: "robot",
-      imageKey: "deliverybot",
       title: { zh: "会自己坐电梯的送物小车", en: "The trolley that takes the lift by itself", ar: "العربة التي تركب المصعد وحدها" },
       where: {
         zh: "很多餐厅的菜是机器人推到桌边的；不少酒店的外卖和毛巾也是它送到房门口。入住时可以问一句前台有没有。",
@@ -1889,9 +1888,9 @@ export const CITY_TECH: {
         ar: "في مطاعم كثيرة تصل الأطباق إلى الطاولة على روبوت؛ وفي فنادق كثيرة يصل الطعام والمناشف إلى بابكم بالطريقة نفسها. ويستحقّ الأمر سؤالًا في الاستقبال عند الوصول.",
       },
       body: {
-        zh: "门铃响，门外站着一台一米来高的小车，肚子上的盖子打开，里面是你点的东西。它刚才自己按了电梯、自己上了楼、自己认了门牌号；你把东西拿走，它关上盖子转身回去。\n这一行排前两名的普渡和擎朗，总部在深圳和上海。普渡一家占了全球商用服务机器人 23% 的份额，出货超过十二万台。",
-        en: "The doorbell goes. Outside stands a trolley about a metre high; a lid opens on its front and your order is inside. It called the lift itself, rode up itself, found your room number itself. You take the order out, the lid closes, and it turns around and goes back.\nThe two leaders of this industry, Pudu and Keenon, are headquartered in Shenzhen and Shanghai. Pudu alone holds 23 percent of the world's commercial service-robot market, with more than 120,000 units shipped.",
-        ar: "يرنّ جرس الباب. في الخارج تقف عربة بارتفاع متر تقريبًا، ينفتح غطاء في مقدمتها وفي داخلها طلبكم. لقد استدعت المصعد بنفسها، وصعدت بنفسها، ووجدت رقم غرفتكم بنفسها. تأخذون الطلب، فينغلق الغطاء وتستدير عائدة.\nالشركتان الرائدتان في هذا المجال، «بودو» و«كينون»، مقرّاهما في شنتشن وشنغهاي. وتستحوذ بودو وحدها على 23% من سوق روبوتات الخدمة التجارية عالميًا، بأكثر من 120 ألف وحدة مشحونة.",
+        zh: "门铃响，门外站着一台一米来高的小车，肚子上的盖子打开，里面是你点的东西。它刚才自己按了电梯、自己上了楼、自己认了门牌号；你把东西拿走，它关上盖子转身回去。\n商场和写字楼里还有另一种：方方正正的洗地机器人贴着墙根慢慢走，有人过来它让开，电快没了自己回去充电。\n这一行排前两名的普渡和擎朗，总部在深圳和上海。普渡一家占了全球商用服务机器人 23% 的份额，出货超过十二万台。",
+        en: "The doorbell goes. Outside stands a trolley about a metre high; a lid opens on its front and your order is inside. It called the lift itself, rode up itself, found your room number itself. You take the order out, the lid closes, and it turns around and goes back.\nMalls and office towers have another kind: a squared-off scrubbing robot working its way along the skirting, moving aside when someone comes, taking itself back to charge when the battery runs low.\nThe two leaders of this industry, Pudu and Keenon, are headquartered in Shenzhen and Shanghai. Pudu alone holds 23 percent of the world's commercial service-robot market, with more than 120,000 units shipped.",
+        ar: "يرنّ جرس الباب. في الخارج تقف عربة بارتفاع متر تقريبًا، ينفتح غطاء في مقدمتها وفي داخلها طلبكم. لقد استدعت المصعد بنفسها، وصعدت بنفسها، ووجدت رقم غرفتكم بنفسها. تأخذون الطلب، فينغلق الغطاء وتستدير عائدة.\nوفي المراكز التجارية وأبراج المكاتب نوع آخر: روبوت تنظيف مربّع الشكل يسير بمحاذاة الجدار، يفسح الطريق حين يقترب أحد، ويعود وحده إلى الشحن حين تنفد بطاريته.\nالشركتان الرائدتان في هذا المجال، «بودو» و«كينون»، مقرّاهما في شنتشن وشنغهاي. وتستحوذ بودو وحدها على 23% من سوق روبوتات الخدمة التجارية عالميًا، بأكثر من 120 ألف وحدة مشحونة.",
       },
     },
     {
