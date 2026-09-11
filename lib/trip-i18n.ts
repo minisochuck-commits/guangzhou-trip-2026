@@ -179,6 +179,61 @@ export const UI = {
 
   prep: { zh: "出发前准备", en: "Before you fly", ar: "قبل السفر" },
 
+  /** 这座城和阿拉伯世界的关系 —— 指南开头那段，不折叠。 */
+  cityStory: {
+    zh: "广州与你们",
+    en: "Guangzhou and you",
+    ar: "قوانغتشو وأنتم",
+  },
+
+  /**
+   * 折叠起来时每节标题下的一行提示：收起状态下整份指南就是一张目录，
+   * 得让人一眼知道里面有什么、值不值得点开。
+   */
+  guideHints: {
+    prep: {
+      zh: "上网 · 翻译 · 支付 · 天气与穿什么",
+      en: "Data · translation · payment · weather",
+      ar: "الإنترنت · الترجمة · الدفع · الطقس",
+    },
+    halal: {
+      zh: "三座清真寺 · 周五主麻 · 清真餐厅",
+      en: "Three mosques · Friday prayer · halal food",
+      ar: "ثلاثة مساجد · صلاة الجمعة · طعام حلال",
+    },
+    baggage: {
+      zh: "两家航司的免费额度与来源",
+      en: "Both airlines' allowances and sources",
+      ar: "مخصصات الشركتين ومصادرها",
+    },
+    copyAddresses: {
+      zh: "酒店与两个航站楼，可复制给司机",
+      en: "Hotel and both terminals, to show a driver",
+      ar: "الفندق والصالتان، لعرضها على السائق",
+    },
+    phrases: {
+      zh: "打车 · 问食材 · 问价格",
+      en: "Taxis · ingredients · prices",
+      ar: "سيارات الأجرة · المكوّنات · الأسعار",
+    },
+    routes: {
+      zh: "黄埔古港 · 西关与沙面 · 珠江夜景",
+      en: "Huangpu port · Xiguan and Shamian · the Pearl River",
+      ar: "ميناء هوانغبو · شيغوان وشاميان · نهر اللؤلؤ",
+    },
+    food: {
+      zh: "早茶 · 肠粉 · 艇仔粥 · 糖水 · 骑楼",
+      en: "Yum cha · rice rolls · congee · sweets · arcades",
+      ar: "اليوم تشا · لفائف الأرز · العصيدة · الحلويات · الأروقة",
+    },
+    officialSources: {
+      zh: "页面上的事实出自哪里",
+      en: "Where the facts on this page come from",
+      ar: "من أين جاءت معلومات هذه الصفحة",
+    },
+  },
+
+
   /** 五人里四位是穆斯林 —— 礼拜与清真餐单独成节，排在指南靠前的位置。 */
   halal: {
     zh: "礼拜与清真餐",
