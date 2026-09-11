@@ -3,6 +3,8 @@
 MINISO Egypt 一行 5 人赴广州的行程分享页。手机优先，三语（中文 / English / العربية），
 公开访问，无登录无密码。
 
+- 最新对客指南约定、事实来源和 GitHub 发布方法：[`docs/GUEST_GUIDE.md`](docs/GUEST_GUIDE.md)。该文件的 2026-09-11 决定优先于下文历史记录。
+
 - 设计与取舍记录：[`DESIGN_NOTES.md`](DESIGN_NOTES.md)
 - 站点 starter 文档（vinext / Sites 生命周期、Wrangler 等）：[`docs/VINEXT_STARTER.md`](docs/VINEXT_STARTER.md)
 
