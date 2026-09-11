@@ -21,6 +21,7 @@ import {
   PHRASES,
   PREP,
   RETAIL_STUDY,
+  ROUTES,
   type L10n,
   type Lang,
   type MallCard,
@@ -28,7 +29,6 @@ import {
   type PlaceCard,
 } from "@/lib/trip-data";
 import { IMAGE_CREDITS, IMG } from "@/lib/image-credits";
-import { FOOD_ADVICE } from "@/lib/plan-presentation";
 import { UI, t } from "@/lib/trip-i18n";
 import { cn } from "@/lib/utils";
 import {
@@ -69,9 +69,30 @@ const HOTEL_LABELS = {
 
 const HOTEL_PHONE = "+86 20 8922 8888";
 
+/** 开篇那张全景，以及商圈末尾那张北京路 —— 数据里没有，写在这里。 */
+const INLINE_IMAGE_KEYS = ["skyline", "beijinglu"];
+
+/**
+ * 页面上真正显示过的图片。图片来源那一段只列这些：
+ * `lib/image-credits.ts` 是脚本生成的完整资产清单（不手改），里面还留着弃用的素材。
+ */
+const USED_IMAGE_KEYS = new Set(
+  [
+    ...INLINE_IMAGE_KEYS,
+    ...ROUTES.map((route) => route.imageKey),
+    ...FOOD_NOTES.map((note) => note.imageKey),
+    ...RETAIL_STUDY.malls.map((mall) => mall.imageKey),
+  ].filter((key): key is string => Boolean(key && IMG[key])),
+);
+
+const shownCredits = IMAGE_CREDITS.filter((credit) =>
+  USED_IMAGE_KEYS.has(credit.key),
+);
+
 /**
  * 开篇的一句欢迎。只在这份组件里，不进 lib/trip-data.ts —— 那里放的是事实。
- * 两段话没有新事实：怀圣寺那张照片下面的完整历史与来源仍在「广州与你们」一章。
+ * 配的是珠江全景（skyline.jpg）；两段话没有新事实，
+ * 光塔与蕃坊的完整故事和来源在「广州与你们」一章。
  */
 const WELCOME = {
   title: {
@@ -184,9 +205,8 @@ function StatTiles({ lang }: { lang: Lang }) {
           </div>
         ))}
       </div>
-      <p className={cn(GUIDE.note, "mt-2 text-navy-soft/80")}>
-        {t(UI.scaleNote, lang)}
-      </p>
+      {/* 「数据标注了年份、来源可展开」这种话不用写在页面上 ——
+          年份就印在每格里，来源本来就在章尾折叠着。 */}
     </div>
   );
 }
@@ -471,13 +491,14 @@ export function GuideTab({
           </Prose>
         </Section>
 
+        {/* 这一章没有照片：原来挂的 robotaxi.jpg 拍的是阿布扎比的法拉利世界，
+            路牌都是阿拉伯语，不能拿来当广州的实景。宁可不配图，也不换一张假的。 */}
         <Section id="tech" title={UI.cityTech} hint={UI.guideHints.tech} lang={lang}>
           <Prose
             lead={CITY_TECH.lead}
             paragraphs={[CITY_TECH.intro]}
             sources={CITY_TECH.sources}
             lang={lang}
-            photo="robotaxi"
           >
             <ul className="mt-4">
               {CITY_TECH.items.map((item) => (
@@ -542,15 +563,10 @@ export function GuideTab({
               </p>
             ))}
             {/*
-              FOOD_ADVICE 的第一条（清真 / 过敏 / 忌口）已经并进上面品牌推荐的导语里，
-              而且要在挑店之前就看到，所以这里滤掉它，只留机上特殊餐那条 ——
-              同一句话在一章里出现两遍就是噪音。数据文件不改。
+              这一章不再挂那串通用饮食提醒：清真与忌口那句已经并进上面品牌推荐的导语
+              （挑店之前就要看到），机上特殊餐那句属于出发前的事，已移到「出发前准备」。
+              一章里同一句话说两遍就是噪音。
             */}
-            <BulletList
-              items={FOOD_ADVICE.filter((item) => !item.zh.includes("清真"))}
-              lang={lang}
-              className="pt-0.5"
-            />
             <Sources sources={FOOD_CULTURE.sources} lang={lang} />
           </div>
 
@@ -704,10 +720,12 @@ export function GuideTab({
               </li>
             ))}
           </ul>
-          {/* CC 授权的条件：作者与授权要列出来 */}
+          {/* CC 授权的条件：作者与授权要列出来。只列页面上真在用的那些 ——
+              仓里还留着弃用的旧素材（水印图、日本的机器人、阿布扎比那张），
+              全表照搬会把它们端到客人面前。授权清单文件本身不动。 */}
           <SubHeading>{t(UI.imageCredits, lang)}</SubHeading>
           <ul className={cn(GUIDE.note, "max-w-[44rem] space-y-1")}>
-            {IMAGE_CREDITS.map((credit) => (
+            {shownCredits.map((credit) => (
               <li key={credit.key}>
                 <a
                   href={credit.page}
