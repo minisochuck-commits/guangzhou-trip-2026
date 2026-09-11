@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable @next/next/no-img-element -- 静态站、离线可用、相对路径：故意用原生 <img> */
 
 import * as React from "react";
 
@@ -10,14 +11,17 @@ import {
 import type { Lang } from "@/lib/trip-data";
 import { t } from "@/lib/trip-i18n";
 import { cn } from "@/lib/utils";
+import { IMG } from "@/lib/image-credits";
 import { CopyChinese, GUIDE, SourceLink } from "./ui";
 
 /**
  * 特色餐饮品牌推荐：按口味分主题，一行一个品牌，四行左右说完。
  *
  * 这一节是「介绍」，不是工具：没有筛选、没有定位、没有地图按钮，也没有卡中卡。
- * 每个品牌只给名字、人均参考、一句特色、一到两道点单参考，外加一个复制中文店名的按钮 ——
+ * 每个品牌只给招牌菜照片、名字、人均参考、一句特色、一到两道点单参考，外加一个复制中文店名的按钮 ——
  * 门店地址、电话、营业时间都不写，那些随分店变，页面追不上。
+ * 照片拍的是这一味，不是门脸：本地品牌的门店照片没有可以合法使用的，
+ * 而且一张乳鸽的图本来就比一张门脸的图更让人想去。
  * 来源统一收在末尾一个折叠里，不是每行挂一个。
  */
 const LABELS = {
@@ -35,9 +39,16 @@ const LABELS = {
 };
 
 /**
- * 人均：数字用 bdi 包住，阿语下也按 116–144 的顺序读。
- * 单位（人民币 / CNY）在导语里说过一次，这里不每行重复一遍。
+ * 人均：人民币在前、约合美元在后。
+ * 两个都给是有原因的 —— 客人靠美元判断贵不贵，但菜单和买单都是人民币，
+ * 只给美元她在店里对不上号。汇率按 7.2 粗算，写明是「约」。
  */
+const CNY_PER_USD = 7.2;
+
+function usd(value: number) {
+  return Math.round(value / CNY_PER_USD);
+}
+
 function Budget({
   budget,
   lang,
@@ -46,14 +57,18 @@ function Budget({
   lang: Lang;
 }) {
   const amount = Array.isArray(budget) ? `${budget[0]}–${budget[1]}` : String(budget);
+  const dollars = Array.isArray(budget)
+    ? `${usd(budget[0])}–${usd(budget[1])}`
+    : String(usd(budget));
   const figure = (
     <bdi dir="ltr" className="font-medium text-navy">
       {amount}
     </bdi>
   );
-  if (lang === "zh") return <>约 {figure} 元/人</>;
-  if (lang === "ar") return <>{figure} يوانًا/للفرد</>;
-  return <>CNY {figure}/person</>;
+  const converted = <bdi dir="ltr">US${dollars}</bdi>;
+  if (lang === "zh") return <>约 {figure} 元/人（{converted}）</>;
+  if (lang === "ar") return <>{figure} يوانًا/للفرد (نحو {converted})</>;
+  return <>CNY {figure}/person (about {converted})</>;
 }
 
 /**
@@ -77,8 +92,17 @@ function BrandRow({ brand, lang }: { brand: DiningBrand; lang: Lang }) {
   // 英文、阿语的标题是译名，中文检索名要单独露出来 —— 给店员看、也能手选。
   const nameIsChinese = lang === "zh";
   const entry = copyEntryFor(brand);
+  const photo = brand.imageKey ? IMG[brand.imageKey] : undefined;
   return (
     <li className="border-t border-card-line py-3">
+      {photo ? (
+        <img
+          src={photo}
+          alt=""
+          loading="lazy"
+          className="trip-photo mb-2.5 aspect-[4/3] w-full object-cover"
+        />
+      ) : null}
       {/* 三级：主题标题最重，品牌名中等，标签只是行内的引子 —— 别三层一样粗。 */}
       <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
         <h4 className="text-[0.9375rem] font-medium leading-6 text-navy">
@@ -125,7 +149,7 @@ export function DiningBrands({ lang }: { lang: Lang }) {
             {t(theme.title, lang)}
           </h3>
           <p className={cn(GUIDE.note, "mt-0.5")}>{t(theme.lead, lang)}</p>
-          <ul className="mt-1.5">
+          <ul className="mt-1.5 grid gap-x-5 md:grid-cols-2">
             {theme.brands.map((brand) => (
               <BrandRow key={brand.id} brand={brand} lang={lang} />
             ))}
@@ -133,7 +157,7 @@ export function DiningBrands({ lang }: { lang: Lang }) {
         </section>
       ))}
 
-      {/* 21 条来源收在一个折叠里：要核对的人点得开，读的人不被链接打断。 */}
+      {/* 来源收在一个折叠里：要核对的人点得开，读的人不被链接打断。 */}
       <details className="mt-4">
         <summary
           className={cn(GUIDE.note, "inline-flex min-h-11 cursor-pointer items-center")}

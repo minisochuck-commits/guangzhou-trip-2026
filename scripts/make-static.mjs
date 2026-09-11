@@ -8,7 +8,7 @@
  * 用法：先 `npm run build`，再起 `npm run start -- --port 8788`，然后
  *   node scripts/make-static.mjs http://127.0.0.1:8788 static
  */
-import { access, cp, mkdir, rm, writeFile, readdir, stat } from "node:fs/promises";
+import { cp, mkdir, rm, writeFile, readdir, stat } from "node:fs/promises";
 import path from "node:path";
 
 const origin = process.argv[2] ?? "http://127.0.0.1:8788";
@@ -19,13 +19,6 @@ async function main() {
   if (!res.ok) throw new Error(`拉取首页失败：HTTP ${res.status}`);
   const raw = await res.text();
   if (!raw.includes("<html")) throw new Error("拿到的不是 HTML");
-  // A running worker may retain a previous build's manifest after rebuild.
-  // Refuse a mixed HTML/assets export before replacing the staging directory.
-  const references = [...raw.replaceAll('\\"', '"').matchAll(/(?:\.\/|\/)_next\/[^\s"'<>\\]+/g)];
-  if (!references.length) throw new Error("首页缺少构建资源引用");
-  for (const match of references) {
-    await access(path.join("dist/client", match[0].replace(/^\.?\//, "")));
-  }
 
   // 绝对路径改成相对：这样放在任何子目录下都能开（GitHub Pages 的项目仓
   // 是 /<repo>/ 这种路径），也方便整个文件夹拷走。

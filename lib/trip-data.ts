@@ -1736,134 +1736,91 @@ export const CITY_SCALE: {
   tiles: StatTile[];
   sources: { label: L10n; url: string }[];
 } = {
-  "lead": {
-    "zh": "从机场到江边，看看广州怎样连接世界。",
-    "en": "From the airport to the riverfront: how Guangzhou connects with the world.",
-    "ar": "من المطار إلى ضفة النهر: كيف تتّصل قوانغتشو بالعالم."
+  lead: {
+    zh: "一座城，一年四千四百亿美元。",
+    en: "One city, 440 billion US dollars a year.",
+    ar: "مدينةٌ واحدة، 440 مليار دولار في السنة.",
   },
-  "intro": [
+  intro: [
     {
-      "zh": "你们从白云机场抵达，在琶洲参会，空闲时去江边看夜景。机场、展馆和高塔，让这些大数字有了具体的模样。",
-      "en": "You arrive through Baiyun Airport, attend the conference in Pazhou, and go down to the river for the night view when there is time. The airport, the exhibition halls and the tower give these large numbers a shape you can picture.",
-      "ar": "تصلون عبر مطار بايون، وتحضرون المؤتمر في بازو، وتنزلون إلى النهر لمشاهدة المساء حين يتّسع الوقت. المطار وقاعات المعارض والبرج تمنح هذه الأرقام الكبيرة صورةً ملموسة."
-    }
+      zh: "2025 年广州的 GDP 是 3.2 万亿元人民币，按当年约 7.2 的汇率折合四千四百多亿美元。作为参照，世界银行给出的埃及 2024 年全国 GDP 是 3,890 亿美元。这是一座城的数，常住人口一千九百多万。",
+      en: "Guangzhou's GDP in 2025 was 3.2 trillion yuan — about 440 billion US dollars at that year's rate of roughly 7.2. For reference, the World Bank puts all of Egypt's GDP for 2024 at 389 billion dollars. That is the figure for one city, with just over nineteen million residents.",
+      ar: "بلغ الناتج المحلي الإجمالي لقوانغتشو عام 2025 نحو 3.2 تريليون يوان — أي ما يزيد على 440 مليار دولار بسعر صرف ذلك العام البالغ نحو 7.2. وللمقارنة، يقدّر البنك الدولي ناتج مصر كلّها لعام 2024 بـ 389 مليار دولار. وهذا رقم مدينة واحدة يسكنها ما يزيد قليلًا على تسعة عشر مليون نسمة.",
+    },
+    {
+      zh: "这些数字你们这几天会一个个碰到：从白云机场落地，在琶洲的展馆旁边开会，晚上去江边看那座六百米的塔。",
+      en: "You will meet these numbers one by one over the next few days: you land at Baiyun, you meet beside the exhibition halls at Pazhou, and in the evening you go down to the river to see the six-hundred-metre tower.",
+      ar: "ستلتقون بهذه الأرقام واحدًا واحدًا خلال الأيام القادمة: تهبطون في مطار بايون، وتجتمعون إلى جوار قاعات المعارض في بازو، وفي المساء تنزلون إلى النهر لرؤية البرج البالغ ستمئة متر.",
+    },
+    {
+      zh: "再往外看一圈：广州所在的粤港澳大湾区，十一座城市、八千八百万人，2025 年经济总量 15.3 万亿元，约合 2.1 万亿美元 —— 用全国不到 0.6% 的土地，做出全国九分之一的经济。",
+      en: "Widen the frame once: the Greater Bay Area that Guangzhou anchors — eleven cities, eighty-eight million people — produced 15.3 trillion yuan in 2025, about 2.1 trillion US dollars, a ninth of China's economy on less than 0.6 percent of its land.",
+      ar: "وسّع الإطار مرةً واحدة: منطقة الخليج الكبرى التي تتوسّطها قوانغتشو — إحدى عشرة مدينة، ثمانية وثمانون مليون نسمة — أنتجت عام 2025 ما قيمته 15.3 تريليون يوان، أي نحو 2.1 تريليون دولار، وهو تُسع اقتصاد الصين على أقل من 0.6 بالمئة من أرضها.",
+    },
   ],
-  "tiles": [
+  tiles: [
     {
-      "id": "gdp",
-      "value": {
-        "zh": "3.2",
-        "en": "3.2",
-        "ar": "3.2"
-      },
-      "unit": {
-        "zh": "万亿元 · 2025 年 GDP",
-        "en": "trillion yuan · GDP, 2025",
-        "ar": "تريليون يوان · الناتج المحلي 2025"
-      },
-      "note": {
-        "zh": "制造、商贸和服务业共同支撑的城市经济",
-        "en": "A city economy carried by manufacturing, trade and services",
-        "ar": "اقتصاد مدينة تحمله الصناعة والتجارة والخدمات"
-      }
+      id: "gdp",
+      value: { zh: "3.2", en: "3.2", ar: "3.2" },
+      unit: { zh: "万亿元 · 2025 年 GDP", en: "trillion yuan · GDP, 2025", ar: "تريليون يوان · الناتج المحلي 2025" },
+      note: { zh: "约合 4,400 亿美元，全国城市第四", en: "About US$440bn — fourth among Chinese cities", ar: "نحو 440 مليار دولار — الرابعة بين مدن الصين" },
     },
     {
-      "id": "airport",
-      "value": {
-        "zh": "8,359",
-        "en": "83.6",
-        "ar": "83.6"
-      },
-      "unit": {
-        "zh": "万人次 · 白云机场 2025",
-        "en": "million passengers · Baiyun, 2025",
-        "ar": "مليون مسافر · مطار بايون 2025"
-      },
-      "note": {
-        "zh": "折合每天约 23 万人次进出",
-        "en": "About 230,000 passengers a day",
-        "ar": "نحو 230 ألف مسافر يوميًا"
-      }
+      id: "pop",
+      value: { zh: "1,910", en: "19.1", ar: "19.1" },
+      unit: { zh: "万常住人口", en: "million residents", ar: "مليون نسمة" },
+      note: { zh: "一座城的人口，比很多国家都多", en: "One city with more people than many countries", ar: "مدينة واحدة يفوق سكانها سكان دول كثيرة" },
     },
     {
-      "id": "tower",
-      "value": {
-        "zh": "600",
-        "en": "600",
-        "ar": "600"
-      },
-      "unit": {
-        "zh": "米 · 广州塔",
-        "en": "m · Canton Tower",
-        "ar": "م · برج كانتون"
-      },
-      "note": {
-        "zh": "不登塔，也可以从江岸看它亮灯",
-        "en": "You need not go up: the lit tower is a sight from the bank",
-        "ar": "لا حاجة للصعود: البرج المضاء مشهدٌ من الضفة"
-      }
+      id: "airport",
+      value: { zh: "8,359", en: "83.6", ar: "83.6" },
+      unit: { zh: "万人次 · 白云机场 2025", en: "million passengers · Baiyun, 2025", ar: "مليون مسافر · مطار بايون 2025" },
+      note: { zh: "折合每天约 23 万人次进出；全国第二个八千万级机场，你们从这里落地", en: "About 230,000 people a day; China's second airport past 80 million, and the one you land at", ar: "نحو 230 ألف شخص يوميًا؛ ثاني مطار في الصين يتجاوز 80 مليونًا، وهو مطار وصولكم" },
     },
     {
-      "id": "fair",
-      "value": {
-        "zh": "31",
-        "en": "310,000",
-        "ar": "310,000"
-      },
-      "unit": {
-        "zh": "万境外采购商 · 第 138 届广交会",
-        "en": "overseas buyers · 138th Canton Fair",
-        "ar": "مشترٍ أجنبي · معرض كانتون الـ138"
-      },
-      "note": {
-        "zh": "223 个国家和地区的买家汇聚于此（该届）",
-        "en": "Buyers from 223 countries and regions, at that edition",
-        "ar": "مشترون من 223 دولةً ومنطقة في تلك الدورة"
-      }
-    }
+      id: "port",
+      value: { zh: "6.96", en: "696", ar: "696" },
+      unit: { zh: "亿吨 · 广州港 2025 货物吞吐", en: "million tonnes · Port of Guangzhou, 2025", ar: "مليون طن · ميناء قوانغتشو 2025" },
+      note: { zh: "集装箱 2,800 万标箱，全球港口前六", en: "28 million TEU; a top-six port worldwide", ar: "28 مليون حاوية؛ من أكبر ستة موانئ في العالم" },
+    },
+    {
+      id: "metro",
+      value: { zh: "780", en: "780", ar: "780" },
+      unit: { zh: "公里地铁 · 2025 年底", en: "km of metro · end of 2025", ar: "كم من المترو · نهاية 2025" },
+      note: { zh: "全国第三，比开罗到亚历山大来回还长", en: "Third in China — longer than Cairo to Alexandria and back", ar: "الثالثة في الصين — أطول من رحلة القاهرة إلى الإسكندرية ذهابًا وإيابًا" },
+    },
+    {
+      id: "tower",
+      value: { zh: "600", en: "600", ar: "600" },
+      unit: { zh: "米 · 广州塔", en: "m · Canton Tower", ar: "م · برج كانتون" },
+      note: { zh: "就在你们住的海珠区，入夜整座塔换色", en: "In Haizhu, your own district; the whole tower changes colour after dark", ar: "في هايتشو، منطقتكم نفسها؛ ويغيّر البرج كله لونه بعد حلول الظلام" },
+    },
+    {
+      id: "fair",
+      value: { zh: "31", en: "310,000", ar: "310,000" },
+      unit: { zh: "万境外采购商 · 第 138 届广交会", en: "overseas buyers · 138th Canton Fair", ar: "مشترٍ أجنبي · معرض كانتون الـ138" },
+      note: { zh: "来自 223 个国家和地区，展馆就在你们酒店那条路上", en: "From 223 countries and regions — the halls are on your hotel's street", ar: "من 223 دولةً ومنطقة — والقاعات في شارع فندقكم نفسه" },
+    },
+    {
+      id: "gba",
+      value: { zh: "15.3", en: "15.3", ar: "15.3" },
+      unit: { zh: "万亿元 · 大湾区 2025", en: "trillion yuan · Greater Bay Area, 2025", ar: "تريليون يوان · منطقة الخليج الكبرى 2025" },
+      note: { zh: "约合 2.1 万亿美元；十一城八千八百万人，全国九分之一的经济", en: "About US$2.1tn; eleven cities, 88 million people, a ninth of China's economy", ar: "نحو 2.1 تريليون دولار؛ إحدى عشرة مدينة، 88 مليون نسمة، تُسع اقتصاد الصين" },
+    },
   ],
-  "sources": [
-    {
-      "label": {
-        "zh": "广州2026年政府工作报告",
-        "en": "Guangzhou 2026 government work report",
-        "ar": "تقرير حكومة قوانغتشو لعام 2026"
-      },
-      "url": "https://www.gzfao.gov.cn/zwgk/gkml/gzrmzf/bmwj/gfxwj/content/post_266425.html"
-    },
-    {
-      "label": {
-        "zh": "广州市统计局：2025 年国民经济和社会发展统计公报",
-        "en": "Guangzhou Statistics Bureau: 2025 statistical communiqué",
-        "ar": "مكتب إحصاء قوانغتشو: النشرة الإحصائية لعام 2025"
-      },
-      "url": "https://tjj.gz.gov.cn/zzfwzq/tjkx/content/post_10804061.html"
-    },
-    {
-      "label": {
-        "zh": "海珠区政府：广州塔",
-        "en": "Haizhu District government: Canton Tower",
-        "ar": "حكومة منطقة هايتشو: برج كانتون"
-      },
-      "url": "https://www.haizhu.gov.cn/zjhz/lyck/content/post_7765705.html"
-    },
-    {
-      "label": {
-        "zh": "人民网：第 138 届广交会闭幕，境外采购商创新高",
-        "en": "People's Daily: 138th Canton Fair closes with record overseas buyers",
-        "ar": "صحيفة الشعب: اختتام معرض كانتون الـ138 برقم قياسي"
-      },
-      "url": "http://pic.people.com.cn/n1/2025/1104/c1016-40596777.html"
-    }
-  ]
+  sources: [
+    { label: { zh: "2025 年广州市国民经济和社会发展统计公报", en: "Guangzhou 2025 statistical communiqué", ar: "البيان الإحصائي لقوانغتشو 2025" }, url: "https://www.gz.gov.cn/zwgk/sjfb/tjgb/content/post_10804075.html" },
+    { label: { zh: "广州市统计局：2025 年经济运行情况", en: "Guangzhou Statistics Bureau: the 2025 economy", ar: "مكتب إحصاء قوانغتشو: أداء اقتصاد 2025" }, url: "https://tjj.gz.gov.cn/zzfwzq/tjkx/content/post_10804061.html" },
+    { label: { zh: "广州市 2026 年政府工作报告", en: "Guangzhou government work report, 2026", ar: "تقرير عمل حكومة قوانغتشو 2026" }, url: "https://www.gzfao.gov.cn/zwgk/gkml/gzrmzf/bmwj/gfxwj/content/post_266425.html" },
+    { label: { zh: "世界银行：埃及 GDP（现价美元）", en: "World Bank: Egypt GDP (current US$)", ar: "البنك الدولي: ناتج مصر (بالدولار الجاري)" }, url: "https://data.worldbank.org/indicator/NY.GDP.MKTP.CD?locations=EG" },
+    { label: { zh: "民航局：白云机场年旅客吞吐量首破八千万", en: "CAAC: Baiyun passes 80 million passengers", ar: "هيئة الطيران المدني: مطار بايون يتجاوز 80 مليون مسافر" }, url: "http://www.caacnews.com.cn/special/2025zhuanti/8427/kjzg/20dzln4/202512/t20251223_1392071.html" },
+    { label: { zh: "广州市港务局：2025 年广州港货物吞吐量突破 6.96 亿吨", en: "Guangzhou Port Authority: 696 million tonnes in 2025", ar: "هيئة ميناء قوانغتشو: 696 مليون طن عام 2025" }, url: "https://gwj.gz.gov.cn/xwzx/gzgxw/content/post_10631368.html" },
+    { label: { zh: "广州市交通运输局：2025 年度轨道交通评价（运营里程）", en: "Guangzhou Transport Bureau: 2025 rail transit review", ar: "هيئة النقل بقوانغتشو: مراجعة النقل بالسكك 2025" }, url: "https://jtj.gz.gov.cn/gkmlpt/content/10/10694/post_10694346.html" },
+    { label: { zh: "海珠区政府：广州塔", en: "Haizhu District government: Canton Tower", ar: "حكومة منطقة هايتشو: برج كانتون" }, url: "https://www.haizhu.gov.cn/zjhz/lyck/content/post_7765705.html" },
+    { label: { zh: "人民网：第 138 届广交会闭幕，境外采购商创新高", en: "People's Daily: 138th Canton Fair closes with record overseas buyers", ar: "صحيفة الشعب: اختتام معرض كانتون الـ138 برقم قياسي" }, url: "http://pic.people.com.cn/n1/2025/1104/c1016-40596777.html" },
+    { label: { zh: "粤港澳大湾区门户网：关于大湾区", en: "Greater Bay Area portal: about the GBA", ar: "بوابة منطقة الخليج الكبرى: عن المنطقة" }, url: "https://www.cnbayarea.org.cn/introduction/content/post_165071.html" },
+  ],
 };
-
-/* ------------------------------------------------------------------ */
-/* 科技就在身边                                                          */
-/*                                                                     */
-/* 「中国很强」不能只写在报表上，要写她这几天亲眼能看到的东西。          */
-/* 每一条：是什么、在哪能见到、一个硬数字、来源。不写看不到的。          */
-/* ------------------------------------------------------------------ */
 
 export type TechItem = {
   id: string;
@@ -1881,111 +1838,119 @@ export const CITY_TECH: {
   items: TechItem[];
   sources: { label: L10n; url: string }[];
 } = {
-  "lead": {
-    "zh": "上车之后你会发现，驾驶位上没有人。",
-    "en": "You get in, and then you notice: nobody is in the driver’s seat.",
-    "ar": "تركبون، ثم تلاحظون: لا أحد في مقعد السائق."
+  lead: {
+    zh: "上车之后你会发现，驾驶位上没有人。",
+    en: "You get in, and then you notice: nobody is in the driver's seat.",
+    ar: "تركبون، ثم تلاحظون: لا أحد في مقعد السائق.",
   },
-  "intro": {
-    "zh": "在广州，叫一辆车、收一份外卖、买一杯茶，都可能遇到有意思的新体验。",
-    "en": "In Guangzhou, calling a car, taking a delivery or buying a cup of tea can each turn into something new worth noticing.",
-    "ar": "في قوانغتشو، قد يتحوّل طلب سيارة أو استلام توصيلة أو شراء كوب شاي إلى تجربة جديدة تستحق الانتباه."
+  intro: {
+    zh: "下面这几样，在广州街上是日常，在世界上多数地方还是新闻。不用专门去找，这几天走在路上、坐在车里、吃着饭就会碰到。",
+    en: "The things below are everyday on Guangzhou's streets and still headlines almost everywhere else. None of it needs a special trip: over these few days you will run into it on the road, in the car, at the table.",
+    ar: "الأشياء أدناه روتين يومي في شوارع قوانغتشو، ولا تزال عناوين أخبار في معظم أنحاء العالم. ولا يحتاج أيٌّ منها إلى رحلة خاصة: خلال هذه الأيام ستصادفونها في الطريق وفي السيارة وعلى المائدة.",
   },
-  "items": [
+  items: [
     {
-      "id": "robotaxi",
-      "title": {
-        "zh": "坐一次没有司机的车",
-        "en": "Ride in a car with no driver",
-        "ar": "اركبوا سيارة بلا سائق"
+      id: "robotaxi",
+      imageKey: "robotaxi",
+      title: { zh: "坐一次没有司机的车", en: "Ride in a car with no driver", ar: "اركبوا سيارة بلا سائق" },
+      where: {
+        zh: "微信里搜小程序「WeRide Go」，看看广州能约的上下车点；白云机场、广州南站到市区地标之间有八条示范线，24 小时跑。",
+        en: "Search the WeChat mini-program “WeRide Go” for the pickup points open in Guangzhou; eight demonstration routes link Baiyun Airport and Guangzhou South station with city landmarks, running around the clock.",
+        ar: "ابحثوا في وي تشات عن تطبيق «WeRide Go» المصغّر لمعرفة نقاط الركوب المتاحة في قوانغتشو؛ وثمانية خطوط تجريبية تربط مطار بايون ومحطة قوانغتشو الجنوبية بمعالم المدينة وتعمل على مدار الساعة.",
       },
-      "where": {
-        "zh": "微信里搜小程序「WeRide Go」，看看广州能约的上下车点。",
-        "en": "Search the WeChat mini-program “WeRide Go” and look at the pickup and drop-off points available in Guangzhou.",
-        "ar": "ابحثوا في وي تشات عن تطبيق «WeRide Go» المصغّر، وانظروا إلى نقاط الركوب والنزول المتاحة في قوانغتشو."
+      body: {
+        zh: "方向盘自己转，车在红灯前停下，转弯、变道、避让行人都由它自己完成。做这件事的公司叫文远知行，总部就在广州：它在广州、北京和阿布扎比跑的都是「车里一个人都没有」的纯无人商业运营，2026 年 1 月全球车队过了一千辆。除了出租车，还有无人小巴和无人环卫车。",
+        en: "The wheel turns by itself, the car eases up to a red light, and the turns, lane changes and pauses for pedestrians are its own work. The company behind it is WeRide, headquartered here in Guangzhou: in Guangzhou, Beijing and Abu Dhabi it runs fully driverless commercial service — nobody in the car at all — and in January 2026 its global fleet passed a thousand vehicles. Beyond taxis there are driverless minibuses and street sweepers.",
+        ar: "يدور المقود وحده، وتتمهّل السيارة عند الإشارة الحمراء، وتتولّى بنفسها الانعطاف وتغيير المسار والتوقّف للمشاة. والشركة وراء ذلك هي «وي رايد» ومقرّها هنا في قوانغتشو: تشغّل في قوانغتشو وبكين وأبوظبي خدمة تجارية بلا سائق إطلاقًا — لا أحد في السيارة — وفي يناير 2026 تجاوز أسطولها العالمي ألف مركبة. وإلى جانب سيارات الأجرة هناك حافلات صغيرة ومركبات تنظيف شوارع بلا سائق.",
       },
-      "body": {
-        "zh": "方向盘自己转，车在红灯前停下，转弯、变道、避让行人都由它自己完成。文远知行从 2025 年 9 月起在广州黄埔提供 24 小时全无人商业运营。小程序里可以看当前开放的上下车点和费用；选一段短途，留意它怎样识别路口、等红灯和转弯，比看一段演示视频更直观。",
-        "en": "The wheel turns by itself, the car eases up to a red light, and the turns, lane changes and pauses for pedestrians are its own work. WeRide has run a fully driverless commercial service around the clock in Guangzhou’s Huangpu district since September 2025. The mini-program shows the pickup points and fares currently open; take one short hop and watch how it reads a junction, waits at a light and turns — far more telling than any demonstration video.",
-        "ar": "يدور المقود وحده، وتتمهّل السيارة عند الإشارة الحمراء، وتتولّى بنفسها الانعطاف وتغيير المسار والتوقّف للمشاة. وتشغّل WeRide خدمة تجارية بلا سائق على مدار الساعة في منطقة هوانغبو بقوانغتشو منذ سبتمبر 2025. ويعرض التطبيق المصغّر نقاط الركوب والأجرة المتاحة حاليًا؛ اختاروا مشوارًا قصيرًا ولاحظوا كيف تقرأ التقاطع وتنتظر الإشارة وتنعطف — وهذا أوضح من أي فيديو توضيحي."
-      }
     },
     {
-      "id": "robot",
-      "title": {
-        "zh": "会搭电梯的送物小车",
-        "en": "A delivery robot that takes the lift",
-        "ar": "روبوت توصيل يركب المصعد"
+      id: "evtol",
+      title: { zh: "载人的无人机", en: "A drone that carries people", ar: "طائرة مسيّرة تحمل الركاب" },
+      where: {
+        zh: "在黄埔的运营点可以买票坐一趟低空观光。要提前约，不在日程里；但要知道，这东西是广州造的。",
+        en: "At the operating site in Huangpu you can buy a ticket for a low-altitude sightseeing flight. It takes booking and is not on the itinerary — but know that this machine is made in Guangzhou.",
+        ar: "في موقع التشغيل بهوانغبو يمكن شراء تذكرة لرحلة مشاهدة منخفضة الارتفاع. تحتاج إلى حجز وليست في البرنامج — لكن اعلموا أن هذه الآلة صُنعت في قوانغتشو.",
       },
-      "where": {
-        "zh": "部分酒店和餐厅提供配送机器人服务。",
-        "en": "Some hotels and restaurants run delivery robots.",
-        "ar": "تشغّل بعض الفنادق والمطاعم روبوتات توصيل."
+      body: {
+        zh: "亿航智能的 EH216-S，两个座位、十六个旋翼、没有飞行员。它拿到了全球第一张无人驾驶载人航空器的适航证、第一张生产许可证，2025 年又在广州黄埔拿到全球第一张运营合格证 —— 四证齐全，可以卖票载客。",
+        en: "EHang's EH216-S: two seats, sixteen rotors, no pilot. It holds the world's first type certificate for a pilotless passenger aircraft, the first production certificate, and in 2025 received the first operator certificate in Guangzhou's Huangpu district — the full set, cleared to sell tickets and carry passengers.",
+        ar: "طائرة EH216-S من «إي هانغ»: مقعدان وستة عشر دوّارًا وبلا طيار. تحمل أول شهادة صلاحية طيران في العالم لطائرة ركاب بلا طيار، وأول رخصة إنتاج، وحصلت عام 2025 في منطقة هوانغبو بقوانغتشو على أول شهادة تشغيل في العالم — المجموعة الكاملة، ومصرَّح لها ببيع التذاكر ونقل الركاب.",
       },
-      "body": {
-        "zh": "物品放进货舱后，小车会自己呼叫电梯、跨楼层送到房门前，再通知你取件。看看它怎样和人共用一部电梯，很有意思。入住时问前台是否有这项服务，有的话可以试一次。",
-        "en": "Once your things are in the compartment, the robot calls the lift itself, travels between floors to your door and then lets you know your delivery has arrived. Watching it share a lift with people is the interesting part. Ask at check-in whether the service is available; if it is, it is worth trying once.",
-        "ar": "بعد وضع الأغراض في الحجرة، يستدعي الروبوت المصعد بنفسه وينتقل بين الطوابق إلى باب غرفتكم ثم يُعلمكم بوصول الطلب. والمشوّق أن تروه يتشارك المصعد مع الناس. اسألوا الاستقبال عند الوصول إن كانت الخدمة متاحة، وإن كانت فهي تستحق تجربة واحدة."
-      }
     },
     {
-      "id": "cashless",
-      "title": {
-        "zh": "一杯茶的小额付款",
-        "en": "The price of one cup of tea",
-        "ar": "ثمن كوب شاي واحد"
+      id: "robot",
+      title: { zh: "会搭电梯的送物小车", en: "A delivery robot that takes the lift", ar: "روبوت توصيل يركب المصعد" },
+      where: {
+        zh: "很多餐厅里菜是机器人推到桌边的；不少酒店里外卖和毛巾也是它送到房门口，自己坐电梯上来。入住时可以问前台有没有这项服务。",
+        en: "In many restaurants the dishes arrive at the table on a robot; in many hotels the takeaway or fresh towels come to your door on one, riding the lift by itself. Ask at the front desk whether your hotel runs them.",
+        ar: "في مطاعم كثيرة تصل الأطباق إلى الطاولة على روبوت؛ وفي فنادق كثيرة يصل الطعام الجاهز أو المناشف إلى بابكم على روبوت يركب المصعد بنفسه. اسألوا في الاستقبال إن كان فندقكم يشغّلها.",
       },
-      "where": {
-        "zh": "买水、买茶、打车，都是同一个动作。",
-        "en": "Water, tea, a taxi — the same gesture every time.",
-        "ar": "ماء أو شاي أو سيارة أجرة — الحركة نفسها في كل مرة."
+      body: {
+        zh: "这个行业排在前两名的普渡和擎朗，总部分别在深圳和上海。普渡一家占全球商用服务机器人 23% 的份额，累计出货超过十二万台。",
+        en: "The two leaders of this industry, Pudu and Keenon, are headquartered in Shenzhen and Shanghai. Pudu alone holds 23 percent of the world's commercial service-robot market, with more than 120,000 units shipped.",
+        ar: "الشركتان الرائدتان في هذه الصناعة، «بودو» و«كينون»، مقرّاهما في شنتشن وشنغهاي. وتستحوذ بودو وحدها على 23% من سوق روبوتات الخدمة التجارية في العالم، بأكثر من 120 ألف وحدة مشحونة.",
       },
-      "body": {
-        "zh": "茶饮店、餐厅和许多出租车都能扫码付款。买一杯茶时，看看从点单、付款到取餐，手机怎样把这些小步骤连在一起；支付宝的准备方法在前面的出发准备里。",
-        "en": "Tea shops, restaurants and many taxis all take payment by code. When you buy a cup of tea, watch how the phone links the small steps together — ordering, paying, collecting. How to set Alipay up is in the preparation chapter.",
-        "ar": "محال الشاي والمطاعم وكثير من سيارات الأجرة تقبل الدفع بالرمز. وعند شراء كوب شاي، لاحظوا كيف يربط الهاتف الخطوات الصغيرة معًا — الطلب والدفع والاستلام. وطريقة تجهيز أليباي في فصل الاستعداد قبل السفر."
-      }
-    }
+    },
+    {
+      id: "drone-delivery",
+      title: { zh: "从天上落下来的外卖", en: "Takeaway that comes down from the sky", ar: "طعام جاهز ينزل من السماء" },
+      where: {
+        zh: "在开通航线的商圈和公园，点一份外卖，几分钟后从天上落到取餐柜里。广州是开了航线的城市之一。",
+        en: "In districts and parks with a route, you order a takeaway and a few minutes later it drops from the sky into a pick-up locker. Guangzhou is one of the cities with routes open.",
+        ar: "في الأحياء والحدائق التي فيها خط، تطلبون وجبة جاهزة فتهبط بعد دقائق من السماء في خزانة استلام. وقوانغتشو من المدن التي فُتحت فيها الخطوط.",
+      },
+      body: {
+        zh: "美团无人机到 2024 年底开了 53 条航线，累计送了四十五万单，单 2024 年一年就送了二十万单，比前一年翻了一倍。",
+        en: "By the end of 2024 Meituan's drones flew 53 routes and had delivered 450,000 orders — 200,000 of them in 2024 alone, double the year before.",
+        ar: "بحلول نهاية 2024 كانت طائرات «مي توان» المسيّرة تطير على 53 خطًا وقد سلّمت 450 ألف طلب — منها 200 ألف في عام 2024 وحده، أي ضعف العام السابق.",
+      },
+    },
+    {
+      id: "cashless",
+      imageKey: "cashless",
+      title: { zh: "一杯茶的小额付款", en: "Paying for a cup of tea", ar: "دفع ثمن كوب شاي" },
+      where: {
+        zh: "买水、买茶、打车，都是同一个动作：扫一下码。这几天你们大概一张纸币都用不上。",
+        en: "Buying water, buying tea, taking a taxi — all the same motion: one scan of a code. You will probably not touch a banknote all week.",
+        ar: "شراء الماء أو الشاي أو ركوب سيارة أجرة — الحركة نفسها: مسح رمز واحد. غالبًا لن تلمسوا ورقة نقدية طوال الأسبوع.",
+      },
+      body: {
+        zh: "中国的移动支付普及率 86%，全球第一。街边卖菜的摊子、路边的早餐店、出租车，全都收码不收钞。本页的出发前准备里写了怎么把外卡绑上。",
+        en: "China's mobile-payment penetration is 86 percent, the highest in the world. The vegetable stall, the breakfast shop on the corner, the taxi — all take a code and not a note. The preparation section on this page explains how to link a foreign card.",
+        ar: "نسبة انتشار الدفع بالهاتف في الصين 86%، الأعلى في العالم. بسطة الخضار ومحل الفطور على الناصية وسيارة الأجرة — جميعها تقبل الرمز لا الورقة النقدية. ويشرح قسم الاستعداد في هذه الصفحة كيفية ربط بطاقة أجنبية.",
+      },
+    },
+    {
+      id: "ev-taxi",
+      imageKey: "evtaxi",
+      title: { zh: "安静的出租车", en: "The quiet taxi", ar: "سيارة الأجرة الهادئة" },
+      where: {
+        zh: "坐上去没有发动机声、没有尾气 —— 你们这几天叫到的车几乎全是电动的。",
+        en: "No engine noise, no exhaust when you get in — almost every car you hail this week will be electric.",
+        ar: "لا صوت محرّك ولا عادم حين تركبون — كل سيارة تطلبونها هذا الأسبوع تقريبًا كهربائية.",
+      },
+      body: {
+        zh: "到 2025 年 6 月底，广州网约车电动化率 98%；珠三角新增的出租车和网约车全部是新能源车。广汽自己就是造电动车的大厂，总部也在广州。",
+        en: "By the end of June 2025, 98 percent of Guangzhou's ride-hailing cars were electric, and every new taxi or ride-hailing car in the Pearl River Delta must be a new-energy vehicle. GAC, a major EV maker in its own right, is headquartered here too.",
+        ar: "بحلول نهاية يونيو 2025 كانت 98% من سيارات النقل التشاركي في قوانغتشو كهربائية، ويجب أن تكون كل سيارة أجرة أو نقل تشاركي جديدة في دلتا نهر اللؤلؤ مركبة طاقة جديدة. وشركة «جي إيه سي»، وهي من كبار صانعي السيارات الكهربائية، مقرّها هنا أيضًا.",
+      },
+    },
   ],
-  "sources": [
-    {
-      "label": {
-        "zh": "文远知行：广州黄埔 24 小时全无人商业运营",
-        "en": "WeRide: 24/7 fully driverless service in Guangzhou’s Huangpu",
-        "ar": "WeRide: خدمة بلا سائق على مدار الساعة في هوانغبو"
-      },
-      "url": "https://ir.weride.ai/news-releases/news-release-details/weride-launches-247-fully-driverless-robotaxi-service-guangzhous"
-    },
-    {
-      "label": {
-        "zh": "文远知行：微信小程序 WeRide Go 预约",
-        "en": "WeRide: booking through the WeRide Go mini-program",
-        "ar": "WeRide: الحجز عبر تطبيق WeRide Go المصغّر"
-      },
-      "url": "https://ir.weride.ai/news-releases/news-release-details/weride-makes-robotaxi-booking-effortless-tencents-super-app"
-    },
-    {
-      "label": {
-        "zh": "普渡：酒店配送机器人",
-        "en": "PUDU: hotel delivery robots",
-        "ar": "PUDU: روبوتات التوصيل الفندقية"
-      },
-      "url": "https://www.pudurobotics.com/en/solutions/hospitality"
-    },
-    {
-      "label": {
-        "zh": "官方来华生活指南：支付与通信",
-        "en": "Official guide for visitors: payments and connectivity",
-        "ar": "الدليل الرسمي للزوار: الدفع والاتصالات"
-      },
-      "url": "https://english.www.gov.cn/2025special/bizexpatsinchina2025"
-    }
-  ]
+  sources: [
+    { label: { zh: "文远知行：广州黄埔开通 7×24 小时全无人 Robotaxi 服务", en: "WeRide: 24/7 fully driverless Robotaxi service in Guangzhou's Huangpu", ar: "وي رايد: خدمة روبوتاكسي بلا سائق على مدار الساعة في هوانغبو" }, url: "https://ir.weride.ai/news-releases/news-release-details/weride-launches-247-fully-driverless-robotaxi-service-guangzhous" },
+    { label: { zh: "文远知行：在微信小程序里叫车", en: "WeRide: booking a robotaxi inside WeChat", ar: "وي رايد: حجز روبوتاكسي عبر وي تشات" }, url: "https://ir.weride.ai/news-releases/news-release-details/weride-makes-robotaxi-booking-effortless-tencents-super-app" },
+    { label: { zh: "普渡：酒店配送机器人", en: "Pudu: hospitality delivery robots", ar: "بودو: روبوتات التوصيل الفندقية" }, url: "https://www.pudurobotics.com/en/solutions/hospitality" },
+    { label: { zh: "中国政府网：外籍人士在华支付指南", en: "gov.cn: paying in China as a foreign visitor", ar: "بوابة الحكومة الصينية: الدفع في الصين للزائر الأجنبي" }, url: "https://english.www.gov.cn/2025special/bizexpatsinchina2025" },
+    { label: { zh: "财新：文远知行在广州市区开通 Robotaxi 服务，24 小时运营", en: "Caixin: WeRide opens 24-hour Robotaxi service in central Guangzhou", ar: "كايشين: وي رايد تفتح خدمة روبوتاكسي على مدار الساعة في قوانغتشو" }, url: "https://companies.caixin.com/2025-05-15/102320039.html" },
+    { label: { zh: "新浪科技：文远知行 Robotaxi 车队突破千辆", en: "Sina Tech: WeRide's Robotaxi fleet passes 1,000", ar: "سينا تك: أسطول وي رايد يتجاوز ألف مركبة" }, url: "https://finance.sina.com.cn/tech/digi/2026-01-16/doc-inhhnzaw0673277.shtml" },
+    { label: { zh: "广州市政府：全球首张载人 eVTOL 运营合格证落地广州黄埔", en: "Guangzhou government: the world's first passenger-eVTOL operator certificate, Huangpu", ar: "حكومة قوانغتشو: أول شهادة تشغيل لطائرة ركاب كهربائية في العالم، هوانغبو" }, url: "https://www.gz.gov.cn/ysgz/xwdt/ysdt/content/post_10193139.html" },
+    { label: { zh: "亿航智能：EH216-S 获民航局标准适航证", en: "EHang: EH216-S receives its type certificate from the CAAC", ar: "إي هانغ: EH216-S تحصل على شهادة الصلاحية من هيئة الطيران" }, url: "https://www.ehang.com/news/1022.html" },
+    { label: { zh: "前瞻：2025 年中国餐饮配送机器人行业全景", en: "Qianzhan: China's food-delivery robot industry, 2025", ar: "تشيانتشان: صناعة روبوتات توصيل الطعام في الصين 2025" }, url: "https://ecoapp.qianzhan.com/detials/250530-9cf3847c.html" },
+    { label: { zh: "南方财经：美团无人机 2024 年配送超 20 万单", en: "SFC: Meituan drones delivered over 200,000 orders in 2024", ar: "إس إف سي: طائرات مي توان سلّمت أكثر من 200 ألف طلب في 2024" }, url: "https://www.sfccn.com/2025/1-24/4MMDE0NzNfMTk4NzI4Mw.html" },
+    { label: { zh: "人民网广东：珠三角新增网约车须为新能源汽车", en: "People's Daily Guangdong: new ride-hailing cars in the Delta must be NEVs", ar: "صحيفة الشعب قوانغدونغ: سيارات النقل التشاركي الجديدة في الدلتا يجب أن تكون كهربائية" }, url: "http://gd.people.com.cn/n2/2024/1212/c123932-41073362.html" },
+  ],
 };
-
-/* ------------------------------------------------------------------ */
-/* 你们住的这块地：琶洲                                                  */
-/* ------------------------------------------------------------------ */
 
 export const PAZHOU: { lead: L10n; paragraphs: L10n[]; sources: { label: L10n; url: string }[] } = {
   "lead": {

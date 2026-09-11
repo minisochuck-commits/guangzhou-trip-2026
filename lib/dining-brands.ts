@@ -16,6 +16,9 @@ import type { L10n } from "./trip-data";
 
 export type DiningBrand = {
   id: string;
+  /** 招牌菜照片，对应 public/images/<imageKey>.jpg，见 lib/image-credits.ts。
+      拍的是这一味，不是门脸 —— 本地品牌的门店照片没有可以合法使用的。 */
+  imageKey?: string;
   /** 显示名：中文视图就是中文店名；英文、阿语给译名或音译。 */
   name: L10n;
   /** 中文检索名：复制这一串去搜附近门店。 */
@@ -46,7 +49,7 @@ export type DiningTheme = {
  */
 export const DINING_INTRO: { how: L10n; halal: L10n } = {
   how: {
-    zh: "复制中文品牌名，在高德或大众点评搜附近门店。人均为人民币参考，菜品与价格以门店为准。",
+    zh: "复制中文品牌名，在高德或大众点评搜附近门店。人均按人民币给，括号里是约合美元，菜品与价格以门店为准。",
     en: "Copy the Chinese brand name to find a nearby branch in Amap or Dianping. Prices are per-person estimates in CNY; check the branch’s menu.",
     ar: "انسخوا اسم العلامة بالصينية للبحث عن فرع قريب في Amap أو Dianping. الأسعار تقديرية للفرد باليوان؛ راجعوا قائمة الفرع.",
   },
@@ -73,6 +76,7 @@ export const DINING_THEMES: DiningTheme[] = [
     brands: [
       {
         id: "dagefan",
+        imageKey: "squab",
         name: { zh: "大鸽饭", en: "Da Ge Fan", ar: "دا قه فان" },
         chinese: "大鸽饭",
         budget: 96,
@@ -89,25 +93,8 @@ export const DINING_THEMES: DiningTheme[] = [
         source: "https://www.sohu.com/a/525299190_121124454",
       },
       {
-        id: "xiaobingsheng",
-        name: { zh: "小炳胜", en: "Xiao Bingsheng", ar: "شياو بينغ شنغ" },
-        chinese: "小炳胜",
-        budget: 78,
-        note: {
-          zh: "创意粤菜，咸口菜和奶香点心可以搭配着点。",
-          en: "Inventive Cantonese cooking; pair a savoury dish with one of the milky pastries.",
-          ar: "مطبخ كانتوني مبتكر؛ اجمعوا بين طبق مالح وحلوى بالحليب.",
-        },
-        dishes: {
-          zh: "招积茄子、雪山奶露包",
-          en: "Zhaoji aubergine; snow-top milk bun",
-          ar: "باذنجان تشاوجي؛ خبز الحليب بقمة بيضاء",
-        },
-        source:
-          "https://gs.ctrip.com/html5/you/foods/fooddetail/152/16995033.html",
-      },
-      {
         id: "taotaoju",
+        imageKey: "dimsum",
         name: { zh: "陶陶居酒家", en: "Tao Tao Ju", ar: "تاو تاو جيو" },
         chinese: "陶陶居酒家",
         budget: 101,
@@ -125,6 +112,7 @@ export const DINING_THEMES: DiningTheme[] = [
       },
       {
         id: "leigarden",
+        imageKey: "leigarden",
         name: { zh: "利苑酒家", en: "Lei Garden", ar: "لي غاردن" },
         chinese: "利苑酒家",
         budget: 230,
@@ -157,6 +145,7 @@ export const DINING_THEMES: DiningTheme[] = [
     brands: [
       {
         id: "zheba",
+        imageKey: "zhezhe",
         name: { zh: "啫八", en: "Zhe Ba", ar: "تشيه با" },
         chinese: "啫八",
         budget: 120,
@@ -174,6 +163,7 @@ export const DINING_THEMES: DiningTheme[] = [
       },
       {
         id: "huishijia",
+        imageKey: "zhezhe",
         name: { zh: "惠食佳", en: "Hui Shi Jia", ar: "هوي شي جيا" },
         chinese: "惠食佳",
         budget: 179,
@@ -202,6 +192,7 @@ export const DINING_THEMES: DiningTheme[] = [
     brands: [
       {
         id: "tiancheng",
+        imageKey: "suancai",
         name: {
           zh: "天成川小馆",
           en: "Tiancheng Sichuan Kitchen",
@@ -223,6 +214,7 @@ export const DINING_THEMES: DiningTheme[] = [
       },
       {
         id: "song-sichuan",
+        imageKey: "sichuanfish",
         name: { zh: "宋·川菜", en: "Song Sichuan", ar: "سونغ للمطبخ السيتشواني" },
         chinese: "宋川菜",
         budget: 230,
@@ -256,6 +248,7 @@ export const DINING_THEMES: DiningTheme[] = [
     brands: [
       {
         id: "chaofa",
+        imageKey: "beef",
         name: {
           zh: "潮发潮汕牛肉店",
           en: "Chaofa Chaoshan Beef",
@@ -278,6 +271,7 @@ export const DINING_THEMES: DiningTheme[] = [
       },
       {
         id: "yelin",
+        imageKey: "seafood",
         name: {
           zh: "椰林海鲜码头",
           en: "Yelin Seafood Wharf",
@@ -297,28 +291,6 @@ export const DINING_THEMES: DiningTheme[] = [
         },
         source: "https://you.ctrip.com/food/huadou143887/7197711-dianping.html",
       },
-      {
-        id: "yuechenji",
-        name: {
-          zh: "粤陈记·煲仔粥",
-          en: "Yue Chenji Congee Pot",
-          ar: "يوي تشن جي لقدر العصيدة",
-        },
-        chinese: "粤陈记煲仔粥",
-        budget: 94,
-        note: {
-          zh: "粥底火锅：锅底是滚着的粥，涮完再喝那锅粥。",
-          en: "Congee hotpot — the broth is rice congee, and you drink it at the end.",
-          ar: "قدر ساخن بقاعدة العصيدة: المرق عصيدة أرز، وتُشرب في النهاية.",
-        },
-        dishes: {
-          zh: "罗氏虾、手打虾滑",
-          en: "River prawns; hand-beaten prawn paste",
-          ar: "روبيان نهري؛ عجينة روبيان مخفوقة يدويًا",
-        },
-        source:
-          "https://gs.ctrip.com/html5/you/foods/fooddetail/120098/63070978.html",
-      },
     ],
   },
   {
@@ -335,29 +307,8 @@ export const DINING_THEMES: DiningTheme[] = [
     },
     brands: [
       {
-        id: "shishijiu",
-        name: {
-          zh: "狮拾久·现代新加坡料理",
-          en: "Shi Shi Jiu, modern Singaporean",
-          ar: "شي شي جيو، مطبخ سنغافوري حديث",
-        },
-        chinese: "狮拾久",
-        budget: 210,
-        note: {
-          zh: "新加坡口味的咖喱与小点。",
-          en: "Singapore-style curries and small plates.",
-          ar: "كاري وأطباق صغيرة على الطريقة السنغافورية.",
-        },
-        dishes: {
-          zh: "古法咖喱肉蟹、咖椰面包",
-          en: "Curry crab; kaya toast",
-          ar: "سلطعون بالكاري؛ خبز الكايا",
-        },
-        source:
-          "https://global.hk01.com/%E6%97%85%E6%B8%B8/60325768/%E6%B7%B1%E5%9C%B3%E7%BE%8E%E9%A3%9F-%E6%9C%80%E7%BE%8E%E6%96%B0%E5%8A%A0%E5%9D%A1%E8%8F%9C-%E8%82%89%E9%AA%A8%E8%8C%B6%E6%B1%A4%E5%BA%95%E6%AF%8F%E6%97%A5%E7%8E%B0%E7%86%AC-%E5%92%96%E5%96%B1%E8%82%89%E8%9F%B9%E6%B5%93%E9%A6%99%E8%82%A5%E7%BE%8E",
-      },
-      {
         id: "antalya",
+        imageKey: "turkish",
         name: {
           zh: "安塔利亚土耳其餐厅",
           en: "Antalya Turkish restaurant",
@@ -378,25 +329,8 @@ export const DINING_THEMES: DiningTheme[] = [
         source: "https://you.ctrip.com/food/guangzhou152/18840931-dianping.html",
       },
       {
-        id: "mangotree",
-        name: { zh: "芒果树餐厅", en: "Mango Tree", ar: "مانجو تري" },
-        chinese: "芒果树餐厅",
-        budget: [116, 144],
-        note: {
-          zh: "泰餐的酸辣，配椰香甜品收尾。",
-          en: "Thai sour-and-spicy dishes, finished with a coconut dessert.",
-          ar: "أطباق تايلاندية حامضة وحارة، وتُختتم بحلوى بجوز الهند.",
-        },
-        dishes: {
-          zh: "冬阴功、芒果彩虹糯米饭",
-          en: "Tom yum; mango sticky rice",
-          ar: "شوربة توم يام؛ أرز لزج بالمانجو",
-        },
-        source:
-          "https://you.ctrip.com/food/guangzhou152/21723084-dianping182219136.html",
-      },
-      {
         id: "helanzheng",
+        imageKey: "pho",
         name: {
           zh: "何蘭正·PHO·越泰餐室",
           en: "He Lan Zheng PHO",
@@ -417,46 +351,8 @@ export const DINING_THEMES: DiningTheme[] = [
         source: "https://m.dianping.com/shop/1524623256",
       },
       {
-        id: "datouxia",
-        name: {
-          zh: "大头虾越式风味餐厅",
-          en: "Da Tou Xia, Vietnamese",
-          ar: "دا تو شيا، نكهات فيتنامية",
-        },
-        chinese: "大头虾越式风味餐厅",
-        budget: 99,
-        note: {
-          zh: "越南风味的咖喱，甜品是椰香那一路。",
-          en: "Vietnamese-style curry, with coconut on the dessert side.",
-          ar: "كاري على الطريقة الفيتنامية، وحلويات بجوز الهند.",
-        },
-        dishes: {
-          zh: "越式咖喱牛腩、椰香糯米芒果饭",
-          en: "Vietnamese beef brisket curry; coconut sticky rice with mango",
-          ar: "كاري صدر البقر الفيتنامي؛ أرز لزج بجوز الهند والمانجو",
-        },
-        source: "https://xinjiapo.news/news/124933",
-      },
-      {
-        id: "moda",
-        name: { zh: "摩打食堂", en: "Moda Canteen", ar: "مو دا" },
-        chinese: "摩打食堂",
-        budget: 106,
-        note: {
-          zh: "做法偏创意的日式小馆。",
-          en: "A Japanese kitchen with an inventive streak.",
-          ar: "مطبخ ياباني بلمسة ابتكارية.",
-        },
-        dishes: {
-          zh: "明太子烤土豆、火牛寿司",
-          en: "Baked potato with spicy pollock roe; seared beef sushi",
-          ar: "بطاطا مشوية مع بيض سمك البولّاك المتبّل؛ سوشي لحم بقري مُلهَب",
-        },
-        source:
-          "https://gs.ctrip.com/html5/you/foods/fooddetail/152/22398264.html",
-      },
-      {
         id: "mapo",
+        imageKey: "koreanbbq",
         name: {
           zh: "麻蒲碳烤肉",
           en: "Mapo charcoal barbecue",
@@ -476,23 +372,6 @@ export const DINING_THEMES: DiningTheme[] = [
         },
         source: "https://www.cnpp100.com/shop/15904.html",
       },
-      {
-        id: "sushiro",
-        name: { zh: "寿司郎", en: "Sushiro", ar: "سوشيرو" },
-        chinese: "寿司郎",
-        budget: 95,
-        note: {
-          zh: "回转寿司按碟计价，适合少量多样地尝。",
-          en: "Conveyor-belt sushi priced by the plate — good for trying a little of a lot.",
-          ar: "سوشي الحزام الدوّار بسعر لكل طبق — مناسب لتذوّق القليل من كثير.",
-        },
-        dishes: {
-          zh: "三文鱼寿司、虾三味",
-          en: "Salmon sushi; a trio of prawn",
-          ar: "سوشي السلمون؛ ثلاثية الروبيان",
-        },
-        source: "https://you.ctrip.com/food/guangzhou152/133902013.html",
-      },
     ],
   },
   {
@@ -506,6 +385,7 @@ export const DINING_THEMES: DiningTheme[] = [
     brands: [
       {
         id: "ama",
+        imageKey: "bubbletea",
         name: { zh: "阿嬷手作", en: "A-Ma handmade tea", ar: "آه ما للشاي اليدوي" },
         chinese: "阿嬷手作",
         budget: 26,
@@ -524,6 +404,7 @@ export const DINING_THEMES: DiningTheme[] = [
       },
       {
         id: "heytea",
+        imageKey: "heytea",
         name: { zh: "喜茶", en: "HEYTEA", ar: "هي تي" },
         chinese: "喜茶",
         budget: 27,

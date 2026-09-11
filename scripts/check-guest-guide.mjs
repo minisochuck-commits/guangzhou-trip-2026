@@ -203,18 +203,30 @@ for (const kept of ['opera', 'taikoo']) assert(usedImages.has(kept), `${kept}.jp
  */
 const dining = await evaluate(fs.readFileSync('lib/dining-brands.ts', 'utf8'));
 const brands = dining.DINING_BRANDS;
-assert.equal(brands.length, 21, `Expected 21 brands, found ${brands.length}`);
+/*
+ * 2026-09-12, owner: cut 21 down to two or three per cuisine. His words: what Reham
+ * gets is "I picked for you", not "choose your own from twenty-one". Seven brands were
+ * dropped (Xiao Bingsheng, Yue Chen Ji, Shi Shi Jiu, Mango Tree, Da Tou Xia, Mo Da,
+ * Sushiro); every remaining brand carries a photograph of the dish it is known for.
+ */
+assert.equal(brands.length, 14, `Expected 14 brands, found ${brands.length}`);
 assert.equal(
   dining.DINING_THEMES.reduce((sum, theme) => sum + theme.brands.length, 0),
-  21,
+  14,
   'Every brand belongs to exactly one theme',
 );
+for (const theme of dining.DINING_THEMES) {
+  assert(theme.brands.length >= 2 && theme.brands.length <= 3, `${theme.id}: two or three brands, found ${theme.brands.length}`);
+}
+for (const brand of brands) {
+  assert(brand.imageKey, `${brand.id} needs a photograph of its signature dish`);
+}
 for (const key of ['DINING_THEMES', 'DINING_INTRO']) checkLocales(dining[key]);
 const brandIds = brands.map((brand) => brand.id);
 assert.equal(new Set(brandIds).size, brandIds.length, 'Brand ids must be unique');
 const chineseNames = brands.map((brand) => brand.chinese);
 assert.equal(new Set(chineseNames).size, chineseNames.length, 'One row per brand, not one per branch');
-assert.equal(chineseNames.filter((name) => name.includes('芒果树')).length, 1, 'Mango Tree was merged into a single brand');
+assert(!chineseNames.some((name) => name.includes('芒果树')), 'Mango Tree was cut in the 2026-09-12 trim');
 for (const brand of brands) {
   assert(brand.chinese.trim(), `${brand.id} needs a Chinese name to copy`);
   assert(/^https?:\/\//.test(brand.source), `${brand.id} needs a source link`);
@@ -260,11 +272,25 @@ assert(/label: {\s*zh: `\$\{brand\.chinese\}/.test(diningView), 'Each copy butto
 assert.equal((diningView.match(/<details/g) ?? []).length, 1, 'Sources sit in one folded list, not one per brand');
 assert(diningView.includes('inline'), 'The brand copy button uses the inline variant, not the big address panel');
 assert(fs.readFileSync('components/trip/ui.tsx', 'utf8').includes('inline = false'), 'The inline variant must stay opt-in');
-assert(view.indexOf('UI.diningBrands') < view.indexOf('UI.foodIdeas'), 'Brand recommendations come before the long food notes');
+/*
+ * 2026-09-12, owner: the dishes come first and the brands after them. Read the other
+ * way round you scroll past a dozen restaurants before learning what yum cha or a
+ * sizzling claypot even is — appetite first, then where to eat it.
+ */
+assert(view.indexOf('UI.foodIdeas') < view.indexOf('UI.diningBrands'), 'The dishes are introduced before the brands that serve them');
 
-// robotaxi.jpg is a photograph of Ferrari World in Abu Dhabi — Arabic road signs and all.
-// It may stay in the repo with its credit, but it must never illustrate Guangzhou again.
-assert(!view.includes('photo="robotaxi"'), 'The Abu Dhabi photo must not stand in for Guangzhou');
+/*
+ * robotaxi.jpg used to be Ferrari World in Abu Dhabi, Arabic road signs and all. That
+ * file is gone: the key now holds a Guangqi robotaxi photographed in Guangzhou, on a
+ * Guangdong plate. The rule behind the old assertion stands — a picture must show the
+ * place the text describes — so the credit is checked instead of the key banned.
+ */
+const credits = fs.readFileSync('lib/image-credits.ts', 'utf8');
+assert(/"key": "robotaxi",[\s\S]{0,200}?Guangqi/.test(credits), 'The robotaxi photo must be the Guangzhou one');
+for (const retired of ['pigeon', 'soup']) {
+  assert(!credits.includes(`"key": "${retired}"`), `${retired}.jpg was retired, not left in the credits`);
+}
+assert(!fs.existsSync('public/images/soup.jpg'), 'The pig-lung soup photo is gone — these guests are Muslim');
 
 // The header carries one person picker, not a row of six chips, and no watermark.
 const header = fs.readFileSync('components/trip/trip-view.tsx', 'utf8');
