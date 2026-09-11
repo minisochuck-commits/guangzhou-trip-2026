@@ -105,7 +105,7 @@ export function PlanCell({
       {entryLabel ? (
         <Sheet>
           {/* 窄列里按钮文字必须能换行，同时保持 44px 可点高度、不被裁掉。 */}
-          <SheetTrigger className="mt-1 inline-flex h-auto min-h-11 w-full max-w-full items-center justify-start gap-1 whitespace-normal break-words rounded-lg border border-navy/25 px-2 py-1.5 text-start text-[13px] font-medium leading-4 text-navy transition-colors hover:border-navy/50 md:w-auto md:px-2.5 md:text-sm">
+          <SheetTrigger className="mt-1 inline-flex h-auto min-h-11 w-full max-w-full items-center justify-start gap-1 whitespace-normal break-words rounded-lg border border-navy/25 px-2 py-1.5 text-start text-sm font-medium leading-5 text-navy transition-colors hover:border-navy/50 md:w-auto md:px-2.5">
             {entryLabel}
             <ChevronDownIcon className="size-4 shrink-0" aria-hidden="true" />
           </SheetTrigger>

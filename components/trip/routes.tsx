@@ -3,6 +3,7 @@
 
 import * as React from "react";
 
+import { cn } from "@/lib/utils";
 import { ROUTES, type Lang } from "@/lib/trip-data";
 import { IMG } from "@/lib/image-credits";
 import { UI, t } from "@/lib/trip-i18n";
@@ -15,8 +16,17 @@ import {
 import { CopyChinese, SourceLink } from "./ui";
 
 /**
- * 三条半日建议路线。全部未预订，时长是规划参考。
+ * 竖构图的照片：小图框里按比例放全，不裁。
+ * 广州塔那张是 800×1200 —— 按 96×72 裁出来只剩一截塔腰，看不出是塔。
+ */
+const PORTRAIT_IMAGES = new Set(["tower"]);
+
+/**
+ * 半日建议路线。全部未预订，时长是规划参考。
  * 日程页只在真正自由的日子给一个折叠入口，指南页给完整总览。
+ *
+ * 收起来的时候就能看出该选哪条：一张小图 + 名字 + 时长 + 一句「适合什么」。
+ * 那句话收起时截两行，点开显示完整的一句 —— 所以展开之后不再重复一遍。
  */
 export function RouteList({
   lang,
@@ -28,43 +38,49 @@ export function RouteList({
 }) {
   const routes = ids ? ROUTES.filter((route) => ids.includes(route.id)) : ROUTES;
   return (
-    <div className="space-y-2">
+    <div>
       <p className="text-sm leading-relaxed text-navy-soft">
         {t(UI.routesNote, lang)}
       </p>
-      <Accordion type="multiple" className="space-y-2">
+      <Accordion type="multiple" className="mt-2 border-t border-card-line">
         {routes.map((route) => (
           <AccordionItem
             key={route.id}
             value={route.id}
-            className="trip-card px-3 border-b"
+            className="border-b border-card-line last:border-b-0"
           >
-            <AccordionTrigger className="min-h-11 py-3 hover:no-underline">
-              <span className="flex min-w-0 flex-col items-start gap-0.5 text-start">
+            <AccordionTrigger className="group/route min-h-11 items-center gap-3 py-3 hover:no-underline">
+              {route.imageKey && IMG[route.imageKey] ? (
+                <img
+                  src={IMG[route.imageKey]}
+                  alt=""
+                  loading="lazy"
+                  width={96}
+                  height={72}
+                  className={cn(
+                    "trip-photo h-[72px] w-24 shrink-0",
+                    PORTRAIT_IMAGES.has(route.imageKey)
+                      ? "object-contain"
+                      : "object-cover",
+                  )}
+                />
+              ) : null}
+              <span className="flex min-w-0 flex-1 flex-col items-start gap-0.5 text-start">
                 <span className="trip-display text-lg leading-7 text-navy">
                   {t(route.title, lang)}
                 </span>
                 <span className="text-sm leading-5 text-navy-soft">
                   {t(route.duration, lang)}
                 </span>
+                <span className="text-sm leading-5 text-navy-soft/90 group-data-[state=closed]/route:line-clamp-2">
+                  {t(route.bestFor, lang)}
+                </span>
               </span>
             </AccordionTrigger>
             <AccordionContent className="space-y-3 pb-4">
-              {route.imageKey && IMG[route.imageKey] ? (
-                <img
-                  src={IMG[route.imageKey]}
-                  alt=""
-                  loading="lazy"
-                  className="trip-photo aspect-[16/10] w-full object-cover"
-                />
-              ) : null}
               <p className="text-base leading-relaxed text-navy">
                 {t(route.summary, lang)}
               </p>
-
-              <Field label={t(UI.routeBestFor, lang)}>
-                {t(route.bestFor, lang)}
-              </Field>
 
               <Field label={t(UI.routeSteps, lang)}>
                 <ul className="space-y-1.5">
