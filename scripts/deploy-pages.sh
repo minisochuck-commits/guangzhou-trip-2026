@@ -21,7 +21,7 @@ git config user.name minisochuck
 git config user.email minisochuck@gmail.com
 git add -A
 git commit -q -m "$(cat <<'MSG'
-Publish the Guangzhou trip page as a static mirror
+Publish guide from source f61f898
 
 Serves the same build from a host that opens inside mainland China;
 the OpenAI Sites deployment stays the primary one.
