@@ -1,0 +1,12 @@
+{
+  "name": "广州行程 Guangzhou Visit",
+  "short_name": "广州行程",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#efece5",
+  "theme_color": "#e4002b",
+  "icons": [
+    { "src": "./favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
