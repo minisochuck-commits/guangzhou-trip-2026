@@ -210,6 +210,24 @@ body {
   border: 1px solid var(--card-line);
 }
 
+/*
+ * 数字块：大字是主角，字号和衬线都给它；单位与注解压小压淡。
+ * 每格顶上一道朱红细线，像账簿的栏线 —— 这是「报数」的场合。
+ */
+.trip-stat {
+  background: #ffffff;
+  border: 1px solid var(--card-line);
+  border-top: 2px solid var(--seal-red);
+  border-radius: calc(var(--radius) - 2px);
+}
+.trip-stat-value {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
 /* 举给司机看的那行中文：底纹 + 大字，隔一臂也读得清。 */
 .trip-show-panel {
   background: var(--navy-tint);

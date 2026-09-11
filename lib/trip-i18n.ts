@@ -179,6 +179,31 @@ export const UI = {
 
   prep: { zh: "出发前准备", en: "Before you fly", ar: "قبل السفر" },
 
+  /** 体量：这座城有多大 —— 用户要客人看到中国有多强。 */
+  cityScale: {
+    zh: "这座城有多大",
+    en: "How big this city is",
+    ar: "ما حجم هذه المدينة",
+  },
+  /** 你们住的那块地：琶洲。 */
+  pazhou: {
+    zh: "你们住的这块地",
+    en: "The ground you are staying on",
+    ar: "الأرض التي تقيمون عليها",
+  },
+  /** 食在广州：先讲分量，再讲每一道。 */
+  foodCulture: {
+    zh: "食在广州",
+    en: "Eat in Guangzhou",
+    ar: "كُل في قوانغتشو",
+  },
+  /** 数字块下面那行小字。 */
+  scaleNote: {
+    zh: "数字均为最新年度官方口径，来源见下；美元换算只作量级对比。",
+    en: "All figures are the latest official annual data, sourced below; dollar conversions are for scale only.",
+    ar: "جميع الأرقام أحدث بيانات رسمية سنوية، والمصادر أدناه؛ والتحويل إلى الدولار لبيان الحجم فقط.",
+  },
+
   /** 这座城和阿拉伯世界的关系 —— 指南开头那段，不折叠。 */
   cityStory: {
     zh: "广州与你们",
@@ -195,6 +220,21 @@ export const UI = {
       zh: "上网 · 翻译 · 支付 · 天气与穿什么",
       en: "Data · translation · payment · weather",
       ar: "الإنترنت · الترجمة · الدفع · الطقس",
+    },
+    cityScale: {
+      zh: "GDP 超过埃及全国 · 机场 · 港口 · 地铁 · 大湾区",
+      en: "GDP larger than Egypt · airport · port · metro · Bay Area",
+      ar: "ناتج أكبر من مصر · المطار · الميناء · المترو · منطقة الخليج",
+    },
+    pazhou: {
+      zh: "海丝出海口 · 广交会 · 腾讯阿里总部，都在你们那条路上",
+      en: "Silk Road port · Canton Fair · Tencent and Alibaba HQs — all on your road",
+      ar: "ميناء طريق الحرير · معرض كانتون · مقرّا تينسنت وعلي بابا — كلّها في شارعكم",
+    },
+    foodCulture: {
+      zh: "两千年 · 三大流派 · 联合国认的美食之都 · 九道菜",
+      en: "Two thousand years · three branches · a UNESCO city of gastronomy · nine dishes",
+      ar: "ألفا عام · ثلاثة فروع · مدينة يونسكو لفنون الطهي · تسعة أطباق",
     },
     halal: {
       zh: "三座清真寺 · 周五主麻 · 清真餐厅",
