@@ -340,9 +340,9 @@ export const UI = {
     "ar": "التذاكر والفتح"
   },
   "routesNote": {
-    "zh": "自由活动建议，可按时间与兴趣选择。出发前查看开放与预约信息。",
-    "en": "Ideas for your free time. Choose what interests you and check opening and booking details before setting out.",
-    "ar": "اقتراحات لوقت الفراغ. اختاري حسب اهتمامك وراجعي مواعيد الزيارة والحجز قبل الانطلاق."
+    "zh": "以下时长为游览参考；出发前用地图查看往返路程，按空闲时间挑一条。",
+    "en": "The lengths below are a guide to the visit itself; check the journey each way in your map app and pick one that fits the time you have.",
+    "ar": "المدد أدناه تقدير للزيارة نفسها؛ راجعوا زمن الذهاب والعودة في تطبيق الخرائط واختاروا ما يناسب وقتكم."
   },
   "prep": {
     "zh": "出发前准备",
@@ -365,9 +365,9 @@ export const UI = {
     "ar": "أين ترونها"
   },
   "pazhou": {
-    "zh": "酒店周边：琶洲",
+    "zh": "琶洲：你住的这块地",
     "en": "Around your hotel: Pazhou",
-    "ar": "حول الفندق: بازو"
+    "ar": "حول فندقكم: بازو"
   },
   "retail": {
     "zh": "广州商圈：天河路与北京路",
@@ -400,9 +400,9 @@ export const UI = {
     "ar": "مصادر الصور"
   },
   "culture": {
-    "zh": "常见的文化差异",
-    "en": "Cultural differences you will run into",
-    "ar": "فروق ثقافية ستواجهونها"
+    "zh": "到了会遇到的几件小事",
+    "en": "Small things you will run into",
+    "ar": "تفاصيل صغيرة ستصادفونها"
   },
   "foodCulture": {
     "zh": "食在广州",
@@ -427,33 +427,33 @@ export const UI = {
     },
     "cityScale": {
       "zh": "机场、展馆与珠江两岸",
-      "en": "Airport, exhibition halls and the riverfront",
-      "ar": "المطار والمعارض وضفتا النهر"
+      "en": "The airport, the exhibition halls and the two river banks",
+      "ar": "المطار وقاعات المعارض وضفتا النهر"
     },
     "pazhou": {
-      "zh": "会议就在酒店内，闲暇时认识周边",
-      "en": "Your conference base and its neighbourhood",
-      "ar": "مقر المؤتمر والمنطقة المحيطة"
+      "zh": "四百年前，一座塔在这里迎接远来的商船",
+      "en": "Four centuries ago a tower here welcomed the ships in",
+      "ar": "قبل أربعة قرون كان برج هنا يستقبل السفن"
     },
     "foodCulture": {
-      "zh": "早茶、粤菜与甜品，慢慢品尝",
-      "en": "Tea, Cantonese dishes and desserts",
-      "ar": "الشاي والأطباق الكانتونية والحلويات"
+      "zh": "早茶怎么叹、菜怎么点、21 个特色餐饮品牌",
+      "en": "How yum cha works, how to order, and 21 restaurant brands",
+      "ar": "كيف يكون اليوم تشا وكيف تطلبون، و21 علامة مطاعم"
     },
     "tech": {
-      "zh": "无人驾驶 · 机器人送物 · 手机支付",
-      "en": "Driverless rides · delivery robots · mobile payments",
-      "ar": "قيادة ذاتية · روبوتات التوصيل · الدفع بالهاتف"
+      "zh": "驾驶位上没有人，送餐的是一台会乘电梯的小车",
+      "en": "Nobody in the driver’s seat, and a robot that takes the lift",
+      "ar": "لا أحد في مقعد السائق، وروبوت يركب المصعد"
     },
     "retail": {
-      "zh": "六座购物中心，各有看点；再走一走老城",
-      "en": "Six malls with different characters, then the old city",
-      "ar": "ستة مراكز بطابع مختلف، ثم المدينة القديمة"
+      "zh": "天河路的购物中心，北京路的老街与古道遗址",
+      "en": "The malls of Tianhe Road, and the old street and ancient roadway of Beijing Road",
+      "ar": "مراكز شارع تيانخه، وشارع بكين القديم وطريقه الأثري"
     },
     "culture": {
-      "zh": "周五上班 · 酒桌 · 小费 · 手机支付 · 握手 · 「再研究一下」",
-      "en": "Friday works · toasts · tipping · phone pay · handshakes · the soft no",
-      "ar": "الجمعة يوم عمل · الأنخاب · الإكراميات · الدفع بالهاتف · المصافحة · الرفض المهذّب"
+      "zh": "转盘、敬酒、小费、合影、点菜 —— 到了就会遇到的几件小事",
+      "en": "Turntables, toasts, tipping, photos, ordering — the small things you will meet",
+      "ar": "القرص الدوّار والأنخاب والإكرامية والصور والطلب — تفاصيل ستصادفونها"
     },
     "halal": {
       "zh": "三座清真寺 · 周五主麻 · 清真餐厅",
@@ -481,14 +481,14 @@ export const UI = {
       "ar": "ساحة هواتشنغ (لا تفوّتوها) · برج كانتون · جولة النهر · شارع تيانخه · شارع بكين · شاميان"
     },
     "food": {
-      "zh": "烧鹅 · 乳鸽 · 海鲜 · 早茶 · 牛肉火锅 · 老火汤 · 十二道菜",
-      "en": "Yum cha · rice rolls · congee · sweets · arcades",
-      "ar": "اليوم تشا · لفائف الأرز · العصيدة · الحلويات · الأروقة"
+      "zh": "烧鹅 · 乳鸽 · 白切鸡 · 肠粉 · 姜撞奶 · 老火汤",
+      "en": "Roast goose · squab · poached chicken · rice rolls · ginger milk · slow soup",
+      "ar": "إوز مشوي · حمام · دجاج مسلوق · لفائف أرز · حليب الزنجبيل · حساء بطيء"
     },
     "officialSources": {
-      "zh": "页面上的事实出自哪里",
-      "en": "Where the facts on this page come from",
-      "ar": "من أين جاءت معلومات هذه الصفحة"
+      "zh": "资料与图片出处",
+      "en": "References and photo credits",
+      "ar": "المراجع ومصادر الصور"
     }
   },
   "halal": {

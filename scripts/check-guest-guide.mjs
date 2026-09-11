@@ -21,9 +21,16 @@ const checkLocales = (value) => {
   if ('zh' in value) for (const lang of ['zh', 'en', 'ar']) assert(typeof value[lang] === 'string' && value[lang].trim(), `Missing ${lang}`);
   for (const v of Object.values(value)) checkLocales(v);
 };
-for (const key of ['PREP', 'CITY_STORY', 'CITY_SCALE', 'CITY_TECH', 'PAZHOU', 'RETAIL_STUDY', 'FOOD_CULTURE', 'FOOD_NOTES', 'MOSQUES', 'ROUTES']) checkLocales(data[key]);
+for (const key of [
+  'PREP', 'CITY_STORY', 'CITY_SCALE', 'CITY_TECH', 'PAZHOU', 'RETAIL_STUDY',
+  'FOOD_CULTURE', 'FOOD_NOTES', 'MOSQUES', 'ROUTES', 'CULTURE_NOTES',
+  'HALAL_WHERE', 'HALAL_DINING', 'JUMUAH_NOTE', 'OFFICIAL_LINKS', 'PHRASES',
+]) checkLocales(data[key]);
 // Routes are guest-facing copy too: the rejected wording must not survive there either.
-const copy = JSON.stringify([data.CITY_STORY, data.CITY_SCALE, data.CITY_TECH, data.RETAIL_STUDY, data.FOOD_CULTURE, data.FOOD_NOTES, data.ROUTES]);
+const copy = JSON.stringify([
+  data.CITY_STORY, data.CITY_SCALE, data.CITY_TECH, data.RETAIL_STUDY, data.FOOD_CULTURE,
+  data.FOOD_NOTES, data.ROUTES, data.CULTURE_NOTES, data.PAZHOU, data.HALAL_WHERE, data.MOSQUES,
+]);
 for (const rejected of [
   '值得写进报告', '给做商场的人', '做商场的人', '超过埃及全国', '全球至今只有六',
   '都是广东公司', '没有一件货重叠', '粉红才算到位',
@@ -31,10 +38,70 @@ for (const rejected of [
   // claims nobody can check on the street.
   '有意错开', '最低', '没人用',
   // Rankings and headline statistics belong to the sources, not to a walking route.
-  '第一商圈', '十四家', '世界第二高',
+  '第一商圈', '十四家', '世界第二高', '五十二家老字号', '中轴线从来没挪过',
   // Drive times nobody checked: the page tells guests to look at the map instead.
-  '过江即到', '打车很近', '短车程',
+  '过江即到', '打车很近', '短车程', '开车一小时',
+  // 2026-09-12: speaking for other people's feelings. The guide describes what to do,
+  // never what a stranger is thinking.
+  '没有人会介意', '没人会介意', '不会觉得失礼', '不是打探', '不是敌意', '没人会追问',
+  '多数人不懂', '很多人不懂', '不用等回音',
+  // Numbers and promises that were removed for want of a source.
+  '三十二万吨', '二十分钟后上桌', '正宗的做法来自',
+  // Disclaimers that turned the page into a legal notice.
+  '不代替酒店承诺', '未核实，以官方当日公告为准',
+  // 2026-09-12 second pass: the rewrite must not swap old disclaimers for new hype.
+  '就够记一辈子', '两秒钟', '不会记错', '不用斯文', '一鸽胜九鸡',
+  '比任何景点都快', '没有游客', '最舒服', '最方便', '几步就能走完',
+  '周末满是', '一路不淋雨', '大家出门不带钱包',
+  // The ancient roadway is looked at through the glass, never walked on.
+  '站在罩子上', '踩在上面走', '脚下几米', 'on the glass', 'underfoot',
+  // Cooking instructions nobody can be held to.
+  '几秒钟', '刚刚断生', '差一点就老',
 ]) assert(!copy.includes(rejected), `Rejected wording: ${rejected}`);
+
+/*
+ * Photographs must show what the text is talking about. These files stay in the repo
+ * with their credits, but none of them may illustrate this guide again:
+ *   pigeon.jpg  a boned squab plated in a French restaurant, not Cantonese crisp squab
+ *   soup.jpg    pig lung and almond soup — not for these guests, beside slow-fired soup
+ *   robot.jpg   a delivery robot in Chiba, Japan
+ *   robotaxi.jpg Ferrari World, Abu Dhabi, Arabic road signs and all
+ *   cbd.jpg / tianhe.jpg  watermarked, and unrecognisable as a place
+ */
+const imageKeysInUse = new Set([
+  ...data.ROUTES.map((route) => route.imageKey),
+  ...data.FOOD_NOTES.map((note) => note.imageKey),
+  ...data.RETAIL_STUDY.malls.map((mall) => mall.imageKey),
+].filter(Boolean));
+for (const dropped of ['pigeon', 'soup', 'robot', 'robotaxi', 'cbd', 'tianhe']) {
+  assert(!imageKeysInUse.has(dropped), `${dropped}.jpg does not show what the text describes`);
+}
+// The credits list follows the pictures actually on the page, so the retired files do not
+// arrive in front of the guest through the credits instead. (`view` is read further down.)
+const guideView = fs.readFileSync('components/trip/guide-tab.tsx', 'utf8');
+assert(guideView.includes('USED_IMAGE_KEYS'), 'Image credits must be filtered to the images in use');
+assert(!/IMAGE_CREDITS\.map/.test(guideView), 'The full asset list must not be printed to the reader');
+
+/*
+ * 2026-09-12: the guide was rewritten to be readable. These are the load-bearing pieces
+ * of that rewrite — a later edit may improve the prose, but must not quietly drop them.
+ */
+for (const [key, needle, why] of [
+  ['PAZHOU', '1597', 'Pazhou opens with the pagoda that guided ships in'],
+  ['CITY_STORY', '蕃坊', 'The city story tells the Fanfang quarter, not a vague "centuries of ties"'],
+  ['CITY_TECH', 'WeRide Go', 'The driverless ride says how to actually book one'],
+  ['CITY_SCALE', '23 万', 'The airport figure is tied to something you can picture'],
+]) assert(JSON.stringify(data[key]).includes(needle), why);
+// The new sources must travel with the new stories.
+const allSources = JSON.stringify([data.PAZHOU.sources, data.CITY_STORY.sources, data.CITY_TECH.sources, data.CITY_SCALE.sources, data.ROUTES]);
+for (const url of [
+  'gz.gov.cn/zlgz/whgz/content/post_8091106.html',
+  'gz.gov.cn/zwgk/fggw/szfwj/content/post_10640740.html',
+  'gwj.gz.gov.cn/ghzt/gkwh/content/post_10949653.html',
+  'tjj.gz.gov.cn/zzfwzq/tjkx/content/post_10804061.html',
+  'ir.weride.ai/news-releases',
+  'zaha-hadid.com',
+]) assert(allSources.includes(url), `Missing the source behind a new story: ${url}`);
 // This edit must not silently change travellers, flights, baggage or hotel facts.
 for (const key of Object.keys(original)) {
   if (/FLIGHT|BAGGAGE|PEOPLE|INTERCONTINENTAL/.test(key)) assert.deepEqual(data[key], original[key], `${key} changed`);
@@ -177,7 +244,11 @@ assert(!JSON.stringify(brands).includes('.pdf'), 'No brand leans on a PDF nobody
 const diningView = fs.readFileSync('components/trip/dining-brands.tsx', 'utf8');
 assert.equal((diningView.match(/DINING_INTRO\.halal/g) ?? []).length, 1, 'One dietary reminder for the whole section');
 assert.equal((diningView.match(/DINING_INTRO\.how/g) ?? []).length, 1, 'One explanation of how to use the names');
-assert(/FOOD_ADVICE\.filter/.test(view), 'The chapter must drop the halal bullet the brand intro now carries');
+// FOOD_ADVICE is gone from the chapter entirely: the halal and allergy line lives in the
+// brand intro (seen before you pick a restaurant), and the in-flight special meal belongs
+// to the preparation chapter, where you can still act on it.
+assert(!view.includes('FOOD_ADVICE'), 'The food chapter must not repeat the dietary bullet list');
+assert(/机上.*特殊餐|special meal on board/.test(JSON.stringify(data.PREP)), 'The in-flight special meal note moved into preparation');
 for (const kept of ['清真', '过敏']) {
   assert(dining.DINING_INTRO.halal.zh.includes(kept), `The one dietary line keeps ${kept}`);
 }
@@ -190,6 +261,10 @@ assert.equal((diningView.match(/<details/g) ?? []).length, 1, 'Sources sit in on
 assert(diningView.includes('inline'), 'The brand copy button uses the inline variant, not the big address panel');
 assert(fs.readFileSync('components/trip/ui.tsx', 'utf8').includes('inline = false'), 'The inline variant must stay opt-in');
 assert(view.indexOf('UI.diningBrands') < view.indexOf('UI.foodIdeas'), 'Brand recommendations come before the long food notes');
+
+// robotaxi.jpg is a photograph of Ferrari World in Abu Dhabi — Arabic road signs and all.
+// It may stay in the repo with its credit, but it must never illustrate Guangzhou again.
+assert(!view.includes('photo="robotaxi"'), 'The Abu Dhabi photo must not stand in for Guangzhou');
 
 // The header carries one person picker, not a row of six chips, and no watermark.
 const header = fs.readFileSync('components/trip/trip-view.tsx', 'utf8');
