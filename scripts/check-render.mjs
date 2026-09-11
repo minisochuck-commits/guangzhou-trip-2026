@@ -65,15 +65,15 @@ const mod = await import(
 );
 
 /**
- * 每种视图都必须看得见的东西：酒店那块、几个章标题、路线名。
- * 少了说明不是「样式变了」，是内容掉了。
+ * 每种视图都必须看得见的东西：开篇那句欢迎（不折叠，首屏就该在）、酒店那块、
+ * 几个章标题、路线名。少了说明不是「样式变了」，是内容掉了。
  */
 function mustContain(lang) {
   if (lang === "zh")
-    return ["广州保利洲际酒店", "阅江中路828号", "出发前准备", "广州与你们", "登广州塔"];
+    return ["欢迎来到广州", "广州保利洲际酒店", "阅江中路828号", "出发前准备", "广州与你们", "登广州塔"];
   if (lang === "en")
-    return ["InterContinental", "Before you fly", "Guangzhou and you", "Up the Canton Tower"];
-  return ["إنتركونتيننتال", "قبل السفر", "قوانغتشو وأنتم", "الصعود إلى برج كانتون"];
+    return ["Welcome to Guangzhou", "InterContinental", "Before you fly", "Guangzhou and you", "Up the Canton Tower"];
+  return ["أهلًا بكم في قوانغتشو", "إنتركونتيننتال", "قبل السفر", "قوانغتشو وأنتم", "الصعود إلى برج كانتون"];
 }
 
 /** 被否掉的清单不能悄悄回来：一个勾选框、一个完成数都不行。 */
