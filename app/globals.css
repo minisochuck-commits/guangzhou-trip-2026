@@ -228,6 +228,14 @@ body {
   line-height: 1;
 }
 
+/* 照片：圆角、淡描边，宽度撑满卡片；用 aspect 固定比例，图没到位也不跳版。 */
+.trip-photo {
+  display: block;
+  border-radius: calc(var(--radius) - 2px);
+  border: 1px solid var(--card-line);
+  background: var(--navy-tint);
+}
+
 /* 举给司机看的那行中文：底纹 + 大字，隔一臂也读得清。 */
 .trip-show-panel {
   background: var(--navy-tint);

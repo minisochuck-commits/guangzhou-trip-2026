@@ -191,6 +191,18 @@ export const UI = {
     en: "The ground you are staying on",
     ar: "الأرض التي تقيمون عليها",
   },
+  /** 商圈考察：他们公费来的，回去要交报告 —— 这一节是给报告用的。 */
+  retail: {
+    zh: "商圈考察：天河路与北京路",
+    en: "Retail study: Tianhe Road and Beijing Road",
+    ar: "دراسة التجزئة: شارع تيانخه وشارع بكين",
+  },
+  retailMalls: { zh: "同一条路上的六家商场", en: "Six malls on one road", ar: "ستة مراكز تجارية في شارع واحد" },
+  retailCase: { zh: "为什么这个案例有代表性", en: "Why this case is a textbook one", ar: "لماذا هذه الحالة نموذجية" },
+  retailComparables: { zh: "可对照的案例", en: "Cases to set beside it", ar: "حالات للمقارنة" },
+  retailTakeaways: { zh: "值得写进报告的", en: "Worth putting in the report", ar: "ما يستحق أن يُدرج في التقرير" },
+  imageCredits: { zh: "图片来源", en: "Image credits", ar: "مصادر الصور" },
+
   /** 常见的文化差异：他们会困惑的点，先说在前面。 */
   culture: {
     zh: "常见的文化差异",
@@ -224,9 +236,9 @@ export const UI = {
    */
   guideHints: {
     prep: {
-      zh: "上网 · 翻译 · 支付 · 天气与穿什么",
-      en: "Data · translation · payment · weather",
-      ar: "الإنترنت · الترجمة · الدفع · الطقس",
+      zh: "支付宝绑外卡 · 滴滴打车 · 高德地图 · VPN · 插头与护照 · 天气",
+      en: "Alipay with a foreign card · DiDi · Amap · VPN · plugs and passport · weather",
+      ar: "أليباي ببطاقة أجنبية · ديدي · خرائط أماب · VPN · القوابس وجواز السفر · الطقس",
     },
     cityScale: {
       zh: "GDP 超过埃及全国 · 机场 · 港口 · 地铁 · 大湾区",
@@ -239,9 +251,14 @@ export const UI = {
       ar: "ميناء طريق الحرير · معرض كانتون · مقرّا تينسنت وعلي بابا — كلّها في شارعكم",
     },
     foodCulture: {
-      zh: "两千年 · 三大流派 · 联合国认的美食之都 · 九道菜",
-      en: "Two thousand years · three branches · a UNESCO city of gastronomy · nine dishes",
-      ar: "ألفا عام · ثلاثة فروع · مدينة يونسكو لفنون الطهي · تسعة أطباق",
+      zh: "两千年 · 三大流派 · 联合国认的美食之都 · 烧鹅乳鸽海鲜 · 十二道菜",
+      en: "Two thousand years · three branches · a UNESCO city of gastronomy · goose, squab, seafood · twelve dishes",
+      ar: "ألفا عام · ثلاثة فروع · مدينة يونسكو لفنون الطهي · الإوز والحمام والمأكولات البحرية · اثنا عشر طبقًا",
+    },
+    retail: {
+      zh: "六家商场怎么错位共赢 · 二十年补位的案例 · 成都对照 · 北京路 · 报告要点",
+      en: "How six malls stagger and all win · a twenty-year case · Chengdu for comparison · Beijing Road · report points",
+      ar: "كيف تتدرّج ستة مراكز ويفوز الجميع · حالة عشرين عامًا · تشنغدو للمقارنة · شارع بكين · نقاط للتقرير",
     },
     culture: {
       zh: "周五上班 · 酒桌 · 小费 · 手机支付 · 握手 · 「再研究一下」",
@@ -269,12 +286,12 @@ export const UI = {
       ar: "سيارات الأجرة · المكوّنات · الأسعار",
     },
     routes: {
-      zh: "花城广场（必去）· 登广州塔 · 珠江夜游 · 天河路太古汇 · 沙面",
-      en: "Huacheng Square (do not miss) · Canton Tower · river cruise · Tianhe Road · Shamian",
-      ar: "ساحة هواتشنغ (لا تفوّتوها) · برج كانتون · جولة النهر · شارع تيانخه · شاميان",
+      zh: "花城广场（必去）· 登广州塔 · 珠江夜游 · 天河路太古汇 · 北京路 · 沙面",
+      en: "Huacheng Square (do not miss) · Canton Tower · river cruise · Tianhe Road · Beijing Road · Shamian",
+      ar: "ساحة هواتشنغ (لا تفوّتوها) · برج كانتون · جولة النهر · شارع تيانخه · شارع بكين · شاميان",
     },
     food: {
-      zh: "早茶 · 肠粉 · 艇仔粥 · 糖水 · 骑楼",
+      zh: "烧鹅 · 乳鸽 · 海鲜 · 早茶 · 牛肉火锅 · 老火汤 · 十二道菜",
       en: "Yum cha · rice rolls · congee · sweets · arcades",
       ar: "اليوم تشا · لفائف الأرز · العصيدة · الحلويات · الأروقة",
     },

@@ -6,6 +6,11 @@ MINISO Egypt 一行 5 人赴广州的行程分享页。手机优先，三语（�
 - 设计与取舍记录：[`DESIGN_NOTES.md`](DESIGN_NOTES.md)
 - 站点 starter 文档（vinext / Sites 生命周期、Wrangler 等）：[`docs/VINEXT_STARTER.md`](docs/VINEXT_STARTER.md)
 
+> **本轮（商圈考察 + 照片 + 十二道菜 + 北京路 + 实操版准备）待 owner 验收。**
+> 新增「商圈考察：天河路与北京路」（六家商场定位与业态、四条报告要点）；22 张维基共享资源
+> 照片（CC 授权，来源列在页内）；出发前准备只给 Ahmed / Mohamed，按支付宝外卡、滴滴、高德、
+> VPN、插头护照重写；Reham 只看天气。
+>
 > **本轮（体量展示 + 食在广州 + 分人准备 + 文化差异 + 路线换血）待 owner 验收。**
 > 出发前准备按人显示（`?p=reham` 只见 Reham 的两条 + 天气；`?p=ahmed`/`mohamed` 见
 > 上网 / 翻译 / 支付 + 天气；`?p=all` 全见）。新增「常见的文化差异」11 条。

@@ -1,8 +1,10 @@
 "use client";
+/* eslint-disable @next/next/no-img-element -- 静态站、离线可用、相对路径：故意用原生 <img>，不走 next/image 的加载器 */
 
 import * as React from "react";
 
 import { ROUTES, type Lang } from "@/lib/trip-data";
+import { IMG } from "@/lib/image-credits";
 import { UI, t } from "@/lib/trip-i18n";
 import {
   Accordion,
@@ -39,7 +41,7 @@ export function RouteList({
           >
             <AccordionTrigger className="min-h-11 py-3 hover:no-underline">
               <span className="flex min-w-0 flex-col items-start gap-0.5 text-start">
-                <span className="text-base font-semibold leading-6 text-navy">
+                <span className="trip-display text-lg leading-7 text-navy">
                   {t(route.title, lang)}
                 </span>
                 <span className="text-sm leading-5 text-navy-soft">
@@ -48,6 +50,14 @@ export function RouteList({
               </span>
             </AccordionTrigger>
             <AccordionContent className="space-y-3 pb-4">
+              {route.imageKey && IMG[route.imageKey] ? (
+                <img
+                  src={IMG[route.imageKey]}
+                  alt=""
+                  loading="lazy"
+                  className="trip-photo aspect-[16/10] w-full object-cover"
+                />
+              ) : null}
               <p className="text-base leading-relaxed text-navy">
                 {t(route.summary, lang)}
               </p>

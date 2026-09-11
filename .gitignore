@@ -46,3 +46,4 @@ tsconfig.tsbuildinfo
 /work/
 .claude/
 static/
+.images/
