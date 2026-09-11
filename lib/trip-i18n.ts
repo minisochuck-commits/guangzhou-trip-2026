@@ -344,30 +344,6 @@ export const UI = {
     "en": "Before you fly",
     "ar": "قبل السفر"
   },
-  "prepChecklist": {
-    "note": {
-      "zh": "勾选保存在本设备",
-      "en": "Saved on this device",
-      "ar": "محفوظ على هذا الجهاز"
-    },
-    "detail": {
-      "zh": "怎么做",
-      "en": "How to do it",
-      "ar": "طريقة التنفيذ"
-    }
-  },
-  "guideGroups": {
-    "practical": {
-      "zh": "出行随手查",
-      "en": "Travel essentials",
-      "ar": "أساسيات الرحلة"
-    },
-    "city": {
-      "zh": "认识广州",
-      "en": "Getting to know Guangzhou",
-      "ar": "تعرّفوا على قوانغتشو"
-    }
-  },
   "cityScale": {
     "zh": "这座城有多大",
     "en": "How big this city is",
@@ -561,16 +537,6 @@ export const UI = {
     "ar": "أوقات الرحلات بالتوقيت المحلي كما في التذكرة؛ وكل ما هو «بانتظار التأكيد» غير محسوم."
   }
 };
-
-/**
- * 「已完成 3 / 5」。三语各自的语序不同，所以不做模板拼接。
- * 数字用阿拉伯数字（和全站日期一致），阿语下由 bidi 正常排列。
- */
-export function prepCountLabel(done: number, total: number, lang: Lang): string {
-  if (lang === "zh") return `已完成 ${done} / ${total}`;
-  if (lang === "ar") return `${done} من ${total} مكتملة`;
-  return `${done} of ${total} done`;
-}
 
 /* ---------------- 日期 ---------------- */
 

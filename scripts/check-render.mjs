@@ -4,9 +4,9 @@
 //
 // 类型检查证明不了「运行时不炸」：少一个可选字段、读了 window、拼错一个 key，
 // 都要渲染才看得出来。这里对三种语言 × 六种视图各渲一次，并检查几件必须出现的东西：
-// 酒店那块、出发前清单的条目与计数、以及借来的中国卡不能出现在客人页面上。
+// 酒店那块、各章标题、路线，以及借来的中国卡不能出现在客人页面上。
 //
-// 折叠的那几节由 Accordion 在展开时才挂载，所以清单和路线在这里单独渲一次。
+// 折叠的那几章由 Accordion 在展开时才挂载，所以路线在这里单独渲一次。
 // 做法和 check-journeys.mjs 一样：esbuild 打包 + data: URL 执行，不写产物、不加依赖。
 
 import { fileURLToPath } from "node:url";
@@ -20,7 +20,6 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { createElement } from "react";
 import { GuideTab } from "@/components/trip/guide-tab";
 import { DayTab } from "@/components/trip/day-tab";
-import { PrepChecklist } from "@/components/trip/prep-checklist";
 import { RouteList } from "@/components/trip/routes";
 import { datesForPerson } from "@/lib/person-day-plan";
 
@@ -28,7 +27,6 @@ export function render(lang, person) {
   const dates = datesForPerson(person);
   return [
     createElement(GuideTab, { lang, person }),
-    createElement(PrepChecklist, { lang, person }),
     createElement(RouteList, { lang }),
     createElement(DayTab, {
       lang,
@@ -67,25 +65,29 @@ const mod = await import(
 );
 
 /**
- * 每种视图都必须看得见的东西。少了说明不是「样式变了」，是内容掉了。
- * 计数只在个人视图出现（五件：支付 / 打车 / 地图 / 上网 / 随身物品）；
- * 「全部」视图不给勾也不报完成数，但完整指引一条不少。
+ * 每种视图都必须看得见的东西：酒店那块、几个章标题、路线名。
+ * 少了说明不是「样式变了」，是内容掉了。
  */
-function mustContain(lang, person) {
-  const count = person === null ? [] : [{ zh: "已完成 0 / 5", en: "0 of 5 done", ar: "0 من 5" }[lang]];
+function mustContain(lang) {
   if (lang === "zh")
-    return ["广州保利洲际酒店", "阅江中路828号", "出发前准备", "怎么做", ...count];
+    return ["广州保利洲际酒店", "阅江中路828号", "出发前准备", "广州与你们", "登广州塔"];
   if (lang === "en")
-    return ["InterContinental", "Before you fly", "How to do it", ...count];
-  return ["إنتركونتيننتال", "قبل السفر", "طريقة التنفيذ", ...count];
+    return ["InterContinental", "Before you fly", "Guangzhou and you", "Up the Canton Tower"];
+  return ["إنتركونتيننتال", "قبل السفر", "قوانغتشو وأنتم", "الصعود إلى برج كانتون"];
 }
 
-/** 「全部」视图里不能出现勾选框。 */
-function mustNotContain(person) {
-  return person === null ? ['role="checkbox"'] : [];
-}
+/** 被否掉的清单不能悄悄回来：一个勾选框、一个完成数都不行。 */
+const REJECTED = [
+  'role="checkbox"',
+  "已完成 0 /",
+  "of 5 done",
+];
 
-/** 借来的中国卡与备用金只属于 Ahmed / Mohamed，别人的页面上不能出现。 */
+/**
+ * 借来的中国卡与备用金只属于 Ahmed / Mohamed，别人的页面上不能出现。
+ * 章节收起时 Accordion 不挂载内容，所以这里只能查「不该出现」那一半；
+ * 「该出现」那一半由 check-guest-guide.mjs 直接对 PREP 的分人可见性断言。
+ */
 const TEAM_ONLY = /给 Mohamed 一张中国卡|lend Mohamed one Chinese SIM|شريحة صينية واحدة/;
 
 let failed = 0;
@@ -100,13 +102,13 @@ for (const lang of ["zh", "en", "ar"]) {
       console.log(`FAIL  ${view} 渲染抛错 — ${error.message}`);
       continue;
     }
-    const missing = mustContain(lang, person).filter((text) => !html.includes(text));
+    const missing = mustContain(lang).filter((text) => !html.includes(text));
     if (missing.length > 0) {
       failed += 1;
       console.log(`FAIL  ${view} 缺少：${missing.join(" / ")}`);
       continue;
     }
-    const unexpected = mustNotContain(person).filter((text) => html.includes(text));
+    const unexpected = REJECTED.filter((text) => html.includes(text));
     if (unexpected.length > 0) {
       failed += 1;
       console.log(`FAIL  ${view} 不该出现：${unexpected.join(" / ")}`);
@@ -116,11 +118,6 @@ for (const lang of ["zh", "en", "ar"]) {
     if (!team && TEAM_ONLY.test(html)) {
       failed += 1;
       console.log(`FAIL  ${view} 出现了只属于 Ahmed / Mohamed 的安排`);
-      continue;
-    }
-    if (team && !TEAM_ONLY.test(html)) {
-      failed += 1;
-      console.log(`FAIL  ${view} 少了 Ahmed / Mohamed 的中国卡说明`);
       continue;
     }
     console.log(`PASS  ${view}（${html.length.toLocaleString("en-US")} 字符）`);

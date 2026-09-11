@@ -20,24 +20,24 @@ const labels = {
 
 export function DistrictRoute({ lang }: { lang: Lang }) {
   return (
-    <section className="mb-5 space-y-3" aria-label={t(labels.title, lang)}>
-      <h4 className="trip-display text-lg text-navy">{t(labels.title, lang)}</h4>
-      <p className="rounded-lg bg-navy px-4 py-3 text-base text-white">{t(labels.hotel, lang)}</p>
-      <p className="text-sm text-navy-soft">{t(labels.taxi, lang)}</p>
+    <section className="mb-2 max-w-[44rem] space-y-2.5" aria-label={t(labels.title, lang)}>
+      <h4 className="text-[0.9375rem] font-semibold leading-[1.5] text-navy">{t(labels.title, lang)}</h4>
+      <p className="rounded-lg bg-navy px-3 py-2 text-[0.9375rem] text-white">{t(labels.hotel, lang)}</p>
+      <p className="text-[0.8125rem] leading-[1.55] text-navy-soft">{t(labels.taxi, lang)}</p>
       <div className="grid gap-3 md:grid-cols-2">
         {[
           { id: "district-teemall", title: labels.a, route: labels.tianhe, label: labels.firstA, chinese: "请带我去广州天河城（天河路208号）。" },
           { id: "district-beijing", title: labels.b, route: labels.beijing, label: labels.firstB, chinese: "请带我去广州市越秀区北京路步行街，在允许停车的入口附近下车。" },
         ].map((route) => (
           <div key={route.id} className="rounded-xl border border-navy/15 bg-white p-4">
-            <h5 className="font-semibold text-navy">{t(route.title, lang)}</h5>
-            <p className="mt-2 text-sm text-navy-soft">{t(labels.walk, lang)}</p>
-            <p className="my-3 text-base leading-7 text-navy">{t(route.route, lang)}</p>
+            <h5 className="text-[0.9375rem] font-semibold leading-[1.5] text-navy">{t(route.title, lang)}</h5>
+            <p className="mt-1.5 text-[0.8125rem] leading-[1.55] text-navy-soft">{t(labels.walk, lang)}</p>
+            <p className="my-2 text-[0.9375rem] leading-[1.65] text-navy">{t(route.route, lang)}</p>
             <CopyChinese entry={{ id: route.id, label: route.label, chinese: route.chinese }} lang={lang} showBig />
           </div>
         ))}
       </div>
-      <p className="text-sm leading-6 text-navy-soft">{t(labels.note, lang)}</p>
+      <p className="text-[0.8125rem] leading-[1.55] text-navy-soft">{t(labels.note, lang)}</p>
     </section>
   );
 }

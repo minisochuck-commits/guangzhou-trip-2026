@@ -19,6 +19,7 @@ import {
   OFFICIAL_LINKS,
   PAZHOU,
   PHRASES,
+  PREP,
   RETAIL_STUDY,
   type L10n,
   type Lang,
@@ -29,6 +30,7 @@ import {
 import { IMAGE_CREDITS, IMG } from "@/lib/image-credits";
 import { FOOD_ADVICE } from "@/lib/plan-presentation";
 import { UI, t } from "@/lib/trip-i18n";
+import { cn } from "@/lib/utils";
 import {
   Accordion,
   AccordionContent,
@@ -37,14 +39,8 @@ import {
 } from "@/components/ui/accordion";
 import { DistrictRoute } from "./district-route";
 import { BaggageLines } from "./flight-details";
-import { PrepChecklist } from "./prep-checklist";
 import { RouteList } from "./routes";
-import {
-  BulletList,
-  CopyChinese,
-  SectionHeading,
-  SourceLink,
-} from "./ui";
+import { BulletList, CopyChinese, GUIDE, SourceLink } from "./ui";
 
 /** 顶上那张「住哪里、打给谁」用的文案。整份指南只在这里写一次酒店。 */
 const HOTEL_LABELS = {
@@ -73,9 +69,10 @@ const HOTEL_LABELS = {
 const HOTEL_PHONE = "+86 20 8922 8888";
 
 /**
- * 一段要被「读」的文字：一句大字、几段正文、来源。
+ * 一段要被「读」的文字：一句开头、几段正文、来源。
  * 指南里几处用它 —— 广州与你们、你们住的这块地、食在广州。
- * 排版按文章做：衬线、宽行距，不是又一张白盒子。
+ *
+ * 正文限宽 44rem：屏幕再宽也只是行数变少，不是字变大、也不是一行拉到底。
  */
 function Prose({
   lead,
@@ -94,26 +91,22 @@ function Prose({
   children?: React.ReactNode;
 }) {
   return (
-    <section className="relative py-1">
+    <section className="max-w-[44rem]">
       {photo && IMG[photo] ? (
         <img
           src={IMG[photo]}
           alt=""
           loading="lazy"
-          className="trip-photo mb-5 aspect-[16/9] w-full object-cover md:aspect-[21/9]"
+          className="trip-photo mb-4 aspect-[16/9] w-full object-cover"
         />
       ) : null}
-      <div className="relative max-w-[44rem]">
-        <p className="trip-display text-[1.3125rem] leading-9 text-navy md:text-[1.5rem] md:leading-10">
-          {t(lead, lang)}
-        </p>
-        <div className="mt-3.5 space-y-3.5">
-          {paragraphs.map((paragraph, index) => (
-            <p key={index} className="text-base leading-7 text-navy-soft md:leading-8">
-              {t(paragraph, lang)}
-            </p>
-          ))}
-        </div>
+      <p className={GUIDE.lead}>{t(lead, lang)}</p>
+      <div className="mt-2.5 space-y-2.5">
+        {paragraphs.map((paragraph, index) => (
+          <p key={index} className={GUIDE.body}>
+            {t(paragraph, lang)}
+          </p>
+        ))}
       </div>
       {children}
       <Sources sources={sources} lang={lang} />
@@ -131,8 +124,10 @@ function Sources({
 }) {
   if (sources.length === 0) return null;
   return (
-    <details className="mt-4">
-      <summary className="inline-flex min-h-11 cursor-pointer items-center text-sm text-navy-soft">
+    <details className="mt-3">
+      <summary
+        className={cn(GUIDE.note, "inline-flex min-h-11 cursor-pointer items-center")}
+      >
         {lang === "zh" ? "资料来源" : lang === "ar" ? "المصادر" : "Sources"}
       </summary>
       <ul className="flex flex-wrap gap-x-5 gap-y-1 pb-1">
@@ -147,33 +142,26 @@ function Sources({
 }
 
 /**
- * 报数的格子。大字用衬线、等宽数字；单位与注解压小。
- * 数字自己说话，不加形容词。
+ * 报数的格子。数字自己说话，不加形容词。
+ * 24px 就够：这是一段介绍里的数字，不是海报。
  */
 function StatTiles({ lang }: { lang: Lang }) {
   return (
-    <div className="relative mt-6">
-      <div className="grid grid-cols-2 gap-2.5 md:grid-cols-4">
+    <div className="mt-4">
+      <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
         {CITY_SCALE.tiles.map((tile) => (
-          <div key={tile.id} className="trip-stat px-3.5 pb-3.5 pt-4">
-            {/* 390px 两栏时每格只有 130px 可用，「310,000」这种带逗号的数字
-                断不开：手机上排 28px，放得下；桌面再放大。 */}
-            <p
-              dir="ltr"
-              className="trip-stat-value text-[1.75rem] text-navy md:text-[2.375rem]"
-            >
+          <div key={tile.id} className="trip-stat px-3 pb-3 pt-3">
+            <p dir="ltr" className="trip-stat-value text-2xl text-navy">
               {t(tile.value, lang)}
             </p>
-            <p className="mt-1.5 text-sm font-medium leading-5 text-navy">
+            <p className={cn(GUIDE.note, "mt-1 font-semibold text-navy")}>
               {t(tile.unit, lang)}
             </p>
-            <p className="mt-1 text-sm leading-5 text-navy-soft">
-              {t(tile.note, lang)}
-            </p>
+            <p className={cn(GUIDE.note, "mt-0.5")}>{t(tile.note, lang)}</p>
           </div>
         ))}
       </div>
-      <p className="mt-3 text-sm leading-5 text-navy-soft/80">
+      <p className={cn(GUIDE.note, "mt-2 text-navy-soft/80")}>
         {t(UI.scaleNote, lang)}
       </p>
     </div>
@@ -181,35 +169,14 @@ function StatTiles({ lang }: { lang: Lang }) {
 }
 
 /**
- * 一组同类的入口，共用一张卡：组标题在外面，里面每一节只隔一条细线。
- * 上一版是每一节各自一张白卡 —— 十几张长相一样的卡片叠下来，分不出哪件事更要紧。
- */
-function SectionGroup({
-  title,
-  lang,
-  children,
-}: {
-  title: L10n;
-  lang: Lang;
-  children: React.ReactNode;
-}) {
-  return (
-    <section className="space-y-2.5">
-      <SectionHeading>{t(title, lang)}</SectionHeading>
-      <Accordion
-        type="multiple"
-        defaultValue={[]}
-        className="trip-card px-4 md:px-5"
-      >
-        {children}
-      </Accordion>
-    </section>
-  );
-}
-
-/**
- * 一节。收起来的时候只剩标题和一行提示，整份指南就是一张目录；
- * 点开才铺内容。
+ * 一章。收起来只剩标题和一行提示，整份指南就是一张目录；点开才铺内容。
+ *
+ * 提示只在收起时出现：有几章（「广州与你们」）的提示就是正文开头那句，
+ * 展开后标题下面紧跟着同一句话，等于连读两遍。展开时把它收掉，
+ * 标题一直在，正文那句只出现一次。所有章一致，不因此多加任何控件。
+ *
+ * 单列，一章一张卡 —— 不分组、没有组标题、没有快捷入口。
+ * 上一版把它们归成「出行随手查 / 认识广州」两组并加了工具化的清单，已被用户否掉。
  */
 function Section({
   id,
@@ -228,35 +195,32 @@ function Section({
     <AccordionItem
       id={`guide-${id}`}
       value={id}
-      className="border-b border-card-line last:border-b-0"
+      className="trip-card border-b-0 px-4 md:px-5"
     >
-      <AccordionTrigger className="min-h-14 items-center gap-3 py-3 hover:no-underline">
+      <AccordionTrigger className="group/section items-center gap-3 py-3 hover:no-underline">
         <span className="flex min-w-0 flex-col gap-0.5 text-start">
-          <span className="trip-display text-lg leading-7 text-navy md:text-xl">
-            {t(title, lang)}
-          </span>
-          <span className="text-sm leading-5 text-navy-soft/85">
+          <span className={GUIDE.heading}>{t(title, lang)}</span>
+          <span
+            className={cn(
+              GUIDE.note,
+              "text-navy-soft/85 group-data-[state=open]/section:hidden",
+            )}
+          >
             {t(hint, lang)}
           </span>
         </span>
       </AccordionTrigger>
-      <AccordionContent className="space-y-3 pb-5 pt-1">
+      <AccordionContent className="space-y-4 pb-4 pt-0.5">
         {children}
       </AccordionContent>
     </AccordionItem>
   );
 }
 
-/** 一节里的小标题，比节标题低一级。 */
+/** 一章里的小标题，比章标题低一级。 */
 function SubHeading({ children }: { children: React.ReactNode }) {
   return (
-    <h3 className="flex items-center gap-2 pt-1.5 text-sm font-semibold uppercase tracking-[0.09em] text-navy-soft/85">
-      <span
-        aria-hidden="true"
-        className="inline-block h-px w-4 bg-miniso-red/50"
-      />
-      {children}
-    </h3>
+    <h3 className={cn(GUIDE.subheading, "pt-1 text-navy-soft")}>{children}</h3>
   );
 }
 
@@ -266,24 +230,20 @@ function SubHeading({ children }: { children: React.ReactNode }) {
  */
 function PlaceCardView({ place, lang }: { place: PlaceCard; lang: Lang }) {
   return (
-    <article className="trip-place rounded-xl p-4">
-      <h4 className="trip-display text-lg leading-7 text-navy">
-        {t(place.name, lang)}
-      </h4>
-      <p className="mt-1.5 text-base leading-7 text-navy-soft">
-        {t(place.note, lang)}
-      </p>
-      <div className="mt-3.5">
+    <article className="max-w-[44rem] border-t border-card-line pt-3">
+      <h4 className={GUIDE.subheading}>{t(place.name, lang)}</h4>
+      <p className={cn(GUIDE.body, "mt-1")}>{t(place.note, lang)}</p>
+      <div className="mt-2.5">
         <CopyChinese entry={place.copy} lang={lang} showBig />
       </div>
       {place.meta ? (
-        <p className="mt-2.5 text-sm leading-6 text-navy-soft/90">
-          <span className="font-medium">{t(UI.placeMeta, lang)}：</span>
+        <p className={cn(GUIDE.note, "mt-2")}>
+          <span className="font-semibold">{t(UI.placeMeta, lang)}：</span>
           {t(place.meta, lang)}
         </p>
       ) : null}
       {place.sources.length > 0 ? (
-        <ul className="mt-2.5 space-y-1">
+        <ul className="mt-2 space-y-1">
           {place.sources.map((source) => (
             <li key={source.url}>
               <SourceLink label={source.label} url={source.url} lang={lang} />
@@ -295,30 +255,26 @@ function PlaceCardView({ place, lang }: { place: PlaceCard; lang: Lang }) {
   );
 }
 
-/** 一家商场：有图就配一张小图，名字、一句定位、一段可以边走边看的事实。 */
+/** 一家商场：名字、一句定位、一段边走边看的事实；有图就配一张小图。 */
 function MallRow({ mall, lang }: { mall: MallCard; lang: Lang }) {
   return (
-    <li className="flex gap-3 border-b border-card-line py-3.5 last:border-b-0">
+    <li className="flex gap-3 border-t border-card-line py-3">
       {mall.imageKey && IMG[mall.imageKey] ? (
         <img
           src={IMG[mall.imageKey]}
           alt=""
           loading="lazy"
-          width={96}
-          height={72}
-          className="trip-photo h-[72px] w-24 shrink-0 object-cover"
+          width={88}
+          height={66}
+          className="trip-photo h-[66px] w-[88px] shrink-0 object-cover"
         />
       ) : null}
       <div className="min-w-0">
-        <h4 className="trip-display text-lg leading-7 text-navy">
-          {t(mall.name, lang)}
-        </h4>
-        <p className="text-sm font-semibold uppercase leading-5 tracking-[0.06em] text-miniso-red-strong">
+        <h4 className={GUIDE.subheading}>{t(mall.name, lang)}</h4>
+        <p className={cn(GUIDE.note, "font-medium text-miniso-red-strong")}>
           {t(mall.tier, lang)}
         </p>
-        <p className="mt-1.5 text-base leading-7 text-navy-soft">
-          {t(mall.facts, lang)}
-        </p>
+        <p className={cn(GUIDE.body, "mt-1")}>{t(mall.facts, lang)}</p>
       </div>
     </li>
   );
@@ -331,22 +287,30 @@ export function GuideTab({
   lang: Lang;
   person: PersonId | null;
 }) {
+  // 共同操作指引对所有人可见，只有借卡与备用金按人员区分。
+  // 全员视图（person === null）不筛，给统筹的人看全貌。
+  const prep = PREP.filter(
+    (item) =>
+      !item.audience || person === null || item.audience.includes(person),
+  );
   const hotel = COPY_ADDRESSES.find((entry) => entry.id === "hotel");
   return (
-    <div className="guest-guide space-y-6">
+    <div className="guest-guide space-y-2.5">
       {/* 最先要用的东西：住哪、地址给司机看、前台电话。整份指南只写一次。 */}
       <section className="trip-card p-4 md:p-5" aria-labelledby="guide-hotel">
-        <p className="text-sm font-semibold uppercase leading-5 tracking-[0.08em] text-navy-soft/80">
+        <p
+          className={cn(
+            GUIDE.note,
+            "font-medium uppercase tracking-[0.08em] text-navy-soft/80",
+          )}
+        >
           {t(HOTEL_LABELS.eyebrow, lang)}
         </p>
-        <h2
-          id="guide-hotel"
-          className="trip-display mt-0.5 text-xl leading-8 text-navy md:text-2xl"
-        >
+        <h2 id="guide-hotel" className={cn(GUIDE.heading, "mt-0.5")}>
           {t(INTERCONTINENTAL.name, lang)}
         </h2>
         {hotel ? (
-          <div className="mt-3">
+          <div className="mt-2.5 max-w-[44rem]">
             <CopyChinese
               entry={{ ...hotel, label: HOTEL_LABELS.address }}
               lang={lang}
@@ -355,31 +319,43 @@ export function GuideTab({
           </div>
         ) : null}
         <a
-          className="mt-1 inline-flex min-h-11 items-center gap-2 text-base font-medium text-miniso-red-strong underline underline-offset-4"
+          className={cn(
+            GUIDE.body,
+            "mt-1 inline-flex min-h-11 items-center gap-2 font-medium text-miniso-red-strong underline underline-offset-4",
+          )}
           href={`tel:${HOTEL_PHONE.replace(/\s/g, "")}`}
         >
           {t(HOTEL_LABELS.reception, lang)}
           <bdi dir="ltr">{HOTEL_PHONE}</bdi>
         </a>
         {person === "reham" || person === null ? (
-          <p className="mt-1 text-base leading-7 text-navy-soft">
+          <p className={cn(GUIDE.body, "mt-1 max-w-[44rem]")}>
             {t(HOTEL_LABELS.transfer, lang)}
           </p>
         ) : null}
       </section>
 
-      <SectionGroup title={UI.guideGroups.practical} lang={lang}>
+      <Accordion type="multiple" defaultValue={[]} className="space-y-2.5">
         <Section id="prep" title={UI.prep} hint={UI.guideHints.prep} lang={lang}>
-          <PrepChecklist lang={lang} person={person} />
-          <SourceLink
-            label={{
-              zh: "来华出行与支付指引",
-              en: "Official travel and payment guide",
-              ar: "الدليل الرسمي للتنقل والدفع",
-            }}
-            url="https://english.www.gov.cn/2025special/bizexpatsinchina2025"
-            lang={lang}
-          />
+          {/* 一件事一个小标题，下面直接是原来的说明 ——
+              展开这一章就能从支付一路读到天气，不用再逐条点开。 */}
+          <div className="max-w-[44rem] space-y-4">
+            {prep.map((item) => (
+              <div key={item.id}>
+                <h3 className={GUIDE.subheading}>{t(item.title, lang)}</h3>
+                <BulletList items={item.lines} lang={lang} className="mt-1.5" />
+              </div>
+            ))}
+            <SourceLink
+              label={{
+                zh: "来华出行与支付指引",
+                en: "Official travel and payment guide",
+                ar: "الدليل الرسمي للتنقل والدفع",
+              }}
+              url="https://english.www.gov.cn/2025special/bizexpatsinchina2025"
+              lang={lang}
+            />
+          </div>
         </Section>
 
         <Section
@@ -388,9 +364,11 @@ export function GuideTab({
           hint={{ zh: "白云机场 T2 / T3，按航班选择", en: "Baiyun T2 / T3 — choose your flight’s terminal", ar: "بايون T2 / T3 — اختاري صالة رحلتك" }}
           lang={lang}
         >
-          {COPY_ADDRESSES.filter((entry) => entry.id !== "hotel").map((entry) => (
-            <CopyChinese key={entry.id} entry={entry} lang={lang} showBig />
-          ))}
+          <div className="max-w-[44rem] space-y-3">
+            {COPY_ADDRESSES.filter((entry) => entry.id !== "hotel").map((entry) => (
+              <CopyChinese key={entry.id} entry={entry} lang={lang} showBig />
+            ))}
+          </div>
         </Section>
 
         <Section
@@ -399,9 +377,11 @@ export function GuideTab({
           hint={UI.guideHints.phrases}
           lang={lang}
         >
-          {PHRASES.map((entry) => (
-            <CopyChinese key={entry.id} entry={entry} lang={lang} showBig />
-          ))}
+          <div className="max-w-[44rem] space-y-3">
+            {PHRASES.map((entry) => (
+              <CopyChinese key={entry.id} entry={entry} lang={lang} showBig />
+            ))}
+          </div>
         </Section>
 
         <Section
@@ -410,13 +390,15 @@ export function GuideTab({
           hint={UI.guideHints.halal}
           lang={lang}
         >
-          <BulletList items={HALAL_WHERE} lang={lang} />
+          <div className="max-w-[44rem]">
+            <BulletList items={HALAL_WHERE} lang={lang} />
+          </div>
 
           <SubHeading>{t(UI.mosques, lang)}</SubHeading>
           {MOSQUES.map((place) => (
             <PlaceCardView key={place.id} place={place} lang={lang} />
           ))}
-          <p className="trip-card-accent p-4 text-base leading-7 text-navy">
+          <p className={cn(GUIDE.body, "trip-card-accent max-w-[44rem] p-3 text-navy")}>
             <span className="font-semibold">{t(UI.jumuah, lang)}：</span>
             {t(JUMUAH_NOTE, lang)}
           </p>
@@ -442,16 +424,14 @@ export function GuideTab({
           hint={UI.guideHints.baggage}
           lang={lang}
         >
-          <div className="space-y-4">
+          <div className="max-w-[44rem] space-y-4">
             <BaggageLines profile="sichuanEconomy" lang={lang} />
             <div className="border-t border-card-line pt-4">
               <BaggageLines profile="egyptairBusiness" lang={lang} />
             </div>
           </div>
         </Section>
-      </SectionGroup>
 
-      <SectionGroup title={UI.guideGroups.city} lang={lang}>
         <Section id="story" title={UI.cityStory} hint={CITY_STORY.lead} lang={lang}>
           <Prose
             lead={CITY_STORY.lead}
@@ -482,24 +462,14 @@ export function GuideTab({
             lang={lang}
             photo="robotaxi"
           >
-            <ul className="relative mt-5 grid gap-x-6 md:grid-cols-2">
+            <ul className="mt-4">
               {CITY_TECH.items.map((item) => (
-                <li
-                  key={item.id}
-                  className="border-b border-card-line py-3.5 last:border-b-0 md:[&:nth-last-child(2)]:border-b-0"
-                >
-                  <h4 className="trip-display text-lg leading-7 text-navy">
-                    {t(item.title, lang)}
-                  </h4>
-                  <p className="mt-1 text-sm font-semibold uppercase leading-5 tracking-[0.06em] text-miniso-red-strong">
-                    {t(UI.techWhere, lang)}
+                <li key={item.id} className="border-t border-card-line py-3">
+                  <h4 className={GUIDE.subheading}>{t(item.title, lang)}</h4>
+                  <p className={cn(GUIDE.note, "mt-0.5 text-navy-soft/85")}>
+                    {t(UI.techWhere, lang)}：{t(item.where, lang)}
                   </p>
-                  <p className="text-base leading-7 text-navy">
-                    {t(item.where, lang)}
-                  </p>
-                  <p className="mt-1.5 text-base leading-7 text-navy-soft">
-                    {t(item.body, lang)}
-                  </p>
+                  <p className={cn(GUIDE.body, "mt-1")}>{t(item.body, lang)}</p>
                 </li>
               ))}
             </ul>
@@ -534,29 +504,28 @@ export function GuideTab({
           >
             {/* 清真 / 过敏 / 食材、机上特殊餐 —— 整站只在这里说一次，
                 下面每一道就只讲它本身。 */}
-            <BulletList items={FOOD_ADVICE} lang={lang} className="mt-4" />
+            <BulletList items={FOOD_ADVICE} lang={lang} className="mt-3" />
           </Prose>
 
           <SubHeading>{t(UI.foodIdeas, lang)}</SubHeading>
-          <div className="grid gap-3 md:grid-cols-2">
+          <div className="grid gap-x-5 md:grid-cols-2">
             {FOOD_NOTES.map((note) => (
-              <article key={note.id} className="trip-place overflow-hidden rounded-xl p-4">
+              <article
+                key={note.id}
+                className="border-t border-card-line py-3"
+              >
                 {note.imageKey && IMG[note.imageKey] ? (
                   <img
                     src={IMG[note.imageKey]}
                     alt=""
                     loading="lazy"
-                    className="trip-photo mb-3 aspect-[4/3] w-full object-cover"
+                    className="trip-photo mb-2 aspect-[4/3] w-full object-cover"
                   />
                 ) : null}
-                <h4 className="trip-display text-lg leading-7 text-navy">
-                  {t(note.title, lang)}
-                </h4>
-                <p className="mt-1.5 text-base leading-7 text-navy-soft">
-                  {t(note.body, lang)}
-                </p>
+                <h4 className={GUIDE.subheading}>{t(note.title, lang)}</h4>
+                <p className={cn(GUIDE.body, "mt-1")}>{t(note.body, lang)}</p>
                 {note.url ? (
-                  <div className="mt-2.5">
+                  <div className="mt-1.5">
                     <SourceLink
                       label={{
                         zh: "来源",
@@ -581,48 +550,45 @@ export function GuideTab({
         >
           <DistrictRoute lang={lang} />
 
-          <p className="trip-display text-[1.3125rem] leading-9 text-navy">
-            {t(RETAIL_STUDY.lead, lang)}
-          </p>
-          <div className="space-y-3">
-            {RETAIL_STUDY.intro.map((paragraph, index) => (
-              <p key={index} className="text-base leading-7 text-navy-soft">
-                {t(paragraph, lang)}
-              </p>
-            ))}
+          <div className="max-w-[44rem]">
+            <p className={GUIDE.lead}>{t(RETAIL_STUDY.lead, lang)}</p>
+            <div className="mt-2.5 space-y-2.5">
+              {RETAIL_STUDY.intro.map((paragraph, index) => (
+                <p key={index} className={GUIDE.body}>
+                  {t(paragraph, lang)}
+                </p>
+              ))}
+            </div>
           </div>
 
           <SubHeading>{t(UI.retailMalls, lang)}</SubHeading>
-          <ul className="border-t border-card-line">
+          <ul className="max-w-[44rem]">
             {RETAIL_STUDY.malls.map((mall) => (
               <MallRow key={mall.id} mall={mall} lang={lang} />
             ))}
           </ul>
 
           <SubHeading>{t(UI.retailCase, lang)}</SubHeading>
-          <div className="space-y-3">
+          <div className="max-w-[44rem] space-y-2.5">
             {RETAIL_STUDY.caseStudy.map((paragraph, index) => (
-              <p key={index} className="text-base leading-7 text-navy-soft">
+              <p key={index} className={GUIDE.body}>
                 {t(paragraph, lang)}
               </p>
             ))}
           </div>
 
-          <div className="pt-1">
+          <div className="max-w-[44rem]">
             {IMG.beijinglu ? (
               <img
                 src={IMG.beijinglu}
                 alt=""
                 loading="lazy"
-                className="trip-photo mb-3 aspect-[16/9] w-full object-cover"
+                className="trip-photo mb-2.5 aspect-[16/9] w-full object-cover"
               />
             ) : null}
-            <p className="text-base leading-7 text-navy-soft">
-              {t(RETAIL_STUDY.beijinglu, lang)}
-            </p>
+            <p className={GUIDE.body}>{t(RETAIL_STUDY.beijinglu, lang)}</p>
+            <Sources sources={RETAIL_STUDY.sources} lang={lang} />
           </div>
-
-          <Sources sources={RETAIL_STUDY.sources} lang={lang} />
         </Section>
 
         <Section
@@ -631,15 +597,11 @@ export function GuideTab({
           hint={UI.guideHints.culture}
           lang={lang}
         >
-          <ul className="border-t border-card-line">
+          <ul className="max-w-[44rem]">
             {CULTURE_NOTES.map((note) => (
-              <li key={note.id} className="border-b border-card-line py-3.5">
-                <h4 className="trip-display text-lg leading-7 text-navy">
-                  {t(note.title, lang)}
-                </h4>
-                <p className="mt-1 text-base leading-7 text-navy-soft">
-                  {t(note.body, lang)}
-                </p>
+              <li key={note.id} className="border-t border-card-line py-3">
+                <h4 className={GUIDE.subheading}>{t(note.title, lang)}</h4>
+                <p className={cn(GUIDE.body, "mt-1")}>{t(note.body, lang)}</p>
               </li>
             ))}
           </ul>
@@ -651,19 +613,17 @@ export function GuideTab({
           hint={UI.guideHints.officialSources}
           lang={lang}
         >
-          <ul className="space-y-3">
+          <ul className="max-w-[44rem] space-y-2.5">
             {OFFICIAL_LINKS.map((link) => (
               <li key={link.id}>
                 <SourceLink label={link.title} url={link.url} lang={lang} />
-                <p className="mt-1 text-sm leading-6 text-navy-soft">
-                  {t(link.note, lang)}
-                </p>
+                <p className={cn(GUIDE.note, "mt-0.5")}>{t(link.note, lang)}</p>
               </li>
             ))}
           </ul>
           {/* CC 授权的条件：作者与授权要列出来 */}
           <SubHeading>{t(UI.imageCredits, lang)}</SubHeading>
-          <ul className="space-y-1.5 text-sm leading-5 text-navy-soft">
+          <ul className={cn(GUIDE.note, "max-w-[44rem] space-y-1")}>
             {IMAGE_CREDITS.map((credit) => (
               <li key={credit.key}>
                 <a
@@ -680,7 +640,7 @@ export function GuideTab({
             ))}
           </ul>
         </Section>
-      </SectionGroup>
+      </Accordion>
     </div>
   );
 }

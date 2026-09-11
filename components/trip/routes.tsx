@@ -13,7 +13,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { CopyChinese, SourceLink } from "./ui";
+import { CopyChinese, GUIDE, SourceLink } from "./ui";
 
 /**
  * 竖构图的照片：小图框里按比例放全，不裁。
@@ -25,8 +25,8 @@ const PORTRAIT_IMAGES = new Set(["tower"]);
  * 半日建议路线。全部未预订，时长是规划参考。
  * 日程页只在真正自由的日子给一个折叠入口，指南页给完整总览。
  *
- * 收起来的时候就能看出该选哪条：一张小图 + 名字 + 时长 + 一句「适合什么」。
- * 那句话收起时截两行，点开显示完整的一句 —— 所以展开之后不再重复一遍。
+ * 收起来只有一行：路线名 + 时长。照片和「适合什么」都在展开之后，各出现一次 ——
+ * 上一版把小图、长名字和一句理由挤进折叠条，窄屏上挤成一团，已被用户否掉。
  */
 export function RouteList({
   lang,
@@ -38,52 +38,45 @@ export function RouteList({
 }) {
   const routes = ids ? ROUTES.filter((route) => ids.includes(route.id)) : ROUTES;
   return (
-    <div>
-      <p className="text-sm leading-relaxed text-navy-soft">
-        {t(UI.routesNote, lang)}
-      </p>
-      <Accordion type="multiple" className="mt-2 border-t border-card-line">
+    <div className="max-w-[44rem]">
+      <p className={GUIDE.note}>{t(UI.routesNote, lang)}</p>
+      <Accordion type="multiple" className="mt-1.5">
         {routes.map((route) => (
           <AccordionItem
             key={route.id}
             value={route.id}
-            className="border-b border-card-line last:border-b-0"
+            className="border-t border-b-0 border-card-line"
           >
-            <AccordionTrigger className="group/route min-h-11 items-center gap-3 py-3 hover:no-underline">
+            <AccordionTrigger className="min-h-11 items-center gap-3 py-2.5 hover:no-underline">
+              <span className="flex min-w-0 flex-1 flex-col items-start gap-0.5 text-start">
+                <span className="text-base font-semibold leading-6 text-navy">
+                  {t(route.title, lang)}
+                </span>
+                <span className={GUIDE.note}>{t(route.duration, lang)}</span>
+              </span>
+            </AccordionTrigger>
+            <AccordionContent className="space-y-3 pb-4">
               {route.imageKey && IMG[route.imageKey] ? (
                 <img
                   src={IMG[route.imageKey]}
                   alt=""
                   loading="lazy"
-                  width={96}
-                  height={72}
                   className={cn(
-                    "trip-photo h-[72px] w-24 shrink-0",
+                    "trip-photo w-full",
+                    // 广州塔那张是 800×1200 的竖图：按 16/9 裁会切掉塔顶塔底，
+                    // 所以竖图限高按比例放全，不裁。
                     PORTRAIT_IMAGES.has(route.imageKey)
-                      ? "object-contain"
-                      : "object-cover",
+                      ? "max-h-[22rem] object-contain"
+                      : "aspect-[16/9] object-cover",
                   )}
                 />
               ) : null}
-              <span className="flex min-w-0 flex-1 flex-col items-start gap-0.5 text-start">
-                <span className="trip-display text-lg leading-7 text-navy">
-                  {t(route.title, lang)}
-                </span>
-                <span className="text-sm leading-5 text-navy-soft">
-                  {t(route.duration, lang)}
-                </span>
-                <span className="text-sm leading-5 text-navy-soft/90 group-data-[state=closed]/route:line-clamp-2">
-                  {t(route.bestFor, lang)}
-                </span>
-              </span>
-            </AccordionTrigger>
-            <AccordionContent className="space-y-3 pb-4">
-              <p className="text-base leading-relaxed text-navy">
-                {t(route.summary, lang)}
-              </p>
+
+              <p className={GUIDE.bodyStrong}>{t(route.bestFor, lang)}</p>
+              <p className={GUIDE.body}>{t(route.summary, lang)}</p>
 
               <Field label={t(UI.routeSteps, lang)}>
-                <ul className="space-y-1.5">
+                <ul className="space-y-1">
                   {route.steps.map((step, index) => (
                     <li
                       key={index}
@@ -133,12 +126,10 @@ function Field({
 }) {
   return (
     <div>
-      <p className="text-sm font-semibold uppercase tracking-wide text-navy-soft">
+      <p className={cn(GUIDE.note, "font-semibold text-navy-soft/85")}>
         {label}
       </p>
-      <div className="mt-0.5 text-base leading-relaxed text-navy-soft">
-        {children}
-      </div>
+      <div className={cn(GUIDE.body, "mt-0.5")}>{children}</div>
     </div>
   );
 }

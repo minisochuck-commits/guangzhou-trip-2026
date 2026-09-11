@@ -41,7 +41,7 @@ function PointLine({
   lang: Lang;
 }) {
   return (
-    <p className="flex flex-wrap items-baseline gap-x-1.5 text-base leading-6 text-navy">
+    <p className="flex flex-wrap items-baseline gap-x-1.5 text-[0.9375rem] leading-6 text-navy">
       <span className="shrink-0 text-sm font-medium text-navy-soft">{label}</span>
       <span className="text-sm text-navy-soft">{shortDateLabel(point.date, lang)}</span>
       <Ltr className="font-semibold">{point.time}</Ltr>
@@ -56,7 +56,7 @@ function LegBlock({ flight, lang }: { flight: FlightSegment; lang: Lang }) {
   return (
     <div className="rounded-lg bg-white px-3 py-2.5">
       <div className="mb-1 flex flex-wrap items-center gap-2">
-        <Ltr className="rounded-md bg-navy px-2 py-0.5 text-base font-semibold tracking-wide text-white">
+        <Ltr className="rounded-md bg-navy px-2 py-0.5 text-[0.9375rem] font-semibold tracking-wide text-white">
           {flight.code}
         </Ltr>
         <span className="text-sm text-navy-soft">{t(flight.cabin, lang)}</span>
@@ -114,7 +114,7 @@ function JourneyBlock({ journey, lang }: { journey: Journey; lang: Lang }) {
 
   return (
     <section className="space-y-2 rounded-lg bg-navy-tint px-3 py-3">
-      <p className="text-base font-semibold leading-6 text-navy">
+      <p className="text-[0.9375rem] font-semibold leading-6 text-navy">
         {routeHeadline(journey, lang)}
       </p>
 
@@ -163,12 +163,12 @@ export function BaggageLines({
 
   return (
     <div className="space-y-1">
-      <p className="text-base font-semibold leading-6 text-navy">
+      <p className="text-[0.9375rem] font-semibold leading-6 text-navy">
         {t(info.title, lang)}
       </p>
-      <p className="text-base leading-relaxed text-navy">{t(opening, lang)}</p>
+      <p className="text-[0.9375rem] leading-[1.65] text-navy">{t(opening, lang)}</p>
       {primary ? (
-        <p className="text-base leading-relaxed text-navy-soft">
+        <p className="text-[0.9375rem] leading-[1.65] text-navy-soft">
           {t(primary, lang)}
         </p>
       ) : null}
@@ -185,7 +185,7 @@ export function BaggageLines({
           </AccordionTrigger>
           <AccordionContent className="space-y-1 pb-2">
             {folded.map((line, index) => (
-              <p key={index} className="text-base leading-relaxed text-navy-soft">
+              <p key={index} className="text-[0.9375rem] leading-[1.65] text-navy-soft">
                 {t(line, lang)}
               </p>
             ))}

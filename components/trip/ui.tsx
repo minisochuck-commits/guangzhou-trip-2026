@@ -7,6 +7,34 @@ import { cn } from "@/lib/utils";
 import type { CopyEntry, L10n, Lang, Status } from "@/lib/trip-data";
 import { UI, t } from "@/lib/trip-i18n";
 
+/**
+ * 指南的排版尺度 —— 整份页面只在这里定一次，别在各处各写一串 text-*。
+ *
+ * 用户 2026-09-11 明确要求的是三件事：要「介绍」不要工具化的分组清单、
+ * **字太大**、层级不清。按这个要求缩小字号。
+ * 下面这组具体尺度是**本轮的实施选择，尚待实际页面核验**，不是用户逐项认可的方案：
+ *   正文 15px / 1.65 · 章标题 17px 半粗 · 小标题 15px 半粗 · 副说明与来源 13px
+ * 桌面不再加大 —— 同一份文章，屏幕宽只是行更长，不是字更大。
+ *
+ * 15px 是**对默认 16px 正文下限的一次例外**，依据是用户点名字太大；理由与边界
+ * 写在 docs/GUEST_GUIDE.md。根字号仍是 16px，表单控件也仍是 16px
+ * （iOS 聚焦放大只看控件字号）。
+ */
+export const GUIDE = {
+  /** 段落正文。 */
+  body: "text-[0.9375rem] leading-[1.65] text-navy-soft",
+  /** 需要更深一档的正文（地址、交通这种要看准的句子）。 */
+  bodyStrong: "text-[0.9375rem] leading-[1.65] text-navy",
+  /** 一章开头那句话。不再是大号衬线，只是半粗一档。 */
+  lead: "text-base font-semibold leading-[1.6] text-navy",
+  /** 章标题。 */
+  heading: "trip-display text-[1.0625rem] font-semibold leading-[1.45] text-navy",
+  /** 章里面的小标题：一家清真寺、一道菜、一条准备事项。 */
+  subheading: "text-[0.9375rem] font-semibold leading-[1.5] text-navy",
+  /** 副说明、图注、来源、眉批。 */
+  note: "text-[0.8125rem] leading-[1.55] text-navy-soft",
+} as const;
+
 /** 航班号、机场码、时间：在阿语 RTL 下必须保持从左到右。 */
 export function Ltr({
   children,
@@ -63,7 +91,10 @@ export function BulletList({
       {items.map((item, index) => (
         <li
           key={index}
-          className="relative ps-4 text-base leading-relaxed text-navy-soft before:absolute before:start-0 before:top-[0.72em] before:size-1.5 before:rounded-full before:bg-miniso-red/45"
+          className={cn(
+            GUIDE.body,
+            "relative ps-4 before:absolute before:start-0 before:top-[0.72em] before:size-1.5 before:rounded-full before:bg-miniso-red/45",
+          )}
         >
           {t(item, lang)}
         </li>
@@ -134,17 +165,23 @@ export function CopyChinese({
       )}
     >
       {/* 标签只是眉批，中文那行才是要被读的东西 —— 字号和底纹都归它 */}
-      <p className="text-sm font-medium uppercase leading-5 tracking-[0.06em] text-navy-soft/80">
+      <p
+        className={cn(
+          GUIDE.note,
+          "font-medium uppercase tracking-[0.06em] text-navy-soft/80",
+        )}
+      >
         {t(entry.label, lang)}
       </p>
+      {/* 这一行是例外：要举给司机看，所以比正文大。其余都按 GUIDE 的尺度。 */}
       <p
         lang="zh-CN"
         dir="ltr"
         className={cn(
           "mt-1.5 font-medium text-navy",
           showBig
-            ? "trip-show-panel px-3 py-2.5 text-lg leading-8"
-            : "text-base",
+            ? "trip-show-panel px-3 py-2 text-[1.0625rem] leading-7"
+            : "text-[0.9375rem] leading-6",
         )}
       >
         {entry.chinese}
@@ -230,10 +267,13 @@ export function SourceLink({
       href={url}
       target="_blank"
       rel="noreferrer"
-      className="inline-flex items-start gap-1.5 text-sm font-medium text-miniso-red-strong underline underline-offset-4"
+      className={cn(
+        GUIDE.note,
+        "inline-flex items-start gap-1.5 font-medium text-miniso-red-strong underline underline-offset-4",
+      )}
     >
       <ExternalLinkIcon
-        className="mt-0.5 size-4 shrink-0 rtl:-scale-x-100"
+        className="mt-0.5 size-3.5 shrink-0 rtl:-scale-x-100"
         aria-hidden="true"
       />
       <span>{t(label, lang)}</span>
