@@ -208,9 +208,9 @@ const CITY_SELF: L10n = {
 };
 
 const STUDY_TRANSPORT: L10n = {
-  zh: "巡店当天的交通与接送，向 MINISO 中国区域负责人确认。",
-  en: "Transport and pickups on store-visit days are to be confirmed with the MINISO China regional lead.",
-  ar: "التنقل والاستقبال في أيام زيارة المتاجر يُؤكَّد مع مسؤول منطقة MINISO في الصين.",
+  zh: "巡店当天的交通与接送，向 MINISO 广州区域负责人确认。",
+  en: "Transport and pickups on store-visit days are to be confirmed with the MINISO Guangzhou regional lead.",
+  ar: "التنقل والاستقبال في أيام زيارة المتاجر يُؤكَّد مع مسؤول منطقة MINISO في قوانغتشو.",
 };
 
 const REHAM_AIRPORT: L10n = {
@@ -234,8 +234,8 @@ const ARRIVAL_TRANSFER_TBD: L10n = {
 const STUDY_PLAN_TBD: L10n[] = [
   {
     zh: "具体课表、路线、门店与接送待 MINISO 中国团队确认。",
-    en: "The timetable, route, which stores and the transfers are to be confirmed by the MINISO China team.",
-    ar: "الجدول والمسار والمتاجر والتنقلات يؤكّدها فريق MINISO في الصين.",
+    en: "The timetable, route, which stores and the transfers are to be confirmed by the MINISO Guangzhou team.",
+    ar: "الجدول والمسار والمتاجر والتنقلات يؤكّدها فريق MINISO في قوانغتشو.",
   },
 ];
 
@@ -622,9 +622,9 @@ function day24(): PersonDayCard[] {
       people: STUDY,
       lodging: interconLodging("study"),
       activity: row("pending", {
-        zh: "由 MINISO 中国区域负责人带领巡店学习（第 1 天）。",
-        en: "Store-visit training led by the MINISO China regional lead (day 1).",
-        ar: "تدريب زيارة المتاجر بقيادة مسؤول منطقة MINISO في الصين (اليوم 1).",
+        zh: "由 MINISO 广州区域负责人带领巡店学习（第 1 天）。",
+        en: "Store-visit training led by the MINISO Guangzhou regional lead (day 1).",
+        ar: "تدريب زيارة المتاجر بقيادة مسؤول منطقة MINISO في قوانغتشو (اليوم 1).",
       }, { detail: STUDY_PLAN_TBD }),
       dining: row("confirmed", {
         zh: "从 9/24 起餐食自行安排。",
@@ -709,9 +709,9 @@ function day25(): PersonDayCard[] {
       people: STUDY,
       lodging: STUDY_NEW_HOTEL,
       activity: row("pending", {
-        zh: "由 MINISO 中国区域负责人带领巡店学习（第 2 天）。",
-        en: "Store-visit training led by the MINISO China regional lead (day 2).",
-        ar: "تدريب زيارة المتاجر بقيادة مسؤول منطقة MINISO في الصين (اليوم 2).",
+        zh: "由 MINISO 广州区域负责人带领巡店学习（第 2 天）。",
+        en: "Store-visit training led by the MINISO Guangzhou regional lead (day 2).",
+        ar: "تدريب زيارة المتاجر بقيادة مسؤول منطقة MINISO في قوانغتشو (اليوم 2).",
       }, { detail: STUDY_PLAN_TBD }),
       dining: row("confirmed", MEALS_OWN_TODAY, { detail: [DIET_ASK] }),
       transport: row("pending", STUDY_TRANSPORT),

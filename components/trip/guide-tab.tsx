@@ -6,6 +6,7 @@ import * as React from "react";
 import {
   CITY_SCALE,
   CITY_STORY,
+  CITY_TECH,
   COPY_ADDRESSES,
   CULTURE_NOTES,
   FOOD_CULTURE,
@@ -359,6 +360,43 @@ export function GuideTab({
         }
       >
         <StatTiles lang={lang} />
+      </Prose>
+
+      {/* 眼睛看得见的强：无人车、载人无人机、机器人、无现金、电动车。不折叠。 */}
+      <Prose
+        eyebrow={UI.cityTech}
+        lead={CITY_TECH.lead}
+        paragraphs={[CITY_TECH.intro]}
+        sources={CITY_TECH.sources}
+        lang={lang}
+        photo="robotaxi"
+      >
+        <div className="relative mt-5 grid gap-3 md:grid-cols-2">
+          {CITY_TECH.items.map((item) => (
+            <article key={item.id} className="trip-place overflow-hidden rounded-xl p-4">
+              {item.imageKey && IMG[item.imageKey] && item.imageKey !== "robotaxi" ? (
+                <img
+                  src={IMG[item.imageKey]}
+                  alt=""
+                  loading="lazy"
+                  className="trip-photo mb-3 aspect-[16/10] w-full object-cover"
+                />
+              ) : null}
+              <h4 className="trip-display text-lg leading-7 text-navy">
+                {t(item.title, lang)}
+              </h4>
+              <p className="mt-1 text-[0.8125rem] font-semibold uppercase tracking-[0.06em] text-miniso-red-strong">
+                {t(UI.techWhere, lang)}
+              </p>
+              <p className="mt-0.5 text-[0.9375rem] leading-7 text-navy">
+                {t(item.where, lang)}
+              </p>
+              <p className="mt-2 text-[0.9375rem] leading-7 text-navy-soft">
+                {t(item.body, lang)}
+              </p>
+            </article>
+          ))}
+        </div>
       </Prose>
 
       <Accordion

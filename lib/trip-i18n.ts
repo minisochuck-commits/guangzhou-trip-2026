@@ -185,6 +185,14 @@ export const UI = {
     en: "How big this city is",
     ar: "ما حجم هذه المدينة",
   },
+  /** 科技就在身边：眼睛看得见的强。 */
+  cityTech: {
+    zh: "科技就在身边",
+    en: "The technology around you",
+    ar: "التقنية من حولكم",
+  },
+  techWhere: { zh: "在哪能见到", en: "Where you'll see it", ar: "أين ترونها" },
+
   /** 你们住的那块地：琶洲。 */
   pazhou: {
     zh: "你们住的这块地",
@@ -255,10 +263,15 @@ export const UI = {
       en: "Two thousand years · three branches · a UNESCO city of gastronomy · goose, squab, seafood · twelve dishes",
       ar: "ألفا عام · ثلاثة فروع · مدينة يونسكو لفنون الطهي · الإوز والحمام والمأكولات البحرية · اثنا عشر طبقًا",
     },
+    tech: {
+      zh: "无人出租车 · 载人无人机 · 送餐机器人 · 无人机送外卖 · 无现金 · 电动出租车",
+      en: "Driverless taxis · passenger drones · delivery robots · drone takeaway · cashless · electric taxis",
+      ar: "سيارات أجرة بلا سائق · طائرات ركاب مسيّرة · روبوتات توصيل · توصيل بالطائرات · بلا نقد · سيارات كهربائية",
+    },
     retail: {
-      zh: "六家商场怎么错位共赢 · 二十年补位的案例 · 成都对照 · 北京路 · 报告要点",
-      en: "How six malls stagger and all win · a twenty-year case · Chengdu for comparison · Beijing Road · report points",
-      ar: "كيف تتدرّج ستة مراكز ويفوز الجميع · حالة عشرين عامًا · تشنغدو للمقارنة · شارع بكين · نقاط للتقرير",
+      zh: "给做商场的人：六家商场怎么定位招商 · 二十年补位的案例 · 成都对照 · 北京路 · 报告要点",
+      en: "For people who run malls: how six malls position and lease · a twenty-year case · Chengdu for comparison · Beijing Road · report points",
+      ar: "لمن يديرون المراكز التجارية: كيف تتموضع ستة مراكز وتؤجّر · حالة عشرين عامًا · تشنغدو للمقارنة · شارع بكين · نقاط للتقرير",
     },
     culture: {
       zh: "周五上班 · 酒桌 · 小费 · 手机支付 · 握手 · 「再研究一下」",

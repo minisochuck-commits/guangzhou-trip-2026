@@ -291,7 +291,7 @@ function activityView(date: string, group: GroupKey): CellView {
       return {
         lines: [
           L(`巡店学习 第 ${day} 天`, `Store-visit training, day ${day}`, `تدريب زيارة المتاجر، اليوم ${day}`),
-          L("MINISO 中国区域负责人带", "Led by the MINISO China regional lead", "بقيادة مسؤول منطقة MINISO في الصين"),
+          L("MINISO 广州区域负责人带", "Led by the MINISO Guangzhou regional lead", "بقيادة مسؤول منطقة MINISO في قوانغتشو"),
           L("课表与门店待定", "Timetable and stores to be set", "الجدول والمتاجر لم تُحدَّد"),
         ],
         entry: "storeVisit",
@@ -639,7 +639,7 @@ function transportView(date: string, group: GroupKey): CellView {
       return {
         lines: [
           L("巡店交通", "Store-visit transport", "تنقل زيارة المتاجر"),
-          L("向 MINISO 中国区域负责人确认", "Confirm with the MINISO China lead", "أكّد مع مسؤول MINISO في الصين"),
+          L("向 MINISO 广州区域负责人确认", "Confirm with the MINISO Guangzhou lead", "أكّد مع مسؤول MINISO في قوانغتشو"),
         ],
         entry: null,
         hidePending: true,

@@ -177,6 +177,46 @@ export const IMAGE_CREDITS: ImageCredit[] = [
     "artist": "Ceeseven",
     "license": "CC BY-SA 4.0",
     "page": "https://commons.wikimedia.org/wiki/File:Dry-fried_Beef_Ho_Fan.jpg"
+  },
+  {
+    "key": "robotaxi",
+    "file": "images/robotaxi.jpg",
+    "title": "WeRide Robotaxi GXR.jpg",
+    "artist": "Kk0521",
+    "license": "CC BY-SA 4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:WeRide_Robotaxi_GXR.jpg"
+  },
+  {
+    "key": "evtol",
+    "file": "images/evtol.jpg",
+    "title": "EHang 216 7 lateral by-dpc.jpg",
+    "artist": "David Perez",
+    "license": "CC0",
+    "page": "https://commons.wikimedia.org/wiki/File:EHang_216_7_lateral_by-dpc.jpg"
+  },
+  {
+    "key": "robot",
+    "file": "images/robot.jpg",
+    "title": "Delivery robot at family restaurant in Chiba.jpg",
+    "artist": "Syced",
+    "license": "CC0",
+    "page": "https://commons.wikimedia.org/wiki/File:Delivery_robot_at_family_restaurant_in_Chiba.jpg"
+  },
+  {
+    "key": "cashless",
+    "file": "images/cashless.jpg",
+    "title": "A woman paying at Ziguangyuan, Yuanda Xilu (20250411135111).jpg",
+    "artist": "N509FZ",
+    "license": "CC BY-SA 4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:A_woman_paying_at_Ziguangyuan,_Yuanda_Xilu_(20250411135111).jpg"
+  },
+  {
+    "key": "evtaxi",
+    "file": "images/evtaxi.jpg",
+    "title": "Yellow taxi of Guangzhou - GAC Aion S.jpg",
+    "artist": "User3204",
+    "license": "CC BY-SA 4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Yellow_taxi_of_Guangzhou_-_GAC_Aion_S.jpg"
   }
 ];
 export const IMG: Record<string, string> = Object.fromEntries(IMAGE_CREDITS.map((c) => [c.key, "./" + c.file]));
