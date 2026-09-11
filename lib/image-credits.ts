@@ -275,14 +275,6 @@ export const IMAGE_CREDITS: ImageCredit[] = [
     "page": "https://www.gz.gov.cn/zwfw/zxfw/kjcy/content/post_10189840.html"
   },
   {
-    "key": "deliverybot",
-    "file": "images/deliverybot.jpg",
-    "title": "擎朗配送机器人（擎朗智能官网）",
-    "artist": "",
-    "license": "来源页",
-    "page": "https://www.keenon.com/en/product/w3"
-  },
-  {
     "key": "grandview",
     "file": "images/grandview.jpg",
     "title": "正佳广场（广州市文广旅局）",
