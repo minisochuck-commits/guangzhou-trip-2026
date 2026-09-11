@@ -47,3 +47,5 @@ tsconfig.tsbuildinfo
 .claude/
 static/
 .images/
+.codex-publish/
+codex_publish_prompt.md
