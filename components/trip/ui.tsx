@@ -134,7 +134,7 @@ export function CopyChinese({
       )}
     >
       {/* 标签只是眉批，中文那行才是要被读的东西 —— 字号和底纹都归它 */}
-      <p className="text-[0.8125rem] font-medium uppercase tracking-[0.06em] text-navy-soft/80">
+      <p className="text-sm font-medium uppercase leading-5 tracking-[0.06em] text-navy-soft/80">
         {t(entry.label, lang)}
       </p>
       <p

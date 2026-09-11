@@ -149,10 +149,13 @@
 
 html,
 body {
-  /* 手机上禁止左右橡皮筋，避免误以为页面横向溢出 */
+  /*
+   * 手机上禁止左右橡皮筋，避免误以为页面横向溢出。
+   * 这里不再把横向溢出裁掉 —— 裁掉只是让撑出去的内容看不见，问题还在。
+   * 真有东西撑出去要在那一处修好（表格 table-fixed、图片 max-width、
+   * 横滑条自己 overflow-x-auto）。
+   */
   overscroll-behavior-x: none;
-  max-width: 100%;
-  overflow-x: clip;
 }
 
 html {
@@ -173,6 +176,9 @@ body {
  * 一张卡的标准长相：白底、淡描边、极轻的阴影。
  * 整站的卡片都走这一个类，不要各处各写一串 border/shadow ——
  * 那正是之前每个块看起来都一样、分不出主次的原因。
+ *
+ * 卡是用来分「组」的，不是用来分「条」的：一组入口共用一张卡，
+ * 里面每一条只隔一条 --card-line 的细线（见指南页的 SectionGroup）。
  */
 .trip-card {
   background: #ffffff;
@@ -190,20 +196,10 @@ body {
 }
 
 /*
- * 开篇那段故事：整页唯一一块不是白卡片的地方。
- * 底色压深一点、配朱红细线，让它读起来像一段文章的开头，
- * 而不是又一个盒子。
- */
-.trip-story {
-  background:
-    linear-gradient(180deg, #fbf8f3 0%, #f5f1e8 100%);
-  border: 1px solid rgba(200, 16, 46, 0.16);
-  box-shadow: var(--shadow-card);
-}
-
-/*
  * 卡片里面的那一层。没有阴影、只有很淡的底和描边 ——
  * 卡中卡各带一层阴影，正是整页看着「什么都一样」的来源。
+ * 现在只留给真正要单独框起来的东西：一座清真寺、一道菜。
+ * 一串同类的条目请用细线分隔，不要一条一个框。
  */
 .trip-place {
   background: #fffdfa;
@@ -273,10 +269,17 @@ body {
     0 1px 3px rgba(140, 12, 32, 0.35);
 }
 
-/* 木棉是广州市花，红的 —— 当页头的水印，比任何「中国元素」都更点题。 */
-.trip-kapok {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke='%23c8102e' stroke-width='1.6' stroke-linecap='round'%3E%3Cpath d='M50 50 L50 18 M50 50 L80 34 M50 50 L74 76 M50 50 L26 76 M50 50 L20 34'/%3E%3Cpath d='M50 18c7 6 9 16 4 24-6-3-11-3-17 0-5-8-3-18 4-24 3-2 6-2 9 0z'/%3E%3Cpath d='M80 34c1 9-4 18-13 21-2-6-6-10-12-12 1-9 8-16 17-17 3 0 6 3 8 8z'/%3E%3Cpath d='M74 76c-8 4-18 2-24-6 5-4 7-9 7-15 9-1 17 4 20 13 1 3-1 6-3 8z'/%3E%3Cpath d='M26 76c-3-8 0-18 8-22 3 5 8 8 14 8 2 9-3 17-12 20-3 1-7-2-10-6z'/%3E%3Cpath d='M20 34c8-4 18-1 23 7-5 3-8 8-9 14-9 0-16-6-17-15 0-3 1-5 3-6z'/%3E%3Ccircle cx='50' cy='50' r='5'/%3E%3C/g%3E%3C/svg%3E");
-  background-repeat: no-repeat;
+/*
+ * 页头以前还压着一张木棉水印 + 一层投影。花纹在手机上只让字更难读，
+ * 已经去掉：页头现在只有一条朱红细带、印章、标题和两个选择器。
+ */
+
+/* 出发前清单里的「怎么做」：展开时箭头转过来。 */
+details[data-prep] .prep-chevron {
+  transition: transform 0.2s ease;
+}
+details[data-prep][open] .prep-chevron {
+  transform: rotate(180deg);
 }
 
 /* 姓名、航班号、时间在阿语 RTL 下保持 LTR 且不被标点翻转 */
@@ -313,13 +316,14 @@ body {
 }
 
 /* 阿语的星期和月份词长得多（الثلاثاء / سبتمبر），首列多给几像素，
-   否则每个词都要断成两行。多出来的宽度从后两列按同一比例扣。 */
+   否则每个词都要断成两行。多出来的宽度从后两列按同一比例扣。
+   月份 / 星期从 13px 抬到 14px（窄表的下限）之后，这里也跟着补了 4px。 */
 [dir="rtl"] .trip-matrix {
-  --col-date: 4.5rem;
+  --col-date: 4.75rem;
 }
 
 [dir="rtl"] .trip-matrix[data-view="all"] {
-  --col-date: 5.5rem;
+  --col-date: 5.75rem;
 }
 
 .trip-matrix [data-slot="table-container"] {
@@ -333,6 +337,13 @@ body {
   box-shadow: var(--shadow-card);
 }
 
-/* Guest guide: anchor targets remain below the sticky person header. */
-.guest-guide [id^="guide-"] { scroll-margin-top: 10rem; }
-.guest-guide img { max-width: 100%; }
+/*
+ * 指南页的跳转锚点要停在 sticky 页头下面。页头高度由 trip-view 量出来写进
+ * --trip-header-h（语言、换行都会改变它），所以这里跟着算，不写死一个 10rem。
+ */
+.guest-guide [id^="guide-"] {
+  scroll-margin-top: calc(var(--trip-header-h, 7rem) + 0.75rem);
+}
+.guest-guide img {
+  max-width: 100%;
+}

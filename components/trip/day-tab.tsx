@@ -119,15 +119,15 @@ export function DayTab({
           // table-fixed 的均分规则一致，两边逐像素对齐，也不用同步滚动位置。
           <div
             aria-hidden="true"
-            className="mt-2 flex rounded-t-xl border border-b-0 border-card-line bg-navy-tint shadow-[0_-1px_0_rgba(14,34,64,0.03)]"
+            className="mt-2 flex rounded-t-xl border border-b-0 border-card-line bg-navy-tint"
           >
-            <div className="w-[var(--col-date)] shrink-0 border-e border-line px-2 py-2 text-[13px] font-semibold leading-4 text-navy">
+            <div className="w-[var(--col-date)] shrink-0 border-e border-card-line px-2 py-2.5 text-sm font-semibold leading-5 text-navy">
               {firstColLabel}
             </div>
-            <div className="min-w-0 flex-1 border-e border-line px-2 py-2 text-[13px] font-semibold leading-4 text-navy md:px-3">
+            <div className="min-w-0 flex-1 border-e border-card-line px-2 py-2.5 text-sm font-semibold leading-5 text-navy md:px-3">
               {t(UI.cols.plan, lang)}
             </div>
-            <div className="min-w-0 flex-1 px-2 py-2 text-[13px] font-semibold leading-4 text-navy md:px-3">
+            <div className="min-w-0 flex-1 px-2 py-2.5 text-sm font-semibold leading-5 text-navy md:px-3">
               {t(UI.cols.stay, lang)}
             </div>
           </div>
@@ -163,7 +163,8 @@ export function DayTab({
                 const { date, card } = row;
                 const isActive = date === activeDate;
                 const tint = isActive ? "bg-miniso-red-tint" : "bg-white";
-                const topLine = firstOfDate ? "border-t-2 border-t-navy/15" : "";
+                // 同一天的几行之间只有一条淡线；换一天才用深一点的那条分组。
+                const topLine = firstOfDate ? "border-t border-t-navy/20" : "";
                 // 筛了人就只认那一个人：合并行里同卡的其他人不该出现在弹窗标题里
                 // （筛 Ahmed 时不能带出 Mohamed）。
                 const people = displayedPeople(row, person);
@@ -186,23 +187,24 @@ export function DayTab({
                     <TableHead
                       scope="row"
                       className={cn(
-                        "h-auto whitespace-normal break-words border-b border-e border-line px-2 py-2 text-start align-top md:py-3",
+                        "h-auto whitespace-normal break-words border-b border-e border-card-line px-2 py-2.5 text-start align-top md:py-3.5",
                         tint,
                         topLine,
                       )}
                     >
-                      {/* 窄列里日期竖着排：日 / 月 / 周几，英阿的月份才放得下 */}
-                      <span className="block text-base font-semibold leading-5 text-navy">
+                      {/* 窄列里日期竖着排：日 / 月 / 周几，英阿的月份才放得下。
+                          日号是主角，月和周几压小压淡 —— 三行一样大就看不出层级。 */}
+                      <span className="block text-xl font-semibold leading-6 text-navy">
                         <Ltr>{dayNumber(date)}</Ltr>
                       </span>
-                      <span className="block text-[13px] leading-4 text-navy-soft">
+                      <span className="mt-0.5 block text-sm leading-4 text-navy-soft">
                         {monthLabel(date, lang)}
                       </span>
-                      <span className="block text-[13px] leading-4 text-navy-soft">
+                      <span className="block text-sm leading-4 text-navy-soft/75">
                         {weekdayLabel(date, lang)}
                       </span>
                       {shown.length > 0 ? (
-                        <span className="mt-1 block text-[13px] font-semibold leading-4 text-navy">
+                        <span className="mt-1.5 block text-sm font-semibold leading-4 text-navy">
                           {shown.map((id) => (
                             <span key={id} className="block">
                               <Ltr>{PERSON_MAP[id].name}</Ltr>
@@ -215,7 +217,7 @@ export function DayTab({
                     {/* 活动与交通：两段之间一条细线，不加重复的小标题 */}
                     <TableCell
                       className={cn(
-                        "whitespace-normal break-words border-b border-e border-line px-2 py-2 align-top md:px-3 md:py-3",
+                        "whitespace-normal break-words border-b border-e border-card-line px-2 py-2.5 align-top md:px-3 md:py-3.5",
                         tint,
                         topLine,
                       )}
@@ -227,7 +229,7 @@ export function DayTab({
                         date={date}
                         people={people}
                       />
-                      <div className="mt-2 border-t border-line/70 pt-2">
+                      <div className="mt-2.5 border-t border-card-line pt-2.5">
                         <PlanCell
                           row={card.transport}
                           view={cellView("transport", date, card)}
@@ -241,7 +243,7 @@ export function DayTab({
                     {/* 食宿：两段各带一个短标签，免得混在一起 */}
                     <TableCell
                       className={cn(
-                        "whitespace-normal break-words border-b border-line px-2 py-2 align-top md:px-3 md:py-3",
+                        "whitespace-normal break-words border-b border-card-line px-2 py-2.5 align-top md:px-3 md:py-3.5",
                         tint,
                         topLine,
                       )}
@@ -254,7 +256,7 @@ export function DayTab({
                         date={date}
                         people={people}
                       />
-                      <div className="mt-2 border-t border-line/70 pt-2">
+                      <div className="mt-2.5 border-t border-card-line pt-2.5">
                         <MiniLabel>{t(UI.rows.lodging, lang)}</MiniLabel>
                         <PlanCell
                           row={card.lodging}
@@ -278,7 +280,7 @@ export function DayTab({
 
 function MiniLabel({ children }: { children: React.ReactNode }) {
   return (
-    <span className="mb-0.5 block text-[11px] font-semibold uppercase leading-4 tracking-[0.09em] text-navy-soft/70">
+    <span className="mb-0.5 block text-xs font-semibold uppercase leading-4 tracking-[0.08em] text-navy-soft/75">
       {children}
     </span>
   );

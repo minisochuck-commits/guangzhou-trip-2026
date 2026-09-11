@@ -4,14 +4,13 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 import { datesForPerson } from "@/lib/person-day-plan";
-import {
-  PEOPLE,
-  PERSON_MAP,
-  type Lang,
-  type PersonId,
-} from "@/lib/trip-data";
+import { PEOPLE, type Lang, type PersonId } from "@/lib/trip-data";
 import { DEFAULT_LANG, LANGS, UI, dirOf, t } from "@/lib/trip-i18n";
 import { DirectionProvider } from "@/components/ui/direction";
+import {
+  NativeSelect,
+  NativeSelectOption,
+} from "@/components/ui/native-select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DayTab } from "./day-tab";
 import { GuideTab } from "./guide-tab";
@@ -212,6 +211,13 @@ export function TripView() {
 
 /* ---------------- 顶部 ---------------- */
 
+/**
+ * 页头只放三件事：这是什么、看谁、什么语言。
+ *
+ * 「看谁」用一个原生下拉（六个横滑按钮是上一版，已替代）：默认显示 Reham 的名字，
+ * 点开才列出其他人和「全部」。常驻六个按钮既占两行，又让人以为那是主要操作。
+ * 日期区间和当前的人各写一次，不重复。没有背景花纹、没有投影、没有首屏大图。
+ */
 function Header({
   ref,
   lang,
@@ -225,54 +231,60 @@ function Header({
   person: PersonId | null;
   onPerson: (person: PersonId | null) => void;
 }) {
-  const chipScrollerRef = React.useRef<HTMLDivElement | null>(null);
-  const activeChipRef = React.useRef<HTMLButtonElement | null>(null);
-
-  // 选中的人 chip 必须看得见，否则用户不知道正在看谁。只滚这条横向容器。
-  React.useEffect(() => {
-    const scroller = chipScrollerRef.current;
-    const chip = activeChipRef.current;
-    if (!scroller || !chip) return;
-    const box = scroller.getBoundingClientRect();
-    const rect = chip.getBoundingClientRect();
-    if (rect.left >= box.left && rect.right <= box.right) return;
-    scroller.scrollBy({
-      left: rect.left + rect.width / 2 - (box.left + box.width / 2),
-      behavior: "smooth",
-    });
-  }, [person, lang]);
-
-  const viewingLabel = person ? PERSON_MAP[person].name : t(UI.everyone, lang);
-
   return (
     <header
       ref={ref}
-      className="sticky top-0 z-20 border-b border-card-line bg-white/95 shadow-[0_10px_24px_-20px_rgba(14,34,64,0.55)] md:rounded-t-2xl"
+      className="sticky top-0 z-20 border-b border-card-line bg-white md:rounded-t-2xl"
     >
       {/* 品牌红只占一条细带：这是行程单，不是营销页 */}
       <div
         aria-hidden="true"
         className="h-1 w-full bg-miniso-red md:rounded-t-2xl"
       />
-      {/* 木棉水印：广州市花，淡到不抢字，但一眼知道这是广州。
-          裁剪放在这一层，不放到 sticky 那层上。 */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 overflow-hidden md:rounded-t-2xl"
-      >
-        <div className="trip-kapok absolute end-0 bottom-0 h-[11rem] w-[11rem] bg-[length:176px_176px] bg-[position:right_-34px_bottom_-40px] opacity-[0.075]" />
-      </div>
-      <div className="relative flex items-center gap-2.5 px-4 pt-2.5">
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 px-4 pt-2.5">
         <span className="trip-seal" aria-hidden="true">
           穗
         </span>
-        <h1 className="trip-display min-w-0 flex-1 truncate text-xl leading-8 tracking-tight text-navy">
+        <h1 className="trip-display text-xl leading-8 tracking-tight text-navy">
           {t(UI.title, lang)}
         </h1>
+        <p className="text-sm font-semibold uppercase leading-5 tracking-[0.08em] text-miniso-red-strong">
+          <Ltr>20 SEP – 07 OCT 2026</Ltr>
+        </p>
+      </div>
+
+      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 px-4 pb-2.5 pt-2">
+        <label className="flex items-center">
+          {/* 标签只给读屏：阿语的「العرض」加上下拉本身，会把语言按钮挤到下一行，
+              页头从 111px 涨到 163px。名字就在下拉里，视觉上不需要再写一遍。 */}
+          <span className="sr-only">{t(UI.viewing, lang)}</span>
+          <NativeSelect
+            value={person ?? "all"}
+            onChange={(event) =>
+              onPerson(
+                event.target.value === "all"
+                  ? null
+                  : (event.target.value as PersonId),
+              )
+            }
+            // 16px 起：iOS 上更小的字号会在聚焦时把整页放大。
+            className="h-11 rounded-lg border-line bg-white text-base font-medium text-navy shadow-none"
+          >
+            {PEOPLE.map((item) => (
+              <NativeSelectOption key={item.id} value={item.id}>
+                {item.name}
+              </NativeSelectOption>
+            ))}
+            <NativeSelectOption value="all">
+              {t(UI.everyone, lang)}
+            </NativeSelectOption>
+          </NativeSelect>
+        </label>
+
         <div
           role="group"
           aria-label={t(UI.language, lang)}
-          className="flex shrink-0 gap-1"
+          className="flex shrink-0 gap-1.5"
         >
           {LANGS.map((option) => (
             <button
@@ -281,7 +293,8 @@ function Header({
               onClick={() => onLang(option.id)}
               aria-pressed={option.id === lang}
               className={cn(
-                "rounded-full border px-2 py-1 text-sm font-medium leading-5 transition-colors",
+                // 手指点得到：最小 44px 高。
+                "inline-flex min-h-11 items-center rounded-lg border px-2.5 text-sm font-medium leading-5 transition-colors",
                 option.id === lang
                   ? "border-navy bg-navy text-white"
                   : "border-line bg-white text-navy hover:border-navy/40",
@@ -292,76 +305,7 @@ function Header({
           ))}
         </div>
       </div>
-
-      {/* 日期区间 + 当前筛选对象放同一行：chip 滑出视野也知道在看谁 */}
-      <p className="mt-0.5 flex flex-wrap items-baseline gap-x-2.5 px-4 text-sm leading-5">
-        <span className="font-semibold uppercase tracking-[0.08em] text-miniso-red-strong">
-          <Ltr>20 SEP – 07 OCT 2026</Ltr>
-        </span>
-        <span className="text-navy-soft">
-          {t(UI.viewingNow, lang)}:{" "}
-          <Ltr className="font-semibold text-navy">{viewingLabel}</Ltr>
-        </span>
-      </p>
-
-      <div
-        ref={chipScrollerRef}
-        className="mt-1.5 overflow-x-auto scrollbar-none px-4"
-      >
-        <div
-          role="group"
-          aria-label={t(UI.viewing, lang)}
-          className="flex w-max gap-1.5 pb-2"
-        >
-          <PersonChip
-            ref={person === null ? activeChipRef : undefined}
-            active={person === null}
-            onClick={() => onPerson(null)}
-            label={t(UI.everyone, lang)}
-          />
-          {PEOPLE.map((item) => (
-            <PersonChip
-              key={item.id}
-              ref={person === item.id ? activeChipRef : undefined}
-              active={person === item.id}
-              onClick={() => onPerson(item.id)}
-              label={<Ltr>{item.name}</Ltr>}
-            />
-          ))}
-        </div>
-      </div>
-
     </header>
-  );
-}
-
-function PersonChip({
-  ref,
-  active,
-  onClick,
-  label,
-}: {
-  ref?: React.Ref<HTMLButtonElement>;
-  active: boolean;
-  onClick: () => void;
-  label: React.ReactNode;
-}) {
-  return (
-    <button
-      ref={ref}
-      type="button"
-      onClick={onClick}
-      aria-pressed={active}
-      className={cn(
-        // 手指点得到：最小 44px 高。
-        "inline-flex min-h-11 items-center rounded-full border px-3.5 text-sm font-medium transition-colors",
-        active
-          ? "border-miniso-red bg-miniso-red text-white"
-          : "border-line bg-white text-navy hover:border-miniso-red/50",
-      )}
-    >
-      {label}
-    </button>
   );
 }
 

@@ -699,11 +699,11 @@ export const PHRASES: CopyEntry[] = [
 
 
 /* ------------------------------------------------------------------ */
-/* 商圈考察                                                              */
+/* 广州商圈：天河路与北京路                                              */
 /*                                                                     */
-/* Reham 做招商、Ahmed 管区域。他们公费来，回去要向老板汇报学到了什么。      */
-/* 这一节按「一个做零售的人站在天河路上该看懂什么」写：整体骨架、        */
-/* 会议之外的自由探索：地点、空间特色、步行建议，不替客人布置考察任务。 */
+/* 会议之外的自由探索：地点、空间特色、步行建议。写给来逛的人看 ——       */
+/* 不替客人布置考察任务、不指导他写报告、不对着「做商场的人」说话。      */
+/* 只写站在街上看得见的东西；别人为什么这么开店属于揣测，不写。          */
 /* 数字出自天河区政府、广州市政府与新华网。                              */
 /* ------------------------------------------------------------------ */
 
@@ -711,9 +711,9 @@ export type MallCard = {
   id: string;
   imageKey?: string;
   name: L10n;
-  /** 一句话定位。 */
+  /** 一句话说清它是什么地方，不贴客群标签。 */
   tier: L10n;
-  /** 事实：开业、体量、锚点业态、成绩。 */
+  /** 到了现场看得见的：空间、店、怎么走。 */
   facts: L10n;
 };
 
@@ -828,14 +828,14 @@ export const RETAIL_STUDY: {
         "ar": "وان لينك ووك"
       },
       "tier": {
-        "zh": "年轻白领：早午餐与书店",
-        "en": "Young professionals: brunch and bookshops",
-        "ar": "الشباب المهنيون: الفطور المتأخر والمكتبات"
+        "zh": "早午餐与书店",
+        "en": "Brunch and bookshops",
+        "ar": "فطور متأخر ومكتبات"
       },
       "facts": {
-        "zh": "客群标签是时尚白领。业态上用早午餐、西西弗书店这类「待得住」的东西留人，而不是靠奢侈品。在太古汇隔壁做这个定位，是有意错开。",
-        "en": "Its crowd is the fashionable office worker. It keeps people with things to linger over — brunch, the Sisyphe bookshop — rather than with luxury goods. Doing that next door to Taikoo Hui is a deliberate sidestep.",
-        "ar": "جمهوره الموظف الأنيق. يُبقي الناس بأشياء يتمهّلون عندها — الفطور المتأخر، ومكتبة سيزيف — لا بالسلع الفاخرة. وفعل ذلك إلى جوار تايكو هوي انحرافٌ مقصود."
+        "zh": "这里有早午餐的馆子和西西弗书店，可以坐下来待一会儿。就在太古汇旁边，逛累了适合过来歇脚。",
+        "en": "There are brunch places and the Sisyphe bookshop here — somewhere to sit for a while. It is right beside Taikoo Hui, so it works well as a break part-way through a walk.",
+        "ar": "هنا مقاهٍ للفطور المتأخر ومكتبة سيزيف، أماكن تصلح للجلوس قليلًا. وهو ملاصق لتايكو هوي، فيصلح استراحة في منتصف الجولة."
       }
     },
     {
@@ -846,14 +846,14 @@ export const RETAIL_STUDY: {
         "ar": "فاشن تيانخه"
       },
       "tier": {
-        "zh": "地下主题街区：平价与游客",
-        "en": "An underground themed street: budget and tourists",
-        "ar": "شارع تحت الأرض بطابع خاص: أسعار معقولة وسيّاح"
+        "zh": "地下主题街区",
+        "en": "Underground themed lanes",
+        "ar": "ممرات مواضيعية تحت الأرض"
       },
       "facts": {
-        "zh": "整个开在天河体育中心的地下，做主题街区，客群是外地游客和年轻人，价格带最低。它把体育中心地下这块没人用的空间变成了商圈的一部分。",
-        "en": "Built entirely beneath the Tianhe Sports Centre as themed streets, aimed at visitors and the young, with the lowest price band on the road. It turned an unused space under the stadium into part of the district.",
-        "ar": "بُني كليًّا تحت مركز تيانخه الرياضي على هيئة شوارع ذات طابع خاص، موجّهًا للزوّار والشباب، وبأدنى شريحة أسعار في الطريق. حوّل فراغًا غير مستخدم تحت الملعب إلى جزء من المنطقة."
+        "zh": "整个开在天河体育中心的地下，分成一条条主题街区，铺面以小店为主。逛起来和地面的购物中心很不一样；天热或下雨时，从地下穿过去也更舒服。",
+        "en": "Built entirely beneath the Tianhe Sports Centre and laid out as themed lanes, mostly small shops. It feels quite unlike the malls above ground, and walking through underground is more comfortable in heat or rain.",
+        "ar": "يقع بالكامل تحت مركز تيانخه الرياضي، ومقسَّم إلى ممرات ذات طابع خاص تغلب عليها المتاجر الصغيرة. تجربته تختلف عن المراكز فوق الأرض، والمرور تحت الأرض أكثر راحة في الحر أو المطر."
       }
     }
   ],
@@ -1080,7 +1080,9 @@ export type Route = {
 export const ROUTES: Route[] = [
   {
     id: "huacheng",
-    imageKey: "cbd",
+    // 大剧院与西塔的实景。原来那张 cbd.jpg 带 500px 水印，不再使用
+    // （不裁剪、不抹水印，就是不用它）。
+    imageKey: "opera",
     title: {
       zh: "花城广场 · 新中轴线（必去）",
       en: "Huacheng Square · the new central axis (do not miss)",
@@ -1103,9 +1105,9 @@ export const ROUTES: Route[] = [
     },
     steps: [
       {
-        zh: "酒店 → 花城广场北端（广州图书馆 / 大剧院一侧）→ 沿中轴往南走到海心沙 → 江边看广州塔亮灯 → 返回酒店。",
-        en: "Hotel → north end of Huacheng Square (library / opera house side) → walk south along the axis to Haixinsha → watch the Canton Tower light up from the riverbank → back to the hotel.",
-        ar: "الفندق ← الطرف الشمالي لساحة هواتشنغ (جهة المكتبة ودار الأوبرا) ← المشي جنوبًا على المحور حتى هايشينشا ← مشاهدة إضاءة برج كانتون من ضفة النهر ← العودة إلى الفندق.",
+        zh: "酒店 → 广州图书馆 / 大剧院周边 → 花城广场南侧 → 江边看广州塔 → 返回酒店。",
+        en: "Hotel → around the city library and opera house → the south side of Huacheng Square → the riverbank for the Canton Tower → back to the hotel.",
+        ar: "الفندق ← محيط المكتبة ودار الأوبرا ← الجانب الجنوبي لساحة هواتشنغ ← ضفة النهر لمشاهدة برج كانتون ← العودة إلى الفندق.",
       },
       {
         zh: "步行约一个半小时，其余留给拍照和地下商场。",
@@ -1114,9 +1116,9 @@ export const ROUTES: Route[] = [
       },
     ],
     transport: {
-      zh: "从保利洲际打车过江即到；换住其他酒店后以实际地址导航为准。",
-      en: "A short taxi ride across the river from the InterContinental; from any other hotel, go by the actual address in your navigation app.",
-      ar: "رحلة أجرة قصيرة عبر النهر من الإنتركونتيننتال؛ ومن أي فندق آخر اعتمدوا على العنوان الفعلي في تطبيق الملاحة.",
+      zh: "打车前往。出发前在地图里查一下当天车程，再决定几点出门；换住其他酒店后以实际地址导航为准。",
+      en: "Go by taxi. Check the drive time in your map app before setting out, then decide when to leave; from any other hotel, navigate by the actual address.",
+      ar: "اذهبوا بسيارة أجرة. راجعوا زمن الطريق في تطبيق الخرائط قبل الانطلاق ثم حدّدوا موعد الخروج؛ ومن أي فندق آخر اعتمدوا على العنوان الفعلي.",
     },
     tickets: {
       zh: "广场、海心沙江边免费。大剧院、图书馆、博物馆的开放时间未核实，以官方当日公告为准。",
@@ -1160,26 +1162,31 @@ export const ROUTES: Route[] = [
       ar: "إن أردتم إدراك حجم هذه المدينة بنظرة واحدة فاصعدوا. والعصر يمنحكم مشهد النهار والليل في زيارة واحدة.",
     },
     summary: {
-      zh: "六百米，世界第二高的塔，就在你们住的海珠区。塔身是细腰的双曲面钢网，晚上整座塔换色。观景层在四百多米，塔顶还有一圈高空摩天轮。",
-      en: "Six hundred metres, the second-tallest tower in the world, in your own district of Haizhu. Its waisted hyperboloid steel mesh changes colour at night. The observation decks are above four hundred metres, and there is a ring of ferris-wheel cabins near the top.",
-      ar: "ستمئة متر، ثاني أعلى برج في العالم، في منطقتكم هايتشو. هيكله الفولاذي الشبكي ذو الخصر النحيل يغيّر لونه ليلًا. ومنصّات المشاهدة فوق أربعمئة متر، وقرب القمة حلقة من مقصورات دولاب هواء.",
+      zh: "六百米高，就在你们住的海珠区。塔身是细腰的双曲面钢网，晚上整座塔换色。室内观景层在四百多米，塔上另有高空项目可以另选。",
+      en: "Six hundred metres, in your own district of Haizhu. Its waisted hyperboloid steel mesh changes colour at night. The indoor observation deck sits above four hundred metres, with separate high-level attractions you can add.",
+      ar: "ستمئة متر، في منطقتكم هايتشو. هيكله الفولاذي الشبكي ذو الخصر النحيل يغيّر لونه ليلًا. ومنصّة المشاهدة الداخلية فوق أربعمئة متر، وفي الأعلى مرافق إضافية يمكن اختيارها على حدة.",
     },
     steps: [
       {
-        zh: "酒店 → 广州塔 → 观景层 → 出来沿江走到对岸看回来的角度 → 返回。",
-        en: "Hotel → Canton Tower → observation deck → afterwards, walk the riverbank for the view of the tower itself → back.",
-        ar: "الفندق ← برج كانتون ← منصة المشاهدة ← ثم المشي على ضفة النهر لرؤية البرج نفسه ← العودة.",
+        zh: "酒店 → 广州塔 → 室内观景层。",
+        en: "Hotel → Canton Tower → the indoor observation deck.",
+        ar: "الفندق ← برج كانتون ← منصة المشاهدة الداخلية.",
+      },
+      {
+        zh: "出塔后可沿同侧江边散步；若要去花城广场，另安排过江交通。",
+        en: "Afterwards you can walk the riverbank on the same side; Huacheng Square is across the water, so arrange separate transport for it.",
+        ar: "بعد الخروج يمكنكم المشي على ضفة النهر من الجهة نفسها؛ وساحة هواتشنغ على الضفة الأخرى، فرتّبوا لها تنقّلًا منفصلًا.",
       },
     ],
     transport: {
-      zh: "和酒店同在海珠区，打车很近；也可以和花城广场排在同一个晚上，一江之隔。",
-      en: "Same district as the hotel, a short taxi ride; it pairs naturally with Huacheng Square on the same evening, one river apart.",
-      ar: "في منطقة الفندق نفسها، رحلة أجرة قصيرة؛ ويمكن جمعه مع ساحة هواتشنغ في المساء نفسه، فبينهما النهر فقط.",
+      zh: "打车前往，广州塔和酒店同在海珠区；出发前在地图里查当天车程。",
+      en: "Go by taxi; the tower is in Haizhu, the same district as your hotel. Check the drive time in your map app before setting out.",
+      ar: "اذهبوا بسيارة أجرة؛ البرج في هايتشو، منطقة فندقكم نفسها. راجعوا زمن الطريق في تطبيق الخرائط قبل الانطلاق.",
     },
     tickets: {
-      zh: "登塔收费，票价与各层开放时间未核实，以广州塔官方为准；旺季建议提前买票。",
-      en: "Admission is charged; prices and opening hours for each level are not verified — go by the tower's official channels, and buy ahead in busy periods.",
-      ar: "الدخول برسوم؛ والأسعار ومواعيد كل طابق غير مُتحقَّق منها — اعتمدوا على القنوات الرسمية للبرج، واشتروا التذاكر مسبقًا في المواسم المزدحمة.",
+      zh: "官网公布营业时间 09:30–22:30；先选观光层与入场时段，再核对票价及当天项目开放情况。总体营业时间不等于每个高空项目的结束时间。",
+      en: "The official site lists opening hours of 09:30–22:30. Choose the deck and entry slot first, then check the price and which attractions are running that day — the tower's overall hours are not the closing time of every attraction.",
+      ar: "يعلن الموقع الرسمي مواعيد 09:30–22:30. اختاروا المنصّة ووقت الدخول أولًا، ثم تحقّقوا من السعر ومن المرافق العاملة ذلك اليوم — فمواعيد البرج العامة ليست وقت إغلاق كل مرفق.",
     },
     copy: [
       {
@@ -1193,6 +1200,14 @@ export const ROUTES: Route[] = [
         label: { zh: "海珠区政府：广州塔", en: "Haizhu District government: Canton Tower", ar: "حكومة منطقة هايتشو: برج كانتون" },
         url: "https://www.haizhu.gov.cn/zjhz/lyck/content/post_7765705.html",
       },
+      {
+        label: { zh: "广州塔官方网站（含在线购票）", en: "Canton Tower official site (online tickets)", ar: "الموقع الرسمي لبرج كانتون (تذاكر إلكترونية)" },
+        url: "https://www.cantontower.com/?lang=zh",
+      },
+      {
+        label: { zh: "海珠区政府：城市名片与游览指引", en: "Haizhu District government: visiting guidance", ar: "حكومة منطقة هايتشو: إرشادات الزيارة" },
+        url: "https://www.haizhu.gov.cn/hzdt/ztlm/tzhz/rjhj/lyjd/csmp/content/post_9190964.html",
+      },
     ],
   },
   {
@@ -1204,36 +1219,36 @@ export const ROUTES: Route[] = [
       ar: "جولة ليلية في نهر اللؤلؤ",
     },
     duration: {
-      zh: "船程约 60 分钟，前后约 2 小时（规划参考）",
-      en: "About 60 minutes on the water, around 2 hours door to door (planning estimate)",
-      ar: "نحو 60 دقيقة على الماء، وقرابة ساعتين من الباب إلى الباب (تقدير تخطيطي)",
+      zh: "船程约 60 分钟，另留往返及候船时间（规划参考）",
+      en: "About 60 minutes on the water, plus getting to the pier and waiting (planning estimate)",
+      ar: "نحو 60 دقيقة على الماء، إضافةً إلى الذهاب إلى الرصيف والانتظار (تقدير تخطيطي)",
     },
     bestFor: {
-      zh: "坐着不动，把广州塔、海心沙、珠江两岸的灯光一次看完。适合一天结束的时候。",
-      en: "Sit still and take in the Canton Tower, Haixinsha and both lit banks in one pass. Good at the end of a day.",
-      ar: "اجلسوا وشاهدوا برج كانتون وهايشينشا والضفتين المضاءتين في جولة واحدة. مناسب لختام اليوم.",
+      zh: "坐着不动看两岸灯光，适合一天结束的时候。",
+      en: "Sit still and watch both lit banks go by. Good at the end of a day.",
+      ar: "اجلسوا وشاهدوا الضفتين المضاءتين. مناسب لختام اليوم.",
     },
     summary: {
-      zh: "船从老城江边出发，往东开到广州塔、海心沙一带再回来。大沙头是最大的游船码头，天字码头是广州用得最久的码头，有两百七十多年。",
-      en: "Boats leave from the old-city waterfront, run east past the Canton Tower and Haixinsha and return. Dashatou is the largest cruise pier; Tianzi Pier is the oldest still in use, some two hundred and seventy years.",
-      ar: "تنطلق القوارب من واجهة المدينة القديمة، وتتجه شرقًا متجاوزة برج كانتون وهايشينشا ثم تعود. رصيف داشاتو أكبر أرصفة الجولات، ورصيف تيانزي أقدمها المستخدمة، وعمره نحو مئتين وسبعين عامًا.",
+      zh: "夜里在珠江上看两岸灯光。码头、船和航线各不相同：大沙头是最大的游船码头，天字码头是广州用得最久的码头，有两百七十多年。",
+      en: "An evening on the Pearl River with both banks lit. Piers, boats and routes all differ: Dashatou is the largest cruise pier, and Tianzi is the oldest still in use, some two hundred and seventy years.",
+      ar: "أمسية على نهر اللؤلؤ والضفتان مضاءتان. تختلف الأرصفة والقوارب والمسارات: رصيف داشاتو أكبر أرصفة الجولات، ورصيف تيانزي أقدمها المستخدمة، وعمره نحو مئتين وسبعين عامًا.",
     },
     steps: [
       {
-        zh: "酒店 → 大沙头码头或天字码头 → 上船约 60 分钟 → 返回酒店。",
-        en: "Hotel → Dashatou or Tianzi Pier → about 60 minutes aboard → back to the hotel.",
-        ar: "الفندق ← رصيف داشاتو أو تيانزي ← نحو 60 دقيقة على متن القارب ← العودة إلى الفندق.",
+        zh: "酒店 → 票面上的码头 → 上船约 60 分钟 → 返回酒店。",
+        en: "Hotel → the pier printed on your ticket → about 60 minutes aboard → back to the hotel.",
+        ar: "الفندق ← الرصيف المذكور في التذكرة ← نحو 60 دقيقة على متن القارب ← العودة إلى الفندق.",
       },
     ],
     transport: {
-      zh: "打车到码头。以实际地址导航为准。",
-      en: "Taxi to the pier; go by the actual address in your navigation app.",
-      ar: "سيارة أجرة إلى الرصيف؛ اعتمدوا على العنوان الفعلي في تطبيق الملاحة.",
+      zh: "按票面上的码头叫车，别只搜索「珠江夜游」；出发前在地图里查当天车程。",
+      en: "Take your taxi to the pier printed on the ticket rather than searching for “Pearl River night cruise”; check the drive time in your map app before setting out.",
+      ar: "اطلبوا السيارة إلى الرصيف المذكور في التذكرة لا بالبحث عن «جولة نهر اللؤلؤ الليلية»؛ وراجعوا زمن الطريق في تطبيق الخرائط قبل الانطلاق.",
     },
     tickets: {
-      zh: "船票收费，班次与票价未核实，以码头当日公告为准。",
-      en: "Tickets are charged; departures and prices are not verified — follow the pier's notice on the day.",
-      ar: "التذاكر برسوم؛ والمواعيد والأسعار غير مُتحقَّق منها — اتبعوا إعلان الرصيف في اليوم نفسه.",
+      zh: "订票时核对码头、船名、路线、楼层与开航时间；想看广州塔，选明确途经的班次。票价未核实，以售票方公布为准。",
+      en: "When booking, check the pier, the boat's name, the route, the deck and the departure time; if you want the Canton Tower, choose a sailing that clearly passes it. Prices are not verified — go by the seller's own notice.",
+      ar: "عند الحجز تحقّقوا من الرصيف واسم القارب والمسار والطابق وموعد الإقلاع؛ وإن أردتم برج كانتون فاختاروا رحلة تمرّ به بوضوح. الأسعار غير مُتحقَّق منها — اعتمدوا على إعلان الجهة البائعة.",
     },
     copy: [
       {
@@ -1256,7 +1271,8 @@ export const ROUTES: Route[] = [
   },
   {
     id: "tianhe",
-    imageKey: "tianhe",
+    // 太古汇招牌的实景。原来那张 tianhe.jpg 是一条看不出是哪里的普通街道。
+    imageKey: "taikoo",
     title: {
       zh: "天河路 · 太古汇（看这座城怎么买东西）",
       en: "Tianhe Road · Taikoo Hui (how this city shops)",
@@ -1268,14 +1284,14 @@ export const ROUTES: Route[] = [
       ar: "نصف يوم، نحو 3–4 ساعات (تقدير تخطيطي)",
     },
     bestFor: {
-      zh: "做商场的人来广州，这里是最该花半天的地方：华南第一商圈，十四家综合体挤在一条路上。",
-      en: "For anyone who runs a mall, this is the half day to spend in Guangzhou: the number-one shopping district in South China, fourteen complexes on one road.",
-      ar: "لمن يدير مركزًا تجاريًا، هذا هو نصف اليوم الذي يستحق الإنفاق في قوانغتشو: منطقة التسوّق الأولى في جنوب الصين، أربعة عشر مجمّعًا على طريق واحد.",
+      zh: "想看这座城市怎么买东西，安排半天来这里。选两三家慢慢逛，别一口气走完。",
+      en: "Half a day to see how this city shops. Pick two or three malls and take them slowly instead of covering them all.",
+      ar: "نصف يوم لرؤية كيف تتسوّق هذه المدينة. اختاروا مركزين أو ثلاثة وتمهّلوا فيها بدل تغطيتها كلها.",
     },
     summary: {
-      zh: "两点八公里长的一条路，二百四十万平方米商业面积，一天一百五十万人，一年八亿人次、销售额过万亿元；2024 年全国商圈排名第三，高端品牌数量全国第一。太古汇、正佳广场、天河城、天环都在这一条路上，地下由地铁和通道连成一片。",
-      en: "A road 2.8 kilometres long carrying 2.4 million square metres of retail, a million and a half people a day, eight hundred million a year and over a trillion yuan in sales; third among China's shopping districts in the 2024 ranking and first for high-end brands. Taikoo Hui, Grandview, Teemall and Parc Central all stand on it, joined underground by metro and walkways.",
-      ar: "طريق طوله 2.8 كيلومتر يضمّ 2.4 مليون متر مربع من المساحات التجارية، ويستقبل مليونًا ونصف المليون شخص يوميًا وثمانمئة مليون سنويًا بمبيعات تتجاوز تريليون يوان؛ الثالث بين مناطق التسوّق في الصين في تصنيف 2024 والأول في العلامات الفاخرة. وعليه تقوم تايكو هوي وغراندفيو وتيمول وبارك سنترال، متصلة تحت الأرض بالمترو والممرات.",
+      zh: "同一条路上的几家商场各有各的样子：天河城是老牌的城市购物中心，天环是低层建筑配室外广场，正佳广场里有海洋馆这类体验项目，太古汇是奢侈品牌和公共空间。几家之间步行可达，地下也有通道相连。挑两三家慢慢逛，中间找个地方坐下来喝一杯。",
+      en: "The malls along this one road each have their own character: Teemall is the established city mall, Parc Central is low-rise buildings around outdoor plazas, Grandview holds attractions such as an aquarium, and Taikoo Hui is luxury brands and public space. They are within walking distance of one another and linked underground. Take two or three slowly, with a drink somewhere in between.",
+      ar: "لكل مركز على هذا الطريق طابعه: تيمول مركز المدينة العريق، وبارك سنترال مبانٍ منخفضة حول ساحات خارجية، وغراندفيو يضمّ مرافق مثل الأكواريوم، وتايكو هوي علامات فاخرة ومساحات عامة. وهي متقاربة سيرًا ومتصلة تحت الأرض. خذوا مركزين أو ثلاثة على مهل، مع استراحة ومشروب بينها.",
     },
     steps: [
       {
