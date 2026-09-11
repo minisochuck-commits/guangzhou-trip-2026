@@ -132,12 +132,25 @@ export function CopyChinese({
   lang,
   compact = false,
   showBig = false,
+  inline = false,
+  hideChinese = false,
 }: {
   entry: CopyEntry;
   lang: Lang;
   compact?: boolean;
   /** 这句是要举给司机或店员看的：字号加大，隔着一臂也读得清。 */
   showBig?: boolean;
+  /**
+   * 一行里的紧凑版：中文 + 一个复制按钮，不要眉批、不要卡片、不要大字底纹。
+   * 用在餐饮品牌那种一行一个店名的地方 —— 那里要复制的是店名，不是一整张地址。
+   * 默认 false，原有用法一个字都不用改。
+   */
+  inline?: boolean;
+  /**
+   * 只在 `inline` 下有意义：中文已经写在旁边（比如中文视图里标题就是店名），
+   * 这里只留按钮，不把同一串字再印一遍。
+   */
+  hideChinese?: boolean;
 }) {
   const [copied, setCopied] = React.useState(false);
 
@@ -154,6 +167,39 @@ export function CopyChinese({
     } catch {
       setCopied(false);
     }
+  }
+
+  if (inline) {
+    return (
+      <span className="inline-flex flex-wrap items-center gap-x-2 gap-y-1">
+        {hideChinese ? null : (
+          <span
+            lang="zh-CN"
+            dir="ltr"
+            className="text-[0.9375rem] font-medium leading-6 text-navy"
+          >
+            {entry.chinese}
+          </span>
+        )}
+        <button
+          type="button"
+          onClick={copy}
+          aria-label={`${t(UI.copy, lang)} ${t(entry.label, lang)}`}
+          data-copy={entry.id}
+          className={cn(
+            GUIDE.note,
+            "inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-navy/20 px-2.5 font-medium text-navy transition-colors hover:border-navy/45 hover:bg-navy-tint",
+          )}
+        >
+          {copied ? (
+            <CheckIcon className="size-3.5" aria-hidden="true" />
+          ) : (
+            <CopyIcon className="size-3.5" aria-hidden="true" />
+          )}
+          {copied ? t(UI.copied, lang) : t(UI.copy, lang)}
+        </button>
+      </span>
+    );
   }
 
   return (

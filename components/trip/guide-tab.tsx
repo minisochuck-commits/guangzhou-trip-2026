@@ -37,6 +37,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { DiningBrands } from "./dining-brands";
 import { DistrictRoute } from "./district-route";
 import { BaggageLines } from "./flight-details";
 import { RouteList } from "./routes";
@@ -319,24 +320,26 @@ export function GuideTab({
   return (
     <div className="guest-guide space-y-2.5">
       {/*
-        开篇：一张怀圣寺的照片 + 一句欢迎。默认就看得见，不折叠、不加按钮，
-        也不占满一屏 —— 手机上照片满宽 170px，往下滚一点就是出发前准备。
-        桌面改成左图右文：照片固定 20rem 宽、220px 高，取景和手机上接近；
-        满宽横幅在 1280px 会被拉成 1134×220，只剩一截屋檐。
-        这张照片整份指南只在这里出现一次。
+        开篇：一张明亮的珠江城市全景 + 一句欢迎。默认就看得见，不折叠、不加按钮，
+        也不占满一屏。照片按 1200×492 的自然比例完整显示，**不裁楼**：
+        手机上满宽（约 326×134），桌面左图右文、图宽限 26rem 后同样按比例算高，
+        所以两边取景一样。上一版用怀圣寺的屋檐，在 1280px 被拉成一条屋檐，已换掉。
+        这张照片整份指南只在这里出现一次 ——「这座城有多大」一章不再重复它。
       */}
       <section
-        className="trip-card overflow-hidden md:flex md:items-center"
+        className="trip-card overflow-hidden md:flex md:items-center md:gap-5 md:p-5"
         aria-labelledby="guide-welcome"
       >
-        {IMG.huaisheng ? (
+        {IMG.skyline ? (
           <img
-            src={IMG.huaisheng}
+            src={IMG.skyline}
             alt=""
-            className="h-[170px] w-full object-cover object-[center_28%] md:h-[220px] md:w-[20rem] md:shrink-0"
+            width={1200}
+            height={492}
+            className="h-auto w-full md:w-[26rem] md:shrink-0 md:rounded-lg"
           />
         ) : null}
-        <div className="p-4 md:min-w-0 md:flex-1 md:p-5">
+        <div className="p-4 md:min-w-0 md:flex-1 md:p-0">
           <h2
             id="guide-welcome"
             className="trip-display text-xl font-semibold leading-7 text-navy"
@@ -457,12 +460,12 @@ export function GuideTab({
         </Section>
 
         <Section id="scale" title={UI.cityScale} hint={UI.guideHints.cityScale} lang={lang}>
+          {/* 照片不再放这里：同一张珠江全景已经是开篇那张，文字与数字照旧。 */}
           <Prose
             lead={CITY_SCALE.lead}
             paragraphs={CITY_SCALE.intro}
             sources={CITY_SCALE.sources}
             lang={lang}
-            photo="skyline"
           >
             <StatTiles lang={lang} />
           </Prose>
@@ -521,16 +524,35 @@ export function GuideTab({
           hint={UI.guideHints.foodCulture}
           lang={lang}
         >
-          <Prose
-            lead={FOOD_CULTURE.lead}
-            paragraphs={FOOD_CULTURE.paragraphs}
-            sources={FOOD_CULTURE.sources}
-            lang={lang}
-          >
-            {/* 清真 / 过敏 / 食材、机上特殊餐 —— 整站只在这里说一次，
-                下面每一道就只讲它本身。 */}
-            <BulletList items={FOOD_ADVICE} lang={lang} className="mt-3" />
-          </Prose>
+          {/*
+            一句导语 → 品牌推荐 → 原来的饮食介绍。推荐放在容易看见的位置，
+            不埋在长篇后面；下面的文化介绍与十二道菜一条没删，只是排在推荐之后。
+          */}
+          <p className={cn(GUIDE.lead, "max-w-[44rem]")}>
+            {t(FOOD_CULTURE.lead, lang)}
+          </p>
+
+          <SubHeading>{t(UI.diningBrands, lang)}</SubHeading>
+          <DiningBrands lang={lang} />
+
+          <div className="max-w-[44rem] space-y-2.5">
+            {FOOD_CULTURE.paragraphs.map((paragraph, index) => (
+              <p key={index} className={GUIDE.body}>
+                {t(paragraph, lang)}
+              </p>
+            ))}
+            {/*
+              FOOD_ADVICE 的第一条（清真 / 过敏 / 忌口）已经并进上面品牌推荐的导语里，
+              而且要在挑店之前就看到，所以这里滤掉它，只留机上特殊餐那条 ——
+              同一句话在一章里出现两遍就是噪音。数据文件不改。
+            */}
+            <BulletList
+              items={FOOD_ADVICE.filter((item) => !item.zh.includes("清真"))}
+              lang={lang}
+              className="pt-0.5"
+            />
+            <Sources sources={FOOD_CULTURE.sources} lang={lang} />
+          </div>
 
           <SubHeading>{t(UI.foodIdeas, lang)}</SubHeading>
           <div className="grid gap-x-5 md:grid-cols-2">

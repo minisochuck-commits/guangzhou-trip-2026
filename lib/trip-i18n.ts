@@ -192,6 +192,11 @@ export const UI = {
     "en": "What to eat",
     "ar": "ماذا تأكل"
   },
+  "diningBrands": {
+    "zh": "特色餐饮品牌推荐",
+    "en": "Restaurant brands worth trying",
+    "ar": "علامات مطاعم تستحق التجربة"
+  },
   "viewingNow": {
     "zh": "正在看",
     "en": "Viewing",
