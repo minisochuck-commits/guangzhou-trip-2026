@@ -8,13 +8,21 @@ export const metadata: Metadata = {
   icons: {
     icon: "/favicon.svg",
     shortcut: "/favicon.svg",
+    apple: "/favicon.svg",
+  },
+  // 加到手机主屏后当独立应用打开，配合 sw.js 做到没网也能看
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    title: "广州行程",
+    statusBarStyle: "default",
   },
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#ffffff",
+  themeColor: "#e4002b",
 };
 
 export default function RootLayout({

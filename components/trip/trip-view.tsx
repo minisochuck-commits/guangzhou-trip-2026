@@ -15,6 +15,7 @@ import { DirectionProvider } from "@/components/ui/direction";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DayTab } from "./day-tab";
 import { GuideTab } from "./guide-tab";
+import { OfflineReady } from "./offline-ready";
 import { Ltr } from "./ui";
 
 const FIRST_DATE = "2026-09-20";
@@ -149,6 +150,7 @@ export function TripView() {
 
   return (
     <DirectionProvider dir={dir}>
+      <OfflineReady />
       <div
         ref={rootRef}
         dir={dir}
