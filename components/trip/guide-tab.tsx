@@ -6,6 +6,7 @@ import {
   CITY_SCALE,
   CITY_STORY,
   COPY_ADDRESSES,
+  CULTURE_NOTES,
   FOOD_CULTURE,
   FOOD_NOTES,
   HALAL_DINING,
@@ -18,6 +19,7 @@ import {
   PREP,
   type L10n,
   type Lang,
+  type PersonId,
   type PlaceCard,
 } from "@/lib/trip-data";
 import { FOOD_ADVICE } from "@/lib/plan-presentation";
@@ -275,7 +277,19 @@ function PlaceCardView({ place, lang }: { place: PlaceCard; lang: Lang }) {
   );
 }
 
-export function GuideTab({ lang }: { lang: Lang }) {
+export function GuideTab({
+  lang,
+  person,
+}: {
+  lang: Lang;
+  person: PersonId | null;
+}) {
+  // 出发前准备分人：手机上网 / 翻译 / 支付是给区域经理与防损的，Reham 有自己那两条。
+  // 全员视图（person === null）不筛，给统筹的人看全貌。
+  const prep = PREP.filter(
+    (item) =>
+      !item.audience || person === null || item.audience.includes(person),
+  );
   return (
     <div className="space-y-4">
       {/* 开篇：这座城和阿拉伯世界的关系。不折叠。 */}
@@ -429,12 +443,32 @@ export function GuideTab({ lang }: { lang: Lang }) {
         </Section>
 
         <Section
+          id="culture"
+          title={UI.culture}
+          hint={UI.guideHints.culture}
+          lang={lang}
+        >
+          <div className="grid gap-3 md:grid-cols-2">
+            {CULTURE_NOTES.map((note) => (
+              <article key={note.id} className="trip-place rounded-xl p-4">
+                <h4 className="trip-display text-lg leading-7 text-navy">
+                  {t(note.title, lang)}
+                </h4>
+                <p className="mt-1.5 text-[0.9375rem] leading-7 text-navy-soft">
+                  {t(note.body, lang)}
+                </p>
+              </article>
+            ))}
+          </div>
+        </Section>
+
+        <Section
           id="prep"
           title={UI.prep}
           hint={UI.guideHints.prep}
           lang={lang}
         >
-          {PREP.map((item) => (
+          {prep.map((item) => (
             <article key={item.id} className="trip-place rounded-xl p-4">
               <h4 className="trip-display mb-2 text-lg leading-7 text-navy">
                 {t(item.title, lang)}

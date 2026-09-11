@@ -197,7 +197,7 @@ export function TripView() {
             </TabsContent>
 
             <TabsContent value="guide">
-              <GuideTab lang={lang} />
+              <GuideTab lang={lang} person={person} />
             </TabsContent>
           </Tabs>
 
