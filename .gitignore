@@ -49,3 +49,5 @@ static/
 .images/
 .codex-publish/
 codex_publish_prompt.md
+.images/
+static/

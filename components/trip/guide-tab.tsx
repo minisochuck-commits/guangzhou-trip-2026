@@ -37,6 +37,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { DINING_THEMES } from "@/lib/dining-brands";
 import { DiningBrands } from "./dining-brands";
 import { DistrictRoute } from "./district-route";
 import { BaggageLines } from "./flight-details";
@@ -82,6 +83,8 @@ const USED_IMAGE_KEYS = new Set(
     ...ROUTES.map((route) => route.imageKey),
     ...FOOD_NOTES.map((note) => note.imageKey),
     ...RETAIL_STUDY.malls.map((mall) => mall.imageKey),
+    ...CITY_TECH.items.map((item) => item.imageKey),
+    ...DINING_THEMES.flatMap((theme) => theme.brands).map((brand) => brand.imageKey),
   ].filter((key): key is string => Boolean(key && IMG[key])),
 );
 
@@ -491,8 +494,10 @@ export function GuideTab({
           </Prose>
         </Section>
 
-        {/* 这一章没有照片：原来挂的 robotaxi.jpg 拍的是阿布扎比的法拉利世界，
-            路牌都是阿拉伯语，不能拿来当广州的实景。宁可不配图，也不换一张假的。 */}
+        {/* 配图只用真在中国、最好在广州拍的：广汽的 Robotaxi（粤A 牌）、扫码付款、
+            广汽 Aion 黄的。载人无人机那张是西班牙警用涂装、送餐机器人那张拍于日本千叶，
+            都不能当中国实景 —— 那两条宁可不配图。
+            （上一版挂的 robotaxi.jpg 拍的是阿布扎比，已换成广汽那张。） */}
         <Section id="tech" title={UI.cityTech} hint={UI.guideHints.tech} lang={lang}>
           <Prose
             lead={CITY_TECH.lead}
@@ -500,9 +505,17 @@ export function GuideTab({
             sources={CITY_TECH.sources}
             lang={lang}
           >
-            <ul className="mt-4">
+            <ul className="mt-4 grid gap-x-5 md:grid-cols-2">
               {CITY_TECH.items.map((item) => (
                 <li key={item.id} className="border-t border-card-line py-3">
+                  {item.imageKey && IMG[item.imageKey] ? (
+                    <img
+                      src={IMG[item.imageKey]}
+                      alt=""
+                      loading="lazy"
+                      className="trip-photo mb-2.5 aspect-[16/10] w-full object-cover"
+                    />
+                  ) : null}
                   <h4 className={GUIDE.subheading}>{t(item.title, lang)}</h4>
                   <p className={cn(GUIDE.note, "mt-0.5 text-navy-soft/85")}>
                     {t(UI.techWhere, lang)}：{t(item.where, lang)}
@@ -546,15 +559,13 @@ export function GuideTab({
           lang={lang}
         >
           {/*
-            一句导语 → 品牌推荐 → 原来的饮食介绍。推荐放在容易看见的位置，
-            不埋在长篇后面；下面的文化介绍与十二道菜一条没删，只是排在推荐之后。
+            一句导语 → 饮食介绍 → 十二道菜 → 品牌推荐。
+            先让人知道什么是「叹早茶」、什么是啫啫煲，再告诉她去哪吃 ——
+            倒过来的话，要划过十几家餐厅才知道这些菜是什么（owner 定的顺序）。
           */}
           <p className={cn(GUIDE.lead, "max-w-[44rem]")}>
             {t(FOOD_CULTURE.lead, lang)}
           </p>
-
-          <SubHeading>{t(UI.diningBrands, lang)}</SubHeading>
-          <DiningBrands lang={lang} />
 
           <div className="max-w-[44rem] space-y-2.5">
             {FOOD_CULTURE.paragraphs.map((paragraph, index) => (
@@ -603,6 +614,9 @@ export function GuideTab({
               </article>
             ))}
           </div>
+
+          <SubHeading>{t(UI.diningBrands, lang)}</SubHeading>
+          <DiningBrands lang={lang} />
         </Section>
 
         <Section
