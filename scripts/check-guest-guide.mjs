@@ -40,10 +40,44 @@ for (const key of Object.keys(original)) {
   if (/FLIGHT|BAGGAGE|PEOPLE|INTERCONTINENTAL/.test(key)) assert.deepEqual(data[key], original[key], `${key} changed`);
 }
 const view = fs.readFileSync('components/trip/guide-tab.tsx', 'utf8');
-assert(view.indexOf('id="prep"') < view.indexOf('id="story"'), 'Preparation must precede long reading');
 assert(view.includes('defaultValue={[]}'), 'Long stories must start collapsed');
 assert(!view.includes('UI.retailTakeaways'), 'Report instructions must not be rendered');
 for (const reused of ['AccordionItem', 'CopyChinese', 'SourceLink']) assert(view.includes(reused), `Must reuse ${reused}`);
+
+/*
+ * The guide opens with a welcome, then preparation, then the hotel block, then the
+ * chapters in the order the trip is actually read. The owner agreed this on 2026-09-11;
+ * it replaces "hotel first, city story folded away near the end".
+ */
+const at = (needle) => {
+  const index = view.indexOf(needle);
+  assert(index > -1, `Missing from the guide: ${needle}`);
+  return index;
+};
+assert(at('id="guide-welcome"') < at('id="prep"'), 'The welcome opens the guide');
+assert(at('id="prep"') < at('id="guide-hotel"'), 'Preparation comes before the hotel block');
+const CHAPTERS = [
+  'addresses', 'pazhou', 'story', 'scale', 'tech', 'halal',
+  'food', 'retail', 'routes', 'culture', 'phrases', 'baggage', 'sources',
+];
+let previous = at('id="guide-hotel"');
+for (const id of CHAPTERS) {
+  const here = at(`id="${id}"`);
+  assert(here > previous, `Chapter out of the agreed reading order: ${id}`);
+  previous = here;
+}
+assert(view.indexOf('id="prep"') < view.indexOf('id="story"'), 'Preparation must precede long reading');
+
+// The welcome itself: always visible, no button, and it owns the Huaisheng photo.
+// The chapter behind it keeps the full history and its sources.
+const welcomeStart = at('aria-labelledby="guide-welcome"');
+const welcome = view.slice(welcomeStart, view.indexOf('</section>', welcomeStart));
+assert(welcome.includes('IMG.huaisheng'), 'The welcome carries the Huaisheng photo');
+assert(!/Accordion|button|Trigger/.test(welcome), 'The welcome is plain and always open');
+assert(!view.includes('photo="huaisheng"'), 'The welcome photo must not be repeated in the story chapter');
+for (const kept of ['CITY_STORY.paragraphs', 'CITY_STORY.sources']) {
+  assert(view.includes(kept), `The city story keeps ${kept}`);
+}
 
 // The guide reads as one column of chapters. The owner rejected the grouped
 // "travel essentials / getting to know Guangzhou" toolbox and the tickable preparation

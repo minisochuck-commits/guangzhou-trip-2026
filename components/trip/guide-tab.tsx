@@ -69,6 +69,28 @@ const HOTEL_LABELS = {
 const HOTEL_PHONE = "+86 20 8922 8888";
 
 /**
+ * 开篇的一句欢迎。只在这份组件里，不进 lib/trip-data.ts —— 那里放的是事实。
+ * 两段话没有新事实：怀圣寺那张照片下面的完整历史与来源仍在「广州与你们」一章。
+ */
+const WELCOME = {
+  title: {
+    zh: "欢迎来到广州",
+    en: "Welcome to Guangzhou",
+    ar: "أهلًا بكم في قوانغتشو",
+  },
+  first: {
+    zh: "很高兴在这里与你相见。广州与阿拉伯世界的联系，沿着海上贸易延续了许多个世纪。",
+    en: "We are glad to meet you here. Guangzhou’s ties with the Arab world have followed the sea trade routes for many centuries.",
+    ar: "يسعدنا لقاؤكم هنا. فصلة قوانغتشو بالعالم العربي امتدّت قرونًا طويلة على طول طرق التجارة البحرية.",
+  },
+  second: {
+    zh: "会议之余，愿你有时间看看珠江夜景，走进老城街巷，慢慢发现属于自己的广州。",
+    en: "Between the meetings, we hope you find time for the Pearl River at night, for the lanes of the old city, and for the Guangzhou you discover for yourself.",
+    ar: "وبين جلسات المؤتمر، نتمنى أن تجدوا وقتًا لنهر اللؤلؤ ليلًا ولأزقة المدينة القديمة، ولقوانغتشو التي تكتشفونها بأنفسكم.",
+  },
+} satisfies Record<string, L10n>;
+
+/**
  * 一段要被「读」的文字：一句开头、几段正文、来源。
  * 指南里几处用它 —— 广州与你们、你们住的这块地、食在广州。
  *
@@ -296,7 +318,64 @@ export function GuideTab({
   const hotel = COPY_ADDRESSES.find((entry) => entry.id === "hotel");
   return (
     <div className="guest-guide space-y-2.5">
-      {/* 最先要用的东西：住哪、地址给司机看、前台电话。整份指南只写一次。 */}
+      {/*
+        开篇：一张怀圣寺的照片 + 一句欢迎。默认就看得见，不折叠、不加按钮，
+        也不占满一屏 —— 手机上照片满宽 170px，往下滚一点就是出发前准备。
+        桌面改成左图右文：照片固定 20rem 宽、220px 高，取景和手机上接近；
+        满宽横幅在 1280px 会被拉成 1134×220，只剩一截屋檐。
+        这张照片整份指南只在这里出现一次。
+      */}
+      <section
+        className="trip-card overflow-hidden md:flex md:items-center"
+        aria-labelledby="guide-welcome"
+      >
+        {IMG.huaisheng ? (
+          <img
+            src={IMG.huaisheng}
+            alt=""
+            className="h-[170px] w-full object-cover object-[center_28%] md:h-[220px] md:w-[20rem] md:shrink-0"
+          />
+        ) : null}
+        <div className="p-4 md:min-w-0 md:flex-1 md:p-5">
+          <h2
+            id="guide-welcome"
+            className="trip-display text-xl font-semibold leading-7 text-navy"
+          >
+            {t(WELCOME.title, lang)}
+          </h2>
+          <div className="mt-2 max-w-[44rem] space-y-2">
+            <p className={GUIDE.body}>{t(WELCOME.first, lang)}</p>
+            <p className={GUIDE.body}>{t(WELCOME.second, lang)}</p>
+          </div>
+        </div>
+      </section>
+
+      {/* 欢迎之后紧接着出发前准备 —— 出发前最先要读的就是它，不被酒店块挡住。 */}
+      <Accordion type="multiple" defaultValue={[]} className="space-y-2.5">
+        <Section id="prep" title={UI.prep} hint={UI.guideHints.prep} lang={lang}>
+          {/* 一件事一个小标题，下面直接是原来的说明 ——
+              展开这一章就能从支付一路读到天气，不用再逐条点开。 */}
+          <div className="max-w-[44rem] space-y-4">
+            {prep.map((item) => (
+              <div key={item.id}>
+                <h3 className={GUIDE.subheading}>{t(item.title, lang)}</h3>
+                <BulletList items={item.lines} lang={lang} className="mt-1.5" />
+              </div>
+            ))}
+            <SourceLink
+              label={{
+                zh: "来华出行与支付指引",
+                en: "Official travel and payment guide",
+                ar: "الدليل الرسمي للتنقل والدفع",
+              }}
+              url="https://english.www.gov.cn/2025special/bizexpatsinchina2025"
+              lang={lang}
+            />
+          </div>
+        </Section>
+      </Accordion>
+
+      {/* 到了之后最先要用的东西：住哪、地址给司机看、前台电话。整份指南只写一次。 */}
       <section className="trip-card p-4 md:p-5" aria-labelledby="guide-hotel">
         <p
           className={cn(
@@ -335,29 +414,12 @@ export function GuideTab({
         ) : null}
       </section>
 
+      {/*
+        其余章节按一次旅行读下来的顺序：先到（机场地址）、住在哪一片（琶洲）、
+        这座城是什么（广州与你们 / 体量 / 科技）、日常要用的（礼拜与清真餐 / 吃 / 逛 /
+        路线 / 习惯），最后是备查的（短句 / 行李 / 来源）。
+      */}
       <Accordion type="multiple" defaultValue={[]} className="space-y-2.5">
-        <Section id="prep" title={UI.prep} hint={UI.guideHints.prep} lang={lang}>
-          {/* 一件事一个小标题，下面直接是原来的说明 ——
-              展开这一章就能从支付一路读到天气，不用再逐条点开。 */}
-          <div className="max-w-[44rem] space-y-4">
-            {prep.map((item) => (
-              <div key={item.id}>
-                <h3 className={GUIDE.subheading}>{t(item.title, lang)}</h3>
-                <BulletList items={item.lines} lang={lang} className="mt-1.5" />
-              </div>
-            ))}
-            <SourceLink
-              label={{
-                zh: "来华出行与支付指引",
-                en: "Official travel and payment guide",
-                ar: "الدليل الرسمي للتنقل والدفع",
-              }}
-              url="https://english.www.gov.cn/2025special/bizexpatsinchina2025"
-              lang={lang}
-            />
-          </div>
-        </Section>
-
         <Section
           id="addresses"
           title={{ zh: "机场中文地址", en: "Airport addresses", ar: "عناوين المطار" }}
@@ -372,64 +434,17 @@ export function GuideTab({
         </Section>
 
         <Section
-          id="phrases"
-          title={UI.phrases}
-          hint={UI.guideHints.phrases}
+          id="pazhou"
+          title={UI.pazhou}
+          hint={UI.guideHints.pazhou}
           lang={lang}
         >
-          <div className="max-w-[44rem] space-y-3">
-            {PHRASES.map((entry) => (
-              <CopyChinese key={entry.id} entry={entry} lang={lang} showBig />
-            ))}
-          </div>
-        </Section>
-
-        <Section
-          id="halal"
-          title={UI.halal}
-          hint={UI.guideHints.halal}
-          lang={lang}
-        >
-          <div className="max-w-[44rem]">
-            <BulletList items={HALAL_WHERE} lang={lang} />
-          </div>
-
-          <SubHeading>{t(UI.mosques, lang)}</SubHeading>
-          {MOSQUES.map((place) => (
-            <PlaceCardView key={place.id} place={place} lang={lang} />
-          ))}
-          <p className={cn(GUIDE.body, "trip-card-accent max-w-[44rem] p-3 text-navy")}>
-            <span className="font-semibold">{t(UI.jumuah, lang)}：</span>
-            {t(JUMUAH_NOTE, lang)}
-          </p>
-
-          <SubHeading>{t(UI.halalDining, lang)}</SubHeading>
-          {HALAL_DINING.map((place) => (
-            <PlaceCardView key={place.id} place={place} lang={lang} />
-          ))}
-        </Section>
-
-        <Section
-          id="routes"
-          title={UI.routes}
-          hint={UI.guideHints.routes}
-          lang={lang}
-        >
-          <RouteList lang={lang} />
-        </Section>
-
-        <Section
-          id="baggage"
-          title={UI.baggage}
-          hint={UI.guideHints.baggage}
-          lang={lang}
-        >
-          <div className="max-w-[44rem] space-y-4">
-            <BaggageLines profile="sichuanEconomy" lang={lang} />
-            <div className="border-t border-card-line pt-4">
-              <BaggageLines profile="egyptairBusiness" lang={lang} />
-            </div>
-          </div>
+          <Prose
+            lead={PAZHOU.lead}
+            paragraphs={PAZHOU.paragraphs}
+            sources={PAZHOU.sources}
+            lang={lang}
+          />
         </Section>
 
         <Section id="story" title={UI.cityStory} hint={CITY_STORY.lead} lang={lang}>
@@ -438,7 +453,6 @@ export function GuideTab({
             paragraphs={CITY_STORY.paragraphs}
             sources={CITY_STORY.sources}
             lang={lang}
-            photo="huaisheng"
           />
         </Section>
 
@@ -477,17 +491,28 @@ export function GuideTab({
         </Section>
 
         <Section
-          id="pazhou"
-          title={UI.pazhou}
-          hint={UI.guideHints.pazhou}
+          id="halal"
+          title={UI.halal}
+          hint={UI.guideHints.halal}
           lang={lang}
         >
-          <Prose
-            lead={PAZHOU.lead}
-            paragraphs={PAZHOU.paragraphs}
-            sources={PAZHOU.sources}
-            lang={lang}
-          />
+          <div className="max-w-[44rem]">
+            <BulletList items={HALAL_WHERE} lang={lang} />
+          </div>
+
+          <SubHeading>{t(UI.mosques, lang)}</SubHeading>
+          {MOSQUES.map((place) => (
+            <PlaceCardView key={place.id} place={place} lang={lang} />
+          ))}
+          <p className={cn(GUIDE.body, "trip-card-accent max-w-[44rem] p-3 text-navy")}>
+            <span className="font-semibold">{t(UI.jumuah, lang)}：</span>
+            {t(JUMUAH_NOTE, lang)}
+          </p>
+
+          <SubHeading>{t(UI.halalDining, lang)}</SubHeading>
+          {HALAL_DINING.map((place) => (
+            <PlaceCardView key={place.id} place={place} lang={lang} />
+          ))}
         </Section>
 
         <Section
@@ -592,6 +617,15 @@ export function GuideTab({
         </Section>
 
         <Section
+          id="routes"
+          title={UI.routes}
+          hint={UI.guideHints.routes}
+          lang={lang}
+        >
+          <RouteList lang={lang} />
+        </Section>
+
+        <Section
           id="culture"
           title={UI.culture}
           hint={UI.guideHints.culture}
@@ -605,6 +639,33 @@ export function GuideTab({
               </li>
             ))}
           </ul>
+        </Section>
+
+        <Section
+          id="phrases"
+          title={UI.phrases}
+          hint={UI.guideHints.phrases}
+          lang={lang}
+        >
+          <div className="max-w-[44rem] space-y-3">
+            {PHRASES.map((entry) => (
+              <CopyChinese key={entry.id} entry={entry} lang={lang} showBig />
+            ))}
+          </div>
+        </Section>
+
+        <Section
+          id="baggage"
+          title={UI.baggage}
+          hint={UI.guideHints.baggage}
+          lang={lang}
+        >
+          <div className="max-w-[44rem] space-y-4">
+            <BaggageLines profile="sichuanEconomy" lang={lang} />
+            <div className="border-t border-card-line pt-4">
+              <BaggageLines profile="egyptairBusiness" lang={lang} />
+            </div>
+          </div>
         </Section>
 
         <Section
