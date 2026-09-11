@@ -8,6 +8,7 @@ import {
   CITY_STORY,
   CITY_TECH,
   COPY_ADDRESSES,
+  INTERCONTINENTAL,
   CULTURE_NOTES,
   FOOD_CULTURE,
   FOOD_NOTES,
@@ -35,81 +36,10 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { DistrictRoute } from "./district-route";
 import { BaggageLines } from "./flight-details";
 import { RouteList } from "./routes";
 import { BulletList, CopyChinese, SourceLink } from "./ui";
-
-/**
- * 光塔 —— 怀圣寺旁那座三十六米的阿拉伯式砖塔，广州老城最老的东西之一。
- * 手画的线稿，不引外部图片，离线照样在。
- */
-function LightTower({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 48 150"
-      fill="none"
-      aria-hidden="true"
-      className={className}
-      stroke="currentColor"
-      strokeWidth="1.3"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M13 140 L17.5 52" />
-      <path d="M35 140 L30.5 52" />
-      <path d="M14.6 108 L33.4 108" opacity=".55" />
-      <path d="M15.6 88 L32.4 88" opacity=".55" />
-      <path d="M16.4 70 L31.6 70" opacity=".55" />
-      <path d="M9 140 L39 140" />
-      <path d="M11 146 L37 146" />
-      <path d="M9 140 L11 146 M39 140 L37 146" />
-      <path d="M20 140 L20 128 Q24 121 28 128 L28 140" />
-      <path d="M12 52 L36 52" />
-      <path d="M14 46 L34 46" />
-      <path d="M12 52 L14 46 M36 52 L34 46" />
-      <path d="M19 46 L19 34 M29 46 L29 34" />
-      <path d="M19 34 L29 34" opacity=".55" />
-      <path d="M18 34 Q24 18 30 34" />
-      <path d="M24 18 L24 9" />
-      <circle cx="24" cy="7" r="2" />
-    </svg>
-  );
-}
-
-/**
- * 广州塔 —— 六百米，世界第二高塔，细腰。跟光塔并排：一千四百年前的塔和
- * 今天的塔，都是这座城的地标。同样是内联线稿。
- */
-function CantonTower({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 48 150"
-      fill="none"
-      aria-hidden="true"
-      className={className}
-      stroke="currentColor"
-      strokeWidth="1.3"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      {/* 细腰的双曲面：两条内凹的边 */}
-      <path d="M14 142 C 20 105, 20 80, 19 58" />
-      <path d="M34 142 C 28 105, 28 80, 29 58" />
-      {/* 斜交的网格 */}
-      <path d="M14 142 L29 58 M34 142 L19 58" opacity=".35" />
-      <path d="M16 122 L32 122 M18.5 100 L29.5 100 M19.2 80 L28.8 80" opacity=".45" />
-      {/* 顶部观景层与桅杆 */}
-      <path d="M17 58 L31 58" />
-      <path d="M18 52 L30 52" />
-      <path d="M17 58 L18 52 M31 58 L30 52" />
-      <path d="M24 52 L24 8" />
-      <path d="M22 14 L26 14 M22.5 22 L25.5 22" opacity=".6" />
-      {/* 基座 */}
-      <path d="M10 142 L38 142" />
-      <path d="M12 147 L36 147" />
-    </svg>
-  );
-}
 
 /**
  * 一段要被「读」的文字：眉批、一句大字、几段正文、来源。
@@ -117,12 +47,10 @@ function CantonTower({ className }: { className?: string }) {
  * 排版按文章做：衬线、宽行距，不是又一张白盒子。
  */
 function Prose({
-  eyebrow,
   lead,
   paragraphs,
   sources,
   lang,
-  art,
   photo,
   children,
 }: {
@@ -131,13 +59,12 @@ function Prose({
   paragraphs: L10n[];
   sources: { label: L10n; url: string }[];
   lang: Lang;
-  art?: React.ReactNode;
   /** 顶上压一张满宽照片（public/images 的 key）。 */
   photo?: string;
   children?: React.ReactNode;
 }) {
   return (
-    <section className="trip-story relative overflow-hidden rounded-2xl px-5 py-6 md:px-8 md:py-8">
+    <section className="relative overflow-hidden py-2">
       {photo && IMG[photo] ? (
         <img
           src={IMG[photo]}
@@ -146,11 +73,7 @@ function Prose({
           className="trip-photo mb-5 aspect-[16/9] w-full object-cover md:aspect-[21/9]"
         />
       ) : null}
-      {art}
-      <div className={art ? "relative max-w-[36rem] pe-14 md:pe-24" : "relative max-w-[40rem]"}>
-        <p className="text-[0.8125rem] font-semibold uppercase tracking-[0.14em] text-miniso-red-strong">
-          {t(eyebrow, lang)}
-        </p>
+      <div className="relative max-w-[44rem]">
         <p className="trip-display mt-2.5 text-[1.375rem] leading-9 text-navy md:text-[1.625rem] md:leading-10">
           {t(lead, lang)}
         </p>
@@ -158,7 +81,7 @@ function Prose({
           {paragraphs.map((paragraph, index) => (
             <p
               key={index}
-              className="text-[0.9375rem] leading-7 text-navy-soft md:text-base md:leading-8"
+              className="text-base leading-7 text-navy-soft md:text-base md:leading-8"
             >
               {t(paragraph, lang)}
             </p>
@@ -166,13 +89,14 @@ function Prose({
         </div>
       </div>
       {children}
-      <ul className="relative mt-4 flex flex-wrap gap-x-5 gap-y-1">
+      <details className="mt-4"><summary className="cursor-pointer py-2 text-sm text-navy-soft">{lang === "zh" ? "资料来源" : lang === "ar" ? "المصادر" : "Sources"}</summary>
+      <ul className="relative flex flex-wrap gap-x-5 gap-y-1">
         {sources.map((source) => (
           <li key={source.url}>
             <SourceLink label={source.label} url={source.url} lang={lang} />
           </li>
         ))}
-      </ul>
+      </ul></details>
     </section>
   );
 }
@@ -193,16 +117,16 @@ function StatTiles({ lang }: { lang: Lang }) {
             >
               {t(tile.value, lang)}
             </p>
-            <p className="mt-1.5 text-[0.8125rem] font-medium leading-5 text-navy">
+            <p className="mt-1.5 text-sm font-medium leading-5 text-navy">
               {t(tile.unit, lang)}
             </p>
-            <p className="mt-1 text-[0.8125rem] leading-5 text-navy-soft">
+            <p className="mt-1 text-sm leading-5 text-navy-soft">
               {t(tile.note, lang)}
             </p>
           </div>
         ))}
       </div>
-      <p className="mt-3 text-[0.8125rem] leading-5 text-navy-soft/80">
+      <p className="mt-3 text-sm leading-5 text-navy-soft/80">
         {t(UI.scaleNote, lang)}
       </p>
     </div>
@@ -227,13 +151,13 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <AccordionItem value={id} className="trip-card border-b-0 px-4 md:px-5">
+    <AccordionItem id={`guide-${id}`} value={id} className="trip-card border-b-0 px-4 md:px-5">
       <AccordionTrigger className="items-center gap-3 py-4 hover:no-underline">
         <span className="flex min-w-0 flex-col gap-0.5 text-start">
           <span className="trip-display text-lg leading-7 text-navy md:text-xl">
             {t(title, lang)}
           </span>
-          <span className="text-[0.8125rem] leading-5 text-navy-soft/85">
+          <span className="text-sm leading-5 text-navy-soft/85">
             {t(hint, lang)}
           </span>
         </span>
@@ -248,7 +172,7 @@ function Section({
 /** 一节里的小标题，比卡片名低一级。 */
 function SubHeading({ children }: { children: React.ReactNode }) {
   return (
-    <h3 className="flex items-center gap-2 pt-1.5 text-[0.8125rem] font-semibold uppercase tracking-[0.09em] text-navy-soft/85">
+    <h3 className="flex items-center gap-2 pt-1.5 text-sm font-semibold uppercase tracking-[0.09em] text-navy-soft/85">
       <span
         aria-hidden="true"
         className="inline-block h-px w-4 bg-miniso-red/50"
@@ -268,7 +192,7 @@ function PlaceCardView({ place, lang }: { place: PlaceCard; lang: Lang }) {
       <h4 className="trip-display text-lg leading-7 text-navy">
         {t(place.name, lang)}
       </h4>
-      <p className="mt-1.5 text-[0.9375rem] leading-7 text-navy-soft">
+      <p className="mt-1.5 text-base leading-7 text-navy-soft">
         {t(place.note, lang)}
       </p>
       <div className="mt-3.5">
@@ -308,10 +232,10 @@ function MallCardView({ mall, lang }: { mall: MallCard; lang: Lang }) {
       <h4 className="trip-display text-lg leading-7 text-navy">
         {t(mall.name, lang)}
       </h4>
-      <p className="mt-0.5 text-[0.8125rem] font-semibold uppercase tracking-[0.06em] text-miniso-red-strong">
+      <p className="mt-0.5 text-sm font-semibold uppercase tracking-[0.06em] text-miniso-red-strong">
         {t(mall.tier, lang)}
       </p>
-      <p className="mt-2 text-[0.9375rem] leading-7 text-navy-soft">
+      <p className="mt-2 text-base leading-7 text-navy-soft">
         {t(mall.facts, lang)}
       </p>
     </article>
@@ -325,15 +249,113 @@ export function GuideTab({
   lang: Lang;
   person: PersonId | null;
 }) {
-  // 出发前准备分人：手机上网 / 翻译 / 支付是给区域经理与防损的，Reham 有自己那两条。
+  // 共同操作指引对所有人可见，只有借卡与备用金按人员区分。
   // 全员视图（person === null）不筛，给统筹的人看全貌。
   const prep = PREP.filter(
     (item) =>
       !item.audience || person === null || item.audience.includes(person),
   );
   return (
-    <div className="space-y-4">
-      {/* 开篇：这座城和阿拉伯世界的关系。不折叠。 */}
+    <div className="guest-guide space-y-4">
+      <section className="trip-card space-y-3 p-4 md:p-5" aria-label={lang === "zh" ? "随手查" : lang === "ar" ? "معلومات سريعة" : "Quick help"}>
+        <h2 className="trip-display text-xl text-navy">{lang === "zh" ? "住哪里，联系谁" : lang === "ar" ? "الإقامة والتواصل" : "Your hotel and contacts"}</h2>
+        <CopyChinese entry={{ ...COPY_ADDRESSES.find((entry) => entry.id === "hotel")!, label: INTERCONTINENTAL.name }} lang={lang} showBig />
+        <a className="inline-flex min-h-11 items-center text-sm font-medium text-miniso-red-strong underline underline-offset-4" href="tel:+862089228888">{lang === "zh" ? "酒店前台" : lang === "ar" ? "استقبال الفندق" : "Hotel reception"} · <bdi>+86 20 8922 8888</bdi></a>
+        {person === "reham" || person === null ? <p className="text-base leading-7 text-navy-soft">{lang === "zh" ? "Reham 的广州机场接送：公司安排，联系 Rahma 确认车辆与出发时间。" : lang === "ar" ? "ترتّب الشركة انتقالات Reham من مطار قوانغتشو وإليه. أكّدي السيارة ووقت الانطلاق مع Rahma." : "Reham’s Guangzhou airport transfers are arranged by the company. Confirm the vehicle and departure time with Rahma."}</p> : null}
+      </section>
+      <Accordion
+        type="multiple"
+        defaultValue={[]}
+        className="space-y-2.5"
+      >
+        <Section
+          id="prep"
+          title={UI.prep}
+          hint={UI.guideHints.prep}
+          lang={lang}
+        >
+          {prep.map((item) => (
+            <article key={item.id} className="trip-place rounded-xl p-4">
+              <h4 className="trip-display mb-2 text-lg leading-7 text-navy">
+                {t(item.title, lang)}
+              </h4>
+              <BulletList items={item.lines} lang={lang} />
+            </article>
+          ))}
+          <SourceLink label={{ zh: "来华出行与支付指引", en: "Official travel and payment guide", ar: "الدليل الرسمي للتنقل والدفع" }} url="https://english.www.gov.cn/2025special/bizexpatsinchina2025" lang={lang} />
+        </Section>
+
+        <Section
+          id="addresses"
+          title={{ zh: "机场中文地址", en: "Airport addresses", ar: "عناوين المطار" }}
+          hint={{ zh: "白云机场 T2 / T3，按航班选择", en: "Baiyun T2 / T3 — choose your flight’s terminal", ar: "بايون T2 / T3 — اختاري صالة رحلتك" }}
+          lang={lang}
+        >
+          {COPY_ADDRESSES.filter((entry) => entry.id !== "hotel").map((entry) => (
+            <CopyChinese key={entry.id} entry={entry} lang={lang} showBig />
+          ))}
+        </Section>
+
+        <Section
+          id="halal"
+          title={UI.halal}
+          hint={UI.guideHints.halal}
+          lang={lang}
+        >
+          <div className="trip-place rounded-xl p-4">
+            <BulletList items={HALAL_WHERE} lang={lang} />
+          </div>
+
+          <SubHeading>{t(UI.mosques, lang)}</SubHeading>
+          {MOSQUES.map((place) => (
+            <PlaceCardView key={place.id} place={place} lang={lang} />
+          ))}
+          <p className="trip-card-accent p-4 text-base leading-7 text-navy">
+            <span className="font-semibold">{t(UI.jumuah, lang)}：</span>
+            {t(JUMUAH_NOTE, lang)}
+          </p>
+
+          <SubHeading>{t(UI.halalDining, lang)}</SubHeading>
+          {HALAL_DINING.map((place) => (
+            <PlaceCardView key={place.id} place={place} lang={lang} />
+          ))}
+        </Section>
+
+        <Section
+          id="phrases"
+          title={UI.phrases}
+          hint={UI.guideHints.phrases}
+          lang={lang}
+        >
+          {PHRASES.map((entry) => (
+            <CopyChinese key={entry.id} entry={entry} lang={lang} showBig />
+          ))}
+        </Section>
+
+        <Section
+          id="routes"
+          title={UI.routes}
+          hint={UI.guideHints.routes}
+          lang={lang}
+        >
+          <RouteList lang={lang} />
+        </Section>
+
+        <Section
+          id="baggage"
+          title={UI.baggage}
+          hint={UI.guideHints.baggage}
+          lang={lang}
+        >
+          <article className="trip-place rounded-xl p-4">
+            <BaggageLines profile="sichuanEconomy" lang={lang} />
+          </article>
+          <article className="trip-place rounded-xl p-4">
+            <BaggageLines profile="egyptairBusiness" lang={lang} />
+          </article>
+        </Section>
+
+        <Section id="story" title={UI.cityStory} hint={CITY_STORY.lead} lang={lang}>
       <Prose
         eyebrow={UI.cityStory}
         lead={CITY_STORY.lead}
@@ -341,13 +363,9 @@ export function GuideTab({
         sources={CITY_STORY.sources}
         lang={lang}
         photo="huaisheng"
-        art={
-          <LightTower className="pointer-events-none absolute end-3 top-4 h-[9.5rem] w-auto text-miniso-red opacity-[0.17] md:end-8 md:h-[13rem]" />
-        }
       />
-
-      {/* 体量：GDP、人口、机场、港口、地铁、塔、广交会、大湾区。不折叠 ——
-          这是用户要客人看到的东西，不能藏在折叠里。 */}
+        </Section>
+        <Section id="scale" title={UI.cityScale} hint={UI.guideHints.cityScale} lang={lang}>
       <Prose
         eyebrow={UI.cityScale}
         lead={CITY_SCALE.lead}
@@ -355,14 +373,11 @@ export function GuideTab({
         sources={CITY_SCALE.sources}
         lang={lang}
         photo="skyline"
-        art={
-          <CantonTower className="pointer-events-none absolute end-3 top-4 h-[9.5rem] w-auto text-miniso-red opacity-[0.17] md:end-8 md:h-[13rem]" />
-        }
       >
         <StatTiles lang={lang} />
       </Prose>
-
-      {/* 眼睛看得见的强：无人车、载人无人机、机器人、无现金、电动车。不折叠。 */}
+        </Section>
+        <Section id="tech" title={UI.cityTech} hint={UI.guideHints.tech} lang={lang}>
       <Prose
         eyebrow={UI.cityTech}
         lead={CITY_TECH.lead}
@@ -374,36 +389,24 @@ export function GuideTab({
         <div className="relative mt-5 grid gap-3 md:grid-cols-2">
           {CITY_TECH.items.map((item) => (
             <article key={item.id} className="trip-place overflow-hidden rounded-xl p-4">
-              {item.imageKey && IMG[item.imageKey] && item.imageKey !== "robotaxi" ? (
-                <img
-                  src={IMG[item.imageKey]}
-                  alt=""
-                  loading="lazy"
-                  className="trip-photo mb-3 aspect-[16/10] w-full object-cover"
-                />
-              ) : null}
               <h4 className="trip-display text-lg leading-7 text-navy">
                 {t(item.title, lang)}
               </h4>
-              <p className="mt-1 text-[0.8125rem] font-semibold uppercase tracking-[0.06em] text-miniso-red-strong">
+              <p className="mt-1 text-sm font-semibold uppercase tracking-[0.06em] text-miniso-red-strong">
                 {t(UI.techWhere, lang)}
               </p>
-              <p className="mt-0.5 text-[0.9375rem] leading-7 text-navy">
+              <p className="mt-0.5 text-base leading-7 text-navy">
                 {t(item.where, lang)}
               </p>
-              <p className="mt-2 text-[0.9375rem] leading-7 text-navy-soft">
+              <p className="mt-2 text-base leading-7 text-navy-soft">
                 {t(item.body, lang)}
               </p>
             </article>
           ))}
         </div>
       </Prose>
+        </Section>
 
-      <Accordion
-        type="multiple"
-        defaultValue={["pazhou", "food", "retail"]}
-        className="space-y-2.5"
-      >
         <Section
           id="pazhou"
           title={UI.pazhou}
@@ -418,7 +421,7 @@ export function GuideTab({
               {PAZHOU.paragraphs.map((paragraph, index) => (
                 <p
                   key={index}
-                  className="text-[0.9375rem] leading-7 text-navy-soft"
+                  className="text-base leading-7 text-navy-soft"
                 >
                   {t(paragraph, lang)}
                 </p>
@@ -448,7 +451,7 @@ export function GuideTab({
               {FOOD_CULTURE.paragraphs.map((paragraph, index) => (
                 <p
                   key={index}
-                  className="text-[0.9375rem] leading-7 text-navy-soft"
+                  className="text-base leading-7 text-navy-soft"
                 >
                   {t(paragraph, lang)}
                 </p>
@@ -484,7 +487,7 @@ export function GuideTab({
                 <h4 className="trip-display text-lg leading-7 text-navy">
                   {t(note.title, lang)}
                 </h4>
-                <p className="mt-1.5 text-[0.9375rem] leading-7 text-navy-soft">
+                <p className="mt-1.5 text-base leading-7 text-navy-soft">
                   {t(note.body, lang)}
                 </p>
                 {note.url ? (
@@ -512,20 +515,13 @@ export function GuideTab({
           lang={lang}
         >
           <div className="trip-place rounded-xl p-4">
-            {IMG.tianhe ? (
-              <img
-                src={IMG.tianhe}
-                alt=""
-                loading="lazy"
-                className="trip-photo mb-4 aspect-[16/9] w-full object-cover"
-              />
-            ) : null}
+            <DistrictRoute lang={lang} />
             <p className="trip-display text-lg leading-7 text-navy">
               {t(RETAIL_STUDY.lead, lang)}
             </p>
             <div className="mt-3 space-y-3">
               {RETAIL_STUDY.intro.map((paragraph, index) => (
-                <p key={index} className="text-[0.9375rem] leading-7 text-navy-soft">
+                <p key={index} className="text-base leading-7 text-navy-soft">
                   {t(paragraph, lang)}
                 </p>
               ))}
@@ -543,23 +539,9 @@ export function GuideTab({
           <SubHeading>{t(UI.retailCase, lang)}</SubHeading>
           <div className="trip-place space-y-3 rounded-xl p-4">
             {RETAIL_STUDY.caseStudy.map((paragraph, index) => (
-              <p key={index} className="text-[0.9375rem] leading-7 text-navy-soft">
+              <p key={index} className="text-base leading-7 text-navy-soft">
                 {t(paragraph, lang)}
               </p>
-            ))}
-          </div>
-
-          <SubHeading>{t(UI.retailComparables, lang)}</SubHeading>
-          <div className="grid gap-3 md:grid-cols-2">
-            {RETAIL_STUDY.comparables.map((item, index) => (
-              <article key={index} className="trip-place rounded-xl p-4">
-                <h4 className="trip-display text-lg leading-7 text-navy">
-                  {t(item.name, lang)}
-                </h4>
-                <p className="mt-1.5 text-[0.9375rem] leading-7 text-navy-soft">
-                  {t(item.body, lang)}
-                </p>
-              </article>
             ))}
           </div>
 
@@ -572,24 +554,11 @@ export function GuideTab({
                 className="trip-photo mb-3 aspect-[16/9] w-full object-cover"
               />
             ) : null}
-            <p className="text-[0.9375rem] leading-7 text-navy-soft">
+            <p className="text-base leading-7 text-navy-soft">
               {t(RETAIL_STUDY.beijinglu, lang)}
             </p>
           </div>
 
-          <SubHeading>{t(UI.retailTakeaways, lang)}</SubHeading>
-          <div className="trip-card-accent p-4">
-            <ol className="space-y-2.5">
-              {RETAIL_STUDY.takeaways.map((item, index) => (
-                <li key={index} className="flex gap-3 text-[0.9375rem] leading-7 text-navy">
-                  <span className="trip-display shrink-0 text-lg leading-7 text-miniso-red-strong">
-                    {index + 1}
-                  </span>
-                  <span>{t(item, lang)}</span>
-                </li>
-              ))}
-            </ol>
-          </div>
           <ul className="flex flex-wrap gap-x-5 gap-y-1">
             {RETAIL_STUDY.sources.map((source) => (
               <li key={source.url}>
@@ -597,31 +566,6 @@ export function GuideTab({
               </li>
             ))}
           </ul>
-        </Section>
-
-        <Section
-          id="halal"
-          title={UI.halal}
-          hint={UI.guideHints.halal}
-          lang={lang}
-        >
-          <div className="trip-place rounded-xl p-4">
-            <BulletList items={HALAL_WHERE} lang={lang} />
-          </div>
-
-          <SubHeading>{t(UI.mosques, lang)}</SubHeading>
-          {MOSQUES.map((place) => (
-            <PlaceCardView key={place.id} place={place} lang={lang} />
-          ))}
-          <p className="trip-card-accent p-4 text-[0.9375rem] leading-7 text-navy">
-            <span className="font-semibold">{t(UI.jumuah, lang)}：</span>
-            {t(JUMUAH_NOTE, lang)}
-          </p>
-
-          <SubHeading>{t(UI.halalDining, lang)}</SubHeading>
-          {HALAL_DINING.map((place) => (
-            <PlaceCardView key={place.id} place={place} lang={lang} />
-          ))}
         </Section>
 
         <Section
@@ -636,73 +580,12 @@ export function GuideTab({
                 <h4 className="trip-display text-lg leading-7 text-navy">
                   {t(note.title, lang)}
                 </h4>
-                <p className="mt-1.5 text-[0.9375rem] leading-7 text-navy-soft">
+                <p className="mt-1.5 text-base leading-7 text-navy-soft">
                   {t(note.body, lang)}
                 </p>
               </article>
             ))}
           </div>
-        </Section>
-
-        <Section
-          id="prep"
-          title={UI.prep}
-          hint={UI.guideHints.prep}
-          lang={lang}
-        >
-          {prep.map((item) => (
-            <article key={item.id} className="trip-place rounded-xl p-4">
-              <h4 className="trip-display mb-2 text-lg leading-7 text-navy">
-                {t(item.title, lang)}
-              </h4>
-              <BulletList items={item.lines} lang={lang} />
-            </article>
-          ))}
-        </Section>
-
-        <Section
-          id="baggage"
-          title={UI.baggage}
-          hint={UI.guideHints.baggage}
-          lang={lang}
-        >
-          <article className="trip-place rounded-xl p-4">
-            <BaggageLines profile="sichuanEconomy" lang={lang} />
-          </article>
-          <article className="trip-place rounded-xl p-4">
-            <BaggageLines profile="egyptairBusiness" lang={lang} />
-          </article>
-        </Section>
-
-        <Section
-          id="addresses"
-          title={UI.copyAddresses}
-          hint={UI.guideHints.copyAddresses}
-          lang={lang}
-        >
-          {COPY_ADDRESSES.map((entry) => (
-            <CopyChinese key={entry.id} entry={entry} lang={lang} showBig />
-          ))}
-        </Section>
-
-        <Section
-          id="phrases"
-          title={UI.phrases}
-          hint={UI.guideHints.phrases}
-          lang={lang}
-        >
-          {PHRASES.map((entry) => (
-            <CopyChinese key={entry.id} entry={entry} lang={lang} showBig />
-          ))}
-        </Section>
-
-        <Section
-          id="routes"
-          title={UI.routes}
-          hint={UI.guideHints.routes}
-          lang={lang}
-        >
-          <RouteList lang={lang} />
         </Section>
 
         <Section
@@ -723,7 +606,7 @@ export function GuideTab({
           </ul>
           {/* CC 授权的条件：作者与授权要列出来 */}
           <SubHeading>{t(UI.imageCredits, lang)}</SubHeading>
-          <ul className="trip-place space-y-1.5 rounded-xl p-4 text-[0.8125rem] leading-5 text-navy-soft">
+          <ul className="trip-place space-y-1.5 rounded-xl p-4 text-sm leading-5 text-navy-soft">
             {IMAGE_CREDITS.map((credit) => (
               <li key={credit.key}>
                 <a

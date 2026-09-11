@@ -332,3 +332,7 @@ body {
   /* 表头条 + 表体连成一张浮起来的卡，而不是贴在底色上的一块围栏 */
   box-shadow: var(--shadow-card);
 }
+
+/* Guest guide: anchor targets remain below the sticky person header. */
+.guest-guide [id^="guide-"] { scroll-margin-top: 10rem; }
+.guest-guide img { max-width: 100%; }

@@ -5,8 +5,8 @@
  * 策略：导航请求走「网络优先，失败回缓存」，保证有网时看到的是最新行程；
  * 静态资源走「缓存优先」，因为文件名带哈希，内容变了文件名就变。
  */
-const CACHE = "guangzhou-trip-v1";
-const OFFLINE_URL = "/";
+const OFFLINE_URL = new URL("./", self.location.href).href;
+const CACHE = `guangzhou-trip-${new URL(OFFLINE_URL).pathname}-guest-guide-20260911`;
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -20,7 +20,7 @@ self.addEventListener("activate", (event) => {
     caches
       .keys()
       .then((keys) =>
-        Promise.all(keys.filter((key) => key !== CACHE).map((key) => caches.delete(key))),
+        Promise.all(keys.filter((key) => key.startsWith("guangzhou-trip-") && key !== CACHE).map((key) => caches.delete(key))),
       )
       .then(() => self.clients.claim()),
   );
@@ -32,11 +32,13 @@ self.addEventListener("fetch", (event) => {
 
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
+  if (!url.pathname.startsWith(new URL(OFFLINE_URL).pathname)) return;
 
   if (request.mode === "navigate") {
     event.respondWith(
       fetch(request)
         .then((response) => {
+          if (!response.ok) throw new Error("Page unavailable");
           const copy = response.clone();
           caches.open(CACHE).then((cache) => cache.put(OFFLINE_URL, copy));
           return response;
