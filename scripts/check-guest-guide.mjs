@@ -68,15 +68,23 @@ for (const id of CHAPTERS) {
 }
 assert(view.indexOf('id="prep"') < view.indexOf('id="story"'), 'Preparation must precede long reading');
 
-// The welcome itself: always visible, no button, and it owns the Huaisheng photo.
-// The chapter behind it keeps the full history and its sources.
+/*
+ * The welcome itself: always visible, no button, and it carries the bright Pearl River
+ * skyline at its natural 1200x492 — the owner replaced the Huaisheng eaves photo, which
+ * a full-width band cropped down to a strip of roof. No forced height, no crop.
+ * Whichever photo opens the guide must not appear again further down.
+ */
 const welcomeStart = at('aria-labelledby="guide-welcome"');
 const welcome = view.slice(welcomeStart, view.indexOf('</section>', welcomeStart));
-assert(welcome.includes('IMG.huaisheng'), 'The welcome carries the Huaisheng photo');
+assert(welcome.includes('IMG.skyline'), 'The welcome carries the skyline photo');
+assert(!welcome.includes('IMG.huaisheng'), 'The Huaisheng eaves photo was replaced on the welcome');
+assert(!/object-cover|aspect-\[|h-\[\d/.test(welcome), 'The welcome photo keeps its natural proportions');
 assert(!/Accordion|button|Trigger/.test(welcome), 'The welcome is plain and always open');
-assert(!view.includes('photo="huaisheng"'), 'The welcome photo must not be repeated in the story chapter');
-for (const kept of ['CITY_STORY.paragraphs', 'CITY_STORY.sources']) {
-  assert(view.includes(kept), `The city story keeps ${kept}`);
+for (const repeated of ['photo="skyline"', 'photo="huaisheng"']) {
+  assert(!view.includes(repeated), `The welcome photo must not be repeated in a chapter: ${repeated}`);
+}
+for (const kept of ['CITY_STORY.paragraphs', 'CITY_STORY.sources', 'CITY_SCALE.intro', 'CITY_SCALE.sources']) {
+  assert(view.includes(kept), `The chapter text and sources stay: ${kept}`);
 }
 
 // The guide reads as one column of chapters. The owner rejected the grouped
@@ -119,6 +127,69 @@ assert(!routes.includes('line-clamp'), 'A clamped teaser in the collapsed row wa
 const usedImages = new Set(data.ROUTES.map((route) => route.imageKey));
 for (const dropped of ['cbd', 'tianhe']) assert(!usedImages.has(dropped), `${dropped}.jpg was rejected on sight`);
 for (const kept of ['opera', 'taikoo']) assert(usedImages.has(kept), `${kept}.jpg should carry a route`);
+
+/*
+ * Dining brands: 21 brands, a brand appearing once however many branches it runs.
+ * They are recommendations of a *brand*, so no branch address, phone or opening hours,
+ * no "we ate here", no score, and nothing claiming a restaurant is halal — the guest
+ * asks at the door, and the section says so exactly once.
+ */
+const dining = await evaluate(fs.readFileSync('lib/dining-brands.ts', 'utf8'));
+const brands = dining.DINING_BRANDS;
+assert.equal(brands.length, 21, `Expected 21 brands, found ${brands.length}`);
+assert.equal(
+  dining.DINING_THEMES.reduce((sum, theme) => sum + theme.brands.length, 0),
+  21,
+  'Every brand belongs to exactly one theme',
+);
+for (const key of ['DINING_THEMES', 'DINING_INTRO']) checkLocales(dining[key]);
+const brandIds = brands.map((brand) => brand.id);
+assert.equal(new Set(brandIds).size, brandIds.length, 'Brand ids must be unique');
+const chineseNames = brands.map((brand) => brand.chinese);
+assert.equal(new Set(chineseNames).size, chineseNames.length, 'One row per brand, not one per branch');
+assert.equal(chineseNames.filter((name) => name.includes('芒果树')).length, 1, 'Mango Tree was merged into a single brand');
+for (const brand of brands) {
+  assert(brand.chinese.trim(), `${brand.id} needs a Chinese name to copy`);
+  assert(/^https?:\/\//.test(brand.source), `${brand.id} needs a source link`);
+  const budget = Array.isArray(brand.budget) ? brand.budget : [brand.budget];
+  assert(budget.every((value) => typeof value === 'number' && value > 0), `${brand.id} needs a per-person figure`);
+  // A brand, not a branch: no address, no phone, no opening hours.
+  const text = JSON.stringify([brand.name, brand.note, brand.dishes]);
+  assert(!/\d+号|电话|营业时间|分店地址|[东南西北]路/.test(text), `${brand.id} must not pin a branch`);
+}
+// No personal endorsement, no score, no superlative, no halal claim.
+const diningCopy = JSON.stringify(dining.DINING_THEMES);
+for (const banned of ['Chuck', '吃过', '评分', '星级', '最好吃', '全广州最', '保证正宗', '每桌必点', '本店清真', '清真认证']) {
+  assert(!diningCopy.includes(banned), `Rejected dining wording: ${banned}`);
+}
+// Pork and alcohol stay off the recommendation list.
+for (const banned of ['猪', '培根', '火腿', '叉烧', '啤酒', '清酒', '红酒']) {
+  assert(!diningCopy.includes(banned), `Dish list must not recommend: ${banned}`);
+}
+// Tao Tao Ju: the PDF was hard to search for the egg tart, so the source is the menu
+// page that lists both dishes by name.
+const taotaoju = brands.find((brand) => brand.id === 'taotaoju');
+assert(taotaoju.source.includes('you.ctrip.com'), 'Tao Tao Ju cites the menu page, not the PDF');
+assert(!JSON.stringify(brands).includes('.pdf'), 'No brand leans on a PDF nobody can search');
+
+// The dietary reminder and the "copy the name and search" note appear once each, and the
+// chapter no longer repeats the halal line that FOOD_ADVICE already carried.
+const diningView = fs.readFileSync('components/trip/dining-brands.tsx', 'utf8');
+assert.equal((diningView.match(/DINING_INTRO\.halal/g) ?? []).length, 1, 'One dietary reminder for the whole section');
+assert.equal((diningView.match(/DINING_INTRO\.how/g) ?? []).length, 1, 'One explanation of how to use the names');
+assert(/FOOD_ADVICE\.filter/.test(view), 'The chapter must drop the halal bullet the brand intro now carries');
+for (const kept of ['清真', '过敏']) {
+  assert(dining.DINING_INTRO.halal.zh.includes(kept), `The one dietary line keeps ${kept}`);
+}
+// The unit is said once in the intro, not on all 21 rows.
+assert(dining.DINING_INTRO.how.zh.includes('人民币') && dining.DINING_INTRO.how.en.includes('CNY'), 'The intro names the currency');
+assert(!diningView.includes('元人民币'), 'The per-person line does not repeat the currency on every row');
+// 21 copy buttons that all read "copy Chinese name" are indistinguishable to a screen reader.
+assert(/label: {\s*zh: `\$\{brand\.chinese\}/.test(diningView), 'Each copy button names its own brand');
+assert.equal((diningView.match(/<details/g) ?? []).length, 1, 'Sources sit in one folded list, not one per brand');
+assert(diningView.includes('inline'), 'The brand copy button uses the inline variant, not the big address panel');
+assert(fs.readFileSync('components/trip/ui.tsx', 'utf8').includes('inline = false'), 'The inline variant must stay opt-in');
+assert(view.indexOf('UI.diningBrands') < view.indexOf('UI.foodIdeas'), 'Brand recommendations come before the long food notes');
 
 // The header carries one person picker, not a row of six chips, and no watermark.
 const header = fs.readFileSync('components/trip/trip-view.tsx', 'utf8');
