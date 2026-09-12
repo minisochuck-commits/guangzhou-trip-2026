@@ -1772,13 +1772,18 @@ export const CITY_STORY: { lead: L10n; paragraphs: L10n[]; sources: { label: L10
 /* 名创优品在广州                                                        */
 /*                                                                     */
 /* 不是公司简介 —— 货盘、店型、企业实力在会议现场讲。页面只写会议讲不了的：*/
-/* 她住的那块地就是这个牌子的总部所在地，她要去的正佳广场里有一家店       */
-/* 可以自己走进去看。数字都带出处，没出处的说法一律不留。                 */
+/* 她住的那块地就是这个牌子的家，而且是看得见的：琶洲西区那栋 287.5 米的  */
+/* 新楼今年 8 月刚验收，正佳广场里那家店她可以自己走进去。               */
+/* 数字都带出处，没出处的说法一律不留。                                   */
+/*                                                                     */
+/* paragraphs 在照片上面（这座楼、这家公司），store 在照片下面（那家店）。*/
 /* ------------------------------------------------------------------ */
 
 export const MINISO_IN_GZ: {
   lead: L10n;
   paragraphs: L10n[];
+  /** 照片下面那一组：照片拍的就是这家店。 */
+  store: L10n[];
   sources: { label: L10n; url: string }[];
 } = {
   lead: {
@@ -1788,15 +1793,27 @@ export const MINISO_IN_GZ: {
   },
   paragraphs: [
     {
-      zh: "出酒店往东走，过了广交会的展馆，琶洲大道 109 号，铭丰广场 A 栋三楼 —— 名创优品的中国总部就在那儿。你们这几天开会、吃饭、睡觉的这一片，是这家公司每天上班的地方。",
-      en: "Walk east out of the hotel, past the Canton Fair halls, and at 109 Pazhou Avenue, third floor of Building A in Mingfeng Plaza, you are at MINISO’s China headquarters. The few streets where you will meet, eat and sleep this week are where this company comes to work every morning.",
-      ar: "اخرجوا من الفندق شرقًا، وتجاوزوا قاعات معرض كانتون، وعند الرقم 109 في شارع بازو، في الطابق الثالث من المبنى A بمجمع مينغفنغ، تصلون إلى المقر الصيني لـ«ميني سو». فهذه الشوارع القليلة التي ستجتمعون وتأكلون وتنامون فيها هذا الأسبوع هي المكان الذي تأتي إليه الشركة للعمل كل صباح.",
+      zh: "从酒店朝西，隔着广交会的展馆，是琶洲西区 —— 腾讯、阿里巴巴、唯品会的总部楼都在那一片。最新的一栋是名创优品国际总部：287.5 米，地上四十层，一圈 270 度的环幕玻璃从头包到脚，站在里面看得见珠江和广州塔。设计它的人说，想做成一支立起来的笔。",
+      en: "West of the hotel, on the far side of the Canton Fair halls, is Pazhou West, where Tencent, Alibaba and Vipshop have their headquarters. The newest tower there is MINISO’s: 287.5 metres, forty floors above ground, wrapped top to bottom in a 270-degree curve of glass that looks out on the Pearl River and the Canton Tower. The architects said they wanted a building shaped like a pen stood on its end.",
+      ar: "إلى الغرب من الفندق، خلف قاعات معرض كانتون، تقع بازو الغربية، حيث مقارّ تينسنت وعلي بابا وفيب شوب. وأحدث أبراجها برج «ميني سو»: 287.5 مترًا، وأربعون طابقًا فوق الأرض، ملفوفًا من أعلاه إلى أسفله بانحناءة زجاجية بزاوية 270 درجة تطلّ على نهر اللؤلؤ وبرج كانتون. وقال مصمّموه إنهم أرادوا مبنى على هيئة قلم منتصب.",
     },
     {
-      zh: "它 2013 年开张的时候，在广州的一个地下室车库里。十三年过去，名创优品在一百一十二个国家和地区都有店；单是这个牌子，2025 年底有 8,151 家 —— 中国内地 4,568 家，海外 3,583 家 —— 那一年营收 195.2 亿元人民币。",
-      en: "When it started in 2013 it was in a basement garage in Guangzhou. Thirteen years on, MINISO trades in more than a hundred and twelve countries and regions; the brand alone ended 2025 with 8,151 stores — 4,568 in mainland China, 3,583 abroad — on revenue of 19.52 billion yuan for the year.",
-      ar: "حين بدأت عام 2013 كانت في مرآب تحت الأرض في قوانغتشو. وبعد ثلاثة عشر عامًا صارت «ميني سو» تعمل في أكثر من مئة واثنتي عشرة دولة ومنطقة؛ وعلامتها وحدها أنهت عام 2025 بـ8,151 متجرًا — منها 4,568 في الصين القارية و3,583 في الخارج — بإيراد قدره 19.52 مليار يوان في تلك السنة.",
+      zh: "这栋楼 2021 年 7 月动工，2025 年 7 月封顶，今年 8 月 12 日通过竣工验收 —— 你们到广州的时候，它验收才一个月。投资三十五亿元人民币，占地六千五百多平方米，往上盖出十四万平方米。以后名创优品的全球业务、品牌运营和产品研发都在这栋楼里。",
+      en: "Work began in July 2021, the frame topped out in July 2025, and the building passed its completion inspection on 12 August this year — one month before you land. It cost 3.5 billion yuan; it stands on a plot of six and a half thousand square metres and holds a hundred and forty thousand. MINISO’s global operations, brand management and product development are all to sit inside it.",
+      ar: "بدأ العمل في يوليو 2021، واكتمل الهيكل في يوليو 2025، واجتاز المبنى فحص الإنجاز في 12 أغسطس من هذا العام — أي قبل شهر من وصولكم. كلفته 3.5 مليار يوان، ويقوم على قطعة أرض مساحتها ستة آلاف ونصف متر مربع ليضمّ مئة وأربعين ألف متر مربع. وستقيم فيه عمليات «ميني سو» العالمية وإدارة العلامة وتطوير المنتجات.",
     },
+    {
+      zh: "公司官网上写的中国总部地址，现在还是琶洲大道 109 号的铭丰广场。也在琶洲 —— 就是你们这几天开会、吃饭、睡觉的这一片。",
+      en: "The address the company still gives for its China head office is Mingfeng Plaza, 109 Pazhou Avenue. Also in Pazhou — the same few streets where you will meet, eat and sleep this week.",
+      ar: "أما العنوان الذي ما زالت الشركة تعطيه لمقرّها في الصين فهو مجمع مينغفنغ، 109 شارع بازو. وهو أيضًا في بازو — الشوارع نفسها التي ستجتمعون وتأكلون وتنامون فيها هذا الأسبوع.",
+    },
+    {
+      zh: "2013 年它开张的时候，在广州的一个地下室车库里。十三年过去，名创优品在一百一十二个国家和地区都有店；单是这个牌子，2025 年底有 8,151 家 —— 中国内地 4,568 家，海外 3,583 家 —— 那一年营收 195.2 亿元人民币。",
+      en: "When it opened in 2013 it was in a basement garage in Guangzhou. Thirteen years on, MINISO trades in more than a hundred and twelve countries and regions; the brand alone ended 2025 with 8,151 stores — 4,568 in mainland China, 3,583 abroad — on revenue of 19.52 billion yuan for the year.",
+      ar: "حين فتحت أبوابها عام 2013 كانت في مرآب تحت الأرض في قوانغتشو. وبعد ثلاثة عشر عامًا صارت «ميني سو» تعمل في أكثر من مئة واثنتي عشرة دولة ومنطقة؛ وعلامتها وحدها أنهت عام 2025 بـ8,151 متجرًا — منها 4,568 في الصين القارية و3,583 في الخارج — بإيراد قدره 19.52 مليار يوان في تلك السنة.",
+    },
+  ],
+  store: [
     {
       zh: "正佳广场里的那家 MINISO LAND，是这个店型在广州的第一家。全球开了二十多家，家家都在一线城市的核心商圈。广州这家今年 1 月 30 日开门：一千一百多平方米，上下两层。一楼照着「伊甸园派对」做，YOYO、迪士尼、哈利·波特、三丽鸥挤在同一层；二楼叫「可爱工厂」，用乐器引路，货架做成音符的样子。店里九成以上是 IP 商品，一百多个 IP、五千五百多款。",
       en: "The MINISO LAND inside Grandview Mall is the first of its kind in Guangzhou. Barely two dozen exist anywhere, every one of them in the core retail district of a first-tier city. This one opened on 30 January: eleven hundred square metres over two floors. The ground floor is built as an “Eden garden party”, with YOYO, Disney, Harry Potter and Sanrio sharing one room; above it is the “cute factory”, laid out along musical instruments with shelves shaped like notes. More than ninety percent of the stock is licensed IP — over a hundred properties, more than 5,500 items.",
@@ -1814,6 +1831,22 @@ export const MINISO_IN_GZ: {
     },
   ],
   sources: [
+    {
+      label: { zh: "广州日报：名创优品国际总部封顶，287.5 米", en: "Guangzhou Daily: the MINISO International Headquarters tops out at 287.5 m", ar: "قوانغتشو دايلي: اكتمال هيكل مقر ميني سو الدولي عند 287.5 مترًا" },
+      url: "https://news.dayoo.com/guangzhou/202507/05/139995_54844163.htm",
+    },
+    {
+      label: { zh: "羊城派：项目开工（投资、占地与建筑面积）", en: "Yangcheng Pai: the groundbreaking (investment, site and floor area)", ar: "يانغتشنغ باي: انطلاق المشروع (الاستثمار والمساحة)" },
+      url: "https://ycpai.ycwb.com/ycppad/content/2021-07/29/content_40170750.html",
+    },
+    {
+      label: { zh: "广州市规划和自然资源局：项目地块与建设单位", en: "Guangzhou Planning Bureau: the plot and the developer", ar: "هيئة التخطيط بقوانغتشو: قطعة الأرض والجهة المطوّرة" },
+      url: "https://ghzyj.gz.gov.cn/ywpd/cxgh/ghxkgsgb/phgbnew/gbt/content/mpost_9189139.html",
+    },
+    {
+      label: { zh: "报道：总部大楼 8 月 12 日通过竣工验收（含设计与幕墙）", en: "Report: the tower passed its completion inspection on 12 August (design and curtain wall)", ar: "تقرير: اجتياز البرج فحص الإنجاز في 12 أغسطس (التصميم والواجهة)" },
+      url: "https://www.163.com/dy/article/L4L2GKIQ0514ETGI.html",
+    },
     {
       label: { zh: "名创优品：联系我们（中国总部地址）", en: "MINISO: contact us (China headquarters address)", ar: "ميني سو: اتصل بنا (عنوان المقر الصيني)" },
       url: "https://www.miniso.cn/contact/",

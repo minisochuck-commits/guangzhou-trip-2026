@@ -446,9 +446,9 @@ export const UI = {
       "ar": "كيف يكون اليوم تشا وكيف تطلبون، و{n} علامة مطاعم"
     },
     "miniso": {
-      "zh": "总部就在你住的琶洲，旗舰店在你要去的正佳广场",
-      "en": "The head office is in Pazhou where you are staying; the flagship store is in the mall you are visiting",
-      "ar": "المقر في بازو حيث تقيمون، والمتجر الرئيسي في المركز الذي ستزورونه"
+      "zh": "琶洲西区那栋 287.5 米的新楼，和正佳广场里的旗舰店",
+      "en": "The new 287.5-metre tower in Pazhou West, and the flagship store inside Grandview Mall",
+      "ar": "البرج الجديد بارتفاع 287.5 مترًا في بازو الغربية، والمتجر الرئيسي داخل غراندفيو مول"
     },
     "tech": {
       "zh": "驾驶位上没有人，送餐的是一台会乘电梯的小车",
