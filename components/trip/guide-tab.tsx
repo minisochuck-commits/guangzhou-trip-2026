@@ -15,6 +15,7 @@ import {
   HALAL_DINING,
   HALAL_WHERE,
   JUMUAH_NOTE,
+  MINISO_IN_GZ,
   MOSQUES,
   OFFICIAL_LINKS,
   PAZHOU,
@@ -77,10 +78,14 @@ const HOTEL_LABELS = {
 const HOTEL_PHONE = "+86 20 8922 8888";
 
 /**
- * 两章的主图：琶洲塔与怀圣寺的光塔。照片的 alt 与图说在 lib/guide-photos.ts 里，
- * 跟着照片走 —— 这里只说哪一章配哪一张。
+ * 三章的主图：琶洲塔、怀圣寺的光塔、开业当天的正佳门口。照片的 alt 与图说在
+ * lib/guide-photos.ts 里，跟着照片走 —— 这里只说哪一章配哪一张。
  */
-const CHAPTER_PHOTOS = { pazhou: "pazhou-pagoda", story: "huaisheng-minaret" };
+const CHAPTER_PHOTOS = {
+  pazhou: "pazhou-pagoda",
+  story: "huaisheng-minaret",
+  miniso: "miniso-land",
+};
 
 /** 开篇那张全景，商圈末尾那张北京路，文化章开头那张骑楼 —— 数据里没有，写在这里。 */
 const INLINE_IMAGE_KEYS = ["skyline", "beijinglu", "arcade"];
@@ -125,6 +130,7 @@ const USED_IMAGE_KEYS = new Set(
     ...DINING_THEMES.map((theme) => theme.imageKey),
     CHAPTER_PHOTOS.pazhou,
     CHAPTER_PHOTOS.story,
+    CHAPTER_PHOTOS.miniso,
   ].filter((key): key is string => Boolean(key && IMG[key])),
 );
 
@@ -484,7 +490,111 @@ export function GuideTab({
         </div>
       </section>
 
-      {/* 欢迎之后紧接着出发前准备 —— 出发前最先要读的就是它，不被酒店块挡住。 */}
+      {/*
+        欢迎之后先给印象，再办事（owner 2026-09-12 定的顺序）。
+        这一组从「这座城和你们的关系」一路读到「你住的这块地」：
+        广州与你们 → 这座城有多大 → 科技就在身边 → 名创优品在广州 → 琶洲。
+        读完正好接下面的酒店块 —— 琶洲那一节讲的就是酒店脚下这块地。
+        上一版这里接的是出发前准备和机场地址，第一次点开看到的是行政事务。
+      */}
+      <Accordion type="multiple" defaultValue={[]} className="space-y-2.5">
+        <Section id="story" title={UI.cityStory} hint={CITY_STORY.lead} lang={lang}>
+          <Prose
+            lead={CITY_STORY.lead}
+            paragraphs={CITY_STORY.paragraphs}
+            sources={CITY_STORY.sources}
+            lang={lang}
+            photoKey={CHAPTER_PHOTOS.story}
+          />
+        </Section>
+
+        <Section id="scale" title={UI.cityScale} hint={UI.guideHints.cityScale} lang={lang}>
+          {/* 照片不再放这里：同一张珠江全景已经是开篇那张，文字与数字照旧。 */}
+          <Prose
+            lead={CITY_SCALE.lead}
+            paragraphs={CITY_SCALE.intro}
+            sources={CITY_SCALE.sources}
+            lang={lang}
+          >
+            <StatTiles lang={lang} />
+          </Prose>
+        </Section>
+
+        {/* 配图只用真在中国、最好在广州拍的：街上的 Robotaxi（粤A 牌）、扫码付款、
+            黄色电动出租车，载人飞行器那张来自广州市政府。
+            送餐机器人与无人机送餐没有能用的中国实景，那两条宁可不配图。
+            （上一版挂的 robotaxi.jpg 拍的是阿布扎比，已换掉。） */}
+        <Section id="tech" title={UI.cityTech} hint={UI.guideHints.tech} lang={lang}>
+          <Prose
+            lead={CITY_TECH.lead}
+            paragraphs={[CITY_TECH.intro]}
+            sources={CITY_TECH.sources}
+            lang={lang}
+          >
+            <ul className="mt-4 grid gap-x-5 md:grid-cols-2">
+              {CITY_TECH.items.map((item) => (
+                <li key={item.id} className="border-t border-card-line py-3">
+                  {/* 照片按原比例放全：机身、车顶的传感器、电梯口都不裁。 */}
+                  <GuideFigure
+                    photoKey={item.imageKey}
+                    alt={item.imageAlt}
+                    lang={lang}
+                    className="mt-0"
+                  />
+                  <h4 className={GUIDE.subheading}>{t(item.title, lang)}</h4>
+                  {/* 正文按空行分段：先给一个看得见的画面，再让数字落下来当回响。
+                      一段连着写，两个节拍就糊成一句话了。 */}
+                  {t(item.body, lang)
+                    .split("\n")
+                    .map((paragraph, index) => (
+                      <p key={index} className={cn(GUIDE.body, "mt-1")}>
+                        {paragraph}
+                      </p>
+                    ))}
+                  {/* 「哪里能碰到」排在故事后面：先读到画面，再拿到入口。
+                      放在标题下面时，390px 上先看见的是一条说明书。 */}
+                  <p className={cn(GUIDE.note, "mt-1.5 text-navy-soft/85")}>
+                    {t(UI.techWhere, lang)}：{t(item.where, lang)}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </Prose>
+        </Section>
+
+        {/* 照片就是开业当天的正佳门口 —— 上一段说门口排了人，图里正好是那一幕。 */}
+        <Section
+          id="miniso"
+          title={UI.miniso}
+          hint={UI.guideHints.miniso}
+          lang={lang}
+        >
+          <Prose
+            lead={MINISO_IN_GZ.lead}
+            paragraphs={MINISO_IN_GZ.paragraphs}
+            sources={MINISO_IN_GZ.sources}
+            lang={lang}
+            photoKey={CHAPTER_PHOTOS.miniso}
+          />
+        </Section>
+
+        <Section
+          id="pazhou"
+          title={UI.pazhou}
+          hint={UI.guideHints.pazhou}
+          lang={lang}
+        >
+          <Prose
+            lead={PAZHOU.lead}
+            paragraphs={PAZHOU.paragraphs}
+            sources={PAZHOU.sources}
+            lang={lang}
+            photoKey={CHAPTER_PHOTOS.pazhou}
+          />
+        </Section>
+      </Accordion>
+
+      {/* 读完上面那一组再办事：出发前准备排在印象后面、酒店块前面。 */}
       <Accordion type="multiple" defaultValue={[]} className="space-y-2.5">
         <Section id="prep" title={UI.prep} hint={UI.guideHints.prep} lang={lang}>
           {/* 一件事一个小标题，下面直接是原来的说明 ——
@@ -549,9 +659,8 @@ export function GuideTab({
       </section>
 
       {/*
-        其余章节按一次旅行读下来的顺序：先到（机场地址）、住在哪一片（琶洲）、
-        这座城是什么（广州与你们 / 体量 / 科技）、日常要用的（礼拜与清真餐 / 吃 / 逛 /
-        路线 / 习惯），最后是备查的（短句 / 行李 / 来源）。
+        剩下的都是到了之后要用的：机场地址、礼拜与清真餐、吃、逛、路线、习惯，
+        最后是备查的（短句 / 行李 / 来源）。讲这座城的四章已经搬到欢迎卡下面了。
       */}
       <Accordion type="multiple" defaultValue={[]} className="space-y-2.5">
         <Section
@@ -567,84 +676,9 @@ export function GuideTab({
           </div>
         </Section>
 
-        <Section
-          id="pazhou"
-          title={UI.pazhou}
-          hint={UI.guideHints.pazhou}
-          lang={lang}
-        >
-          <Prose
-            lead={PAZHOU.lead}
-            paragraphs={PAZHOU.paragraphs}
-            sources={PAZHOU.sources}
-            lang={lang}
-            photoKey={CHAPTER_PHOTOS.pazhou}
-          />
-        </Section>
 
-        <Section id="story" title={UI.cityStory} hint={CITY_STORY.lead} lang={lang}>
-          <Prose
-            lead={CITY_STORY.lead}
-            paragraphs={CITY_STORY.paragraphs}
-            sources={CITY_STORY.sources}
-            lang={lang}
-            photoKey={CHAPTER_PHOTOS.story}
-          />
-        </Section>
 
-        <Section id="scale" title={UI.cityScale} hint={UI.guideHints.cityScale} lang={lang}>
-          {/* 照片不再放这里：同一张珠江全景已经是开篇那张，文字与数字照旧。 */}
-          <Prose
-            lead={CITY_SCALE.lead}
-            paragraphs={CITY_SCALE.intro}
-            sources={CITY_SCALE.sources}
-            lang={lang}
-          >
-            <StatTiles lang={lang} />
-          </Prose>
-        </Section>
 
-        {/* 配图只用真在中国、最好在广州拍的：街上的 Robotaxi（粤A 牌）、扫码付款、
-            黄色电动出租车，载人飞行器那张来自广州市政府。
-            送餐机器人与无人机送餐没有能用的中国实景，那两条宁可不配图。
-            （上一版挂的 robotaxi.jpg 拍的是阿布扎比，已换掉。） */}
-        <Section id="tech" title={UI.cityTech} hint={UI.guideHints.tech} lang={lang}>
-          <Prose
-            lead={CITY_TECH.lead}
-            paragraphs={[CITY_TECH.intro]}
-            sources={CITY_TECH.sources}
-            lang={lang}
-          >
-            <ul className="mt-4 grid gap-x-5 md:grid-cols-2">
-              {CITY_TECH.items.map((item) => (
-                <li key={item.id} className="border-t border-card-line py-3">
-                  {/* 照片按原比例放全：机身、车顶的传感器、电梯口都不裁。 */}
-                  <GuideFigure
-                    photoKey={item.imageKey}
-                    alt={item.imageAlt}
-                    lang={lang}
-                    className="mt-0"
-                  />
-                  <h4 className={GUIDE.subheading}>{t(item.title, lang)}</h4>
-                  {/* 正文按空行分段：先给一个看得见的画面，再让数字落下来当回响。
-                      一段连着写，两个节拍就糊成一句话了。 */}
-                  {t(item.body, lang)
-                    .split("\n")
-                    .map((paragraph, index) => (
-                      <p key={index} className={cn(GUIDE.body, "mt-1")}>
-                        {paragraph}
-                      </p>
-                    ))}
-                  {/* 「哪里能碰到」排在故事后面：先读到画面，再拿到入口。
-                      放在标题下面时，390px 上先看见的是一条说明书。 */}
-                  <p className={cn(GUIDE.note, "mt-1.5 text-navy-soft/85")}>
-                    {t(UI.techWhere, lang)}：{t(item.where, lang)}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          </Prose>
-        </Section>
 
         <Section
           id="halal"

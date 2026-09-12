@@ -354,6 +354,11 @@ export const UI = {
     "en": "How big this city is",
     "ar": "ما حجم هذه المدينة"
   },
+  "miniso": {
+    "zh": "名创优品在广州",
+    "en": "MINISO in Guangzhou",
+    "ar": "ميني سو في قوانغتشو"
+  },
   "cityTech": {
     "zh": "科技就在身边",
     "en": "The technology around you",
@@ -439,6 +444,11 @@ export const UI = {
       "zh": "早茶怎么点、菜怎么选、{n} 个特色餐饮品牌",
       "en": "How yum cha works, how to order, and {n} restaurant brands",
       "ar": "كيف يكون اليوم تشا وكيف تطلبون، و{n} علامة مطاعم"
+    },
+    "miniso": {
+      "zh": "总部就在你住的琶洲，旗舰店在你要去的正佳广场",
+      "en": "The head office is in Pazhou where you are staying; the flagship store is in the mall you are visiting",
+      "ar": "المقر في بازو حيث تقيمون، والمتجر الرئيسي في المركز الذي ستزورونه"
     },
     "tech": {
       "zh": "驾驶位上没有人，送餐的是一台会乘电梯的小车",

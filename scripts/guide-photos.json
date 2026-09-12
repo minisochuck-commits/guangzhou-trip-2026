@@ -150,6 +150,26 @@
         "en": "Low-altitude delivery in Pazhou: the drone follows the water channel.",
         "ar": "توصيل منخفض الارتفاع في بازو: المسيّرة تتبع مجرى القناة."
       }
+    },
+    {
+      "key": "miniso-land",
+      "input": "miniso-land-0.jpg",
+      "source": "official",
+      "title": "正佳广场 MINISO LAND 广州壹号店开业",
+      "artist": "信息时报记者 潘敬文",
+      "license": "来源页",
+      "assetUrl": "https://oss.gz-cmc.com/pgcr/root/xinxishibao/upload/news/image/2026/01/30/1769770416879066978.jpg",
+      "page": "https://xxsb.gz-cmc.com/pages/2026/01/30/afa451fb749c44af8dcef00ce3abdf5a.html",
+      "alt": {
+        "zh": "正佳广场的外墙被一整面绿底红边的 MINISO 装置盖住，中间是一座高高的拱门，上面挂着 MINISO 招牌和一排卡通角色；门前站满了人，很多人举着手机在拍，远处是几栋玻璃幕墙的高楼。",
+        "en": "The outside wall of Grandview Mall covered by a giant green-and-red MINISO installation, a tall decorated archway in the middle carrying the MINISO sign and a row of cartoon characters; a crowd stands in front, many of them holding up phones, and glass towers rise behind.",
+        "ar": "جدار غراندفيو مول الخارجي تغطّيه منشأة ضخمة لـ«ميني سو» بالأخضر والأحمر، وفي وسطها قوس مرتفع مزيّن يحمل لافتة «ميني سو» وصفًّا من الشخصيات الكرتونية؛ وأمامها يقف حشد من الناس يرفع كثيرون منهم هواتفهم، وخلفها أبراج زجاجية."
+      },
+      "caption": {
+        "zh": "开业那天的正佳广场门口。",
+        "en": "Outside Grandview Mall on the morning it opened.",
+        "ar": "أمام غراندفيو مول صباح الافتتاح."
+      }
     }
   ]
 }

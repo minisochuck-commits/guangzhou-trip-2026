@@ -25,11 +25,13 @@ for (const key of [
   'PREP', 'CITY_STORY', 'CITY_SCALE', 'CITY_TECH', 'PAZHOU', 'RETAIL_STUDY',
   'FOOD_CULTURE', 'FOOD_NOTES', 'MOSQUES', 'ROUTES', 'CULTURE_NOTES',
   'HALAL_WHERE', 'HALAL_DINING', 'JUMUAH_NOTE', 'OFFICIAL_LINKS', 'PHRASES',
+  'MINISO_IN_GZ',
 ]) checkLocales(data[key]);
 // Routes are guest-facing copy too: the rejected wording must not survive there either.
 const copy = JSON.stringify([
   data.CITY_STORY, data.CITY_SCALE, data.CITY_TECH, data.RETAIL_STUDY, data.FOOD_CULTURE,
   data.FOOD_NOTES, data.ROUTES, data.CULTURE_NOTES, data.PAZHOU, data.HALAL_WHERE, data.MOSQUES,
+  data.MINISO_IN_GZ,
 ]);
 for (const rejected of [
   '值得写进报告', '给做商场的人', '做商场的人', '超过埃及全国', '全球至今只有六',
@@ -249,28 +251,31 @@ assert(!view.includes('UI.retailTakeaways'), 'Report instructions must not be re
 for (const reused of ['AccordionItem', 'CopyChinese', 'SourceLink']) assert(view.includes(reused), `Must reuse ${reused}`);
 
 /*
- * The guide opens with a welcome, then preparation, then the hotel block, then the
- * chapters in the order the trip is actually read. The owner agreed this on 2026-09-11;
- * it replaces "hotel first, city story folded away near the end".
+ * 2026-09-12, the owner: the welcome is followed by the four chapters that say what
+ * this city is — Guangzhou and you, how big it is, the technology around you, MINISO
+ * in Guangzhou — and then Pazhou, which hands over to the hotel block standing on it.
+ * Only after that comes the administration: preparation, the hotel, the addresses.
+ * Whoever opens the link for the first time should meet the city, not a to-do list.
+ * This replaces the 2026-09-11 order, which put preparation and the hotel first.
  */
 const at = (needle) => {
   const index = view.indexOf(needle);
   assert(index > -1, `Missing from the guide: ${needle}`);
   return index;
 };
-assert(at('id="guide-welcome"') < at('id="prep"'), 'The welcome opens the guide');
-assert(at('id="prep"') < at('id="guide-hotel"'), 'Preparation comes before the hotel block');
 const CHAPTERS = [
-  'addresses', 'pazhou', 'story', 'scale', 'tech', 'halal',
+  'guide-welcome', 'story', 'scale', 'tech', 'miniso', 'pazhou',
+  'prep', 'guide-hotel', 'addresses', 'halal',
   'food', 'retail', 'routes', 'culture', 'phrases', 'baggage', 'sources',
 ];
-let previous = at('id="guide-hotel"');
+let previous = -1;
 for (const id of CHAPTERS) {
   const here = at(`id="${id}"`);
   assert(here > previous, `Chapter out of the agreed reading order: ${id}`);
   previous = here;
 }
-assert(view.indexOf('id="prep"') < view.indexOf('id="story"'), 'Preparation must precede long reading');
+assert(at('id="story"') < at('id="prep"'), 'The city comes before the paperwork');
+assert(at('id="pazhou"') < at('id="guide-hotel"'), 'Pazhou hands over to the hotel standing on it');
 
 /*
  * The welcome itself: always visible, no button, and it carries the bright Pearl River
@@ -287,6 +292,25 @@ assert(!/Accordion|button|Trigger/.test(welcome), 'The welcome is plain and alwa
 for (const repeated of ['photo="skyline"', 'photo="huaisheng"']) {
   assert(!view.includes(repeated), `The welcome photo must not be repeated in a chapter: ${repeated}`);
 }
+/*
+ * 名创优品那一章的分寸：会议现场讲货盘、店型和企业实力，页面不重复。页面只留
+ * 两件会议讲不了的事 —— 她住的琶洲就是中国总部所在地，她要去的正佳广场里有
+ * 一家可以自己走进去的 MINISO LAND。每个数字都要有出处；没出处的说法（早先那版
+ * 的「海外同比增长 29.3%」「近万人排队」）已经删掉，不许回来。
+ */
+const miniso = JSON.stringify(data.MINISO_IN_GZ);
+for (const needed of ['琶洲大道 109 号', '8,151', '正佳广场', 'MINISO LAND']) {
+  assert(miniso.includes(needed), `The MINISO chapter lost a checked fact: ${needed}`);
+}
+for (const unsourced of ['29.3', '近万人', '万人排队']) {
+  assert(!miniso.includes(unsourced), `No source was ever found for this: ${unsourced}`);
+}
+for (const url of [
+  'https://www.miniso.cn/contact/',
+  'https://xxsb.gz-cmc.com/pages/2026/01/30/afa451fb749c44af8dcef00ce3abdf5a.html',
+]) assert(miniso.includes(url), `The MINISO chapter must keep its source: ${url}`);
+assert(view.includes('MINISO_IN_GZ.paragraphs'), 'The MINISO chapter is rendered, not just written');
+
 for (const kept of ['CITY_STORY.paragraphs', 'CITY_STORY.sources', 'CITY_SCALE.intro', 'CITY_SCALE.sources']) {
   assert(view.includes(kept), `The chapter text and sources stay: ${kept}`);
 }

@@ -1767,6 +1767,80 @@ export const CITY_STORY: { lead: L10n; paragraphs: L10n[]; sources: { label: L10
 };
 
 
+
+/* ------------------------------------------------------------------ */
+/* 名创优品在广州                                                        */
+/*                                                                     */
+/* 不是公司简介 —— 货盘、店型、企业实力在会议现场讲。页面只写会议讲不了的：*/
+/* 她住的那块地就是这个牌子的总部所在地，她要去的正佳广场里有一家店       */
+/* 可以自己走进去看。数字都带出处，没出处的说法一律不留。                 */
+/* ------------------------------------------------------------------ */
+
+export const MINISO_IN_GZ: {
+  lead: L10n;
+  paragraphs: L10n[];
+  sources: { label: L10n; url: string }[];
+} = {
+  lead: {
+    zh: "你住的琶洲，就是这个牌子的家。",
+    en: "Pazhou, where you are staying, is where this brand lives.",
+    ar: "بازو، حيث تقيمون، هي موطن هذه العلامة.",
+  },
+  paragraphs: [
+    {
+      zh: "出酒店往东走，过了广交会的展馆，琶洲大道 109 号，铭丰广场 A 栋三楼 —— 名创优品的中国总部就在那儿。你们这几天开会、吃饭、睡觉的这一片，是这家公司每天上班的地方。",
+      en: "Walk east out of the hotel, past the Canton Fair halls, and at 109 Pazhou Avenue, third floor of Building A in Mingfeng Plaza, you are at MINISO’s China headquarters. The few streets where you will meet, eat and sleep this week are where this company comes to work every morning.",
+      ar: "اخرجوا من الفندق شرقًا، وتجاوزوا قاعات معرض كانتون، وعند الرقم 109 في شارع بازو، في الطابق الثالث من المبنى A بمجمع مينغفنغ، تصلون إلى المقر الصيني لـ«ميني سو». فهذه الشوارع القليلة التي ستجتمعون وتأكلون وتنامون فيها هذا الأسبوع هي المكان الذي تأتي إليه الشركة للعمل كل صباح.",
+    },
+    {
+      zh: "它 2013 年开张的时候，在广州的一个地下室车库里。十三年过去，名创优品在一百一十二个国家和地区都有店；单是这个牌子，2025 年底有 8,151 家 —— 中国内地 4,568 家，海外 3,583 家 —— 那一年营收 195.2 亿元人民币。",
+      en: "When it started in 2013 it was in a basement garage in Guangzhou. Thirteen years on, MINISO trades in more than a hundred and twelve countries and regions; the brand alone ended 2025 with 8,151 stores — 4,568 in mainland China, 3,583 abroad — on revenue of 19.52 billion yuan for the year.",
+      ar: "حين بدأت عام 2013 كانت في مرآب تحت الأرض في قوانغتشو. وبعد ثلاثة عشر عامًا صارت «ميني سو» تعمل في أكثر من مئة واثنتي عشرة دولة ومنطقة؛ وعلامتها وحدها أنهت عام 2025 بـ8,151 متجرًا — منها 4,568 في الصين القارية و3,583 في الخارج — بإيراد قدره 19.52 مليار يوان في تلك السنة.",
+    },
+    {
+      zh: "正佳广场里的那家 MINISO LAND，是这个店型在广州的第一家。全球开了二十多家，家家都在一线城市的核心商圈。广州这家今年 1 月 30 日开门：一千一百多平方米，上下两层。一楼照着「伊甸园派对」做，YOYO、迪士尼、哈利·波特、三丽鸥挤在同一层；二楼叫「可爱工厂」，用乐器引路，货架做成音符的样子。店里九成以上是 IP 商品，一百多个 IP、五千五百多款。",
+      en: "The MINISO LAND inside Grandview Mall is the first of its kind in Guangzhou. Barely two dozen exist anywhere, every one of them in the core retail district of a first-tier city. This one opened on 30 January: eleven hundred square metres over two floors. The ground floor is built as an “Eden garden party”, with YOYO, Disney, Harry Potter and Sanrio sharing one room; above it is the “cute factory”, laid out along musical instruments with shelves shaped like notes. More than ninety percent of the stock is licensed IP — over a hundred properties, more than 5,500 items.",
+      ar: "متجر «ميني سو لاند» داخل غراندفيو مول هو الأول من نوعه في قوانغتشو. ولا يتجاوز عدد فروع هذا النمط عشرين ونيّفًا في العالم كله، وكلها في قلب المناطق التجارية لمدن الصف الأول. افتُتح فرع قوانغتشو في 30 يناير: ألف ومئة متر مربع على طابقين. بُني الطابق الأرضي على فكرة «حفلة حديقة عدن»، حيث تجتمع YOYO وديزني وهاري بوتر وسانريو في قاعة واحدة؛ وفوقه «مصنع الظرافة»، ممتدّ على خطّ من الآلات الموسيقية وأرففه على هيئة نوتات. وأكثر من تسعين بالمئة من المعروض منتجات بترخيص شخصيات — أكثر من مئة شخصية وما يزيد على 5,500 صنف.",
+    },
+    {
+      zh: "开门那天早上的样子就是上面这张照片：人从门口一直站到广场上。YOYO 一代的手办，开店不到一分钟就没了。",
+      en: "The photograph above is that first morning: people standing from the door out across the plaza. The first-generation YOYO figures were gone within a minute of opening.",
+      ar: "الصورة أعلاه من ذلك الصباح الأول: الناس واقفون من الباب حتى الساحة. أما مجسّمات YOYO من الجيل الأول فنفدت خلال دقيقة من الافتتاح.",
+    },
+    {
+      zh: "正佳就是商圈那一章里的六家之一。你们去天河路的那天，这家店就在那栋楼里。",
+      en: "Grandview is one of the six malls in the shopping-district chapter. On the day you go to Tianhe Road, this store is inside that building.",
+      ar: "وغراندفيو أحد المراكز الستة في فصل مناطق التسوّق. ويوم ذهابكم إلى شارع تيانخه، يكون هذا المتجر داخل ذلك المبنى.",
+    },
+  ],
+  sources: [
+    {
+      label: { zh: "名创优品：联系我们（中国总部地址）", en: "MINISO: contact us (China headquarters address)", ar: "ميني سو: اتصل بنا (عنوان المقر الصيني)" },
+      url: "https://www.miniso.cn/contact/",
+    },
+    {
+      label: { zh: "名创优品：品牌故事（2013 年，广州的地下室车库）", en: "MINISO: brand story (2013, a basement garage in Guangzhou)", ar: "ميني سو: قصة العلامة (2013، مرآب تحت الأرض في قوانغتشو)" },
+      url: "https://www.miniso.cn/brand/",
+    },
+    {
+      label: { zh: "赢商网：2025 年度业绩与全球门店数", en: "Winshang: the 2025 results and the global store count", ar: "وينشانغ: نتائج 2025 وعدد المتاجر عالميًا" },
+      url: "https://m.winshang.com/news739495.html",
+    },
+    {
+      label: { zh: "赢商网：MINISO LAND 的门店布局", en: "Winshang: where the MINISO LAND stores are", ar: "وينشانغ: أين تقع متاجر ميني سو لاند" },
+      url: "https://m.winshang.com/news738794.html",
+    },
+    {
+      label: { zh: "信息时报：MINISO LAND 广州壹号店在正佳广场开业", en: "Xinxi Shibao: MINISO LAND Guangzhou opens at Grandview Mall", ar: "شينشي شيباو: افتتاح ميني سو لاند قوانغتشو في غراندفيو مول" },
+      url: "https://xxsb.gz-cmc.com/pages/2026/01/30/afa451fb749c44af8dcef00ce3abdf5a.html",
+    },
+    {
+      label: { zh: "时代周报：开业首日的门店实况", en: "Time Weekly: the store on its opening day", ar: "تايم ويكلي: المتجر في يوم افتتاحه" },
+      url: "https://time-weekly.com/post/327243",
+    },
+  ],
+};
+
 /* ------------------------------------------------------------------ */
 /* 这座城有多大                                                          */
 /*                                                                     */
