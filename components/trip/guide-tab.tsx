@@ -28,7 +28,13 @@ import {
   type PersonId,
   type PlaceCard,
 } from "@/lib/trip-data";
-import { IMAGE_CREDITS, IMG } from "@/lib/image-credits";
+import {
+  IMG,
+  PHOTO_CREDITS,
+  photoAlt,
+  photoCaption,
+  photoSize,
+} from "@/lib/photos";
 import { UI, t } from "@/lib/trip-i18n";
 import { cn } from "@/lib/utils";
 import {
@@ -37,12 +43,12 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { DINING_THEMES } from "@/lib/dining-brands";
+import { DINING_BRANDS, DINING_THEMES } from "@/lib/dining-brands";
 import { DiningBrands } from "./dining-brands";
 import { DistrictRoute } from "./district-route";
 import { BaggageLines } from "./flight-details";
 import { RouteList } from "./routes";
-import { BulletList, CopyChinese, GUIDE, SourceLink } from "./ui";
+import { BulletList, CopyChinese, Figure, GUIDE, SourceLink } from "./ui";
 
 /** 顶上那张「住哪里、打给谁」用的文案。整份指南只在这里写一次酒店。 */
 const HOTEL_LABELS = {
@@ -70,27 +76,75 @@ const HOTEL_LABELS = {
 
 const HOTEL_PHONE = "+86 20 8922 8888";
 
-/** 开篇那张全景，以及商圈末尾那张北京路 —— 数据里没有，写在这里。 */
-const INLINE_IMAGE_KEYS = ["skyline", "beijinglu", "tianhenight"];
+/**
+ * 两章的主图：琶洲塔与怀圣寺的光塔。照片的 alt 与图说在 lib/guide-photos.ts 里，
+ * 跟着照片走 —— 这里只说哪一章配哪一张。
+ */
+const CHAPTER_PHOTOS = { pazhou: "pazhou-pagoda", story: "huaisheng-minaret" };
+
+/** 开篇那张全景，商圈末尾那张北京路，文化章开头那张骑楼 —— 数据里没有，写在这里。 */
+const INLINE_IMAGE_KEYS = ["skyline", "beijinglu", "arcade"];
+
+/** 上面这几张的三语说明。照片里看得见什么就写什么，不留空 alt。 */
+const INLINE_PHOTOS = {
+  beijinglu: {
+    alt: {
+      zh: "北京路步行街挤满了人，两侧竖着一排店铺招牌",
+      en: "Beijing Road pedestrian street full of people, a row of shop signs down both sides",
+      ar: "شارع بكين للمشاة يعجّ بالناس، وعلى جانبيه صفّ من لافتات المتاجر",
+    },
+  },
+  arcade: {
+    alt: {
+      zh: "雨后的恩宁路：左边一排骑楼，二楼探出来盖住人行道，底下开着小吃店，街边停着电动车",
+      en: "Enning Road after rain: a row of arcade buildings on the left, their upper floors reaching out over the pavement, snack shops underneath and scooters parked along the kerb",
+      ar: "شارع إنينغ بعد المطر: صفّ من مباني الأروقة على اليسار، طوابقها العليا تمتدّ فوق الرصيف، وتحتها محال وجبات خفيفة ودراجات كهربائية على الحافة",
+    },
+    caption: {
+      zh: "恩宁路的骑楼：二楼挑出来，底下让出一条走廊。",
+      en: "The arcades of Enning Road: the upper floor reaches out and leaves a covered walk beneath.",
+      ar: "أروقة شارع إنينغ: الطابق العلوي يمتدّ فيترك ممرًّا مسقوفًا تحته.",
+    },
+  },
+} satisfies Record<string, { alt: L10n; caption?: L10n }>;
 
 /**
  * 页面上真正显示过的图片。图片来源那一段只列这些：
- * `lib/image-credits.ts` 是脚本生成的完整资产清单（不手改），里面还留着弃用的素材。
+ * `lib/photos.ts` 合并的是两份脚本生成的清单（都不手改），里面还留着弃用的素材。
  */
 const USED_IMAGE_KEYS = new Set(
   [
     ...INLINE_IMAGE_KEYS,
     ...ROUTES.map((route) => route.imageKey),
     ...FOOD_NOTES.map((note) => note.imageKey),
-    ...RETAIL_STUDY.malls.map((mall) => mall.imageKey),
+    ...RETAIL_STUDY.malls.flatMap((mall) => [mall.imageKey, mall.photoKey]),
+    ...MOSQUES.map((place) => place.photoKey),
+    ...HALAL_DINING.map((place) => place.photoKey),
     ...CITY_TECH.items.map((item) => item.imageKey),
-    ...DINING_THEMES.flatMap((theme) => theme.brands).map((brand) => brand.imageKey),
+    // 品牌推荐现在一个主题一张代表菜，不是一家一张 —— 授权清单跟着页面走。
+    ...DINING_THEMES.map((theme) => theme.imageKey),
+    CHAPTER_PHOTOS.pazhou,
+    CHAPTER_PHOTOS.story,
   ].filter((key): key is string => Boolean(key && IMG[key])),
 );
 
-const shownCredits = IMAGE_CREDITS.filter((credit) =>
+const shownCredits = PHOTO_CREDITS.filter((credit) =>
   USED_IMAGE_KEYS.has(credit.key),
 );
+
+/**
+ * 章提示里的品牌数跟着数据走。文案里写死过 21，品牌早就精选成 14 了 ——
+ * 收起来的那一行第一个数字对不上，读者对整章的信任就先掉一截。
+ */
+const FOOD_HINT: L10n = (() => {
+  const count = String(DINING_BRANDS.length);
+  const hint = UI.guideHints.foodCulture;
+  return {
+    zh: hint.zh.replace("{n}", count),
+    en: hint.en.replace("{n}", count),
+    ar: hint.ar.replace("{n}", count),
+  };
+})();
 
 /**
  * 开篇的一句欢迎。只在这份组件里，不进 lib/trip-data.ts —— 那里放的是事实。
@@ -113,6 +167,12 @@ const WELCOME = {
     en: "Between the meetings, we hope you find time for the Pearl River at night, for the lanes of the old city, and for the Guangzhou you discover for yourself.",
     ar: "وبين جلسات المؤتمر، نتمنى أن تجدوا وقتًا لنهر اللؤلؤ ليلًا ولأزقة المدينة القديمة، ولقوانغتشو التي تكتشفونها بأنفسكم.",
   },
+  /** 照片里看得见什么，三语。读屏的人也该知道开篇那张是什么。 */
+  alt: {
+    zh: "白天从江对岸看珠江新城，一排高楼沿着岸边站开",
+    en: "Zhujiang New Town by day, seen from across the Pearl River: a line of towers along the bank",
+    ar: "تشوجيانغ الجديدة نهارًا من الضفة المقابلة لنهر اللؤلؤ: صفّ من الأبراج على طول الضفة",
+  },
 } satisfies Record<string, L10n>;
 
 /**
@@ -121,33 +181,61 @@ const WELCOME = {
  *
  * 正文限宽 44rem：屏幕再宽也只是行数变少，不是字变大、也不是一行拉到底。
  */
+/**
+ * 按 key 取一张照片来放。第二批照片自带三语 alt 与图说（lib/guide-photos.ts），
+ * 第一批的说明写在各自的数据条目里，所以这里允许传一个 alt 兜底。
+ * 没有说明就不放图 —— 空 alt 对读屏的人等于「跳过」。
+ */
+function GuideFigure({
+  photoKey,
+  lang,
+  alt,
+  caption,
+  className,
+}: {
+  photoKey?: string;
+  lang: Lang;
+  alt?: L10n;
+  caption?: L10n;
+  className?: string;
+}) {
+  if (!photoKey || !IMG[photoKey]) return null;
+  const text = photoAlt(photoKey) ?? alt;
+  if (!text) return null;
+  const size = photoSize(photoKey);
+  return (
+    <Figure
+      src={IMG[photoKey]}
+      alt={text}
+      caption={caption ?? photoCaption(photoKey)}
+      lang={lang}
+      width={size?.width}
+      height={size?.height}
+      className={className}
+    />
+  );
+}
+
 function Prose({
   lead,
   paragraphs,
   sources,
   lang,
-  photo,
+  photoKey,
   children,
 }: {
   lead: L10n;
   paragraphs: L10n[];
   sources: { label: L10n; url: string }[];
   lang: Lang;
-  /** 顶上压一张满宽照片（public/images 的 key）。 */
-  photo?: string;
+  /** 一章的主图，放在开头那句话下面。 */
+  photoKey?: string;
   children?: React.ReactNode;
 }) {
   return (
     <section className="max-w-[44rem]">
-      {photo && IMG[photo] ? (
-        <img
-          src={IMG[photo]}
-          alt=""
-          loading="lazy"
-          className="trip-photo mb-4 aspect-[16/9] w-full object-cover"
-        />
-      ) : null}
       <p className={GUIDE.lead}>{t(lead, lang)}</p>
+      <GuideFigure photoKey={photoKey} lang={lang} />
       <div className="mt-2.5 space-y-2.5">
         {paragraphs.map((paragraph, index) => (
           <p key={index} className={GUIDE.body}>
@@ -279,6 +367,7 @@ function PlaceCardView({ place, lang }: { place: PlaceCard; lang: Lang }) {
     <article className="max-w-[44rem] border-t border-card-line pt-3">
       <h4 className={GUIDE.subheading}>{t(place.name, lang)}</h4>
       <p className={cn(GUIDE.body, "mt-1")}>{t(place.note, lang)}</p>
+      <GuideFigure photoKey={place.photoKey} lang={lang} />
       <div className="mt-2.5">
         <CopyChinese entry={place.copy} lang={lang} showBig />
       </div>
@@ -301,6 +390,23 @@ function PlaceCardView({ place, lang }: { place: PlaceCard; lang: Lang }) {
   );
 }
 
+/**
+ * 食在广州这一章的出处：介绍那几段的来源，加上每道菜自己的来源，合成一张表。
+ * 链接一条不丢，只是不再一道菜一个红链接地打断阅读；每条用菜名当标签，认得出是哪一道。
+ */
+const foodSources = [
+  ...FOOD_CULTURE.sources,
+  ...FOOD_NOTES.filter((note) => note.url).map((note) => ({
+    label: note.title,
+    url: note.url as string,
+  })),
+].filter(
+  (source, index, all) => all.findIndex((s) => s.url === source.url) === index,
+);
+
+/** 文化那一章里，个别条目（放假安排、民俗）带着自己的出处，章尾一起折叠。 */
+const cultureSources = CULTURE_NOTES.flatMap((note) => note.sources ?? []);
+
 /** 一家商场：名字、一句定位、一段边走边看的事实；有图就配一张小图。 */
 function MallRow({ mall, lang }: { mall: MallCard; lang: Lang }) {
   return (
@@ -308,7 +414,7 @@ function MallRow({ mall, lang }: { mall: MallCard; lang: Lang }) {
       {mall.imageKey && IMG[mall.imageKey] ? (
         <img
           src={IMG[mall.imageKey]}
-          alt=""
+          alt={mall.imageAlt ? t(mall.imageAlt, lang) : ""}
           loading="lazy"
           width={88}
           height={66}
@@ -321,6 +427,8 @@ function MallRow({ mall, lang }: { mall: MallCard; lang: Lang }) {
           {t(mall.tier, lang)}
         </p>
         <p className={cn(GUIDE.body, "mt-1")}>{t(mall.facts, lang)}</p>
+        {/* 有成幅照片的那一家（天环的俯瞰）在自己这一行里展开，不去挤小缩略图那一列。 */}
+        <GuideFigure photoKey={mall.photoKey} lang={lang} />
       </div>
     </li>
   );
@@ -356,7 +464,7 @@ export function GuideTab({
         {IMG.skyline ? (
           <img
             src={IMG.skyline}
-            alt=""
+            alt={t(WELCOME.alt, lang)}
             width={1200}
             height={492}
             className="h-auto w-full md:w-[26rem] md:shrink-0 md:rounded-lg"
@@ -470,6 +578,7 @@ export function GuideTab({
             paragraphs={PAZHOU.paragraphs}
             sources={PAZHOU.sources}
             lang={lang}
+            photoKey={CHAPTER_PHOTOS.pazhou}
           />
         </Section>
 
@@ -479,6 +588,7 @@ export function GuideTab({
             paragraphs={CITY_STORY.paragraphs}
             sources={CITY_STORY.sources}
             lang={lang}
+            photoKey={CHAPTER_PHOTOS.story}
           />
         </Section>
 
@@ -494,10 +604,10 @@ export function GuideTab({
           </Prose>
         </Section>
 
-        {/* 配图只用真在中国、最好在广州拍的：广汽的 Robotaxi（粤A 牌）、扫码付款、
-            广汽 Aion 黄的。载人无人机那张是西班牙警用涂装、送餐机器人那张拍于日本千叶，
-            都不能当中国实景 —— 那两条宁可不配图。
-            （上一版挂的 robotaxi.jpg 拍的是阿布扎比，已换成广汽那张。） */}
+        {/* 配图只用真在中国、最好在广州拍的：街上的 Robotaxi（粤A 牌）、扫码付款、
+            黄色电动出租车，载人飞行器那张来自广州市政府。
+            送餐机器人与无人机送餐没有能用的中国实景，那两条宁可不配图。
+            （上一版挂的 robotaxi.jpg 拍的是阿布扎比，已换掉。） */}
         <Section id="tech" title={UI.cityTech} hint={UI.guideHints.tech} lang={lang}>
           <Prose
             lead={CITY_TECH.lead}
@@ -508,18 +618,14 @@ export function GuideTab({
             <ul className="mt-4 grid gap-x-5 md:grid-cols-2">
               {CITY_TECH.items.map((item) => (
                 <li key={item.id} className="border-t border-card-line py-3">
-                  {item.imageKey && IMG[item.imageKey] ? (
-                    <img
-                      src={IMG[item.imageKey]}
-                      alt=""
-                      loading="lazy"
-                      className="trip-photo mb-2.5 aspect-[16/10] w-full object-cover"
-                    />
-                  ) : null}
+                  {/* 照片按原比例放全：机身、车顶的传感器、电梯口都不裁。 */}
+                  <GuideFigure
+                    photoKey={item.imageKey}
+                    alt={item.imageAlt}
+                    lang={lang}
+                    className="mt-0"
+                  />
                   <h4 className={GUIDE.subheading}>{t(item.title, lang)}</h4>
-                  <p className={cn(GUIDE.note, "mt-0.5 text-navy-soft/85")}>
-                    {t(UI.techWhere, lang)}：{t(item.where, lang)}
-                  </p>
                   {/* 正文按空行分段：先给一个看得见的画面，再让数字落下来当回响。
                       一段连着写，两个节拍就糊成一句话了。 */}
                   {t(item.body, lang)
@@ -529,6 +635,11 @@ export function GuideTab({
                         {paragraph}
                       </p>
                     ))}
+                  {/* 「哪里能碰到」排在故事后面：先读到画面，再拿到入口。
+                      放在标题下面时，390px 上先看见的是一条说明书。 */}
+                  <p className={cn(GUIDE.note, "mt-1.5 text-navy-soft/85")}>
+                    {t(UI.techWhere, lang)}：{t(item.where, lang)}
+                  </p>
                 </li>
               ))}
             </ul>
@@ -563,7 +674,7 @@ export function GuideTab({
         <Section
           id="food"
           title={UI.foodCulture}
-          hint={UI.guideHints.foodCulture}
+          hint={FOOD_HINT}
           lang={lang}
         >
           {/*
@@ -585,42 +696,64 @@ export function GuideTab({
               这一章不再挂那串通用饮食提醒：清真与忌口那句已经并进上面品牌推荐的导语
               （挑店之前就要看到），机上特殊餐那句属于出发前的事，已移到「出发前准备」。
               一章里同一句话说两遍就是噪音。
+              来源也不在这里 —— 菜式介绍与每道菜的出处一起，收在下面那一个折叠里。
             */}
-            <Sources sources={FOOD_CULTURE.sources} lang={lang} />
           </div>
 
           <SubHeading>{t(UI.foodIdeas, lang)}</SubHeading>
+          {/*
+            十一道菜不是十一屏一样的图文：几道给一张看得见的照片（`hero`），
+            桌面上图在左、字在右；其余走小图或纯文字的紧凑行。
+            顺序按原来的读法走，不按有没有照片重排。
+          */}
           <div className="grid gap-x-5 md:grid-cols-2">
-            {FOOD_NOTES.map((note) => (
-              <article
-                key={note.id}
-                className="border-t border-card-line py-3"
-              >
-                {note.imageKey && IMG[note.imageKey] ? (
-                  <img
-                    src={IMG[note.imageKey]}
-                    alt=""
-                    loading="lazy"
-                    className="trip-photo mb-2 aspect-[4/3] w-full object-cover"
-                  />
-                ) : null}
-                <h4 className={GUIDE.subheading}>{t(note.title, lang)}</h4>
-                <p className={cn(GUIDE.body, "mt-1")}>{t(note.body, lang)}</p>
-                {note.url ? (
-                  <div className="mt-1.5">
-                    <SourceLink
-                      label={{
-                        zh: "来源",
-                        en: "Source",
-                        ar: "المصدر",
-                      }}
-                      url={note.url}
-                      lang={lang}
+            {FOOD_NOTES.map((note) =>
+              note.hero ? (
+                <article
+                  key={note.id}
+                  className="border-t border-card-line py-3 md:col-span-2 md:flex md:items-start md:gap-4"
+                >
+                  {note.imageKey && IMG[note.imageKey] ? (
+                    // 主图也按原比例放全：手机上限高 15rem，桌面上放在文字左边。
+                    <img
+                      src={IMG[note.imageKey]}
+                      alt={note.imageAlt ? t(note.imageAlt, lang) : ""}
+                      loading="lazy"
+                      className="trip-photo mx-auto mb-2 block h-auto max-h-[15rem] w-auto max-w-full md:mx-0 md:mb-0 md:max-h-[13rem] md:shrink-0"
                     />
+                  ) : null}
+                  <div className="md:min-w-0">
+                    <h4 className={GUIDE.subheading}>{t(note.title, lang)}</h4>
+                    <p className={cn(GUIDE.body, "mt-1")}>{t(note.body, lang)}</p>
                   </div>
-                ) : null}
-              </article>
-            ))}
+                </article>
+              ) : (
+                <article
+                  key={note.id}
+                  className="flex gap-3 border-t border-card-line py-3"
+                >
+                  {note.imageKey && IMG[note.imageKey] ? (
+                    <img
+                      src={IMG[note.imageKey]}
+                      alt={note.imageAlt ? t(note.imageAlt, lang) : ""}
+                      loading="lazy"
+                      width={88}
+                      height={66}
+                      className="trip-photo h-[66px] w-[88px] shrink-0 object-cover"
+                    />
+                  ) : null}
+                  <div className="min-w-0">
+                    <h4 className={GUIDE.subheading}>{t(note.title, lang)}</h4>
+                    <p className={cn(GUIDE.body, "mt-1")}>{t(note.body, lang)}</p>
+                  </div>
+                </article>
+              ),
+            )}
+          </div>
+          {/* 每道菜下面各挂一个红色「来源」，十一条读下来全是链接。
+              出处一条不少，收进这一节末尾的一个折叠里；品牌那一节的「菜品来源」另算。 */}
+          <div className="max-w-[44rem]">
+            <Sources sources={foodSources} lang={lang} />
           </div>
 
           <SubHeading>{t(UI.diningBrands, lang)}</SubHeading>
@@ -636,16 +769,8 @@ export function GuideTab({
           <DistrictRoute lang={lang} />
 
           <div className="max-w-[44rem]">
-            {/* 天河路夜景航拍：这一节讲的是「一条路上十四家商场」，
-                一张俯瞰比两百字描述管用。 */}
-            {IMG.tianhenight ? (
-              <img
-                src={IMG.tianhenight}
-                alt=""
-                loading="lazy"
-                className="trip-photo mb-3 aspect-[16/9] w-full object-cover"
-              />
-            ) : null}
+            {/* 这一节不再拿一张商圈夜景航拍当泛泛的开场白：
+                真正有东西看的是天环那张俯瞰，放在它自己那一行里。 */}
             <p className={GUIDE.lead}>{t(RETAIL_STUDY.lead, lang)}</p>
             <div className="mt-2.5 space-y-2.5">
               {RETAIL_STUDY.intro.map((paragraph, index) => (
@@ -673,14 +798,12 @@ export function GuideTab({
           </div>
 
           <div className="max-w-[44rem]">
-            {IMG.beijinglu ? (
-              <img
-                src={IMG.beijinglu}
-                alt=""
-                loading="lazy"
-                className="trip-photo mb-2.5 aspect-[16/9] w-full object-cover"
-              />
-            ) : null}
+            <GuideFigure
+              photoKey="beijinglu"
+              alt={INLINE_PHOTOS.beijinglu.alt}
+              lang={lang}
+              className="mt-0"
+            />
             <p className={GUIDE.body}>{t(RETAIL_STUDY.beijinglu, lang)}</p>
             <Sources sources={RETAIL_STUDY.sources} lang={lang} />
           </div>
@@ -701,14 +824,35 @@ export function GuideTab({
           hint={UI.guideHints.culture}
           lang={lang}
         >
+          <div className="max-w-[44rem]">
+            {/* 恩宁路的骑楼：这一章讲的是到了会遇到的小事，开头给一张街上的样子。 */}
+            <GuideFigure
+              photoKey="arcade"
+              alt={INLINE_PHOTOS.arcade.alt}
+              caption={INLINE_PHOTOS.arcade.caption}
+              lang={lang}
+              className="mt-0"
+            />
+          </div>
           <ul className="max-w-[44rem]">
             {CULTURE_NOTES.map((note) => (
               <li key={note.id} className="border-t border-card-line py-3">
                 <h4 className={GUIDE.subheading}>{t(note.title, lang)}</h4>
-                <p className={cn(GUIDE.body, "mt-1")}>{t(note.body, lang)}</p>
+                {/* 空行分段：像「初次见面」这一条，两小段比一大段好读。 */}
+                {t(note.body, lang)
+                  .split("\n")
+                  .map((paragraph, index) => (
+                    <p key={index} className={cn(GUIDE.body, "mt-1")}>
+                      {paragraph}
+                    </p>
+                  ))}
               </li>
             ))}
           </ul>
+          {/* 只有放假安排这类要给出处的条目才有 sources，和别处一样收在章尾一个折叠里。 */}
+          <div className="max-w-[44rem]">
+            <Sources sources={cultureSources} lang={lang} />
+          </div>
         </Section>
 
         <Section
@@ -752,9 +896,10 @@ export function GuideTab({
               </li>
             ))}
           </ul>
-          {/* CC 授权的条件：作者与授权要列出来。只列页面上真在用的那些 ——
-              仓里还留着弃用的旧素材（水印图、日本的机器人、阿布扎比那张），
-              全表照搬会把它们端到客人面前。授权清单文件本身不动。 */}
+          {/* CC 授权的条件：作者与授权要列出来，授权名直接链到条款页。
+              维基来源写作者与 CC；政府或官网的图只写来源页与提供方，不冒充 CC。
+              只列页面上真在用的那些 —— 仓里还留着弃用的旧素材，全表照搬会把它们
+              端到客人面前。两份清单文件都是脚本生成的，不手改。 */}
           <SubHeading>{t(UI.imageCredits, lang)}</SubHeading>
           <ul className={cn(GUIDE.note, "max-w-[44rem] space-y-1")}>
             {shownCredits.map((credit) => (
@@ -768,7 +913,20 @@ export function GuideTab({
                   {credit.title}
                 </a>
                 {" — "}
-                {credit.artist || "Wikimedia Commons"}, {credit.license}
+                {credit.artist || "Wikimedia Commons"}
+                {", "}
+                {credit.licenseUrl ? (
+                  <a
+                    href={credit.licenseUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="underline underline-offset-4"
+                  >
+                    {credit.license}
+                  </a>
+                ) : (
+                  credit.license
+                )}
               </li>
             ))}
           </ul>

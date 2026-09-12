@@ -1,0 +1,155 @@
+{
+  "_readme": [
+    "指南第二批照片的清单：来源、授权、三语 alt 与图说都写在这里。",
+    "跑 `node scripts/build-guide-photos.mjs [输入目录]` 会把 input 里的原图压到最长边 1400，",
+    "写进 public/images/，并生成 lib/guide-photos.ts（生成文件不要手改）。",
+    "原图不入仓：assetUrl 记着从哪儿来，重跑前先按 assetUrl 取回同名文件。",
+    "source=wikimedia 的按 CC 条件署名作者与授权；source=official 的只写来源页与提供方，",
+    "不冒充 CC 或维基。"
+  ],
+  "photos": [
+    {
+      "key": "pazhou-pagoda",
+      "input": "pazhou-0.jpg",
+      "source": "wikimedia",
+      "title": "Aerial View, Whampoa Pagoda, Guangzhou 20230701.jpg",
+      "artist": "Tim Wu",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "assetUrl": "https://upload.wikimedia.org/wikipedia/commons/7/71/Aerial_View%2C_Whampoa_Pagoda%2C_Guangzhou_20230701.jpg",
+      "page": "https://commons.wikimedia.org/wiki/File:Aerial_View,_Whampoa_Pagoda,_Guangzhou_20230701.jpg",
+      "alt": {
+        "zh": "航拍琶洲塔：八角形的砖塔立在一片树林中间，四周是住宅楼、会展与交易中心的新楼，天上压着一层乌云。",
+        "en": "An aerial view of the Pazhou pagoda: an octagonal brick tower standing in a block of trees, ringed by flats and new exhibition and trading buildings under a dark sky.",
+        "ar": "منظر جوي لباغودا بازو: برج من الآجر ثماني الأضلاع يقف وسط بقعة من الأشجار، تحيط به مبانٍ سكنية وأبراج معارض وتجارة حديثة تحت سماء داكنة."
+      },
+      "caption": {
+        "zh": "琶洲塔与今天的城区在同一个画面里。",
+        "en": "The Pazhou pagoda and today's district in one frame.",
+        "ar": "باغودا بازو والحيّ الحديث في إطار واحد."
+      }
+    },
+    {
+      "key": "huaisheng-minaret",
+      "input": "huaisheng-official.png",
+      "source": "official",
+      "title": "怀圣寺光塔",
+      "artist": "广州越秀发布",
+      "license": "来源页",
+      "assetUrl": "https://www.yuexiu.gov.cn/img/0/764/764734/8665060.png",
+      "page": "https://www.yuexiu.gov.cn/zjyx/yxjd/zjwh/content/post_8665060.html",
+      "alt": {
+        "zh": "从院子里抬头看：白色的圆筒形光塔立在蓝天下，近处是一排绿琉璃瓦的中式屋檐和树。",
+        "en": "Looking up from the courtyard: the white cylindrical minaret against a blue sky, with green-tiled Chinese eaves and trees in the foreground.",
+        "ar": "نظرة إلى الأعلى من الفناء: المئذنة الأسطوانية البيضاء في سماء زرقاء، وفي المقدّمة أفاريز صينية بقرميد أخضر وأشجار."
+      },
+      "caption": {
+        "zh": "怀圣寺：白色的光塔从中式屋檐旁升起来。",
+        "en": "Huaisheng Mosque: the white minaret rising beside Chinese eaves.",
+        "ar": "مسجد هوايشنغ: المئذنة البيضاء ترتفع إلى جانب الأفاريز الصينية."
+      }
+    },
+    {
+      "key": "xianxian-gate",
+      "input": "xianxian-0.jpg",
+      "source": "wikimedia",
+      "title": "Guangzhou Yuexiu Qingzhen Xianxian Gumu 2023-07-26 12.12.55.jpg",
+      "artist": "古海岸遗址",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "assetUrl": "https://upload.wikimedia.org/wikipedia/commons/8/81/Guangzhou_Yuexiu_Qingzhen_Xianxian_Gumu_2023-07-26_12.12.55.jpg",
+      "page": "https://commons.wikimedia.org/wiki/File:Guangzhou_Yuexiu_Qingzhen_Xianxian_Gumu_2023-07-26_12.12.55.jpg",
+      "alt": {
+        "zh": "灰砖的门楼，檐下有彩绘，门额上并排着阿拉伯文和「清真先贤古墓」六个字，中间是圆形的月洞门，两旁是老树和盆栽。",
+        "en": "A grey brick gateway with painted eaves: an Arabic inscription and the Chinese name of the ancient tomb side by side above a round moon gate, old trees and potted plants on either side.",
+        "ar": "بوابة من الآجر الرمادي بأفاريز مزخرفة: نقش عربي واسم المقبرة بالصينية جنبًا إلى جنب فوق بوابة مستديرة، وعلى الجانبين أشجار عتيقة ونباتات في أصص."
+      },
+      "caption": {
+        "zh": "先贤古墓的门楼，门额上是阿拉伯文与汉字。",
+        "en": "The gateway to the ancient tomb, inscribed in Arabic and Chinese.",
+        "ar": "بوابة المقبرة القديمة، ونقشها بالعربية والصينية."
+      }
+    },
+    {
+      "key": "parc-garden",
+      "input": "parc-aerial-0.jpg",
+      "source": "wikimedia",
+      "title": "Aerial View, Parc Central, Guangzhou 20230520-C.jpg",
+      "artist": "Tim Wu",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "assetUrl": "https://upload.wikimedia.org/wikipedia/commons/8/88/Aerial_View%2C_Parc_Central%2C_Guangzhou_20230520-C.jpg",
+      "page": "https://commons.wikimedia.org/wiki/File:Aerial_View,_Parc_Central,_Guangzhou_20230520-C.jpg",
+      "alt": {
+        "zh": "垂直俯看天环广场：两片弧形的格栅屋顶像两条鱼，中间留出步道、绿化和下沉广场，四周是车流不断的马路。",
+        "en": "Parc Central seen straight down: two curved latticed roofs like a pair of fish, with walkways, planting and a sunken plaza left open between them, busy roads all around.",
+        "ar": "بارك سنترال من الأعلى مباشرة: سقفان مقوّسان مشبّكان كسمكتين، وبينهما ممرات ومساحات خضراء وساحة منخفضة، وحولهما شوارع مزدحمة."
+      },
+      "caption": {
+        "zh": "天环：两片屋顶之间留着花园、步道和下沉广场。",
+        "en": "Parc Central: garden, walkways and a sunken plaza between the two roofs.",
+        "ar": "بارك سنترال: حديقة وممرات وساحة منخفضة بين السقفين."
+      }
+    },
+    {
+      "key": "gxr-guangzhou",
+      "input": "werideir-1.jpg",
+      "source": "official",
+      "title": "WeRide GXR robotaxi in Guangzhou",
+      "artist": "WeRide 文远知行",
+      "license": "来源页",
+      "assetUrl": "https://ml.globenewswire.com/Resource/Download/5e18f23a-8d59-4226-a328-47cfa29b6c4c/1.jpg",
+      "page": "https://ir.weride.ai/news-releases/news-release-details/weride-launches-247-fully-driverless-robotaxi-service-guangzhous",
+      "alt": {
+        "zh": "一辆黑色的自动驾驶出租车驶过绿灯路口，车顶装着一排传感器，车身印着文远知行的标识，挂新能源绿牌。",
+        "en": "A black self-driving taxi crossing a junction on green, a row of sensors on its roof, the WeRide logo on its body and a green electric-vehicle plate.",
+        "ar": "سيارة أجرة سوداء ذاتية القيادة تعبر تقاطعًا والإشارة خضراء، وعلى سقفها صفّ من أجهزة الاستشعار، وعلى جسمها شعار WeRide ولوحة خضراء للسيارات الكهربائية."
+      },
+      "caption": {
+        "zh": "文远知行的 GXR 行驶在广州街头。",
+        "en": "A WeRide GXR on the road in Guangzhou.",
+        "ar": "سيارة GXR من WeRide في شوارع قوانغتشو."
+      }
+    },
+    {
+      "key": "hotel-lift-robot",
+      "input": "hotel-delivery.webp",
+      "source": "official",
+      "title": "Hospitality room delivery robot",
+      "artist": "Pudu Robotics 普渡机器人",
+      "license": "来源页",
+      "assetUrl": "https://cdn.pudutech.com/hospitality_room_delivery_flashbot_4c03808775.webp",
+      "page": "https://www.pudurobotics.com/en/solutions/hospitality",
+      "alt": {
+        "zh": "一台白色的送物机器人正从电梯口出来，柜门分成四格，脚下是酒店的大理石地面。",
+        "en": "A white delivery robot coming out of a lift doorway, its cabinet split into four hatches, marble hotel flooring underneath.",
+        "ar": "روبوت توصيل أبيض يخرج من باب مصعد، وخزانته مقسّمة إلى أربع فتحات، وتحته أرضية رخامية في فندق."
+      },
+      "caption": {
+        "zh": "酒店服务示例：送物机器人进出电梯。",
+        "en": "Hotel service example: a delivery robot using a lift.",
+        "ar": "مثال على خدمة فندقية: روبوت توصيل يستخدم المصعد."
+      }
+    },
+    {
+      "key": "pazhou-drone",
+      "input": "pazhou-drone-2.png",
+      "source": "official",
+      "title": "琶洲低空配送",
+      "artist": "广州市海珠区人民政府",
+      "license": "来源页",
+      "assetUrl": "https://www.haizhu.gov.cn/img/1/1572/1572853/10678783.png",
+      "page": "https://www.haizhu.gov.cn/hzdt/ztlm/dkjj/hhr/cjhx/content/post_10678783.html",
+      "alt": {
+        "zh": "垂直俯看：一条绿色的河涌横过画面，一架白色多旋翼无人机停在岸边的设施上方，两侧是树、马路和排成一列的电动车。",
+        "en": "Seen straight down: a green water channel crossing the frame, a white multirotor drone hovering over a small facility on the bank, trees, a road and rows of scooters on either side.",
+        "ar": "من الأعلى مباشرة: قناة مائية خضراء تعبر الصورة، وطائرة مسيّرة بيضاء متعدّدة المراوح تحلّق فوق منشأة صغيرة على الضفة، وعلى الجانبين أشجار وشارع وصفوف من الدراجات الكهربائية."
+      },
+      "caption": {
+        "zh": "琶洲的低空配送：无人机沿着河涌上方走。",
+        "en": "Low-altitude delivery in Pazhou: the drone follows the water channel.",
+        "ar": "توصيل منخفض الارتفاع في بازو: المسيّرة تتبع مجرى القناة."
+      }
+    }
+  ]
+}

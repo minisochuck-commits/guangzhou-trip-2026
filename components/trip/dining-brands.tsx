@@ -1,5 +1,4 @@
 "use client";
-/* eslint-disable @next/next/no-img-element -- 静态站、离线可用、相对路径：故意用原生 <img> */
 
 import * as React from "react";
 
@@ -11,17 +10,19 @@ import {
 import type { Lang } from "@/lib/trip-data";
 import { t } from "@/lib/trip-i18n";
 import { cn } from "@/lib/utils";
-import { IMG } from "@/lib/image-credits";
-import { CopyChinese, GUIDE, SourceLink } from "./ui";
+import { IMG } from "@/lib/photos";
+import { CopyChinese, Figure, GUIDE, SourceLink } from "./ui";
 
 /**
  * 特色餐饮品牌推荐：按口味分主题，一行一个品牌，四行左右说完。
  *
  * 这一节是「介绍」，不是工具：没有筛选、没有定位、没有地图按钮，也没有卡中卡。
- * 每个品牌只给招牌菜照片、名字、人均参考、一句特色、一到两道点单参考，外加一个复制中文店名的按钮 ——
+ * 每个品牌只给名字、人均参考、一句特色、一到两道点单参考，外加一个复制中文店名的按钮 ——
  * 门店地址、电话、营业时间都不写，那些随分店变，页面追不上。
- * 照片拍的是这一味，不是门脸：本地品牌的门店照片没有可以合法使用的，
- * 而且一张乳鸽的图本来就比一张门脸的图更让人想去。
+ *
+ * 配图按主题给一张，不是每家一张：十四张满宽图把这一节拖成了一条长走廊，
+ * 而且那些照片拍的是这一味、不是哪一家的店（本地品牌没有可以合法使用的门店照片），
+ * 满宽摆在店名下面容易被当成门店实拍，所以图下明写「菜式示意」。
  * 来源统一收在末尾一个折叠里，不是每行挂一个。
  */
 const LABELS = {
@@ -30,6 +31,12 @@ const LABELS = {
     zh: "可试",
     en: "Try",
     ar: "جرّبوا",
+  },
+  /** 图说：这是这一组的菜长什么样，不是哪一家的门店实拍。 */
+  sample: {
+    zh: "菜式示意",
+    en: "Dish shown as an example",
+    ar: "صورة توضيحية للطبق",
   },
   sources: {
     zh: "菜品来源",
@@ -72,7 +79,7 @@ function Budget({
 }
 
 /**
- * 复制按钮的可访问名字要带上是哪一家 —— 21 个按钮都念「复制 中文店名」分不清。
+ * 复制按钮的可访问名字要带上是哪一家 —— 十几个按钮都念「复制 中文店名」分不清。
  * 复制到剪贴板的仍然只有中文店名本身。
  */
 function copyEntryFor(brand: DiningBrand) {
@@ -92,17 +99,8 @@ function BrandRow({ brand, lang }: { brand: DiningBrand; lang: Lang }) {
   // 英文、阿语的标题是译名，中文检索名要单独露出来 —— 给店员看、也能手选。
   const nameIsChinese = lang === "zh";
   const entry = copyEntryFor(brand);
-  const photo = brand.imageKey ? IMG[brand.imageKey] : undefined;
   return (
     <li className="border-t border-card-line py-3">
-      {photo ? (
-        <img
-          src={photo}
-          alt=""
-          loading="lazy"
-          className="trip-photo mb-2.5 aspect-[4/3] w-full object-cover"
-        />
-      ) : null}
       {/* 三级：主题标题最重，品牌名中等，标签只是行内的引子 —— 别三层一样粗。 */}
       <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
         <h4 className="text-[0.9375rem] font-medium leading-6 text-navy">
@@ -149,6 +147,17 @@ export function DiningBrands({ lang }: { lang: Lang }) {
             {t(theme.title, lang)}
           </h3>
           <p className={cn(GUIDE.note, "mt-0.5")}>{t(theme.lead, lang)}</p>
+          {theme.imageKey && theme.imageAlt && IMG[theme.imageKey] ? (
+            // 桌面上照片只占左边一栏：一组两三家店，图再宽就压过了文字。
+            // 图说写「菜式示意」—— 这是这一味长什么样，不是哪一家的门店实拍。
+            <Figure
+              src={IMG[theme.imageKey]}
+              alt={theme.imageAlt}
+              caption={LABELS.sample}
+              lang={lang}
+              className="md:max-w-[22rem]"
+            />
+          ) : null}
           <ul className="mt-1.5 grid gap-x-5 md:grid-cols-2">
             {theme.brands.map((brand) => (
               <BrandRow key={brand.id} brand={brand} lang={lang} />

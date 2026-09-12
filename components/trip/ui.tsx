@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable @next/next/no-img-element -- 静态站、离线可用、相对路径：故意用原生 <img>，不走 next/image 的加载器 */
 
 import * as React from "react";
 import { CheckIcon, CopyIcon, ExternalLinkIcon } from "lucide-react";
@@ -34,6 +35,77 @@ export const GUIDE = {
   /** 副说明、图注、来源、眉批。 */
   note: "text-[0.8125rem] leading-[1.55] text-navy-soft",
 } as const;
+
+/**
+ * 竖构图的照片（高大于宽）：按 16/9、4/3 这种横框裁，剩下的只是中间一条。
+ * 这几张一律放全、不裁，两边留白落在 `.trip-photo` 的底色上。
+ * 名单集中在这里，路线、指南、餐饮三处共用。
+ */
+export const TALL_PHOTOS = new Set([
+  "tower", // 800×1200 广州塔
+  "ginger", // 900×1200 姜撞奶
+  "zhezhe", // 900×1200 啫啫煲
+  "seafood", // 900×1200 清蒸石斑
+  "bubbletea", // 900×1200 一杯茶饮
+  "huaisheng", // 960×1200 怀圣寺
+  "river", // 1192×1200 近方图，按 16/9 裁会切掉塔顶
+  "cashless", // 1200×1148 近方图，按 16/10 裁只剩中间一条
+]);
+
+/**
+ * 一张照片该怎么放：横图按给定比例裁，竖图按比例放全。
+ * `ratio` 用 Tailwind 的 aspect 类，`cap` 是竖图的限高。
+ * 小缩略图（商场那一列的 88×66）还用它；整幅照片走下面的 `Figure`。
+ */
+export function photoFit(imageKey: string, ratio: string, cap = "max-h-[22rem]") {
+  return TALL_PHOTOS.has(imageKey) ? `${cap} object-contain` : `${ratio} object-cover`;
+}
+
+/**
+ * 一张照片 + 一句图说。整份指南里成幅的照片都走这里。
+ *
+ * 三条规矩：
+ *   1. **按原比例放全，永不裁切** —— 塔尖、屋檐、机身都要留在画面里，
+ *      所以只给限高与限宽，不用 object-cover。竖图自然就窄，居中留白。
+ *   2. 手机上限高 15rem（240px）左右，桌面 20rem；照片是插图，不是海报。
+ *   3. alt 与图说分工：alt 说清照片里有什么（读屏用），图说给一句上下文，
+ *      不把 alt 再抄一遍。图说可以不给，alt 不行。
+ */
+export function Figure({
+  src,
+  alt,
+  caption,
+  lang,
+  width,
+  height,
+  className,
+}: {
+  src: string;
+  alt: L10n;
+  caption?: L10n;
+  lang: Lang;
+  width?: number;
+  height?: number;
+  className?: string;
+}) {
+  return (
+    <figure className={cn("my-3", className)}>
+      <img
+        src={src}
+        alt={t(alt, lang)}
+        width={width}
+        height={height}
+        loading="lazy"
+        className="trip-photo mx-auto block h-auto max-h-[15rem] w-auto max-w-full md:max-h-[20rem]"
+      />
+      {caption ? (
+        <figcaption className={cn(GUIDE.note, "mt-1.5 text-center")}>
+          {t(caption, lang)}
+        </figcaption>
+      ) : null}
+    </figure>
+  );
+}
 
 /** 航班号、机场码、时间：在阿语 RTL 下必须保持从左到右。 */
 export function Ltr({
