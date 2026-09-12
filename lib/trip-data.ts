@@ -1798,9 +1798,9 @@ export const MINISO_IN_GZ: {
       ar: "إلى الغرب من الفندق، خلف قاعات معرض كانتون، تقع بازو الغربية، حيث مقارّ تينسنت وعلي بابا وفيب شوب. وأحدث أبراجها برج «ميني سو»: 287.5 مترًا، وأربعون طابقًا فوق الأرض، ملفوفًا من أعلاه إلى أسفله بانحناءة زجاجية بزاوية 270 درجة تطلّ على نهر اللؤلؤ وبرج كانتون. وقال مصمّموه إنهم أرادوا مبنى على هيئة قلم منتصب.",
     },
     {
-      zh: "这栋楼 2021 年 7 月动工，2025 年 7 月封顶，今年 8 月 12 日通过竣工验收 —— 你们到广州的时候，它验收才一个月。投资三十五亿元人民币，占地六千五百多平方米，往上盖出十四万平方米。以后名创优品的全球业务、品牌运营和产品研发都在这栋楼里。",
-      en: "Work began in July 2021, the frame topped out in July 2025, and the building passed its completion inspection on 12 August this year — one month before you land. It cost 3.5 billion yuan; it stands on a plot of six and a half thousand square metres and holds a hundred and forty thousand. MINISO’s global operations, brand management and product development are all to sit inside it.",
-      ar: "بدأ العمل في يوليو 2021، واكتمل الهيكل في يوليو 2025، واجتاز المبنى فحص الإنجاز في 12 أغسطس من هذا العام — أي قبل شهر من وصولكم. كلفته 3.5 مليار يوان، ويقوم على قطعة أرض مساحتها ستة آلاف ونصف متر مربع ليضمّ مئة وأربعين ألف متر مربع. وستقيم فيه عمليات «ميني سو» العالمية وإدارة العلامة وتطوير المنتجات.",
+      zh: "这栋楼 2021 年 7 月动工，2025 年 7 月封顶，今年 8 月 12 日通过竣工验收 —— 你们到广州的时候，它验收才一个月 —— 上面那张照片是封顶时从空中拍的，围着它的那一圈玻璃楼就是琶洲西区。投资三十五亿元人民币，占地六千五百多平方米，往上盖出十四万平方米。以后名创优品的全球业务、品牌运营和产品研发都在这栋楼里。",
+      en: "Work began in July 2021, the frame topped out in July 2025, and the building passed its completion inspection on 12 August this year — one month before you land. The photograph above was taken from the air as the frame topped out; the ring of glass towers around it is Pazhou West. It cost 3.5 billion yuan; it stands on a plot of six and a half thousand square metres and holds a hundred and forty thousand. MINISO’s global operations, brand management and product development are all to sit inside it.",
+      ar: "بدأ العمل في يوليو 2021، واكتمل الهيكل في يوليو 2025، واجتاز المبنى فحص الإنجاز في 12 أغسطس من هذا العام — أي قبل شهر من وصولكم. والصورة أعلاه التُقطت من الجو عند اكتمال الهيكل؛ وحلقة الأبراج الزجاجية المحيطة به هي بازو الغربية. كلفته 3.5 مليار يوان، ويقوم على قطعة أرض مساحتها ستة آلاف ونصف متر مربع ليضمّ مئة وأربعين ألف متر مربع. وستقيم فيه عمليات «ميني سو» العالمية وإدارة العلامة وتطوير المنتجات.",
     },
     {
       zh: "公司官网上写的中国总部地址，现在还是琶洲大道 109 号的铭丰广场。也在琶洲 —— 就是你们这几天开会、吃饭、睡觉的这一片。",

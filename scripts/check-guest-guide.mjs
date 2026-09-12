@@ -141,6 +141,10 @@ for (const photo of GUIDE_PHOTOS) {
 for (const [key, where] of [
   ['pazhou-pagoda', guideView],
   ['huaisheng-minaret', guideView],
+  // 2026-09-12, the owner: the tower going up is the picture he asked for, and the
+  // store on opening day stays with the paragraph that points at it.
+  ['miniso-tower', guideView],
+  ['miniso-land', guideView],
 ]) assert(where.includes(key), `The verified photograph ${key} is not on the page`);
 assert(data.MOSQUES[0].photoKey === 'xianxian-gate', 'The first mosque card carries the tomb gateway photo');
 assert(data.RETAIL_STUDY.malls.some((mall) => mall.photoKey === 'parc-garden'), 'Parc Central carries the aerial of its garden');
@@ -311,8 +315,12 @@ for (const needed of [
 // public photograph, the store below it is what the picture shows.
 assert(view.includes('MINISO_IN_GZ.store'), 'The store paragraphs are rendered under the photo');
 assert(
-  view.indexOf('CHAPTER_PHOTOS.miniso') < view.indexOf('MINISO_IN_GZ.store'),
-  'The photo comes before the paragraph that points at it',
+  view.indexOf('CHAPTER_PHOTOS.minisoStore') < view.indexOf('MINISO_IN_GZ.store'),
+  'The store photo comes before the paragraph that points at it',
+);
+assert(
+  photoByKey.get('miniso-tower')?.caption.zh.includes('2025 年 7 月'),
+  'The tower photo says when it was taken — the text says the building is finished now',
 );
 for (const unsourced of ['29.3', '近万人', '万人排队']) {
   assert(!miniso.includes(unsourced), `No source was ever found for this: ${unsourced}`);

@@ -84,7 +84,9 @@ const HOTEL_PHONE = "+86 20 8922 8888";
 const CHAPTER_PHOTOS = {
   pazhou: "pazhou-pagoda",
   story: "huaisheng-minaret",
-  miniso: "miniso-land",
+  /** 名创优品那一章两张：章首是琶洲西区那栋新楼，中间是正佳门口开业那天。 */
+  miniso: "miniso-tower",
+  minisoStore: "miniso-land",
 };
 
 /** 开篇那张全景，商圈末尾那张北京路，文化章开头那张骑楼 —— 数据里没有，写在这里。 */
@@ -131,6 +133,7 @@ const USED_IMAGE_KEYS = new Set(
     CHAPTER_PHOTOS.pazhou,
     CHAPTER_PHOTOS.story,
     CHAPTER_PHOTOS.miniso,
+    CHAPTER_PHOTOS.minisoStore,
   ].filter((key): key is string => Boolean(key && IMG[key])),
 );
 
@@ -569,15 +572,16 @@ export function GuideTab({
           hint={UI.guideHints.miniso}
           lang={lang}
         >
-          {/* 照片不放在开头：开头讲的是琶洲西区那栋新楼，没有能用的公开照片。
-              它夹在两组正文中间 —— 上面刚说完这家公司，下面接着讲照片里的那家店。 */}
+          {/* 两张图各挨着自己那一段：章首是琶洲西区那栋新楼（封顶时的航拍，
+              广州日报），中间那张是正佳门口开业那天，下面接着讲的就是那家店。 */}
           <Prose
             lead={MINISO_IN_GZ.lead}
             paragraphs={MINISO_IN_GZ.paragraphs}
             sources={MINISO_IN_GZ.sources}
             lang={lang}
+            photoKey={CHAPTER_PHOTOS.miniso}
           >
-            <GuideFigure photoKey={CHAPTER_PHOTOS.miniso} lang={lang} />
+            <GuideFigure photoKey={CHAPTER_PHOTOS.minisoStore} lang={lang} />
             <div className="space-y-2.5">
               {MINISO_IN_GZ.store.map((paragraph, index) => (
                 <p key={index} className={GUIDE.body}>
