@@ -569,13 +569,23 @@ export function GuideTab({
           hint={UI.guideHints.miniso}
           lang={lang}
         >
+          {/* 照片不放在开头：开头讲的是琶洲西区那栋新楼，没有能用的公开照片。
+              它夹在两组正文中间 —— 上面刚说完这家公司，下面接着讲照片里的那家店。 */}
           <Prose
             lead={MINISO_IN_GZ.lead}
             paragraphs={MINISO_IN_GZ.paragraphs}
             sources={MINISO_IN_GZ.sources}
             lang={lang}
-            photoKey={CHAPTER_PHOTOS.miniso}
-          />
+          >
+            <GuideFigure photoKey={CHAPTER_PHOTOS.miniso} lang={lang} />
+            <div className="space-y-2.5">
+              {MINISO_IN_GZ.store.map((paragraph, index) => (
+                <p key={index} className={GUIDE.body}>
+                  {t(paragraph, lang)}
+                </p>
+              ))}
+            </div>
+          </Prose>
         </Section>
 
         <Section

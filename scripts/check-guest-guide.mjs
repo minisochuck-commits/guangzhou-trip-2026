@@ -299,15 +299,28 @@ for (const repeated of ['photo="skyline"', 'photo="huaisheng"']) {
  * 的「海外同比增长 29.3%」「近万人排队」）已经删掉，不许回来。
  */
 const miniso = JSON.stringify(data.MINISO_IN_GZ);
-for (const needed of ['琶洲大道 109 号', '8,151', '正佳广场', 'MINISO LAND']) {
+for (const needed of [
+  // 2026-09-12, the owner: the new tower in Pazhou West is the thing she can see
+  // from the street, so it opens the chapter and stays there.
+  '287.5', '琶洲西区', '8 月 12 日',
+  '琶洲大道 109 号', '8,151', '正佳广场', 'MINISO LAND',
+]) {
   assert(miniso.includes(needed), `The MINISO chapter lost a checked fact: ${needed}`);
 }
+// The photograph sits between the two groups: the tower above it has no usable
+// public photograph, the store below it is what the picture shows.
+assert(view.includes('MINISO_IN_GZ.store'), 'The store paragraphs are rendered under the photo');
+assert(
+  view.indexOf('CHAPTER_PHOTOS.miniso') < view.indexOf('MINISO_IN_GZ.store'),
+  'The photo comes before the paragraph that points at it',
+);
 for (const unsourced of ['29.3', '近万人', '万人排队']) {
   assert(!miniso.includes(unsourced), `No source was ever found for this: ${unsourced}`);
 }
 for (const url of [
   'https://www.miniso.cn/contact/',
   'https://xxsb.gz-cmc.com/pages/2026/01/30/afa451fb749c44af8dcef00ce3abdf5a.html',
+  'https://news.dayoo.com/guangzhou/202507/05/139995_54844163.htm',
 ]) assert(miniso.includes(url), `The MINISO chapter must keep its source: ${url}`);
 assert(view.includes('MINISO_IN_GZ.paragraphs'), 'The MINISO chapter is rendered, not just written');
 
