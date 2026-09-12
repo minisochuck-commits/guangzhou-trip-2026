@@ -496,6 +496,16 @@ const foodSources = [
   (source, index, all) => all.findIndex((s) => s.url === source.url) === index,
 );
 
+/**
+ * 当地生活习惯那一章的开场一句：说清这一章为什么值得读，再进条目。
+ * 用正文字号，不加标题控件。
+ */
+const CULTURE_INTRO: L10n = {
+  zh: "吃饭、见面、在街上散步，都有一些初来时未必熟悉的小习惯。知道其中的缘由，旅途会自在不少。",
+  en: "Eating, meeting people, walking down a street — each comes with small habits you may not know on a first visit. Knowing the reason behind them makes the trip easier.",
+  ar: "الأكل ولقاء الناس والتمشّي في الشارع — لكلٍّ منها عادات صغيرة قد لا تكون مألوفة في زيارة أولى. ومعرفة سببها تجعل الرحلة أيسر.",
+};
+
 /** 文化那一章里，个别条目（放假安排、民俗）带着自己的出处，章尾一起折叠。 */
 const cultureSources = CULTURE_NOTES.flatMap((note) => note.sources ?? []);
 
@@ -888,8 +898,11 @@ export function GuideTab({
           hint={UI.guideHints.culture}
           lang={lang}
         >
-          {/* 先是这次正好遇上的节日，再是餐桌与日常来往，街上的骑楼放在最后 ——
-              骑楼那张照片就挨着讲骑楼的那一条，不再当整章的开场白。 */}
+          {/* 先一句话说清这一章是干什么的，再是这次正好遇上的节日、餐桌与日常来往，
+              街上的骑楼放在最后 —— 骑楼那张照片挨着讲骑楼的那一条。 */}
+          <p className={cn(GUIDE.body, "max-w-[44rem]")}>
+            {t(CULTURE_INTRO, lang)}
+          </p>
           <ul className="max-w-[44rem]">
             {CULTURE_NOTES.map((note) => (
               <li key={note.id} className="border-t border-card-line py-3">

@@ -878,9 +878,9 @@ export const RETAIL_STUDY: {
   ],
   "caseStudy": [
     {
-      "zh": "按喜好挑组合就行：想看高端品牌，去太古汇；想在户外坐一会儿，去天环；带着孩子或想看点别的，正佳有海洋馆。天热或下雨，时尚天河的地下那一段更省事。",
-      "en": "Choose the combination that suits you: Taikoo Hui for the luxury names, Parc Central to sit outside for a while, Grandview if you have children along or want something besides shops. In heat or rain, the underground stretch of Fashion Tianhe is the easier route.",
-      "ar": "اختاروا التركيبة التي تناسبكم: تايكو هوي للعلامات الفاخرة، وبارك سنترال للجلوس في الخارج قليلًا، وغراندفيو إن كان معكم أطفال أو أردتم شيئًا غير المتاجر. وفي الحرّ أو المطر يكون الممر تحت الأرض في فاشن تيانخه أيسر."
+      "zh": "不用一次逛完六家。先选两三家感兴趣的，留时间进店、喝茶；天河路这一段的具体走法，放在半日路线里。",
+      "en": "There is no need to do all six in one go. Pick the two or three that interest you and leave time to go inside and sit down for tea; how to walk this stretch of Tianhe Road is set out in the half-day routes.",
+      "ar": "لا داعي لزيارة الستة دفعة واحدة. اختاروا اثنين أو ثلاثة تثير اهتمامكم واتركوا وقتًا للدخول والجلوس لاحتساء الشاي؛ أما كيفية السير في هذا الامتداد من شارع تيانخه فمذكورة في مسارات نصف اليوم."
     }
   ],
   "comparables": [],
@@ -1725,9 +1725,9 @@ export type PlaceCard = {
 
 export const CITY_STORY: { lead: L10n; paragraphs: L10n[]; sources: { label: L10n; url: string }[] } = {
   "lead": {
-    "zh": "广州与阿拉伯世界的往来，从唐代的海船一直延续到今天。",
-    "en": "Guangzhou's dealings with the Arab world run from the Tang-dynasty sea routes to the present day.",
-    "ar": "تمتدّ صلة قوانغتشو بالعالم العربي من طرق البحر في عهد تانغ إلى اليوم."
+    "zh": "在广州，阿拉伯商人的故事留在街巷里，也留在今天的礼拜与饮食中。",
+    "en": "In Guangzhou the story of the Arab merchants is kept in the streets, and in how people pray and eat here today.",
+    "ar": "في شوارع قوانغتشو، وفي مساجدها ومطاعمها اليوم، تجدون آثار الحكاية التي بدأها التجار العرب هنا."
   },
   "paragraphs": [
     {
@@ -1741,9 +1741,9 @@ export const CITY_STORY: { lead: L10n; paragraphs: L10n[]; sources: { label: L10
       "ar": "وفي قلب ذلك الحي يقوم مسجد هوايشنغ. في فنائه بدنٌ أسطواني شاحب مكسوّ بالجصّ: مئذنةٌ كانت أيضًا علامةً للسفن في النهر ودوّارةً للريح، ولهذا تسمّيها المدينة «برج النور»."
     },
     {
-      "zh": "想去看看，在地图里搜「怀圣寺」；逛完光塔路，再沿街找一间清真小馆坐下。",
-      "en": "To visit, search 怀圣寺 in your map app; after Guangta Road, find one of the halal places along the street and sit down.",
-      "ar": "للزيارة ابحثوا عن 怀圣寺 في تطبيق الخرائط؛ وبعد شارع قوانغتا اجلسوا في أحد المطاعم الحلال على الشارع."
+      "zh": "今天来到光塔路，可以看一看怀圣寺的光塔，再到周边的清真餐馆吃顿饭。那些商贸往来留下的痕迹，就这样融进了日常生活；对第一次来中国的你们，这也是认识广州的一条亲切线索。",
+      "en": "Come to Guangta Road today and you can look up at the minaret of Huaisheng Mosque, then eat at one of the halal restaurants nearby. What that old trade left behind has settled into ordinary life; for a first visit to China, it is a friendly way into the city.",
+      "ar": "وإذا جئتم اليوم إلى شارع قوانغتا، يمكنكم النظر إلى مئذنة مسجد هوايشنغ، ثم تناول الطعام في أحد المطاعم الحلال القريبة. فما تركته تلك التجارة القديمة استقرّ في الحياة اليومية؛ وهو لزيارة أولى إلى الصين مدخل أليف إلى المدينة."
     }
   ],
   "sources": [
@@ -1780,11 +1780,12 @@ export const CITY_STORY: { lead: L10n; paragraphs: L10n[]; sources: { label: L10
 /* 名创优品在广州                                                        */
 /*                                                                     */
 /* 不是公司简介 —— 货盘、店型、企业实力在会议现场讲。页面只写会议讲不了的：*/
-/* 她住的那块地就是这个牌子的家，而且是看得见的：琶洲西区那栋 287.5 米的  */
-/* 新楼今年 8 月刚验收，正佳广场里那家店她可以自己走进去。               */
+/* 品牌在广州创立，如今在琶洲临时办公；新楼与正佳门店各自说明。          */
+/* 琶洲大道 109 号是目前的办公地，琶洲西区那栋 287.5 米的是新总部楼，    */
+/* 两处不要混写；新楼的完工进度没有可用来源，页面不写。                   */
 /* 数字都带出处，没出处的说法一律不留。                                   */
 /*                                                                     */
-/* paragraphs 在照片上面（这座楼、这家公司），store 在照片下面（那家店）。*/
+/* 三节各带自己的照片：总部那节配新楼，门店那节配正佳门口。               */
 /* ------------------------------------------------------------------ */
 
 export const MINISO_IN_GZ: {
@@ -1802,65 +1803,65 @@ export const MINISO_IN_GZ: {
   sources: { label: L10n; url: string }[];
 } = {
   lead: {
-    zh: "你住的琶洲，就是这个牌子的家。",
-    en: "Pazhou, where you are staying, is where this brand lives.",
-    ar: "بازو، حيث تقيمون، هي موطن هذه العلامة.",
+    zh: "你们在埃及熟悉的 MINISO，故事从广州开始。这次来参加会议，也有机会看看它在这座城市里的模样。",
+    en: "The MINISO you know in Egypt began in Guangzhou. While you are here for the meetings, there is a chance to see what it looks like in its own city.",
+    ar: "«ميني سو» التي تعرفونها في مصر بدأت من قوانغتشو. وبينما أنتم هنا للاجتماعات، أمامكم فرصة لرؤية صورتها في مدينتها.",
   },
   sections: [
     {
       id: "origin",
       title: {
-        zh: "从广州的一个地下室开始",
-        en: "It started in a Guangzhou basement",
-        ar: "بدأت في قبو في قوانغتشو",
+        zh: "在广州起步",
+        en: "It started in Guangzhou",
+        ar: "بدأت من قوانغتشو",
       },
       paragraphs: [
         {
-          zh: "2013 年的第一家店开在广州的一个地下室车库里。十三年之后，名创优品在一百一十二个国家和地区经营门店，到 2025 年底共 8,151 家。",
-          en: "The first store opened in 2013, in a basement garage in Guangzhou. Thirteen years later MINISO trades in a hundred and twelve countries and regions, with 8,151 stores at the end of 2025.",
-          ar: "افتُتح أول متجر عام 2013 في مرآب تحت الأرض في قوانغتشو. وبعد ثلاثة عشر عامًا صارت «ميني سو» تعمل في مئة واثنتي عشرة دولة ومنطقة، وبلغ عدد متاجرها 8,151 متجرًا بنهاية عام 2025.",
+          zh: "2013 年，名创优品在广州创立。后来，门店开到了世界各地，到 2025 年底已有 8,151 家；广州仍是公司的总部所在地。",
+          en: "MINISO was founded in Guangzhou in 2013. Stores followed around the world — 8,151 of them by the end of 2025 — and Guangzhou is still where the company is based.",
+          ar: "تأسّست «ميني سو» في قوانغتشو عام 2013. ثم انتشرت متاجرها حول العالم حتى بلغت 8,151 متجرًا بنهاية عام 2025؛ وما زالت قوانغتشو مقرّ الشركة.",
         },
       ],
     },
     {
       id: "headquarters",
       title: {
-        zh: "今天的总部，就在这一片",
-        en: "The head office is in this district",
-        ar: "المقرّ الرئيسي في هذا الحي",
+        zh: "办公所在地与新总部大楼",
+        en: "The offices today, and the new headquarters tower",
+        ar: "مكاتب اليوم وبرج المقرّ الجديد",
       },
       photoKey: "miniso-tower",
       paragraphs: [
         {
-          zh: "公司官网列出的中国总部地址，是琶洲大道 109 号的铭丰广场，也在琶洲。",
-          en: "The China head office listed on the company's own site is at Mingfeng Plaza, 109 Pazhou Avenue, also in Pazhou.",
-          ar: "المقرّ الصيني المذكور على موقع الشركة يقع في مجمع مينغفنغ، 109 شارع بازو، في بازو أيضًا.",
+          zh: "目前公司在琶洲大道 109 号铭丰广场临时办公。",
+          en: "For now the company works out of temporary offices at Mingfeng Plaza, 109 Pazhou Avenue.",
+          ar: "تعمل الشركة حاليًا من مكاتب مؤقتة في مجمع مينغفنغ، 109 شارع بازو.",
         },
         {
-          zh: "从酒店朝西，隔着广交会的展馆，是琶洲西区：一片新起的写字楼，腾讯、阿里巴巴、唯品会都在这里设了办公区。名创优品国际总部新楼高 287.5 米，也是这一带的新地标。",
-          en: "West of the hotel, beyond the Canton Fair halls, lies Pazhou West: a cluster of new office towers where Tencent, Alibaba and Vipshop all keep offices. The new MINISO International Headquarters tower stands 287.5 metres tall, a new landmark in that skyline.",
-          ar: "إلى الغرب من الفندق، خلف قاعات معرض كانتون، تقع بازو الغربية: مجموعة من الأبراج المكتبية الحديثة تضمّ مكاتب لتينسنت وعلي بابا وفيب شوب. ويبلغ ارتفاع برج مقرّ «ميني سو» الدولي الجديد 287.5 مترًا، وهو معلم جديد في ذلك الأفق.",
+          zh: "照片中是另一处建筑：琶洲西区高 287.5 米的名创优品国际总部新楼。同一片区域里，腾讯、阿里巴巴、唯品会也设有办公区，是广州数字经济企业集聚的地方。",
+          en: "The photograph shows a different building: the new MINISO International Headquarters tower in Pazhou West, 287.5 metres tall. Tencent, Alibaba and Vipshop keep offices in the same area, which is where Guangzhou's digital-economy companies cluster.",
+          ar: "تُظهر الصورة مبنى آخر: برج مقرّ «ميني سو» الدولي الجديد في بازو الغربية بارتفاع 287.5 مترًا. وفي المنطقة نفسها مكاتب لتينسنت وعلي بابا وفيب شوب، وهي حيث تتجمّع شركات الاقتصاد الرقمي في قوانغتشو.",
         },
       ],
     },
     {
       id: "store",
       title: {
-        zh: "能自己走进去的那一家",
-        en: "The store you can walk into",
-        ar: "المتجر الذي يمكنكم دخوله",
+        zh: "到正佳，逛一逛 MINISO LAND",
+        en: "MINISO LAND at Grandview Mall",
+        ar: "زيارة «ميني سو لاند» في غراندفيو مول",
       },
       photoKey: "miniso-land",
       paragraphs: [
         {
-          zh: "正佳广场里的 MINISO LAND 广州壹号店，一千一百多平方米，上下两层。一楼按「伊甸园派对」布置，YOYO、迪士尼、哈利·波特、三丽鸥同在一层；二楼叫「可爱工厂」，以乐器为线索，货架做成音符的样子。店内九成以上是 IP 商品。",
-          en: "MINISO LAND Guangzhou No. 1 sits inside Grandview Mall: eleven hundred square metres over two floors. The ground floor is arranged as an “Eden garden party”, with YOYO, Disney, Harry Potter and Sanrio on the same floor; above it is the “cute factory”, laid out around musical instruments with shelves shaped like notes. More than ninety percent of the stock is licensed IP.",
-          ar: "يقع متجر «ميني سو لاند» قوانغتشو رقم 1 داخل غراندفيو مول: ألف ومئة متر مربع على طابقين. رُتّب الطابق الأرضي على فكرة «حفلة حديقة عدن»، وفيه YOYO وديزني وهاري بوتر وسانريو في الطابق نفسه؛ وفوقه «مصنع الظرافة»، منظّم حول الآلات الموسيقية وأرففه على هيئة نوتات. وأكثر من تسعين بالمئة من المعروض منتجات بترخيص شخصيات.",
+          zh: "想近距离感受门店，可以去正佳广场里的 MINISO LAND 广州壹号店：一千一百多平方米，上下两层。一楼按「伊甸园派对」布置，YOYO、迪士尼、哈利·波特、三丽鸥同在一层；二楼叫「可爱工厂」，以乐器为线索，货架做成音符的样子。店内九成以上是 IP 商品。",
+          en: "For a close look at a store, MINISO LAND Guangzhou No. 1 inside Grandview Mall runs to eleven hundred square metres over two floors. The ground floor is arranged as an “Eden garden party”, with YOYO, Disney, Harry Potter and Sanrio on the same floor; above it is the “cute factory”, laid out around musical instruments with shelves shaped like notes. More than ninety percent of the stock is licensed IP.",
+          ar: "ولرؤية متجر عن قرب، يمتدّ «ميني سو لاند» قوانغتشو رقم 1 داخل غراندفيو مول على ألف ومئة متر مربع في طابقين. رُتّب الطابق الأرضي على فكرة «حفلة حديقة عدن»، وفيه YOYO وديزني وهاري بوتر وسانريو في الطابق نفسه؛ وفوقه «مصنع الظرافة»، منظّم حول الآلات الموسيقية وأرففه على هيئة نوتات. وأكثر من تسعين بالمئة من المعروض منتجات بترخيص شخصيات.",
         },
         {
-          zh: "上面那张照片是今年 1 月 30 日开业当天的门口。逛天河路那天顺路过去看看，正合适。",
-          en: "The photograph above was taken at the door on its opening day, 30 January this year. It is an easy stop to fold into an afternoon on Tianhe Road.",
-          ar: "التُقطت الصورة أعلاه عند الباب يوم الافتتاح في 30 يناير من هذا العام. وزيارته تندرج بسهولة ضمن فترة بعد الظهر في شارع تيانخه.",
+          zh: "逛天河路时，可以把这家店作为一站，看看熟悉的品牌在广州怎样布置空间、呈现商品。",
+          en: "On a Tianhe Road afternoon it makes an easy stop: a chance to see how a brand you already know lays out its space and presents its products here.",
+          ar: "وفي جولة شارع تيانخه يصلح محطةً سهلة: فرصة لرؤية كيف ترتّب علامة تعرفونها مساحتها وتعرض منتجاتها هنا.",
         },
       ],
     },
@@ -1883,7 +1884,7 @@ export const MINISO_IN_GZ: {
       url: "https://www.miniso.cn/contact/",
     },
     {
-      label: { zh: "名创优品：品牌故事（2013 年，广州的地下室车库）", en: "MINISO: brand story (2013, a basement garage in Guangzhou)", ar: "ميني سو: قصة العلامة (2013، مرآب تحت الأرض في قوانغتشو)" },
+      label: { zh: "名创优品：品牌故事", en: "MINISO: the brand story", ar: "ميني سو: قصة العلامة" },
       url: "https://www.miniso.cn/brand/",
     },
     {
@@ -1930,20 +1931,20 @@ export const CITY_SCALE: {
   sources: { label: L10n; url: string }[];
 } = {
   lead: {
-    zh: "从落地，到江边的夜色，广州一点点展开。",
-    en: "Guangzhou unfolds from the moment you land.",
-    ar: "تتكشف لكم قوانغتشو منذ لحظة الوصول.",
+    zh: "今天的广州，仍然是一座与世界做生意的城市。",
+    en: "Guangzhou today is still a city that does business with the world.",
+    ar: "قوانغتشو اليوم ما زالت مدينة تتاجر مع العالم.",
   },
   intro: [
     {
-      zh: "白云机场的航班来自世界各地；到了琶洲，连成一片的展馆迎接各国采购商。入夜再到珠江边，两岸的高楼亮起来，白天忙碌的城换了一个样子。",
-      en: "Flights from around the world meet at Baiyun Airport. In Pazhou, long rows of exhibition halls welcome international buyers. After dark, walk down to the Pearl River: the towers light up, and the city takes on a different mood.",
-      ar: "تلتقي في مطار بايون رحلات من أنحاء العالم. وفي بازو، تستقبل قاعات المعارض المتجاورة مشترين من دول كثيرة. وبعد الغروب، تمشّوا إلى نهر اللؤلؤ؛ تضيء الأبراج على الضفتين وتبدو المدينة بمزاج آخر.",
+      zh: "从白云机场进城，到琶洲的展馆，再到珠江两岸的商业区，这份联系一路可见：有人来采购，有人来参展，也有人像你们一样，来看看合作伙伴的产品与门店。",
+      en: "From Baiyun airport into town, on to the exhibition halls in Pazhou and the business districts along both banks of the Pearl River, that connection shows the whole way: some come to buy, some to exhibit, and some, like you, to see a partner's products and stores.",
+      ar: "من مطار بايون إلى المدينة، فقاعات المعارض في بازو، فالمناطق التجارية على ضفّتي نهر اللؤلؤ، تظهر هذه الصلة على طول الطريق: منهم من يأتي للشراء، ومنهم من يأتي للعرض، ومنهم — مثلكم — من يأتي ليرى منتجات شريكه ومتاجره.",
     },
     {
-      zh: "这里住着约一千九百万人，是粤港澳大湾区十一座城市之一。机场的客流、广交会的买家和珠江边的天际线，让这座贸易城市的规模变得具体。",
-      en: "About nineteen million people live here, in one of the eleven cities of the Greater Bay Area. The traffic through the airport, the buyers at the Canton Fair and the skyline along the Pearl River are what give this trading city its scale.",
-      ar: "يعيش هنا نحو تسعة عشر مليون نسمة، في واحدة من مدن منطقة الخليج الكبرى الإحدى عشرة. وحركة المسافرين في المطار، ومشترو معرض كانتون، وأفق الأبراج على نهر اللؤلؤ، هي ما يجعل حجم هذه المدينة التجارية ملموسًا.",
+      zh: "这座约一千九百万人生活的城市，是粤港澳大湾区十一座城市之一。机场每天约二十三万人次的进出、广交会来自各地的买家，是它忙碌的一面；入夜后到江边看广州塔亮起来，又是另一种认识它的方式。",
+      en: "About nineteen million people live in this city, one of the eleven that make up the Greater Bay Area. Some two hundred and thirty thousand passenger movements a day through the airport, and the buyers who come to the Canton Fair from everywhere, are its busy side; going down to the river after dark to watch the Canton Tower light up is another way of knowing it.",
+      ar: "يعيش في هذه المدينة نحو تسعة عشر مليون نسمة، وهي إحدى المدن الإحدى عشرة التي تشكّل منطقة الخليج الكبرى. فنحو مئتين وثلاثين ألف حركة مسافر يوميًا عبر المطار، والمشترون القادمون إلى معرض كانتون من كل مكان، وجهها المزدحم؛ أما النزول إلى النهر بعد الغروب لمشاهدة برج كانتون وهو يضيء، فطريقة أخرى للتعرّف إليها.",
     },
   ],
   tiles: [
@@ -1951,7 +1952,7 @@ export const CITY_SCALE: {
       id: "gdp",
       value: { zh: "3.2", en: "3.2", ar: "3.2" },
       unit: { zh: "万亿元 · 2025 年 GDP", en: "trillion yuan · GDP, 2025", ar: "تريليون يوان · الناتج المحلي 2025" },
-      note: { zh: "制造、商贸与服务业加在一起的一年", en: "A year of manufacturing, trade and services added together", ar: "حصيلة سنة من الصناعة والتجارة والخدمات مجتمعة" },
+      note: { zh: "广州一年创造的经济总量", en: "What Guangzhou's economy adds up to in a year", ar: "ما يبلغه اقتصاد قوانغتشو في سنة" },
     },
     {
       id: "airport",
@@ -2006,9 +2007,9 @@ export const CITY_TECH: {
     ar: "التقنية هنا ليست في قاعات المعارض وحدها؛ بل في تفاصيل اليوم: التنقّل والدفع واستلام الطلبات.",
   },
   intro: {
-    zh: "叫到一辆电动车、扫码买杯茶，都可以是体验的起点。想走得更远，可以专门约一次无人驾驶出租车，或查一查琶洲的低空配送；具体入口见各项介绍。",
-    en: "Hailing an electric car or scanning a code for a cup of tea is a place to start. To go further, you can book a driverless taxi on purpose, or look into the low-altitude deliveries in Pazhou; each item below says where to begin.",
-    ar: "استيقاف سيارة كهربائية أو مسح رمز لشراء كوب شاي نقطة بداية جيدة. وللمضي أبعد، يمكنكم حجز سيارة أجرة بلا سائق قصدًا، أو الاطلاع على التوصيل المنخفض في بازو؛ وكل بند أدناه يذكر من أين تبدؤون.",
+    zh: "叫到一辆电动车、扫码买杯茶，都可以是体验的起点。想走得更远，可以专门约一次无人驾驶出租车，或查一查琶洲的低空配送。",
+    en: "Hailing an electric car or scanning a code for a cup of tea is a place to start. To go further, you can book a driverless taxi on purpose, or look into the low-altitude deliveries in Pazhou.",
+    ar: "استيقاف سيارة كهربائية أو مسح رمز لشراء كوب شاي نقطة بداية جيدة. وللمضي أبعد، يمكنكم حجز سيارة أجرة بلا سائق قصدًا، أو الاطلاع على التوصيل المنخفض في بازو.",
   },
   items: [
     {
@@ -2031,16 +2032,16 @@ export const CITY_TECH: {
       id: "cashless",
       imageKey: "cashless",
       imageAlt: { zh: "街边小店的柜台前，顾客举着手机扫码付款", en: "At a street-front counter, a customer holds up a phone to pay by QR code", ar: "عند واجهة متجر في الشارع، زبون يرفع هاتفه للدفع عبر رمز QR" },
-      title: { zh: "一杯茶的小额付款", en: "Paying for a cup of tea", ar: "دفع ثمن كوب شاي" },
+      title: { zh: "小摊也能用手机付款", en: "Even street stalls accept mobile payments", ar: "حتى البسطة الصغيرة تقبل الدفع بالهاتف" },
       where: {
         zh: "买水、喝茶、打车时，都能体验手机付款。",
         en: "Buying water, stopping for tea, taking a taxi — all of them can be paid for with the phone.",
         ar: "شراء الماء، وكوب الشاي، وسيارة الأجرة — كلها يمكن دفعها بالهاتف.",
       },
       body: {
-        zh: "菜市场的摊子前面立着一块二维码牌，塑封磨白了，边角用胶带补过。你把手机凑过去，扫一下，摊主看一眼屏幕点点头，这笔买卖就完了 —— 没有钞票，也没有找零。",
-        en: "At the market stall a laminated QR code stands propped up, the plastic gone milky, one corner mended with tape. You hold your phone to it, it scans, the stallholder glances at the screen and nods, and the sale is done — no notes, no change.",
-        ar: "عند بسطة السوق ينتصب رمز QR مغلَّف بالبلاستيك، شحب غلافه ورُقّع أحد أركانه بشريط لاصق. تقرّبون الهاتف منه فيُمسح، فينظر صاحب البسطة إلى الشاشة ويومئ، وتنتهي الصفقة — بلا أوراق نقدية وبلا فكّة.",
+        zh: "买一瓶水、点一杯茶，柜台上的二维码往往就能完成付款。打开支付宝扫码，核对金额后确认；有些店则由店员扫描你的付款码。不用找零钱，几笔小消费就能熟悉这种日常。",
+        en: "A bottle of water, a cup of tea — the QR code on the counter is usually all it takes. Open Alipay, scan it, check the amount and confirm; in some shops the assistant scans your payment code instead. No change to count, and a few small purchases are enough to get used to it.",
+        ar: "زجاجة ماء أو كوب شاي — غالبًا يكفي رمز QR على الطاولة. افتحوا «علي باي» وامسحوا الرمز، ثم تحقّقوا من المبلغ وأكّدوا؛ وفي بعض المتاجر يمسح العامل رمز الدفع الخاص بكم. لا فكّة تُحسب، وبضع مشتريات صغيرة تكفي لتعتادوا الأمر.",
       },
     },
     {
@@ -2053,9 +2054,9 @@ export const CITY_TECH: {
         ar: "قد تكون هي ما ينقل الأطباق في المطعم، أو الطعام والمناشف إلى غرفة الفندق. ويستحقّ الأمر سؤالًا في الاستقبال عند الوصول.",
       },
       body: {
-        zh: "门铃响，门外站着一台一米来高的小车，盖子打开，里面是你点的东西。有意思的是它怎么上来的：它跟电梯是连着的，自己叫梯、自己进去、到楼层自己出来，中间要和人共用一部电梯。\n商场和写字楼里还有另一种：方方正正的洗地机器人贴着墙根慢慢走，有人走过来它让开，电快没了自己回去充电。",
-        en: "The doorbell goes and a trolley about a metre high is standing outside; the lid opens and your order is inside. The interesting part is how it got up here: it talks to the lift, calls it, rides up and steps out at your floor — sharing that lift with people on the way.\nMalls and office towers have another kind: a squared-off scrubbing robot working along the skirting, moving aside when someone comes, taking itself off to charge when the battery runs low.",
-        ar: "يرنّ جرس الباب فتجدون عربة بارتفاع متر تقريبًا واقفة في الخارج؛ ينفتح الغطاء وفي داخلها طلبكم. والمثير هو كيف وصلت إلى هنا: فهي متصلة بالمصعد، تستدعيه وتدخله وتخرج عند طابقكم — وتتشارك المصعد مع الناس في الطريق.\nوفي المراكز التجارية والأبراج المكتبية نوع آخر: روبوت تنظيف مربّع يسير بمحاذاة الجدار، يفسح الطريق حين يقترب أحد، ويذهب وحده إلى الشحن حين تنفد بطاريته.",
+        zh: "门铃响，门外站着一台一米来高的小车，盖子打开，里面是你点的东西。有意思的是它怎么上来的：它跟电梯是连着的，自己叫梯、自己进去、到楼层自己出来，中间要和人共用一部电梯。",
+        en: "The doorbell goes and a trolley about a metre high is standing outside; the lid opens and your order is inside. The interesting part is how it got up here: it talks to the lift, calls it, rides up and steps out at your floor — sharing that lift with people on the way.",
+        ar: "يرنّ جرس الباب فتجدون عربة بارتفاع متر تقريبًا واقفة في الخارج؛ ينفتح الغطاء وفي داخلها طلبكم. والمثير هو كيف وصلت إلى هنا: فهي متصلة بالمصعد، تستدعيه وتدخله وتخرج عند طابقكم — وتتشارك المصعد مع الناس في الطريق.",
       },
     },
     {
@@ -2120,25 +2121,25 @@ export const CITY_TECH: {
 
 export const PAZHOU: { lead: L10n; paragraphs: L10n[]; sources: { label: L10n; url: string }[] } = {
   "lead": {
-    "zh": "你住的地方，曾经靠一座塔迎接远来的商船。",
-    "en": "Where you are staying, a tower once welcomed ships in from the sea.",
-    "ar": "حيث تقيمون، كان برجٌ يستقبل السفن القادمة من البحر."
+    "zh": "先认识你住的琶洲：这里有广交会的展馆、沿江的办公楼，也有一座四百多年的古塔。",
+    "en": "First, the district you are staying in: Pazhou has the Canton Fair halls, office towers along the river, and a pagoda more than four hundred years old.",
+    "ar": "أولًا، الحيّ الذي تقيمون فيه: في بازو قاعات معرض كانتون، وأبراج مكاتب على النهر، وباغودا عمرها أكثر من أربعمئة عام."
   },
   "paragraphs": [
     {
-      "zh": "酒店所在的这一片叫琶洲。这一带的古老地标，是 1597 年始建、1600 年落成的琶洲塔。当年这里还是江中的沙洲，远洋商船溯珠江而上，看见这座塔就知道广州快到了。",
-      "en": "The district your hotel sits in is called Pazhou. Its old landmark is the Pazhou pagoda, begun in 1597 and finished in 1600. This was a sandbank in the river then, and ships coming up the Pearl River read the tower as the sign that Guangzhou was close.",
-      "ar": "الحيّ الذي يقع فيه فندقكم اسمه بازو. ومَعلمه القديم هو باغودا بازو، التي بُدئ بناؤها عام 1597 واكتملت عام 1600. كان المكان حينها جزيرة رملية في النهر، وكانت السفن الصاعدة في نهر اللؤلؤ تقرأ البرج علامةً على اقتراب قوانغتشو."
+      "zh": "酒店所在的这一片，是广州迎接国际买家的地方。广交会的展馆就在阅江中路一带，周围的写字楼里聚集着电商和数字经济企业。白天看到的是忙碌的现代城区，傍晚则可以到江边散散步。",
+      "en": "This is the part of Guangzhou that receives international buyers. The Canton Fair halls stand along Yuejiang Middle Road, and the office towers around them hold e-commerce and digital-economy companies. By day it is a busy modern district; in the evening you can walk down to the river.",
+      "ar": "هذا هو الجزء من قوانغتشو الذي يستقبل المشترين الدوليين. فقاعات معرض كانتون تمتدّ على طريق يوى جيانغ الأوسط، وتضمّ الأبراج المحيطة بها شركات تجارة إلكترونية واقتصاد رقمي. نهارًا هو حيّ عصري مزدحم، وفي المساء يمكنكم النزول إلى النهر للتمشّي."
     },
     {
-      "zh": "今天塔的四周长满了树，外面是展馆、写字楼和住宅。这片江岸做的还是同一件事：广交会开展时买家从各国飞来，沿江的写字楼里坐着做电商和数字生意的公司。",
-      "en": "Today the tower stands among trees, with exhibition halls, offices and flats around it. The riverbank still does the same work: when the Canton Fair opens, buyers fly in from everywhere, and the towers along the water hold e-commerce and digital companies.",
-      "ar": "واليوم يقف البرج وسط الأشجار، وحوله قاعات المعارض والمكاتب والمساكن. وما زالت هذه الضفة تؤدي العمل نفسه: حين يُفتتح معرض كانتون يأتي المشترون جوًّا من كل مكان، وتضمّ الأبراج على الماء شركات تجارة إلكترونية وأعمال رقمية."
+      "zh": "这片江岸与贸易的联系，比眼前的高楼早得多。琶洲塔始建于 1597 年、1600 年落成，当年为溯珠江而来的商船指引方向。今天它仍立在树林间，像是现代城区里留下的一页旧航海图。",
+      "en": "This bank's connection with trade is much older than the towers in front of you. The Pazhou pagoda was begun in 1597 and finished in 1600, and it guided the merchant ships coming up the Pearl River. It still stands among the trees today, like a page of an old sea chart left inside a modern district.",
+      "ar": "صلة هذه الضفة بالتجارة أقدم بكثير من الأبراج التي أمامكم. فقد بُدئ بناء باغودا بازو عام 1597 واكتملت عام 1600، وكانت ترشد السفن التجارية الصاعدة في نهر اللؤلؤ. وما زالت قائمة اليوم بين الأشجار، كصفحة من خريطة بحرية قديمة بقيت داخل حيّ عصري."
     },
     {
-      "zh": "傍晚从酒店往江边走一段，风从水面上来，对岸的楼一盏一盏亮起来。想看那座塔，在地图里搜「琶洲塔」。",
-      "en": "In the early evening, walk down to the river from the hotel: the air comes off the water and the far bank lights up tower by tower. To find the pagoda, search 琶洲塔 in your map app.",
-      "ar": "أول المساء هو أفضل وقت للمشي هنا: انزلوا من الفندق إلى النهر، يأتيكم الهواء من فوق الماء، وتُضاء الضفة المقابلة برجًا بعد برج. وللعثور على الباغودا ابحثوا عن 琶洲塔 في تطبيق الخرائط."
+      "zh": "想看看古塔，在地图里搜「琶洲塔」。如果对远来商人的故事感兴趣，老城的光塔路还有另一段与阿拉伯世界相连的历史。",
+      "en": "To see the pagoda, search 琶洲塔 in your map app. And if the story of the merchants who came from far away interests you, Guangta Road in the old city holds another chapter of it, one tied to the Arab world.",
+      "ar": "لرؤية الباغودا ابحثوا عن 琶洲塔 في تطبيق الخرائط. وإن شدّتكم قصة التجار القادمين من بعيد، ففي شارع قوانغتا بالمدينة القديمة فصل آخر منها، فصلٌ موصول بالعالم العربي."
     }
   ],
   "sources": [
@@ -2179,9 +2180,9 @@ export const PAZHOU: { lead: L10n; paragraphs: L10n[]; sources: { label: L10n; u
 
 export const FOOD_CULTURE: { lead: L10n; paragraphs: L10n[]; sources: { label: L10n; url: string }[] } = {
   "lead": {
-    "zh": "一壶茶先上桌，蒸笼一笼一笼跟着来。",
-    "en": "The pot of tea comes first; the steamer baskets follow, one at a time.",
-    "ar": "يأتي إبريق الشاي أولًا، ثم تتبعه سلال البخار واحدةً تلو الأخرى."
+    "zh": "在广州，吃是正经事：早茶慢慢坐，烧味看皮，甜品讲究一个滑。",
+    "en": "Eating is taken seriously in Guangzhou: a long morning over tea, roast meats judged by their skin, desserts by how smoothly they set.",
+    "ar": "الطعام في قوانغتشو شأن جادّ: صباح طويل مع الشاي، ومشاوٍ يُحكم عليها بجلدها، وحلويات بنعومة قوامها."
   },
   "paragraphs": [
     {
@@ -2190,14 +2191,14 @@ export const FOOD_CULTURE: { lead: L10n; paragraphs: L10n[]; sources: { label: L
       "ar": "ارفعوا غطاء السلة فيصل إليكم البخار أولًا. قشرة زلابية الروبيان شفّافة بما يكفي لتُظهر لونها الوردي في الداخل؛ وعلى الطاولة المجاورة يتحدث الناس ويأكلون في الوقت نفسه، وصباحٌ يمتدّ من التاسعة إلى الحادية عشرة أمر عادي."
     },
     {
-      "zh": "点菜可以按三路走：清蒸留鲜，一条鱼上桌，主味就是姜丝、葱丝和一勺豉油；烧味讲皮，烧鹅、乳鸽咬下去先是脆的；甜品讲滑，姜撞奶和双皮奶都凝成嫩滑的一碗。三样各点一个，一桌就齐了。",
-      "en": "Ordering splits neatly three ways. Steamed, for freshness: a whole fish whose main flavours are shredded ginger, spring onion and a spoon of soy. Roasted, for the skin: goose and squab that crack before they give. And the milk desserts, for texture — softly set, smooth under the spoon. One from each and the table is complete.",
-      "ar": "يتوزّع الطلب في ثلاثة اتجاهات. المطهوّ بالبخار للطزاجة: سمكة كاملة نكهتها الأساسية شرائح الزنجبيل والبصل الأخضر وملعقة صويا. والمشويّ من أجل الجلد: إوزّ وحمام يتكسّر جلدهما قبل أن يلين. وحلويات الحليب من أجل القوام — متماسكة طريّة، ناعمة تحت الملعقة. واحد من كل اتجاه وتكتمل المائدة."
+      "zh": "点菜可以按三路走：清蒸留鲜，一条鱼上桌，主味就是姜丝、葱丝和一勺豉油；烧味讲皮，烧鹅、乳鸽咬下去先是脆的；甜品讲滑，姜撞奶和双皮奶都凝成嫩滑的一碗。喜欢清淡、酥脆还是甜口，可以从这里找到起点。",
+      "en": "Ordering splits neatly three ways. Steamed, for freshness: a whole fish whose main flavours are shredded ginger, spring onion and a spoon of soy. Roasted, for the skin: goose and squab that crack before they give. And the milk desserts, for texture — softly set, smooth under the spoon. Whether you lean towards the clean-tasting, the crisp or the sweet, this is where to start.",
+      "ar": "يتوزّع الطلب في ثلاثة اتجاهات. المطهوّ بالبخار للطزاجة: سمكة كاملة نكهتها الأساسية شرائح الزنجبيل والبصل الأخضر وملعقة صويا. والمشويّ من أجل الجلد: إوزّ وحمام يتكسّر جلدهما قبل أن يلين. وحلويات الحليب من أجل القوام — متماسكة طريّة، ناعمة تحت الملعقة. وسواء ملتم إلى الطعم الصافي أو المقرمش أو الحلو، فمن هنا تبدؤون."
     },
     {
-      "zh": "下面按风味认识菜式；点单前请店员确认肉类来源、猪油和料酒，清真餐厅另见「礼拜与清真餐」。",
-      "en": "What follows introduces the dishes by flavour. Before you order, ask the staff about the meat, about lard and about cooking wine; halal restaurants are listed under “Prayer and halal food”.",
-      "ar": "ما يلي تعريف بالأطباق حسب النكهة. وقبل الطلب اسألوا العاملين عن مصدر اللحم وعن شحم الخنزير ونبيذ الطهي؛ أما المطاعم الحلال فمذكورة في «الصلاة والطعام الحلال»."
+      "zh": "先认识几道菜，再按喜欢的口味找餐厅，会比对着陌生菜单猜更轻松。点单前请店员确认肉类来源、猪油和料酒，清真餐厅另见「礼拜与清真餐」。",
+      "en": "Getting to know a few dishes first, then choosing a restaurant by the flavours you like, is easier than guessing at an unfamiliar menu. Before you order, ask the staff about the meat, about lard and about cooking wine; halal restaurants are listed under “Prayer and halal food”.",
+      "ar": "التعرّف إلى بضعة أطباق أولًا ثم اختيار المطعم حسب النكهات التي تحبّونها أسهل من التخمين أمام قائمة غريبة. وقبل الطلب اسألوا العاملين عن مصدر اللحم وعن شحم الخنزير ونبيذ الطهي؛ أما المطاعم الحلال فمذكورة في «الصلاة والطعام الحلال»."
     }
   ],
   "sources": [
