@@ -157,8 +157,8 @@ const FOOD_HINT: L10n = (() => {
 
 /**
  * 开篇的一句欢迎。只在这份组件里，不进 lib/trip-data.ts —— 那里放的是事实。
- * 配的是珠江全景（skyline.jpg）；两段话没有新事实，
- * 光塔与蕃坊的完整故事和来源在「广州与你们」一章。
+ * 配的是珠江全景（skyline.jpg）。两段话是招呼，不是概述：
+ * 海上贸易与光塔的故事属于「广州与你们」那一章，这里不先讲一遍。
  */
 const WELCOME = {
   title: {
@@ -167,14 +167,14 @@ const WELCOME = {
     ar: "أهلًا بكم في قوانغتشو",
   },
   first: {
-    zh: "很高兴在这里与你相见。广州与阿拉伯世界的联系，沿着海上贸易延续了许多个世纪。",
-    en: "We are glad to meet you here. Guangzhou’s ties with the Arab world have followed the sea trade routes for many centuries.",
-    ar: "يسعدنا لقاؤكم هنا. فصلة قوانغتشو بالعالم العربي امتدّت قرونًا طويلة على طول طرق التجارة البحرية.",
+    zh: "很高兴在广州与你相见。这几天除了会议，这座城市还有别的等着你：清晨的茶楼、榕树遮着的老街、入夜后亮起来的珠江两岸。",
+    en: "We are glad to meet you here in Guangzhou. Beyond the meetings, the city has its own things waiting: teahouses in the morning, old streets under banyan trees, and both banks of the Pearl River lit after dark.",
+    ar: "يسعدنا لقاؤكم هنا في قوانغتشو. وإلى جانب الاجتماعات، للمدينة ما تنتظركم به: بيوت الشاي في الصباح، وشوارع قديمة تظلّلها أشجار البانيان، وضفّتا نهر اللؤلؤ مضاءتان بعد المغيب.",
   },
   second: {
-    zh: "会议之余，愿你有时间看看珠江夜景，走进老城街巷，慢慢发现属于自己的广州。",
-    en: "Between the meetings, we hope you find time for the Pearl River at night, for the lanes of the old city, and for the Guangzhou you discover for yourself.",
-    ar: "وبين جلسات المؤتمر، نتمنى أن تجدوا وقتًا لنهر اللؤلؤ ليلًا ولأزقة المدينة القديمة، ولقوانغتشو التي تكتشفونها بأنفسكم.",
+    zh: "愿你在忙碌的会程之外，也有时间慢慢逛、好好吃，发现属于自己的广州。",
+    en: "Beyond a busy programme, we hope you find time to wander, to eat well, and to discover the Guangzhou that is yours.",
+    ar: "ونتمنى أن تجدوا، إلى جانب برنامجكم المزدحم، وقتًا للتجوّل على مهل ولطعام طيّب، ولاكتشاف قوانغتشو التي تخصّكم.",
   },
   /** 照片里看得见什么，三语。读屏的人也该知道开篇那张是什么。 */
   alt: {
@@ -221,6 +221,24 @@ function GuideFigure({
       width={size?.width}
       height={size?.height}
       className={className}
+    />
+  );
+}
+
+/**
+ * 文化那一章里，个别条目自己带一张照片（现在只有骑楼那条）。
+ * 说明写在 `INLINE_PHOTOS` 里 —— 第一批素材的 alt 与图说不在照片记录中。
+ */
+function NotePhoto({ photoKey, lang }: { photoKey?: string; lang: Lang }) {
+  if (!photoKey) return null;
+  const texts: { alt: L10n; caption?: L10n } | undefined =
+    INLINE_PHOTOS[photoKey as keyof typeof INLINE_PHOTOS];
+  return (
+    <GuideFigure
+      photoKey={photoKey}
+      alt={texts?.alt}
+      caption={texts?.caption}
+      lang={lang}
     />
   );
 }
@@ -284,6 +302,71 @@ function Sources({
     </details>
   );
 }
+
+/**
+ * 一段「要用的时候再看」的附加资料：机场中文地址、行李额。
+ * 和来源折叠同一个 `<details>` 写法 —— 不是新控件，也不是新的一章：
+ * 出发前准备读下来是一条线，这两样翻出来是查表，不该横插在正文中间。
+ */
+function Fold({
+  title,
+  lang,
+  children,
+}: {
+  title: L10n;
+  lang: Lang;
+  children: React.ReactNode;
+}) {
+  return (
+    <details className="border-t border-card-line pt-2">
+      {/* 不动 summary 的显示方式：原生的三角标记要留着，读者才看得出这里能点开。 */}
+      <summary className={cn(GUIDE.subheading, "min-h-11 cursor-pointer py-2")}>
+        {t(title, lang)}
+      </summary>
+      <div className="space-y-3 pb-1 pt-1.5">{children}</div>
+    </details>
+  );
+}
+
+/** 出发前准备里那两份查表资料的标题。 */
+const PREP_FOLDS = {
+  addresses: {
+    zh: "机场中文地址（白云 T2 / T3）",
+    en: "Airport addresses in Chinese (Baiyun T2 / T3)",
+    ar: "عناوين المطار بالصينية (بايون T2 / T3)",
+  },
+} satisfies Record<string, L10n>;
+
+/**
+ * 出发前准备的出处：官方来华出行与支付指引，加上带餐刀那句依据的两页航司条款。
+ * 条款不抄进正文 —— 正文只说「包好、托运」，要核对的人点开这里。
+ */
+const PREP_SOURCES = [
+  {
+    label: {
+      zh: "来华出行与支付指引",
+      en: "Official travel and payment guide",
+      ar: "الدليل الرسمي للتنقل والدفع",
+    },
+    url: "https://english.www.gov.cn/2025special/bizexpatsinchina2025",
+  },
+  {
+    label: {
+      zh: "EgyptAir：运输总条件（刀具不得带进客舱）",
+      en: "EgyptAir: conditions of carriage (knives not allowed in the cabin)",
+      ar: "مصر للطيران: شروط النقل (السكاكين ممنوعة في المقصورة)",
+    },
+    url: "https://www.egyptair.com/en/Pages/Conditions-of-Carriage.aspx",
+  },
+  {
+    label: {
+      zh: "EgyptAir：行李额（利器须包好放托运）",
+      en: "EgyptAir: baggage allowance (sharp objects sheathed in checked baggage)",
+      ar: "مصر للطيران: مخصصات الأمتعة (الأدوات الحادة مغلَّفة في الحقيبة المسجَّلة)",
+    },
+    url: "https://www.egyptair.com/en/fly/baggage/Pages/baggage-allowance.aspx",
+  },
+] satisfies { label: L10n; url: string }[];
 
 /**
  * 报数的格子。数字自己说话，不加形容词。
@@ -494,125 +577,14 @@ export function GuideTab({
       </section>
 
       {/*
-        欢迎之后先给印象，再办事（owner 2026-09-12 定的顺序）。
-        这一组从「这座城和你们的关系」一路读到「你住的这块地」：
-        广州与你们 → 这座城有多大 → 科技就在身边 → 名创优品在广州 → 琶洲。
-        读完正好接下面的酒店块 —— 琶洲那一节讲的就是酒店脚下这块地。
-        上一版这里接的是出发前准备和机场地址，第一次点开看到的是行政事务。
+        欢迎之后是出发前准备（owner 2026-09-12 定的顺序）：先把出发前要办的事读完，
+        再落到住处，然后才是这座城。机场中文地址与两家航司的行李额都收在准备这一章里
+        的折叠详情中 —— 它们是查表，不该横插在正文里各占一章。
       */}
-      <Accordion type="multiple" defaultValue={[]} className="space-y-2.5">
-        <Section id="story" title={UI.cityStory} hint={CITY_STORY.lead} lang={lang}>
-          <Prose
-            lead={CITY_STORY.lead}
-            paragraphs={CITY_STORY.paragraphs}
-            sources={CITY_STORY.sources}
-            lang={lang}
-            photoKey={CHAPTER_PHOTOS.story}
-          />
-        </Section>
-
-        <Section id="scale" title={UI.cityScale} hint={UI.guideHints.cityScale} lang={lang}>
-          {/* 照片不再放这里：同一张珠江全景已经是开篇那张，文字与数字照旧。 */}
-          <Prose
-            lead={CITY_SCALE.lead}
-            paragraphs={CITY_SCALE.intro}
-            sources={CITY_SCALE.sources}
-            lang={lang}
-          >
-            <StatTiles lang={lang} />
-          </Prose>
-        </Section>
-
-        {/* 配图只用真在中国、最好在广州拍的：街上的 Robotaxi（粤A 牌）、扫码付款、
-            黄色电动出租车，载人飞行器那张来自广州市政府。
-            送餐机器人与无人机送餐没有能用的中国实景，那两条宁可不配图。
-            （上一版挂的 robotaxi.jpg 拍的是阿布扎比，已换掉。） */}
-        <Section id="tech" title={UI.cityTech} hint={UI.guideHints.tech} lang={lang}>
-          <Prose
-            lead={CITY_TECH.lead}
-            paragraphs={[CITY_TECH.intro]}
-            sources={CITY_TECH.sources}
-            lang={lang}
-          >
-            <ul className="mt-4 grid gap-x-5 md:grid-cols-2">
-              {CITY_TECH.items.map((item) => (
-                <li key={item.id} className="border-t border-card-line py-3">
-                  {/* 照片按原比例放全：机身、车顶的传感器、电梯口都不裁。 */}
-                  <GuideFigure
-                    photoKey={item.imageKey}
-                    alt={item.imageAlt}
-                    lang={lang}
-                    className="mt-0"
-                  />
-                  <h4 className={GUIDE.subheading}>{t(item.title, lang)}</h4>
-                  {/* 正文按空行分段：先给一个看得见的画面，再让数字落下来当回响。
-                      一段连着写，两个节拍就糊成一句话了。 */}
-                  {t(item.body, lang)
-                    .split("\n")
-                    .map((paragraph, index) => (
-                      <p key={index} className={cn(GUIDE.body, "mt-1")}>
-                        {paragraph}
-                      </p>
-                    ))}
-                  {/* 「哪里能碰到」排在故事后面：先读到画面，再拿到入口。
-                      放在标题下面时，390px 上先看见的是一条说明书。 */}
-                  <p className={cn(GUIDE.note, "mt-1.5 text-navy-soft/85")}>
-                    {t(UI.techWhere, lang)}：{t(item.where, lang)}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          </Prose>
-        </Section>
-
-        {/* 照片就是开业当天的正佳门口 —— 上一段说门口排了人，图里正好是那一幕。 */}
-        <Section
-          id="miniso"
-          title={UI.miniso}
-          hint={UI.guideHints.miniso}
-          lang={lang}
-        >
-          {/* 两张图各挨着自己那一段：章首是琶洲西区那栋新楼（封顶时的航拍，
-              广州日报），中间那张是正佳门口开业那天，下面接着讲的就是那家店。 */}
-          <Prose
-            lead={MINISO_IN_GZ.lead}
-            paragraphs={MINISO_IN_GZ.paragraphs}
-            sources={MINISO_IN_GZ.sources}
-            lang={lang}
-            photoKey={CHAPTER_PHOTOS.miniso}
-          >
-            <GuideFigure photoKey={CHAPTER_PHOTOS.minisoStore} lang={lang} />
-            <div className="space-y-2.5">
-              {MINISO_IN_GZ.store.map((paragraph, index) => (
-                <p key={index} className={GUIDE.body}>
-                  {t(paragraph, lang)}
-                </p>
-              ))}
-            </div>
-          </Prose>
-        </Section>
-
-        <Section
-          id="pazhou"
-          title={UI.pazhou}
-          hint={UI.guideHints.pazhou}
-          lang={lang}
-        >
-          <Prose
-            lead={PAZHOU.lead}
-            paragraphs={PAZHOU.paragraphs}
-            sources={PAZHOU.sources}
-            lang={lang}
-            photoKey={CHAPTER_PHOTOS.pazhou}
-          />
-        </Section>
-      </Accordion>
-
-      {/* 读完上面那一组再办事：出发前准备排在印象后面、酒店块前面。 */}
       <Accordion type="multiple" defaultValue={[]} className="space-y-2.5">
         <Section id="prep" title={UI.prep} hint={UI.guideHints.prep} lang={lang}>
           {/* 一件事一个小标题，下面直接是原来的说明 ——
-              展开这一章就能从支付一路读到天气，不用再逐条点开。 */}
+              展开这一章就能从上网一路读到天气，不用再逐条点开。 */}
           <div className="max-w-[44rem] space-y-4">
             {prep.map((item) => (
               <div key={item.id}>
@@ -620,15 +592,23 @@ export function GuideTab({
                 <BulletList items={item.lines} lang={lang} className="mt-1.5" />
               </div>
             ))}
-            <SourceLink
-              label={{
-                zh: "来华出行与支付指引",
-                en: "Official travel and payment guide",
-                ar: "الدليل الرسمي للتنقل والدفع",
-              }}
-              url="https://english.www.gov.cn/2025special/bizexpatsinchina2025"
-              lang={lang}
-            />
+
+            <Fold title={PREP_FOLDS.addresses} lang={lang}>
+              {COPY_ADDRESSES.filter((entry) => entry.id !== "hotel").map((entry) => (
+                <CopyChinese key={entry.id} entry={entry} lang={lang} showBig />
+              ))}
+            </Fold>
+
+            {/* 两张航司大卡不进主阅读流：要核对额度的人点开这里，`BaggageLines`
+                本身的规则一个字没动。 */}
+            <Fold title={UI.baggage} lang={lang}>
+              <BaggageLines profile="sichuanEconomy" lang={lang} />
+              <div className="border-t border-card-line pt-3">
+                <BaggageLines profile="egyptairBusiness" lang={lang} />
+              </div>
+            </Fold>
+
+            <Sources sources={PREP_SOURCES} lang={lang} />
           </div>
         </Section>
       </Accordion>
@@ -673,25 +653,117 @@ export function GuideTab({
       </section>
 
       {/*
-        剩下的都是到了之后要用的：机场地址、礼拜与清真餐、吃、逛、路线、习惯，
-        最后是备查的（短句 / 行李 / 来源）。讲这座城的四章已经搬到欢迎卡下面了。
+        住处之后就是这块地：琶洲紧挨着上面的酒店卡，讲的就是酒店脚下这一片。
+        再往下才是这座城 —— 广州与你们 → 认识今天的广州 → 名创优品 → 科技，
+        然后是到了之后要用的（礼拜与清真餐 / 吃 / 习惯 / 逛 / 路线），
+        最后是备查的（短句 / 来源）。
       */}
       <Accordion type="multiple" defaultValue={[]} className="space-y-2.5">
         <Section
-          id="addresses"
-          title={{ zh: "机场中文地址", en: "Airport addresses", ar: "عناوين المطار" }}
-          hint={{ zh: "白云机场 T2 / T3，按航班选择", en: "Baiyun T2 / T3 — choose your flight’s terminal", ar: "بايون T2 / T3 — اختاري صالة رحلتك" }}
+          id="pazhou"
+          title={UI.pazhou}
+          hint={UI.guideHints.pazhou}
           lang={lang}
         >
-          <div className="max-w-[44rem] space-y-3">
-            {COPY_ADDRESSES.filter((entry) => entry.id !== "hotel").map((entry) => (
-              <CopyChinese key={entry.id} entry={entry} lang={lang} showBig />
-            ))}
-          </div>
+          <Prose
+            lead={PAZHOU.lead}
+            paragraphs={PAZHOU.paragraphs}
+            sources={PAZHOU.sources}
+            lang={lang}
+            photoKey={CHAPTER_PHOTOS.pazhou}
+          />
         </Section>
 
+        <Section id="story" title={UI.cityStory} hint={CITY_STORY.lead} lang={lang}>
+          <Prose
+            lead={CITY_STORY.lead}
+            paragraphs={CITY_STORY.paragraphs}
+            sources={CITY_STORY.sources}
+            lang={lang}
+            photoKey={CHAPTER_PHOTOS.story}
+          />
+        </Section>
 
+        <Section id="scale" title={UI.cityScale} hint={UI.guideHints.cityScale} lang={lang}>
+          {/* 照片不再放这里：同一张珠江全景已经是开篇那张，文字与数字照旧。 */}
+          <Prose
+            lead={CITY_SCALE.lead}
+            paragraphs={CITY_SCALE.intro}
+            sources={CITY_SCALE.sources}
+            lang={lang}
+          >
+            <StatTiles lang={lang} />
+          </Prose>
+        </Section>
 
+        {/* 三节各带自己的照片：总部那节配封顶时的航拍，门店那节配开业当天的正佳门口。 */}
+        <Section
+          id="miniso"
+          title={UI.miniso}
+          hint={UI.guideHints.miniso}
+          lang={lang}
+        >
+          <section className="max-w-[44rem]">
+            <p className={GUIDE.lead}>{t(MINISO_IN_GZ.lead, lang)}</p>
+            {MINISO_IN_GZ.sections.map((part) => (
+              <div key={part.id} className="mt-3">
+                <h3 className={GUIDE.subheading}>{t(part.title, lang)}</h3>
+                <GuideFigure photoKey={part.photoKey} lang={lang} />
+                <div className="mt-1.5 space-y-2.5">
+                  {part.paragraphs.map((paragraph, index) => (
+                    <p key={index} className={GUIDE.body}>
+                      {t(paragraph, lang)}
+                    </p>
+                  ))}
+                </div>
+              </div>
+            ))}
+            <Sources sources={MINISO_IN_GZ.sources} lang={lang} />
+          </section>
+        </Section>
+
+        {/* 配图只用真在中国、最好在广州拍的：街上的 Robotaxi（粤A 牌）、扫码付款、
+            黄色电动出租车，载人飞行器那张来自广州市政府。
+            送餐机器人与无人机送餐没有能用的中国实景，那两条宁可不配图。 */}
+        <Section id="tech" title={UI.cityTech} hint={UI.guideHints.tech} lang={lang}>
+          <Prose
+            lead={CITY_TECH.lead}
+            paragraphs={[CITY_TECH.intro]}
+            sources={CITY_TECH.sources}
+            lang={lang}
+          >
+            {/* 条目顺序就是遇到它们的顺序：先是走在街上就碰得到的三样，
+                再是要专门去约、去找的三样（数据里已按这个顺序排）。 */}
+            <ul className="mt-4 grid gap-x-5 md:grid-cols-2">
+              {CITY_TECH.items.map((item) => (
+                <li key={item.id} className="border-t border-card-line py-3">
+                  {/* 照片按原比例放全：机身、车顶的传感器、电梯口都不裁。 */}
+                  <GuideFigure
+                    photoKey={item.imageKey}
+                    alt={item.imageAlt}
+                    lang={lang}
+                    className="mt-0"
+                  />
+                  <h4 className={GUIDE.subheading}>{t(item.title, lang)}</h4>
+                  {/* 正文按空行分段：先给一个看得见的画面，再让数字落下来当回响。
+                      一段连着写，两个节拍就糊成一句话了。 */}
+                  {t(item.body, lang)
+                    .split("\n")
+                    .map((paragraph, index) => (
+                      <p key={index} className={cn(GUIDE.body, "mt-1")}>
+                        {paragraph}
+                      </p>
+                    ))}
+                  {/* 「哪里能碰到」排在故事后面：先读到画面，再拿到入口。
+                      放在标题下面时，390px 上先看见的是一条说明书。 */}
+                  <p className={cn(GUIDE.note, "mt-1.5 text-navy-soft/85")}>
+                    {t(UI.techWhere, lang)}：{t(item.where, lang)}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </Prose>
+        </Section>
 
 
         <Section
@@ -700,6 +772,12 @@ export function GuideTab({
           hint={UI.guideHints.halal}
           lang={lang}
         >
+          {/* 先是这一周真要用的：哪天的主麻、去哪一带、点菜怎么问。
+              三座寺各自的样子排在后面 —— 读到那里的人已经知道自己要去哪一带了。 */}
+          <p className={cn(GUIDE.body, "trip-card-accent max-w-[44rem] p-3 text-navy")}>
+            <span className="font-semibold">{t(UI.jumuah, lang)}：</span>
+            {t(JUMUAH_NOTE, lang)}
+          </p>
           <div className="max-w-[44rem]">
             <BulletList items={HALAL_WHERE} lang={lang} />
           </div>
@@ -708,10 +786,6 @@ export function GuideTab({
           {MOSQUES.map((place) => (
             <PlaceCardView key={place.id} place={place} lang={lang} />
           ))}
-          <p className={cn(GUIDE.body, "trip-card-accent max-w-[44rem] p-3 text-navy")}>
-            <span className="font-semibold">{t(UI.jumuah, lang)}：</span>
-            {t(JUMUAH_NOTE, lang)}
-          </p>
 
           <SubHeading>{t(UI.halalDining, lang)}</SubHeading>
           {HALAL_DINING.map((place) => (
@@ -809,16 +883,44 @@ export function GuideTab({
         </Section>
 
         <Section
+          id="culture"
+          title={UI.culture}
+          hint={UI.guideHints.culture}
+          lang={lang}
+        >
+          {/* 先是这次正好遇上的节日，再是餐桌与日常来往，街上的骑楼放在最后 ——
+              骑楼那张照片就挨着讲骑楼的那一条，不再当整章的开场白。 */}
+          <ul className="max-w-[44rem]">
+            {CULTURE_NOTES.map((note) => (
+              <li key={note.id} className="border-t border-card-line py-3">
+                <h4 className={GUIDE.subheading}>{t(note.title, lang)}</h4>
+                {/* 空行分段：像「初次见面」这一条，两小段比一大段好读。 */}
+                {t(note.body, lang)
+                  .split("\n")
+                  .map((paragraph, index) => (
+                    <p key={index} className={cn(GUIDE.body, "mt-1")}>
+                      {paragraph}
+                    </p>
+                  ))}
+                <NotePhoto photoKey={note.photoKey} lang={lang} />
+              </li>
+            ))}
+          </ul>
+          {/* 只有放假安排这类要给出处的条目才有 sources，和别处一样收在章尾一个折叠里。 */}
+          <div className="max-w-[44rem]">
+            <Sources sources={cultureSources} lang={lang} />
+          </div>
+        </Section>
+
+        <Section
           id="retail"
           title={UI.retail}
           hint={UI.guideHints.retail}
           lang={lang}
         >
-          <DistrictRoute lang={lang} />
-
           <div className="max-w-[44rem]">
-            {/* 这一节不再拿一张商圈夜景航拍当泛泛的开场白：
-                真正有东西看的是天环那张俯瞰，放在它自己那一行里。 */}
+            {/* 先讲两条街各看什么，再一家一家说；交通示意排在最后 ——
+                知道要去哪儿之后，才需要「从酒店怎么走」。 */}
             <p className={GUIDE.lead}>{t(RETAIL_STUDY.lead, lang)}</p>
             <div className="mt-2.5 space-y-2.5">
               {RETAIL_STUDY.intro.map((paragraph, index) => (
@@ -855,6 +957,8 @@ export function GuideTab({
             <p className={GUIDE.body}>{t(RETAIL_STUDY.beijinglu, lang)}</p>
             <Sources sources={RETAIL_STUDY.sources} lang={lang} />
           </div>
+
+          <DistrictRoute lang={lang} />
         </Section>
 
         <Section
@@ -867,43 +971,6 @@ export function GuideTab({
         </Section>
 
         <Section
-          id="culture"
-          title={UI.culture}
-          hint={UI.guideHints.culture}
-          lang={lang}
-        >
-          <div className="max-w-[44rem]">
-            {/* 恩宁路的骑楼：这一章讲的是到了会遇到的小事，开头给一张街上的样子。 */}
-            <GuideFigure
-              photoKey="arcade"
-              alt={INLINE_PHOTOS.arcade.alt}
-              caption={INLINE_PHOTOS.arcade.caption}
-              lang={lang}
-              className="mt-0"
-            />
-          </div>
-          <ul className="max-w-[44rem]">
-            {CULTURE_NOTES.map((note) => (
-              <li key={note.id} className="border-t border-card-line py-3">
-                <h4 className={GUIDE.subheading}>{t(note.title, lang)}</h4>
-                {/* 空行分段：像「初次见面」这一条，两小段比一大段好读。 */}
-                {t(note.body, lang)
-                  .split("\n")
-                  .map((paragraph, index) => (
-                    <p key={index} className={cn(GUIDE.body, "mt-1")}>
-                      {paragraph}
-                    </p>
-                  ))}
-              </li>
-            ))}
-          </ul>
-          {/* 只有放假安排这类要给出处的条目才有 sources，和别处一样收在章尾一个折叠里。 */}
-          <div className="max-w-[44rem]">
-            <Sources sources={cultureSources} lang={lang} />
-          </div>
-        </Section>
-
-        <Section
           id="phrases"
           title={UI.phrases}
           hint={UI.guideHints.phrases}
@@ -913,20 +980,6 @@ export function GuideTab({
             {PHRASES.map((entry) => (
               <CopyChinese key={entry.id} entry={entry} lang={lang} showBig />
             ))}
-          </div>
-        </Section>
-
-        <Section
-          id="baggage"
-          title={UI.baggage}
-          hint={UI.guideHints.baggage}
-          lang={lang}
-        >
-          <div className="max-w-[44rem] space-y-4">
-            <BaggageLines profile="sichuanEconomy" lang={lang} />
-            <div className="border-t border-card-line pt-4">
-              <BaggageLines profile="egyptairBusiness" lang={lang} />
-            </div>
           </div>
         </Section>
 

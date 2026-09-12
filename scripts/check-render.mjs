@@ -79,6 +79,36 @@ function mustContain(lang) {
   return ["أهلًا بكم في قوانغتشو", "إنتركونتيننتال", "قبل السفر", "قوانغتشو وأنتم", "الصعود إلى برج كانتون"];
 }
 
+/**
+ * 阅读顺序不是靠 JSX 里搜字符串确认的，而是看渲染出来的页面里这些标题谁先谁后。
+ * 折叠状态下章节内容不挂载，但每一章的标题就在触发条上，顺序一目了然。
+ * 2026-09-12 用户批准的顺序：欢迎 → 出发前准备 → 酒店 → 琶洲 → 这座城 →
+ * 到了之后要用的 → 备查。
+ */
+function orderedTitles(lang) {
+  if (lang === "zh")
+    return [
+      "欢迎来到广州", "出发前准备", "广州保利洲际酒店", "琶洲：你住的这块地",
+      "广州与你们", "认识今天的广州", "名创优品在广州", "科技就在身边",
+      "礼拜与清真餐", "食在广州", "当地生活习惯", "广州商圈", "半日建议路线",
+      "可复制的中文短句", "资料与图片出处",
+    ];
+  if (lang === "en")
+    return [
+      "Welcome to Guangzhou", "Before you fly", "InterContinental", "Around your hotel: Pazhou",
+      "Guangzhou and you", "Getting to know Guangzhou today", "MINISO in Guangzhou",
+      "The technology around you", "Prayer and halal food", "Eat in Guangzhou",
+      "Local customs and habits", "Shopping districts", "Half-day route suggestions",
+      "Chinese phrases you can copy", "References and photo credits",
+    ];
+  return [
+    "أهلًا بكم في قوانغتشو", "قبل السفر", "إنتركونتيننتال", "حول فندقكم: بازو",
+    "قوانغتشو وأنتم", "التعرّف إلى قوانغتشو اليوم", "ميني سو في قوانغتشو",
+    "التقنية من حولكم", "الصلاة والطعام الحلال", "العادات المحلية اليومية",
+    "مسارات مقترحة لنصف يوم",
+  ];
+}
+
 /** 被否掉的清单不能悄悄回来：一个勾选框、一个完成数都不行。 */
 const REJECTED = [
   'role="checkbox"',
@@ -127,6 +157,25 @@ for (const lang of ["zh", "en", "ar"]) {
     if (missing.length > 0) {
       failed += 1;
       console.log(`FAIL  ${view} 缺少：${missing.join(" / ")}`);
+      continue;
+    }
+    let outOfOrder = null;
+    let previous = -1;
+    for (const title of orderedTitles(lang)) {
+      const here = html.indexOf(title);
+      if (here < 0) {
+        outOfOrder = `缺少章标题：${title}`;
+        break;
+      }
+      if (here < previous) {
+        outOfOrder = `顺序不对：${title}`;
+        break;
+      }
+      previous = here;
+    }
+    if (outOfOrder) {
+      failed += 1;
+      console.log(`FAIL  ${view} ${outOfOrder}`);
       continue;
     }
     const unexpected = REJECTED.filter((text) => html.includes(text));

@@ -572,6 +572,11 @@ export const PREP: PrepItem[] = [
         "ar": "أصل جواز السفر وحجز الفندق ومحوّل القابس وكابلات الشحن وأي دواء تتناولينه. واحفظي نسخًا بلا إنترنت من صفحة الجواز والبرنامج؛ ويُطلب أصل الجواز عند تسجيل الدخول."
       },
       {
+        "zh": "这边餐厅常用筷子；不习惯的话，可以带一套便携叉勺。若带餐刀，请妥善包好放入托运行李。",
+        "en": "Restaurants here mostly set chopsticks. If you would rather not use them, a compact cutlery set is easy to carry. A table knife has to be wrapped securely and packed in checked baggage.",
+        "ar": "تقدّم المطاعم هنا عيدان الطعام في الغالب. وإن كنتم تفضّلون غيرها، فشوكة وملعقة صغيرتان للسفر تُحملان بسهولة. أما سكين المائدة فيجب لفّها جيدًا ووضعها في الحقيبة المسجَّلة."
+      },
+      {
         "zh": "机上如果需要特殊餐（清真餐、素食或其他），要在出发前直接向航空公司申请，到了机场再说就来不及了。",
         "en": "If you need a special meal on board — halal, vegetarian or anything else — request it from the airline before departure; asking at the airport is too late.",
         "ar": "وإن كنتِ تحتاجين وجبة خاصة على متن الطائرة — حلال أو نباتية أو غيرها — فاطلبيها من شركة الطيران قبل السفر؛ فالطلب في المطار يأتي متأخرًا."
@@ -754,11 +759,6 @@ export const RETAIL_STUDY: {
       "zh": "广州逛街有两种不同的方式。天河路是一条路上相邻的几家购物中心，逛的是室内与品牌；北京路是步行街，老字号、小店和骑楼挨着排，街心还有一段盖着玻璃罩的古代路面。",
       "en": "Guangzhou offers two different kinds of shopping trip. Tianhe Road is a row of neighbouring malls — interiors and brands. Beijing Road is a pedestrian street of long-established shops, small traders and arcade buildings, with a stretch of ancient roadway under a glass cover in the middle of it.",
       "ar": "تقدّم قوانغتشو نوعين مختلفين من جولات التسوّق. شارع تيانخه صفٌّ من المراكز المتجاورة — مساحات داخلية وعلامات تجارية. أما شارع بكين فشارع مشاة تصطفّ فيه المتاجر العريقة والمحال الصغيرة ومباني الأروقة، وفي وسطه امتداد من طريق قديم تحت غطاء زجاجي."
-    },
-    {
-      "zh": "可以从最感兴趣的两三家开始：有的看高端品牌与橱窗，有的在露天花园里歇脚，还有的把整条街开在地下。同一条天河路，逛法很不一样。",
-      "en": "Start with the two or three that interest you most: luxury labels and window displays, a break in an open-air garden, or a whole shopping street below ground. The same road offers quite different ways to spend an afternoon.",
-      "ar": "ابدؤوا بمركزين أو ثلاثة تثير اهتمامكم أكثر: علامات فاخرة وواجهات عرض، أو استراحة في حديقة مكشوفة، أو شارع تسوّق كامل تحت الأرض. يمنحكم الشارع نفسه طرقًا مختلفة لقضاء فترة بعد الظهر."
     }
   ],
   "malls": [
@@ -977,6 +977,8 @@ export type CultureNote = {
   id: string;
   title: L10n;
   body: L10n;
+  /** 这一条自己的照片（lib/guide-photos.ts 或 image-credits 的 key），紧挨着它显示。 */
+  photoKey?: string;
   /** 少数几条要给出处（放假安排、民俗），章尾统一折叠显示。 */
   sources?: { label: L10n; url: string }[];
 };
@@ -1028,6 +1030,15 @@ export const CULTURE_NOTES: CultureNote[] = [
     },
   },
   {
+    id: "spicy",
+    title: { zh: "点菜时把要求说清楚", en: "Say exactly what you want when ordering", ar: "قولوا بوضوح ما تريدونه عند الطلب" },
+    body: {
+      zh: "「不要辣」和「少辣」是两个不同的要求，说清楚你要哪一种；不吃某样东西、要少油少盐，也直接说出来最有效。",
+      en: "“No chilli” and “mild” are two different requests — say which one you mean. The same goes for an ingredient you avoid or a lighter hand with oil and salt: saying it plainly works best.",
+      ar: "«بلا فلفل حار» و«خفيف الحرارة» طلبان مختلفان — حدّدوا أيّهما تقصدون. وكذلك أي مكوّن تتجنّبونه أو رغبتكم في زيت وملح أقل: قولوها بوضوح.",
+    },
+  },
+  {
     id: "no-tip",
     title: { zh: "日常消费不用另给小费", en: "Everyday spending does not need a tip", ar: "المصروفات اليومية لا تحتاج إكرامية" },
     body: {
@@ -1055,30 +1066,22 @@ export const CULTURE_NOTES: CultureNote[] = [
     },
   },
   {
-    id: "spicy",
-    title: { zh: "点菜时把要求说清楚", en: "Say exactly what you want when ordering", ar: "قولوا بوضوح ما تريدونه عند الطلب" },
-    body: {
-      zh: "「不要辣」和「少辣」是两个不同的要求，说清楚你要哪一种。同样，不吃某样东西、要少油少盐，都直接说出来最有效；本页的中文短句可以直接给店员看。",
-      en: "“No chilli” and “mild” are two different requests — say which one you mean. The same goes for an ingredient you avoid or a lighter hand with oil and salt: saying it plainly works best, and the Chinese phrases on this page can be shown straight to the waiter.",
-      ar: "«بلا فلفل حار» و«خفيف الحرارة» طلبان مختلفان — حدّدوا أيّهما تقصدون. وكذلك أي مكوّن تتجنّبونه أو رغبتكم في زيت وملح أقل: قولوها بوضوح، والعبارات الصينية في هذه الصفحة يمكن عرضها مباشرة على العامل.",
-    },
-  },
-  {
-    id: "arcade",
-    title: { zh: "街边为什么有一条连着的走廊", en: "Why the pavement runs under the buildings", ar: "لماذا يمتدّ الرصيف تحت المباني" },
-    body: {
-      zh: "老城的街上，楼房二层往外挑出来，底下让出一条连着的走廊，这叫骑楼。广州夏天日头毒、雨也说下就下，柱廊下能遮阳避雨。恩宁路一带还留着成片的骑楼，走过去看看柱子和楼上的窗花。",
-      en: "In the old city the upper floors jut out over the street, leaving a covered walkway beneath them. These are qilou, arcade houses. Guangzhou summers are fierce and the rain arrives without notice, and the colonnade gives shade and shelter. Enning Road still has whole stretches of them — walk along and look at the columns and the window frames above.",
-      ar: "في المدينة القديمة تبرز الطوابق العليا فوق الشارع تاركةً ممرًا مسقوفًا تحتها. تسمّى هذه المباني «تشي لو». وصيف قوانغتشو قاسٍ والمطر يأتي فجأة، ويمنح الرواق ظلًّا ومأوى. وما زال شارع إن نينغ يحتفظ بامتدادات كاملة منها — امشوا فيه وانظروا إلى الأعمدة وإطارات النوافذ في الأعلى.",
-    },
-  },
-  {
     id: "punctual",
     title: { zh: "赴约与路上的时间", en: "Getting there on time", ar: "الموعد والطريق إليه" },
     body: {
       zh: "会议、接送、饭局，写的时间就是开始的时间。出发前看一眼路况；路上堵了，发条消息说一下预计几点到。",
       en: "Meetings, pick-ups and dinners begin at the time written down. Check the traffic before you set out, and if you are held up, send a message with the time you now expect.",
       ar: "تبدأ الاجتماعات والتوصيلات والعشاءات في الوقت المكتوب. تفقّدوا حركة السير قبل الخروج، وإن تأخّرتم فأرسلوا رسالة بالوقت الذي تتوقّعون الوصول فيه.",
+    },
+  },
+  {
+    id: "arcade",
+    photoKey: "arcade",
+    title: { zh: "街边为什么有一条连着的走廊", en: "Why the pavement runs under the buildings", ar: "لماذا يمتدّ الرصيف تحت المباني" },
+    body: {
+      zh: "老城的街上，楼房二层往外挑出来，底下让出一条连着的走廊，这叫骑楼。广州夏天日头毒、雨也说下就下，柱廊下能遮阳避雨。恩宁路一带还留着成片的骑楼，走过去看看柱子和楼上的窗花。",
+      en: "In the old city the upper floors jut out over the street, leaving a covered walkway beneath them. These are qilou, arcade houses. Guangzhou summers are fierce and the rain arrives without notice, and the colonnade gives shade and shelter. Enning Road still has whole stretches of them — walk along and look at the columns and the window frames above.",
+      ar: "في المدينة القديمة تبرز الطوابق العليا فوق الشارع تاركةً ممرًا مسقوفًا تحتها. تسمّى هذه المباني «تشي لو». وصيف قوانغتشو قاسٍ والمطر يأتي فجأة، ويمنح الرواق ظلًّا ومأوى. وما زال شارع إن نينغ يحتفظ بامتدادات كاملة منها — امشوا فيه وانظروا إلى الأعمدة وإطارات النوافذ في الأعلى.",
     },
   },
 ];
@@ -1129,7 +1132,7 @@ export const ROUTES: Route[] = [
     summary: {
       zh: "一片开阔的市民广场，东塔与西塔一左一右立在两边，正前方隔江就是广州塔。广场上那两块歪斜的石头形状的建筑是广州大剧院，扎哈·哈迪德设计 —— 她是伊拉克裔，造型取自被河水冲刷过的两块卵石。旁边是广州图书馆和广东省博物馆。",
       en: "A wide civic square with the East Tower and the West Tower standing on either side of it and the Canton Tower straight ahead across the water. The two tilted stone shapes on the square are the Guangzhou Opera House by Zaha Hadid — Iraqi-born — designed as two pebbles worn smooth by a river. The city library and the Guangdong Museum stand beside it.",
-      ar: "ساحة مدنية واسعة يقف على جانبيها البرج الشرقي والبرج الغربي، وأمامها مباشرة عبر الماء برج كانتون. والكتلتان الداكنتان المائلتان في الساحة هما دار أوبرا قوانغتشو من تصميم زها حديد — العراقية المولد — صُمِّمتا كحصاتين صقلهما النهر. وإلى جوارهما مكتبة المدينة ومتحف قوانغدونغ.",
+      ar: "ساحة مدنية واسعة يقف على جانبيها البرج الشرقي والبرج الغربي، وأمامها مباشرة عبر الماء برج كانتون. والكتلتان الحجريتان المائلتان في الساحة هما دار أوبرا قوانغتشو من تصميم زها حديد — العراقية المولد — صُمِّمتا كحصاتين صقلهما النهر. وإلى جوارهما مكتبة المدينة ومتحف قوانغدونغ.",
     },
     steps: [
       {
@@ -1324,21 +1327,21 @@ export const ROUTES: Route[] = [
       ar: "نصف يوم لرؤية كيف تتسوّق هذه المدينة — مركزان أو ثلاثة، على مهل.",
     },
     summary: {
-      zh: "从太古汇出发，沿天河路走向正佳广场、天环，三家之间步行可达。这一路真正值得停下来的是三件事：太古汇宽敞的中庭、正佳商场里的水族馆（另购票）、天环露天的下沉庭园。挑两三家就够一个下午，六家各自的样子写在「广州商圈」那一章。",
-      en: "Start at Taikoo Hui and walk along Tianhe Road towards Grandview and Parc Central; the three are within walking distance of one another. Three things are worth stopping for: the wide atrium at Taikoo Hui, the aquarium inside Grandview (separate ticket), and the open sunken garden at Parc Central. Two or three malls fill an afternoon; what each of the six is like is described in the shopping-districts chapter.",
-      ar: "ابدؤوا من تايكو هوي وامشوا على شارع تيانخه نحو غراندفيو وبارك سنترال؛ والثلاثة متقاربة سيرًا. وثمة ثلاثة أشياء تستحق التوقّف: البهو الواسع في تايكو هوي، والأكواريوم داخل غراندفيو (تذكرة منفصلة)، والحديقة الغائرة المكشوفة في بارك سنترال. ومركزان أو ثلاثة يملأون العصر؛ وطابع كل من الستة مشروح في فصل مناطق التسوّق.",
+      zh: "从天河城出发，沿天河路依次经过天环、正佳广场、万菱汇，走到太古汇，几家之间都能步行。挑两三家就够一个下午：想坐一会儿就去天环的下沉庭园，想带孩子或换个内容就进正佳的海洋馆（另购票）。天热或下雨，可以改走天河体育中心地下的时尚天河，那是可选的一段，不必凑满六家。",
+      en: "Start at Teemall and follow Tianhe Road past Parc Central, Grandview and OneLink Walk to Taikoo Hui; they are all within walking distance. Two or three of them fill an afternoon: the sunken garden at Parc Central if you want to sit for a while, the aquarium inside Grandview (separate ticket) if you have children along or want something other than shops. In heat or rain, take the underground Fashion Tianhe beneath the Tianhe Sports Centre instead — an optional stretch, not a sixth stop you have to tick off.",
+      ar: "ابدؤوا من تيمول وسيروا على شارع تيانخه مرورًا ببارك سنترال وغراندفيو ووان لينك ووك حتى تايكو هوي؛ وجميعها متقاربة سيرًا. ومركزان أو ثلاثة يملآن فترة بعد الظهر: الحديقة الغائرة في بارك سنترال إن أردتم الجلوس قليلًا، وأكواريوم غراندفيو (تذكرة منفصلة) إن كان معكم أطفال أو أردتم شيئًا غير المتاجر. وفي الحرّ أو المطر اسلكوا «فاشن تيانخه» تحت مركز تيانخه الرياضي بدلًا من ذلك — مسار اختياري، لا محطة سادسة يجب إتمامها.",
     },
     steps: [
       {
-        zh: "酒店 → 太古汇 → 沿天河路走向正佳广场 → 天环 → 返回。",
-        en: "Hotel → Taikoo Hui → along Tianhe Road to Grandview → Parc Central → back.",
-        ar: "الفندق ← تايكو هوي ← على شارع تيانخه إلى غراندفيو ← بارك سنترال ← العودة.",
+        zh: "酒店 → 天河城 → 天环 → 正佳广场 → 万菱汇 → 太古汇 → 返回（时尚天河为可选的地下一段）。",
+        en: "Hotel → Teemall → Parc Central → Grandview → OneLink Walk → Taikoo Hui → back (the underground Fashion Tianhe is optional).",
+        ar: "الفندق ← تيمول ← بارك سنترال ← غراندفيو ← وان لينك ووك ← تايكو هوي ← العودة (فاشن تيانخه تحت الأرض اختياري).",
       },
     ],
     transport: {
-      zh: "打车到太古汇；接下来的几站按步行导航走，留意路口与商场入口。",
-      en: "Take a taxi to Taikoo Hui; walk the rest with your map app, watching for the crossings and which entrance you want.",
-      ar: "خذوا سيارة أجرة إلى تايكو هوي؛ وامشوا بقية المحطات بتطبيق الخرائط، مع الانتباه إلى التقاطعات والمدخل المقصود.",
+      zh: "打车到天河城；接下来的几站按步行导航走，留意路口与商场入口。回程从太古汇门口叫车。",
+      en: "Take a taxi to Teemall; walk the rest with your map app, watching for the crossings and which entrance you want. Pick up a car outside Taikoo Hui on the way back.",
+      ar: "خذوا سيارة أجرة إلى تيمول؛ وامشوا بقية المحطات بتطبيق الخرائط، مع الانتباه إلى التقاطعات والمدخل المقصود. وفي العودة اطلبوا سيارة من أمام تايكو هوي.",
     },
     tickets: {
       zh: "进商场不要钱。正佳的海洋馆要另外买票。",
@@ -1346,6 +1349,11 @@ export const ROUTES: Route[] = [
       ar: "دخول المراكز نفسها مجاني. أما أكواريوم غراندفيو فيحتاج تذكرة منفصلة.",
     },
     copy: [
+      {
+        id: "tianhe-teemall-addr",
+        label: { zh: "给司机看：天河城", en: "Show the driver: Teemall", ar: "أظهرها للسائق: تيمول" },
+        chinese: "请带我去广州天河城（天河路208号）。",
+      },
       {
         id: "taikoo-addr",
         label: { zh: "给司机看：太古汇", en: "Show the driver: Taikoo Hui", ar: "أظهرها للسائق: تايكو هوي" },
@@ -1379,9 +1387,9 @@ export const ROUTES: Route[] = [
       ar: "قوانغتشو القديمة وقوانغتشو اليوم في شارع واحد؛ وعودوا قرب المساء حين تُضاء الواجهات لتشهدوا صخبًا مختلفًا عن الطريق الأثري.",
     },
     summary: {
-      zh: "街心那段古道是这条街独有的：十一层路面从唐代叠到民国，2002 年修路时挖了出来，没有搬走，就地盖上玻璃罩。透过玻璃看完，再拐进两边的巷子 —— 老字号、小吃和骑楼都在那里。",
-      en: "The roadway in the middle of the street is this street's own: eleven layers stacked from the Tang dynasty to the twentieth century, dug up during roadworks in 2002, never moved, covered with glass where it lay. Look at it through the glass, then turn into the side lanes — the old shops, the street food and the arcades are all in there.",
-      ar: "الطريق القديم في وسط الشارع خاصّ بهذا الشارع وحده: إحدى عشرة طبقة متراكمة من عهد تانغ حتى القرن العشرين، كُشفت في أعمال الطرق عام 2002، ولم تُنقل بل غُطّيت بالزجاج في موضعها. انظروا إليها من خلال الزجاج ثم انعطفوا إلى الأزقة الجانبية — فالمتاجر العريقة وأكل الشارع والأروقة كلها هناك.",
+      zh: "从北段进街，先在街心找那块玻璃罩，古道就在下面。看过之后一路往南走，随时拐进两边的巷子 —— 老字号、小吃和骑楼都在那里。",
+      en: "Come in from the north end and find the glass panel in the middle of the street, with the ancient roadway underneath it. After that, walk south and turn into the side lanes whenever you like — the old shops, the street food and the arcades are all in there.",
+      ar: "ادخلوا من الطرف الشمالي وابحثوا عن اللوح الزجاجي في وسط الشارع، وتحته الطريق الأثري. ثم امشوا جنوبًا وانعطفوا إلى الأزقة الجانبية متى شئتم — فالمتاجر العريقة وأكل الشارع والأروقة كلها هناك.",
     },
     steps: [
       {
@@ -1717,9 +1725,9 @@ export type PlaceCard = {
 
 export const CITY_STORY: { lead: L10n; paragraphs: L10n[]; sources: { label: L10n; url: string }[] } = {
   "lead": {
-    "zh": "一座中国式的屋檐旁边，立着一座宣礼塔。",
-    "en": "Beside a Chinese roof stands a minaret.",
-    "ar": "إلى جوار سقفٍ صيني تقف مئذنة."
+    "zh": "广州与阿拉伯世界的往来，从唐代的海船一直延续到今天。",
+    "en": "Guangzhou's dealings with the Arab world run from the Tang-dynasty sea routes to the present day.",
+    "ar": "تمتدّ صلة قوانغتشو بالعالم العربي من طرق البحر في عهد تانغ إلى اليوم."
   },
   "paragraphs": [
     {
@@ -1728,9 +1736,9 @@ export const CITY_STORY: { lead: L10n; paragraphs: L10n[]; sources: { label: L10
       "ar": "في عهدَي تانغ وسونغ، جاء تجار عرب وفرس إلى قوانغتشو بحرًا للتجارة. وصار مرساهم يُعرف برصيف قوانغتا، وحيّهم باسم «الفانفانغ»: متاجر ومنازل ومكان للصلاة في الشوارع نفسها، على مدى أجيال."
     },
     {
-      "zh": "那个街区的中心是怀圣寺。灰白色的圆筒形塔身抹着灰泥，从中国式的屋檐后面升起来 —— 这是宣礼塔，当年也为江上的船指方向、看风向，广州人因此叫它光塔。",
-      "en": "At the centre of that quarter is Huaisheng Mosque. A pale cylindrical shaft, rendered in plaster, rises from behind Chinese eaves — a minaret that also served the ships on the river as a marker and a wind vane, which is why the city calls it the Light Tower.",
-      "ar": "وفي قلب ذلك الحي يقوم مسجد هوايشنغ. بدنٌ أسطواني شاحب مكسوّ بالجصّ ينهض من خلف أفاريز صينية — مئذنةٌ كانت أيضًا علامةً للسفن في النهر ودوّارةً للريح، ولذلك تسمّيها المدينة «برج النور»."
+      "zh": "那个街区的中心是怀圣寺。院子里立着一座灰白色的圆筒形塔，抹着灰泥：这是宣礼塔，当年也为江上的船指方向、看风向，广州人叫它光塔。",
+      "en": "At the centre of that quarter is Huaisheng Mosque. In its courtyard stands a pale cylindrical shaft rendered in plaster: a minaret that also served the ships on the river as a marker and a wind vane, which is why the city calls it the Light Tower.",
+      "ar": "وفي قلب ذلك الحي يقوم مسجد هوايشنغ. في فنائه بدنٌ أسطواني شاحب مكسوّ بالجصّ: مئذنةٌ كانت أيضًا علامةً للسفن في النهر ودوّارةً للريح، ولهذا تسمّيها المدينة «برج النور»."
     },
     {
       "zh": "想去看看，在地图里搜「怀圣寺」；逛完光塔路，再沿街找一间清真小馆坐下。",
@@ -1781,9 +1789,16 @@ export const CITY_STORY: { lead: L10n; paragraphs: L10n[]; sources: { label: L10
 
 export const MINISO_IN_GZ: {
   lead: L10n;
-  paragraphs: L10n[];
-  /** 照片下面那一组：照片拍的就是这家店。 */
-  store: L10n[];
+  /**
+   * 三节：品牌从广州出发 / 今天的总部 / 可以自己走进去的店。
+   * 每节自带照片 key，页面把照片放在这一节里，不让图和讲它的段落隔着一屏。
+   */
+  sections: {
+    id: string;
+    title: L10n;
+    photoKey?: string;
+    paragraphs: L10n[];
+  }[];
   sources: { label: L10n; url: string }[];
 } = {
   lead: {
@@ -1791,43 +1806,63 @@ export const MINISO_IN_GZ: {
     en: "Pazhou, where you are staying, is where this brand lives.",
     ar: "بازو، حيث تقيمون، هي موطن هذه العلامة.",
   },
-  paragraphs: [
+  sections: [
     {
-      zh: "从酒店朝西，隔着广交会的展馆，是琶洲西区 —— 腾讯、阿里巴巴、唯品会的总部楼都在那一片。最新的一栋是名创优品国际总部：287.5 米，地上四十层，一圈 270 度的环幕玻璃从头包到脚，站在里面看得见珠江和广州塔。设计它的人说，想做成一支立起来的笔。",
-      en: "West of the hotel, on the far side of the Canton Fair halls, is Pazhou West, where Tencent, Alibaba and Vipshop have their headquarters. The newest tower there is MINISO’s: 287.5 metres, forty floors above ground, wrapped top to bottom in a 270-degree curve of glass that looks out on the Pearl River and the Canton Tower. The architects said they wanted a building shaped like a pen stood on its end.",
-      ar: "إلى الغرب من الفندق، خلف قاعات معرض كانتون، تقع بازو الغربية، حيث مقارّ تينسنت وعلي بابا وفيب شوب. وأحدث أبراجها برج «ميني سو»: 287.5 مترًا، وأربعون طابقًا فوق الأرض، ملفوفًا من أعلاه إلى أسفله بانحناءة زجاجية بزاوية 270 درجة تطلّ على نهر اللؤلؤ وبرج كانتون. وقال مصمّموه إنهم أرادوا مبنى على هيئة قلم منتصب.",
+      id: "origin",
+      title: {
+        zh: "从广州的一个地下室开始",
+        en: "It started in a Guangzhou basement",
+        ar: "بدأت في قبو في قوانغتشو",
+      },
+      paragraphs: [
+        {
+          zh: "2013 年的第一家店开在广州的一个地下室车库里。十三年之后，名创优品在一百一十二个国家和地区经营门店，到 2025 年底共 8,151 家。",
+          en: "The first store opened in 2013, in a basement garage in Guangzhou. Thirteen years later MINISO trades in a hundred and twelve countries and regions, with 8,151 stores at the end of 2025.",
+          ar: "افتُتح أول متجر عام 2013 في مرآب تحت الأرض في قوانغتشو. وبعد ثلاثة عشر عامًا صارت «ميني سو» تعمل في مئة واثنتي عشرة دولة ومنطقة، وبلغ عدد متاجرها 8,151 متجرًا بنهاية عام 2025.",
+        },
+      ],
     },
     {
-      zh: "这栋楼 2021 年 7 月动工，2025 年 7 月封顶，今年 8 月 12 日通过竣工验收 —— 你们到广州的时候，它验收才一个月 —— 上面那张照片是封顶时从空中拍的，围着它的那一圈玻璃楼就是琶洲西区。投资三十五亿元人民币，占地六千五百多平方米，往上盖出十四万平方米。以后名创优品的全球业务、品牌运营和产品研发都在这栋楼里。",
-      en: "Work began in July 2021, the frame topped out in July 2025, and the building passed its completion inspection on 12 August this year — one month before you land. The photograph above was taken from the air as the frame topped out; the ring of glass towers around it is Pazhou West. It cost 3.5 billion yuan; it stands on a plot of six and a half thousand square metres and holds a hundred and forty thousand. MINISO’s global operations, brand management and product development are all to sit inside it.",
-      ar: "بدأ العمل في يوليو 2021، واكتمل الهيكل في يوليو 2025، واجتاز المبنى فحص الإنجاز في 12 أغسطس من هذا العام — أي قبل شهر من وصولكم. والصورة أعلاه التُقطت من الجو عند اكتمال الهيكل؛ وحلقة الأبراج الزجاجية المحيطة به هي بازو الغربية. كلفته 3.5 مليار يوان، ويقوم على قطعة أرض مساحتها ستة آلاف ونصف متر مربع ليضمّ مئة وأربعين ألف متر مربع. وستقيم فيه عمليات «ميني سو» العالمية وإدارة العلامة وتطوير المنتجات.",
+      id: "headquarters",
+      title: {
+        zh: "今天的总部，就在这一片",
+        en: "The head office is in this district",
+        ar: "المقرّ الرئيسي في هذا الحي",
+      },
+      photoKey: "miniso-tower",
+      paragraphs: [
+        {
+          zh: "公司官网列出的中国总部地址，是琶洲大道 109 号的铭丰广场，也在琶洲。",
+          en: "The China head office listed on the company's own site is at Mingfeng Plaza, 109 Pazhou Avenue, also in Pazhou.",
+          ar: "المقرّ الصيني المذكور على موقع الشركة يقع في مجمع مينغفنغ، 109 شارع بازو، في بازو أيضًا.",
+        },
+        {
+          zh: "从酒店朝西，隔着广交会的展馆，是琶洲西区：一片新起的写字楼，腾讯、阿里巴巴、唯品会都在这里设了办公区。名创优品国际总部新楼高 287.5 米，也是这一带的新地标。",
+          en: "West of the hotel, beyond the Canton Fair halls, lies Pazhou West: a cluster of new office towers where Tencent, Alibaba and Vipshop all keep offices. The new MINISO International Headquarters tower stands 287.5 metres tall, a new landmark in that skyline.",
+          ar: "إلى الغرب من الفندق، خلف قاعات معرض كانتون، تقع بازو الغربية: مجموعة من الأبراج المكتبية الحديثة تضمّ مكاتب لتينسنت وعلي بابا وفيب شوب. ويبلغ ارتفاع برج مقرّ «ميني سو» الدولي الجديد 287.5 مترًا، وهو معلم جديد في ذلك الأفق.",
+        },
+      ],
     },
     {
-      zh: "公司官网上写的中国总部地址，现在还是琶洲大道 109 号的铭丰广场。也在琶洲 —— 就是你们这几天开会、吃饭、睡觉的这一片。",
-      en: "The address the company still gives for its China head office is Mingfeng Plaza, 109 Pazhou Avenue. Also in Pazhou — the same few streets where you will meet, eat and sleep this week.",
-      ar: "أما العنوان الذي ما زالت الشركة تعطيه لمقرّها في الصين فهو مجمع مينغفنغ، 109 شارع بازو. وهو أيضًا في بازو — الشوارع نفسها التي ستجتمعون وتأكلون وتنامون فيها هذا الأسبوع.",
-    },
-    {
-      zh: "2013 年它开张的时候，在广州的一个地下室车库里。十三年过去，名创优品在一百一十二个国家和地区都有店；单是这个牌子，2025 年底有 8,151 家 —— 中国内地 4,568 家，海外 3,583 家 —— 那一年营收 195.2 亿元人民币。",
-      en: "When it opened in 2013 it was in a basement garage in Guangzhou. Thirteen years on, MINISO trades in more than a hundred and twelve countries and regions; the brand alone ended 2025 with 8,151 stores — 4,568 in mainland China, 3,583 abroad — on revenue of 19.52 billion yuan for the year.",
-      ar: "حين فتحت أبوابها عام 2013 كانت في مرآب تحت الأرض في قوانغتشو. وبعد ثلاثة عشر عامًا صارت «ميني سو» تعمل في أكثر من مئة واثنتي عشرة دولة ومنطقة؛ وعلامتها وحدها أنهت عام 2025 بـ8,151 متجرًا — منها 4,568 في الصين القارية و3,583 في الخارج — بإيراد قدره 19.52 مليار يوان في تلك السنة.",
-    },
-  ],
-  store: [
-    {
-      zh: "正佳广场里的那家 MINISO LAND，是这个店型在广州的第一家。全球开了二十多家，家家都在一线城市的核心商圈。广州这家今年 1 月 30 日开门：一千一百多平方米，上下两层。一楼照着「伊甸园派对」做，YOYO、迪士尼、哈利·波特、三丽鸥挤在同一层；二楼叫「可爱工厂」，用乐器引路，货架做成音符的样子。店里九成以上是 IP 商品，一百多个 IP、五千五百多款。",
-      en: "The MINISO LAND inside Grandview Mall is the first of its kind in Guangzhou. Barely two dozen exist anywhere, every one of them in the core retail district of a first-tier city. This one opened on 30 January: eleven hundred square metres over two floors. The ground floor is built as an “Eden garden party”, with YOYO, Disney, Harry Potter and Sanrio sharing one room; above it is the “cute factory”, laid out along musical instruments with shelves shaped like notes. More than ninety percent of the stock is licensed IP — over a hundred properties, more than 5,500 items.",
-      ar: "متجر «ميني سو لاند» داخل غراندفيو مول هو الأول من نوعه في قوانغتشو. ولا يتجاوز عدد فروع هذا النمط عشرين ونيّفًا في العالم كله، وكلها في قلب المناطق التجارية لمدن الصف الأول. افتُتح فرع قوانغتشو في 30 يناير: ألف ومئة متر مربع على طابقين. بُني الطابق الأرضي على فكرة «حفلة حديقة عدن»، حيث تجتمع YOYO وديزني وهاري بوتر وسانريو في قاعة واحدة؛ وفوقه «مصنع الظرافة»، ممتدّ على خطّ من الآلات الموسيقية وأرففه على هيئة نوتات. وأكثر من تسعين بالمئة من المعروض منتجات بترخيص شخصيات — أكثر من مئة شخصية وما يزيد على 5,500 صنف.",
-    },
-    {
-      zh: "开门那天早上的样子就是上面这张照片：人从门口一直站到广场上。YOYO 一代的手办，开店不到一分钟就没了。",
-      en: "The photograph above is that first morning: people standing from the door out across the plaza. The first-generation YOYO figures were gone within a minute of opening.",
-      ar: "الصورة أعلاه من ذلك الصباح الأول: الناس واقفون من الباب حتى الساحة. أما مجسّمات YOYO من الجيل الأول فنفدت خلال دقيقة من الافتتاح.",
-    },
-    {
-      zh: "正佳就是商圈那一章里的六家之一。你们去天河路的那天，这家店就在那栋楼里。",
-      en: "Grandview is one of the six malls in the shopping-district chapter. On the day you go to Tianhe Road, this store is inside that building.",
-      ar: "وغراندفيو أحد المراكز الستة في فصل مناطق التسوّق. ويوم ذهابكم إلى شارع تيانخه، يكون هذا المتجر داخل ذلك المبنى.",
+      id: "store",
+      title: {
+        zh: "能自己走进去的那一家",
+        en: "The store you can walk into",
+        ar: "المتجر الذي يمكنكم دخوله",
+      },
+      photoKey: "miniso-land",
+      paragraphs: [
+        {
+          zh: "正佳广场里的 MINISO LAND 广州壹号店，一千一百多平方米，上下两层。一楼按「伊甸园派对」布置，YOYO、迪士尼、哈利·波特、三丽鸥同在一层；二楼叫「可爱工厂」，以乐器为线索，货架做成音符的样子。店内九成以上是 IP 商品。",
+          en: "MINISO LAND Guangzhou No. 1 sits inside Grandview Mall: eleven hundred square metres over two floors. The ground floor is arranged as an “Eden garden party”, with YOYO, Disney, Harry Potter and Sanrio on the same floor; above it is the “cute factory”, laid out around musical instruments with shelves shaped like notes. More than ninety percent of the stock is licensed IP.",
+          ar: "يقع متجر «ميني سو لاند» قوانغتشو رقم 1 داخل غراندفيو مول: ألف ومئة متر مربع على طابقين. رُتّب الطابق الأرضي على فكرة «حفلة حديقة عدن»، وفيه YOYO وديزني وهاري بوتر وسانريو في الطابق نفسه؛ وفوقه «مصنع الظرافة»، منظّم حول الآلات الموسيقية وأرففه على هيئة نوتات. وأكثر من تسعين بالمئة من المعروض منتجات بترخيص شخصيات.",
+        },
+        {
+          zh: "上面那张照片是今年 1 月 30 日开业当天的门口。逛天河路那天顺路过去看看，正合适。",
+          en: "The photograph above was taken at the door on its opening day, 30 January this year. It is an easy stop to fold into an afternoon on Tianhe Road.",
+          ar: "التُقطت الصورة أعلاه عند الباب يوم الافتتاح في 30 يناير من هذا العام. وزيارته تندرج بسهولة ضمن فترة بعد الظهر في شارع تيانخه.",
+        },
+      ],
     },
   ],
   sources: [
@@ -1842,10 +1877,6 @@ export const MINISO_IN_GZ: {
     {
       label: { zh: "广州市规划和自然资源局：项目地块与建设单位", en: "Guangzhou Planning Bureau: the plot and the developer", ar: "هيئة التخطيط بقوانغتشو: قطعة الأرض والجهة المطوّرة" },
       url: "https://ghzyj.gz.gov.cn/ywpd/cxgh/ghxkgsgb/phgbnew/gbt/content/mpost_9189139.html",
-    },
-    {
-      label: { zh: "报道：总部大楼 8 月 12 日通过竣工验收（含设计与幕墙）", en: "Report: the tower passed its completion inspection on 12 August (design and curtain wall)", ar: "تقرير: اجتياز البرج فحص الإنجاز في 12 أغسطس (التصميم والواجهة)" },
-      url: "https://www.163.com/dy/article/L4L2GKIQ0514ETGI.html",
     },
     {
       label: { zh: "名创优品：联系我们（中国总部地址）", en: "MINISO: contact us (China headquarters address)", ar: "ميني سو: اتصل بنا (عنوان المقر الصيني)" },
@@ -1910,9 +1941,9 @@ export const CITY_SCALE: {
       ar: "تلتقي في مطار بايون رحلات من أنحاء العالم. وفي بازو، تستقبل قاعات المعارض المتجاورة مشترين من دول كثيرة. وبعد الغروب، تمشّوا إلى نهر اللؤلؤ؛ تضيء الأبراج على الضفتين وتبدو المدينة بمزاج آخر.",
     },
     {
-      zh: "背景是这样的：广州住着约一千九百万人，是粤港澳大湾区十一座城市之一。",
-      en: "For background: about nineteen million people live in Guangzhou, one of the eleven cities of the Greater Bay Area.",
-      ar: "وللخلفية: يعيش في قوانغتشو نحو تسعة عشر مليون نسمة، وهي إحدى مدن منطقة الخليج الكبرى الإحدى عشرة.",
+      zh: "这里住着约一千九百万人，是粤港澳大湾区十一座城市之一。机场的客流、广交会的买家和珠江边的天际线，让这座贸易城市的规模变得具体。",
+      en: "About nineteen million people live here, in one of the eleven cities of the Greater Bay Area. The traffic through the airport, the buyers at the Canton Fair and the skyline along the Pearl River are what give this trading city its scale.",
+      ar: "يعيش هنا نحو تسعة عشر مليون نسمة، في واحدة من مدن منطقة الخليج الكبرى الإحدى عشرة. وحركة المسافرين في المطار، ومشترو معرض كانتون، وأفق الأبراج على نهر اللؤلؤ، هي ما يجعل حجم هذه المدينة التجارية ملموسًا.",
     },
   ],
   tiles: [
@@ -1970,75 +2001,30 @@ export const CITY_TECH: {
   sources: { label: L10n; url: string }[];
 } = {
   lead: {
-    zh: "车到了，你拉开后门坐进去。驾驶位上没有人，方向盘自己转起来。",
-    en: "Your car arrives, you open the back door and get in. Nobody is in the driver's seat, and the wheel turns by itself.",
-    ar: "تصل سيارتكم، تفتحون الباب الخلفي وتركبون. لا أحد في مقعد القيادة، والمقود يدور من تلقاء نفسه.",
+    zh: "科技不只在展厅里，也在每天的出门、付款和收货之间。",
+    en: "Technology here is not only in the exhibition halls; it is in the everyday business of getting around, paying and taking delivery.",
+    ar: "التقنية هنا ليست في قاعات المعارض وحدها؛ بل في تفاصيل اليوم: التنقّل والدفع واستلام الطلبات.",
   },
   intro: {
-    zh: "下面这几样，有的在路上，有的在电梯口，有的就在结账那一下。不一定每样都碰得到，但知道它们在，遇上的时候会多看一眼。",
-    en: "Some of what follows happens on the road, some at the lift door, some in the second it takes to pay. You may not meet all of it — but knowing it is there makes you look twice when you do.",
-    ar: "بعض ما يلي يحدث في الطريق، وبعضه عند باب المصعد، وبعضه في اللحظة التي تدفعون فيها. قد لا تصادفونها كلها — لكن معرفتكم بوجودها تجعلكم تنظرون مرتين حين تصادفونها.",
+    zh: "叫到一辆电动车、扫码买杯茶，都可以是体验的起点。想走得更远，可以专门约一次无人驾驶出租车，或查一查琶洲的低空配送；具体入口见各项介绍。",
+    en: "Hailing an electric car or scanning a code for a cup of tea is a place to start. To go further, you can book a driverless taxi on purpose, or look into the low-altitude deliveries in Pazhou; each item below says where to begin.",
+    ar: "استيقاف سيارة كهربائية أو مسح رمز لشراء كوب شاي نقطة بداية جيدة. وللمضي أبعد، يمكنكم حجز سيارة أجرة بلا سائق قصدًا، أو الاطلاع على التوصيل المنخفض في بازو؛ وكل بند أدناه يذكر من أين تبدؤون.",
   },
   items: [
     {
-      id: "robotaxi",
-      imageKey: "gxr-guangzhou",
-      title: { zh: "坐一次没有司机的车", en: "Ride in a car with no driver", ar: "اركبوا سيارة بلا سائق" },
+      id: "ev-taxi",
+      imageKey: "evtaxi",
+      imageAlt: { zh: "黄色的电动出租车停在充电桩前，挂着新能源绿牌", en: "A yellow electric taxi at a charging point, on the green plate that marks an electric vehicle", ar: "سيارة أجرة كهربائية صفراء عند شاحن، تحمل اللوحة الخضراء الخاصة بالسيارات الكهربائية" },
+      title: { zh: "安静得让人愣一下的出租车", en: "A taxi quiet enough to make you pause", ar: "سيارة أجرة هادئة إلى حدّ يوقفكم لحظة" },
       where: {
-        zh: "微信里搜小程序「WeRide Go」，能约的上下车点、价格与运营时间以应用当天显示为准。",
-        en: "Search the WeChat mini-program “WeRide Go”; the pickup points, fares and hours it offers on the day are the ones that count.",
-        ar: "ابحثوا في وي تشات عن تطبيق «WeRide Go» المصغّر؛ والمعتمد هو ما يعرضه التطبيق في يومه من نقاط ركوب وأسعار ومواعيد.",
+        zh: "在广州叫车，很容易遇见电动车。",
+        en: "Hail a car in Guangzhou and you will often get an electric one.",
+        ar: "استوقفوا سيارة في قوانغتشو وستصادفون سيارة كهربائية في الغالب.",
       },
       body: {
-        zh: "方向盘自己转了半圈，转向灯亮起来，车汇进车流。GXR 这一款索性把前排的副驾驶座也取消了。\n做这件事的公司叫文远知行，总部就在广州，2025 年 9 月起在黄埔跑全无人的商业运营。",
-        en: "The wheel turns half a revolution, the indicator comes on, and the car slides into the traffic. On the GXR the front passenger seat has been left out altogether.\nThe company is WeRide, headquartered here in Guangzhou, running a fully driverless commercial service in Huangpu since September 2025.",
-        ar: "يدور المقود نصف دورة، ويُضاء ضوء الانعطاف، وتنساب السيارة إلى السير. وفي طراز GXR أُلغي مقعد الراكب الأمامي كذلك.\nالشركة هي «وي رايد» ومقرّها هنا في قوانغتشو، وتشغّل خدمة تجارية بلا سائق في هوانغبو منذ سبتمبر 2025.",
-      },
-    },
-    {
-      id: "evtol",
-      imageKey: "evtolair",
-      imageAlt: { zh: "多旋翼的载人飞行器飞在江边公园上空，背后是成片的住宅楼", en: "A multirotor passenger aircraft over a riverside park, blocks of flats behind it", ar: "طائرة ركاب متعددة المراوح فوق حديقة على ضفة النهر، وخلفها مبانٍ سكنية" },
-      title: { zh: "两个座位，没有驾驶舱", en: "Two seats, no cockpit", ar: "مقعدان بلا قمرة قيادة" },
-      where: {
-        zh: "黄埔有低空体验的场景；想去，先查亿航官方的场地与预约信息。这次行程里没有安排。",
-        en: "There are low-altitude flight experiences in Huangpu; if you want to go, start from EHang's own site and booking information. It is not part of this trip.",
-        ar: "توجد تجارب طيران منخفض الارتفاع في هوانغبو؛ وإن أردتم الذهاب فابدؤوا من موقع «إي هانغ» الرسمي ومعلومات الحجز. وهي ليست ضمن هذه الرحلة.",
-      },
-      body: {
-        zh: "十六个旋翼一起转起来，机身离地，没有跑道，机上也没有飞行员 —— 舱里是两个乘客的位置，航线由地面设定。\n这架飞机叫 EH216-S，广州的亿航智能造的。",
-        en: "Sixteen rotors spin up together and the aircraft lifts off — no runway, and no pilot on board. Inside are two passenger seats, and the route is set from the ground.\nThe aircraft is the EH216-S, built by EHang in Guangzhou.",
-        ar: "تدور ستّ عشرة مروحة معًا فترتفع المركبة — بلا مدرج، وبلا طيّار على متنها. في الداخل مقعدان للركاب، والمسار يُحدَّد من الأرض.\nالطائرة هي EH216-S من إنتاج «إي هانغ» في قوانغتشو.",
-      },
-    },
-    {
-      id: "robot",
-      imageKey: "hotel-lift-robot",
-      title: { zh: "会自己坐电梯的送物小车", en: "The trolley that takes the lift by itself", ar: "العربة التي تركب المصعد وحدها" },
-      where: {
-        zh: "餐厅里推菜、酒店里送外卖和毛巾的都可能是它。入住时可以问一句前台有没有。",
-        en: "It may be what brings dishes across a restaurant, or the takeaway and fresh towels to a hotel room. Worth asking at the front desk when you check in.",
-        ar: "قد تكون هي ما ينقل الأطباق في المطعم، أو الطعام والمناشف إلى غرفة الفندق. ويستحقّ الأمر سؤالًا في الاستقبال عند الوصول.",
-      },
-      body: {
-        zh: "门铃响，门外站着一台一米来高的小车，盖子打开，里面是你点的东西。有意思的是它怎么上来的：它跟电梯是连着的，自己叫梯、自己进去、到楼层自己出来，中间要和人共用一部电梯。\n商场和写字楼里还有另一种：方方正正的洗地机器人贴着墙根慢慢走，有人走过来它让开，电快没了自己回去充电。",
-        en: "The doorbell goes and a trolley about a metre high is standing outside; the lid opens and your order is inside. The interesting part is how it got up here: it talks to the lift, calls it, rides up and steps out at your floor — sharing that lift with people on the way.\nMalls and office towers have another kind: a squared-off scrubbing robot working along the skirting, moving aside when someone comes, taking itself off to charge when the battery runs low.",
-        ar: "يرنّ جرس الباب فتجدون عربة بارتفاع متر تقريبًا واقفة في الخارج؛ ينفتح الغطاء وفي داخلها طلبكم. والمثير هو كيف وصلت إلى هنا: فهي متصلة بالمصعد، تستدعيه وتدخله وتخرج عند طابقكم — وتتشارك المصعد مع الناس في الطريق.\nوفي المراكز التجارية والأبراج المكتبية نوع آخر: روبوت تنظيف مربّع يسير بمحاذاة الجدار، يفسح الطريق حين يقترب أحد، ويذهب وحده إلى الشحن حين تنفد بطاريته.",
-      },
-    },
-    {
-      id: "drone-delivery",
-      imageKey: "pazhou-drone",
-      title: { zh: "晚饭走的是另一条路", en: "Dinner takes the other route", ar: "العشاء يسلك طريقًا آخر" },
-      where: {
-        zh: "想看看，可在地图中找华新中心一带的配送设施；能否下单体验，请查看现场的服务入口。",
-        en: "To see it, look for the delivery facilities around Huaxin Centre on the map; whether you can order one yourself is a question for the service point on site.",
-        ar: "لمشاهدتها، ابحثوا في الخريطة عن منشآت التوصيل قرب مركز هواشين؛ أما إمكانية الطلب بأنفسكم فيُسأل عنها عند نقطة الخدمة في الموقع.",
-      },
-      body: {
-        zh: "琶洲的外卖多了一条路线：保利广场、华新中心一带装了低空配送设施，无人机沿着河涌上方飞，避开地面的车流。海珠区 2026 年 2 月的报道里，送吧科技和淘宝闪购送的一单煲仔饭，八分钟到。\n你在地面散步时，晚饭可能正沿着身旁的河涌上空飞过。",
-        en: "Takeaway in Pazhou has a second route. Low-altitude delivery facilities have gone in around Poly Plaza and Huaxin Centre, and the drones fly above the water channels, clear of the traffic below. In a Haizhu district report from February 2026, an order of claypot rice flown by Songba Technology with Taobao Shangou arrived in eight minutes.\nWhile you are out walking, dinner may be flying along the channel beside you.",
-        ar: "لطلبات الطعام في بازو مسار ثانٍ. فقد رُكّبت منشآت للتوصيل المنخفض حول ساحة بولي ومركز هواشين، وتحلّق المسيّرات فوق القنوات المائية بعيدًا عن زحام الشارع. وفي تقرير لمنطقة هايتشو في فبراير 2026، وصل طلب أرز في قدر فخاري نفّذته «سونغبا» مع «تاوباو شانغو» في ثماني دقائق.\nوبينما تتمشّون، قد يكون العشاء يطير فوق القناة التي تسير بجانبكم.",
+        zh: "关上门的那一下可能会让你愣一秒：没有发动机的抖动，车厢里安静到能听见空调的风。起步是滑出去的。",
+        en: "The moment the door shuts may give you a second's pause: no engine shaking, quiet enough inside to hear the air conditioning. It slides away rather than pulls away.",
+        ar: "لحظة إغلاق الباب قد تمنحكم ثانية من الدهشة: لا ارتجاج محرّك، وهدوءٌ في الداخل يكفي لسماع المكيّف. تنساب السيارة بدل أن تندفع.",
       },
     },
     {
@@ -2058,19 +2044,64 @@ export const CITY_TECH: {
       },
     },
     {
-      id: "ev-taxi",
-      imageKey: "evtaxi",
-      imageAlt: { zh: "黄色的电动出租车停在充电桩前，挂着新能源绿牌", en: "A yellow electric taxi at a charging point, on the green plate that marks an electric vehicle", ar: "سيارة أجرة كهربائية صفراء عند شاحن، تحمل اللوحة الخضراء الخاصة بالسيارات الكهربائية" },
-      title: { zh: "安静得让人愣一下的出租车", en: "A taxi quiet enough to make you pause", ar: "سيارة أجرة هادئة إلى حدّ يوقفكم لحظة" },
+      id: "robot",
+      imageKey: "hotel-lift-robot",
+      title: { zh: "会自己坐电梯的送物小车", en: "The trolley that takes the lift by itself", ar: "العربة التي تركب المصعد وحدها" },
       where: {
-        zh: "在广州叫车，很容易遇见电动车。",
-        en: "Hail a car in Guangzhou and you will often get an electric one.",
-        ar: "استوقفوا سيارة في قوانغتشو وستصادفون سيارة كهربائية في الغالب.",
+        zh: "餐厅里推菜、酒店里送外卖和毛巾的都可能是它。入住时可以问一句前台有没有。",
+        en: "It may be what brings dishes across a restaurant, or the takeaway and fresh towels to a hotel room. Worth asking at the front desk when you check in.",
+        ar: "قد تكون هي ما ينقل الأطباق في المطعم، أو الطعام والمناشف إلى غرفة الفندق. ويستحقّ الأمر سؤالًا في الاستقبال عند الوصول.",
       },
       body: {
-        zh: "关上门的那一下可能会让你愣一秒：没有发动机的抖动，车厢里安静到能听见空调的风。起步是滑出去的。",
-        en: "The moment the door shuts may give you a second's pause: no engine shaking, quiet enough inside to hear the air conditioning. It slides away rather than pulls away.",
-        ar: "لحظة إغلاق الباب قد تمنحكم ثانية من الدهشة: لا ارتجاج محرّك، وهدوءٌ في الداخل يكفي لسماع المكيّف. تنساب السيارة بدل أن تندفع.",
+        zh: "门铃响，门外站着一台一米来高的小车，盖子打开，里面是你点的东西。有意思的是它怎么上来的：它跟电梯是连着的，自己叫梯、自己进去、到楼层自己出来，中间要和人共用一部电梯。\n商场和写字楼里还有另一种：方方正正的洗地机器人贴着墙根慢慢走，有人走过来它让开，电快没了自己回去充电。",
+        en: "The doorbell goes and a trolley about a metre high is standing outside; the lid opens and your order is inside. The interesting part is how it got up here: it talks to the lift, calls it, rides up and steps out at your floor — sharing that lift with people on the way.\nMalls and office towers have another kind: a squared-off scrubbing robot working along the skirting, moving aside when someone comes, taking itself off to charge when the battery runs low.",
+        ar: "يرنّ جرس الباب فتجدون عربة بارتفاع متر تقريبًا واقفة في الخارج؛ ينفتح الغطاء وفي داخلها طلبكم. والمثير هو كيف وصلت إلى هنا: فهي متصلة بالمصعد، تستدعيه وتدخله وتخرج عند طابقكم — وتتشارك المصعد مع الناس في الطريق.\nوفي المراكز التجارية والأبراج المكتبية نوع آخر: روبوت تنظيف مربّع يسير بمحاذاة الجدار، يفسح الطريق حين يقترب أحد، ويذهب وحده إلى الشحن حين تنفد بطاريته.",
+      },
+    },
+    {
+      id: "robotaxi",
+      imageKey: "gxr-guangzhou",
+      title: { zh: "坐一次没有司机的车", en: "Ride in a car with no driver", ar: "اركبوا سيارة بلا سائق" },
+      where: {
+        zh: "微信里搜小程序「WeRide Go」，能约的上下车点、价格与运营时间以应用当天显示为准。",
+        en: "Search the WeChat mini-program “WeRide Go”; the pickup points, fares and hours it offers on the day are the ones that count.",
+        ar: "ابحثوا في وي تشات عن تطبيق «WeRide Go» المصغّر؛ والمعتمد هو ما يعرضه التطبيق في يومه من نقاط ركوب وأسعار ومواعيد.",
+      },
+      body: {
+        zh: "方向盘自己转了半圈，转向灯亮起来，车汇进车流。GXR 这一款索性把前排的副驾驶座也取消了。\n做这件事的公司叫文远知行，总部就在广州，2025 年 9 月起在黄埔跑全无人的商业运营。",
+        en: "The wheel turns half a revolution, the indicator comes on, and the car slides into the traffic. On the GXR the front passenger seat has been left out altogether.\nThe company is WeRide, headquartered here in Guangzhou, running a fully driverless commercial service in Huangpu since September 2025.",
+        ar: "يدور المقود نصف دورة، ويُضاء ضوء الانعطاف، وتنساب السيارة إلى السير. وفي طراز GXR أُلغي مقعد الراكب الأمامي كذلك.\nالشركة هي «وي رايد» ومقرّها هنا في قوانغتشو، وتشغّل خدمة تجارية بلا سائق في هوانغبو منذ سبتمبر 2025.",
+      },
+    },
+    {
+      id: "drone-delivery",
+      imageKey: "pazhou-drone",
+      title: { zh: "晚饭走的是另一条路", en: "Dinner takes the other route", ar: "العشاء يسلك طريقًا آخر" },
+      where: {
+        zh: "想看看，可在地图中找华新中心一带的配送设施；能否下单体验，请查看现场的服务入口。",
+        en: "To see it, look for the delivery facilities around Huaxin Centre on the map; whether you can order one yourself is a question for the service point on site.",
+        ar: "لمشاهدتها، ابحثوا في الخريطة عن منشآت التوصيل قرب مركز هواشين؛ أما إمكانية الطلب بأنفسكم فيُسأل عنها عند نقطة الخدمة في الموقع.",
+      },
+      body: {
+        zh: "琶洲的外卖多了一条路线：保利广场、华新中心一带装了低空配送设施，无人机沿着河涌上方飞，避开地面的车流。海珠区 2026 年 2 月的报道里，送吧科技和淘宝闪购送的一单煲仔饭，八分钟到。\n你在地面散步时，晚饭可能正沿着身旁的河涌上空飞过。",
+        en: "Takeaway in Pazhou has a second route. Low-altitude delivery facilities have gone in around Poly Plaza and Huaxin Centre, and the drones fly above the water channels, clear of the traffic below. In a Haizhu district report from February 2026, an order of claypot rice flown by Songba Technology with Taobao Shangou arrived in eight minutes.\nWhile you are out walking, dinner may be flying along the channel beside you.",
+        ar: "لطلبات الطعام في بازو مسار ثانٍ. فقد رُكّبت منشآت للتوصيل المنخفض حول ساحة بولي ومركز هواشين، وتحلّق المسيّرات فوق القنوات المائية بعيدًا عن زحام الشارع. وفي تقرير لمنطقة هايتشو في فبراير 2026، وصل طلب أرز في قدر فخاري نفّذته «سونغبا» مع «تاوباو شانغو» في ثماني دقائق.\nوبينما تتمشّون، قد يكون العشاء يطير فوق القناة التي تسير بجانبكم.",
+      },
+    },
+    {
+      id: "evtol",
+      imageKey: "evtolair",
+      imageAlt: { zh: "多旋翼的载人飞行器飞在江边公园上空，背后是成片的住宅楼", en: "A multirotor passenger aircraft over a riverside park, blocks of flats behind it", ar: "طائرة ركاب متعددة المراوح فوق حديقة على ضفة النهر، وخلفها مبانٍ سكنية" },
+      title: { zh: "两个座位，没有驾驶舱", en: "Two seats, no cockpit", ar: "مقعدان بلا قمرة قيادة" },
+      where: {
+        zh: "黄埔有低空体验的场景；想去，先查亿航官方的场地与预约信息。这次行程里没有安排。",
+        en: "There are low-altitude flight experiences in Huangpu; if you want to go, start from EHang's own site and booking information. It is not part of this trip.",
+        ar: "توجد تجارب طيران منخفض الارتفاع في هوانغبو؛ وإن أردتم الذهاب فابدؤوا من موقع «إي هانغ» الرسمي ومعلومات الحجز. وهي ليست ضمن هذه الرحلة.",
+      },
+      body: {
+        zh: "十六个旋翼一起转起来，机身离地，没有跑道，机上也没有飞行员 —— 舱里是两个乘客的位置，航线由地面设定。\n这架飞机叫 EH216-S，广州的亿航智能造的。",
+        en: "Sixteen rotors spin up together and the aircraft lifts off — no runway, and no pilot on board. Inside are two passenger seats, and the route is set from the ground.\nThe aircraft is the EH216-S, built by EHang in Guangzhou.",
+        ar: "تدور ستّ عشرة مروحة معًا فترتفع المركبة — بلا مدرج، وبلا طيّار على متنها. في الداخل مقعدان للركاب، والمسار يُحدَّد من الأرض.\nالطائرة هي EH216-S من إنتاج «إي هانغ» في قوانغتشو.",
       },
     },
   ],
@@ -2154,14 +2185,14 @@ export const FOOD_CULTURE: { lead: L10n; paragraphs: L10n[]; sources: { label: L
   },
   "paragraphs": [
     {
-      "zh": "掀开蒸笼盖，热气先扑到脸上。虾饺的皮是半透明的，隔着能看见里面那只粉红的虾；旁边一桌人边聊边夹，一顿早茶从九点吃到十一点也很平常。点心是一笼一笼加的：先点两三样，吃完想吃什么再添，不用一次点满。",
-      "en": "Lift the lid off a steamer and the heat reaches your face first. A prawn dumpling's skin is translucent enough to show the pink curl inside; at the next table people talk and pick at the same time, and a morning that runs from nine to eleven is nothing unusual. Baskets are added as you go: order two or three, finish them, then order whatever you feel like next rather than everything at once.",
-      "ar": "ارفعوا غطاء السلة فيصل إليكم البخار أولًا. قشرة زلابية الروبيان شفّافة بما يكفي لتُظهر لونها الوردي في الداخل؛ وعلى الطاولة المجاورة يتحدث الناس ويأكلون في الوقت نفسه، وصباحٌ يمتدّ من التاسعة إلى الحادية عشرة أمر عادي. وتُضاف السلال تباعًا: اطلبوا اثنتين أو ثلاثًا، وحين تنتهون اطلبوا ما تشتهون، بدل أن تطلبوا كل شيء دفعة واحدة."
+      "zh": "掀开蒸笼盖，热气先扑到脸上。虾饺的皮是半透明的，隔着能看见里面那只粉红的虾；旁边一桌人边聊边夹，一顿早茶从九点吃到十一点也很平常。",
+      "en": "Lift the lid off a steamer and the heat reaches your face first. A prawn dumpling's skin is translucent enough to show the pink curl inside; at the next table people talk and pick at the same time, and a morning that runs from nine to eleven is nothing unusual.",
+      "ar": "ارفعوا غطاء السلة فيصل إليكم البخار أولًا. قشرة زلابية الروبيان شفّافة بما يكفي لتُظهر لونها الوردي في الداخل؛ وعلى الطاولة المجاورة يتحدث الناس ويأكلون في الوقت نفسه، وصباحٌ يمتدّ من التاسعة إلى الحادية عشرة أمر عادي."
     },
     {
-      "zh": "点菜可以按三路走：清蒸留鲜，一条鱼上桌，主味就是姜丝、葱丝和一勺豉油；烧味讲皮，烧鹅、乳鸽咬下去先是脆的；甜品讲滑，姜撞奶和双皮奶都凝成嫩滑的一碗。三样各点一个，一桌就齐了。再往下走一步，隔壁的顺德在 2014 年进了联合国教科文组织的美食之都名单。",
-      "en": "Ordering splits neatly three ways. Steamed, for freshness: a whole fish whose main flavours are shredded ginger, spring onion and a spoon of soy. Roasted, for the skin: goose and squab that crack before they give. And the milk desserts, for texture — softly set, smooth under the spoon. One from each and the table is complete. If you want to go further, neighbouring Shunde joined UNESCO's list of cities of gastronomy in 2014.",
-      "ar": "يتوزّع الطلب في ثلاثة اتجاهات. المطهوّ بالبخار للطزاجة: سمكة كاملة نكهتها الأساسية شرائح الزنجبيل والبصل الأخضر وملعقة صويا. والمشويّ من أجل الجلد: إوزّ وحمام يتكسّر جلدهما قبل أن يلين. وحلويات الحليب من أجل القوام — متماسكة طريّة، ناعمة تحت الملعقة. واحد من كل اتجاه وتكتمل المائدة. وإن أردتم التوسّع، فقد انضمّت شوندي المجاورة إلى قائمة اليونسكو لمدن فنون الطهي عام 2014."
+      "zh": "点菜可以按三路走：清蒸留鲜，一条鱼上桌，主味就是姜丝、葱丝和一勺豉油；烧味讲皮，烧鹅、乳鸽咬下去先是脆的；甜品讲滑，姜撞奶和双皮奶都凝成嫩滑的一碗。三样各点一个，一桌就齐了。",
+      "en": "Ordering splits neatly three ways. Steamed, for freshness: a whole fish whose main flavours are shredded ginger, spring onion and a spoon of soy. Roasted, for the skin: goose and squab that crack before they give. And the milk desserts, for texture — softly set, smooth under the spoon. One from each and the table is complete.",
+      "ar": "يتوزّع الطلب في ثلاثة اتجاهات. المطهوّ بالبخار للطزاجة: سمكة كاملة نكهتها الأساسية شرائح الزنجبيل والبصل الأخضر وملعقة صويا. والمشويّ من أجل الجلد: إوزّ وحمام يتكسّر جلدهما قبل أن يلين. وحلويات الحليب من أجل القوام — متماسكة طريّة، ناعمة تحت الملعقة. واحد من كل اتجاه وتكتمل المائدة."
     },
     {
       "zh": "下面按风味认识菜式；点单前请店员确认肉类来源、猪油和料酒，清真餐厅另见「礼拜与清真餐」。",
@@ -2231,9 +2262,9 @@ export const MOSQUES: PlaceCard[] = [
       "ar": "مسجد هوايشنغ (مسجد المنارة)"
     },
     "note": {
-      "zh": "光塔就在这座寺里。院子中国式的屋檐和圆筒形的塔并立，来礼拜的人和来看建筑的人都有。进门前留意现场关于着装和拍照的提示。",
-      "en": "The Light Tower stands within this mosque. In the courtyard, Chinese eaves and the round minaret sit side by side; people come both to pray and to look. Check the notices on dress and photography before you go in.",
-      "ar": "تقوم منارة «برج النور» داخل هذا المسجد. وفي الفناء تقف الأفاريز الصينية والمئذنة المستديرة جنبًا إلى جنب؛ ويأتي الناس للصلاة وللنظر معًا. وراجعي إرشادات اللباس والتصوير قبل الدخول."
+      "zh": "光塔就在这座寺里。这里既有来礼拜的人，也有来看建筑的人；进门前留意现场关于着装和拍照的提示。",
+      "en": "The Light Tower stands within this mosque. Some come here to pray, some to look at the building. Check the notices on dress and photography before you go in.",
+      "ar": "تقوم منارة «برج النور» داخل هذا المسجد. منهم من يأتي للصلاة ومنهم من يأتي للنظر إلى العمارة. وراجعي إرشادات اللباس والتصوير قبل الدخول."
     },
     "copy": {
       "id": "huaisheng-addr",

@@ -350,9 +350,9 @@ export const UI = {
     "ar": "قبل السفر"
   },
   "cityScale": {
-    "zh": "这座城有多大",
-    "en": "How big this city is",
-    "ar": "ما حجم هذه المدينة"
+    "zh": "认识今天的广州",
+    "en": "Getting to know Guangzhou today",
+    "ar": "التعرّف إلى قوانغتشو اليوم"
   },
   "miniso": {
     "zh": "名创优品在广州",
@@ -405,9 +405,9 @@ export const UI = {
     "ar": "مصادر الصور"
   },
   "culture": {
-    "zh": "到了会遇到的几件小事",
-    "en": "Small things you will run into",
-    "ar": "تفاصيل صغيرة ستصادفونها"
+    "zh": "当地生活习惯",
+    "en": "Local customs and habits",
+    "ar": "العادات المحلية اليومية"
   },
   "foodCulture": {
     "zh": "食在广州",
@@ -426,9 +426,9 @@ export const UI = {
   },
   "guideHints": {
     "prep": {
-      "zh": "支付 · 打车 · 地图 · 上网 · 随身物品",
-      "en": "Payment · rides · maps · internet · essentials",
-      "ar": "الدفع · السيارات · الخرائط · الإنترنت · الأساسيات"
+      "zh": "上网、支付与随身准备",
+      "en": "Getting online, paying, and what to pack",
+      "ar": "الإنترنت والدفع وما تحزمونه"
     },
     "cityScale": {
       "zh": "机场、展馆与珠江两岸",
@@ -461,9 +461,9 @@ export const UI = {
       "ar": "مراكز شارع تيانخه، وشارع بكين القديم وطريقه الأثري"
     },
     "culture": {
-      "zh": "转盘、敬酒、小费、合影、点菜 —— 到了就会遇到的几件小事",
-      "en": "Turntables, toasts, tipping, photos, ordering — the small things you will meet",
-      "ar": "القرص الدوّار والأنخاب والإكرامية والصور والطلب — تفاصيل ستصادفونها"
+      "zh": "中秋假期 · 餐桌上的规矩 · 打招呼与合影 · 街上的骑楼",
+      "en": "The Mid-Autumn holiday · at the table · greetings and photos · the arcades",
+      "ar": "عطلة منتصف الخريف · على المائدة · التحية والصور · الأروقة"
     },
     "halal": {
       "zh": "三座清真寺 · 周五主麻 · 清真餐厅",
