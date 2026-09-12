@@ -340,9 +340,9 @@ export const UI = {
     "ar": "التذاكر والفتح"
   },
   "routesNote": {
-    "zh": "以下时长为游览参考；出发前用地图查看往返路程，按空闲时间挑一条。",
-    "en": "The lengths below are a guide to the visit itself; check the journey each way in your map app and pick one that fits the time you have.",
-    "ar": "المدد أدناه تقدير للزيارة نفسها؛ راجعوا زمن الذهاب والعودة في تطبيق الخرائط واختاروا ما يناسب وقتكم."
+    "zh": "想看夜景、逛商场，还是走老街？先按兴趣挑一条，再用地图看看往返酒店要多久。以下时长为游览参考。",
+    "en": "A night view, a shopping afternoon, or an old street? Pick the one that appeals, then check in your map app how long the journey from the hotel and back will take. The lengths below are a guide to the visit itself.",
+    "ar": "منظر ليلي، أو فترة تسوّق، أو شارع قديم؟ اختاروا ما يروق لكم، ثم راجعوا في تطبيق الخرائط زمن الذهاب من الفندق والعودة. والمدد أدناه تقدير للزيارة نفسها."
   },
   "prep": {
     "zh": "出发前准备",
@@ -436,9 +436,9 @@ export const UI = {
       "ar": "المطار وقاعات المعارض وضفتا النهر"
     },
     "pazhou": {
-      "zh": "四百年前，一座塔在这里迎接远来的商船",
-      "en": "Four centuries ago a tower here welcomed the ships in",
-      "ar": "قبل أربعة قرون كان برج هنا يستقبل السفن"
+      "zh": "广交会展馆、沿江写字楼，和一座四百多年的古塔",
+      "en": "The Canton Fair halls, the towers along the river, and a pagoda over four centuries old",
+      "ar": "قاعات معرض كانتون، والأبراج على النهر، وباغودا عمرها أكثر من أربعة قرون"
     },
     "foodCulture": {
       "zh": "早茶怎么点、菜怎么选、{n} 个特色餐饮品牌",
@@ -446,9 +446,9 @@ export const UI = {
       "ar": "كيف يكون اليوم تشا وكيف تطلبون، و{n} علامة مطاعم"
     },
     "miniso": {
-      "zh": "琶洲西区那栋 287.5 米的新楼，和正佳广场里的旗舰店",
-      "en": "The new 287.5-metre tower in Pazhou West, and the flagship store inside Grandview Mall",
-      "ar": "البرج الجديد بارتفاع 287.5 مترًا في بازو الغربية، والمتجر الرئيسي داخل غراندفيو مول"
+      "zh": "从广州起步 · 琶洲的总部 · 正佳的门店",
+      "en": "Guangzhou beginnings · the headquarters in Pazhou · a store at Grandview",
+      "ar": "البداية في قوانغتشو · المقرّ في بازو · متجر غراندفيو"
     },
     "tech": {
       "zh": "驾驶位上没有人，送餐的是一台会乘电梯的小车",
