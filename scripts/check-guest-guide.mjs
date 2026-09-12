@@ -57,6 +57,27 @@ for (const rejected of [
   '站在罩子上', '踩在上面走', '脚下几米', 'on the glass', 'underfoot',
   // Cooking instructions nobody can be held to.
   '几秒钟', '刚刚断生', '差一点就老',
+  /*
+   * 2026-09-12, the owner's verification pass. Each of these was wrong on the facts,
+   * not merely clumsy:
+   *   the GXR has no front passenger seat, so "the two seats in front" cannot stay empty;
+   *   the operator certificate goes to an operating company, never to an aircraft;
+   *   the Pazhou drone flights in the Haizhu report are not Meituan's;
+   *   nobody can promise every car hailed will be electric, or six lanes outside a hotel;
+   *   the hotel and the Canton Tower are both in Haizhu — the tower is not "across the water";
+   *   siu mai is usually pork, so no dim sum order is one that "can hardly go wrong".
+   */
+  /*
+   * 25–27 September 2026 is the Mid-Autumn holiday and Reham is in Guangzhou for it, so
+   * "Friday is an ordinary working day" is wrong for this trip. The culture chapter says
+   * so with the State Council holiday schedule behind it.
+   */
+  '周五照常上班', '周五和平常一样上班', 'Friday is a working day', 'Friday runs like any other',
+  '两个座位，都是空的', '前面那两个座位', 'seats in front stay empty',
+  '拿到运营合格证之后', 'received its operator certificate',
+  '美团', 'Meituan',
+  '几乎每一辆都是电动', '六车道', '江对岸那一座',
+  '几乎不会错', 'rarely go wrong', '一个人吃半只',
 ]) assert(!copy.includes(rejected), `Rejected wording: ${rejected}`);
 
 /*
@@ -72,6 +93,7 @@ const imageKeysInUse = new Set([
   ...data.ROUTES.map((route) => route.imageKey),
   ...data.FOOD_NOTES.map((note) => note.imageKey),
   ...data.RETAIL_STUDY.malls.map((mall) => mall.imageKey),
+  ...data.CITY_TECH.items.map((item) => item.imageKey),
 ].filter(Boolean));
 for (const dropped of ['pigeon', 'soup', 'robot', 'robotaxi', 'cbd', 'tianhe']) {
   assert(!imageKeysInUse.has(dropped), `${dropped}.jpg does not show what the text describes`);
@@ -80,7 +102,118 @@ for (const dropped of ['pigeon', 'soup', 'robot', 'robotaxi', 'cbd', 'tianhe']) 
 // arrive in front of the guest through the credits instead. (`view` is read further down.)
 const guideView = fs.readFileSync('components/trip/guide-tab.tsx', 'utf8');
 assert(guideView.includes('USED_IMAGE_KEYS'), 'Image credits must be filtered to the images in use');
-assert(!/IMAGE_CREDITS\.map/.test(guideView), 'The full asset list must not be printed to the reader');
+for (const printsEverything of ['IMAGE_CREDITS.map', 'PHOTO_CREDITS.map']) {
+  assert(!guideView.includes(printsEverything), 'The full asset list must not be printed to the reader');
+}
+
+/*
+ * 2026-09-12 second batch: the owner checked seven photographs one by one and they come
+ * with their own three-language alt and caption (lib/guide-photos.ts, written by
+ * scripts/build-guide-photos.mjs from scripts/guide-photos.json — neither is hand-edited).
+ * Credit has to be honest about where a file comes from: a Wikimedia file carries its
+ * author and a link to the licence; a photo taken from a government or company site is
+ * credited to that page and must not be dressed up as CC.
+ */
+const { GUIDE_PHOTOS } = await evaluate(fs.readFileSync('lib/guide-photos.ts', 'utf8'));
+const photoByKey = new Map(GUIDE_PHOTOS.map((photo) => [photo.key, photo]));
+for (const photo of GUIDE_PHOTOS) {
+  for (const field of ['alt', 'caption']) {
+    for (const lang of ['zh', 'en', 'ar']) {
+      assert(photo[field][lang]?.trim(), `${photo.key}: missing ${lang} ${field}`);
+    }
+  }
+  assert(/^https?:\/\//.test(photo.page), `${photo.key} needs the page it came from`);
+  assert(photo.artist.trim(), `${photo.key} needs the photographer or the provider`);
+  assert(fs.existsSync(`public/${photo.file}`), `${photo.key}: the file is missing`);
+  assert(Math.max(photo.width, photo.height) <= 1400, `${photo.key} is larger than 1400px`);
+  if (photo.source === 'wikimedia') {
+    assert(/^https:\/\/creativecommons\.org\//.test(photo.licenseUrl ?? ''), `${photo.key} must link its CC licence`);
+    assert(photo.page.includes('commons.wikimedia.org'), `${photo.key} claims Wikimedia but does not link it`);
+  } else {
+    assert(!photo.licenseUrl, `${photo.key} comes from a source page — it must not claim a CC licence`);
+    assert(!/creative ?commons|CC BY|CC0/i.test(photo.license), `${photo.key} must not be dressed up as CC`);
+  }
+}
+// The pictures that carry a place: the city chapters, the tomb, Parc Central, and the
+// three technology items the owner verified.
+for (const [key, where] of [
+  ['pazhou-pagoda', guideView],
+  ['huaisheng-minaret', guideView],
+]) assert(where.includes(key), `The verified photograph ${key} is not on the page`);
+assert(data.MOSQUES[0].photoKey === 'xianxian-gate', 'The first mosque card carries the tomb gateway photo');
+assert(data.RETAIL_STUDY.malls.some((mall) => mall.photoKey === 'parc-garden'), 'Parc Central carries the aerial of its garden');
+const techPhotos = Object.fromEntries(data.CITY_TECH.items.map((item) => [item.id, item.imageKey]));
+assert.equal(techPhotos.robotaxi, 'gxr-guangzhou', 'The driverless ride shows the GXR photographed in Guangzhou');
+assert.equal(techPhotos.robot, 'hotel-lift-robot', 'The delivery robot shows the lift photo');
+assert.equal(techPhotos['drone-delivery'], 'pazhou-drone', 'The drone item shows the Pazhou flight, not a photo from another city');
+
+/*
+ * Every photograph says what it shows, in all three languages. An empty alt tells a
+ * screen reader "skip this", which is right for decoration and wrong for a picture of
+ * the dish the paragraph is about. The text lives next to the key it describes: in the
+ * data entry for the first batch, in the photo record for the second.
+ */
+const withPhotos = [
+  ...data.ROUTES,
+  ...data.FOOD_NOTES,
+  ...data.RETAIL_STUDY.malls,
+  ...data.CITY_TECH.items,
+];
+for (const item of withPhotos) {
+  if (!item.imageKey) continue;
+  const alt = item.imageAlt ?? photoByKey.get(item.imageKey)?.alt;
+  assert(alt, `${item.id}: the photograph needs three-language alt text`);
+  for (const lang of ['zh', 'en', 'ar']) {
+    assert(alt[lang]?.trim(), `${item.id}: missing ${lang} alt text`);
+  }
+}
+/*
+ * The shared Figure is the reason a tower keeps its tip: it bounds the height and lets
+ * the picture keep its own proportions, instead of cropping to a fixed ratio.
+ */
+const uiView = fs.readFileSync('components/trip/ui.tsx', 'utf8');
+const figure = uiView.slice(uiView.indexOf('export function Figure'), uiView.indexOf('export function Ltr'));
+assert(figure.includes('max-h-[15rem]'), 'A photograph is about 240px tall on a phone');
+assert(!figure.includes('object-cover'), 'Figure must never crop a photograph to fit');
+assert(!/aspect-\[/.test(figure), 'Figure keeps the natural proportions of the file');
+
+/*
+ * Eleven dishes each carrying their own red "source" link is eleven interruptions. The
+ * links all survive, folded into one list at the end of the dish section; the brands keep
+ * their own "where the dishes come from" fold.
+ */
+assert(guideView.includes('foodSources'), 'The dish sources are folded into one list');
+assert(!/zh: "来源"/.test(guideView), 'No per-dish source link is left hanging off a paragraph');
+for (const note of data.FOOD_NOTES) {
+  if (!note.url) continue;
+  assert(/^https?:\/\//.test(note.url), `${note.id}: the source link must still be reachable`);
+}
+
+for (const file of ['guide-tab', 'routes', 'dining-brands']) {
+  const source = fs.readFileSync(`components/trip/${file}.tsx`, 'utf8');
+  assert(!source.includes('alt=""'), `${file}.tsx: a photograph shipped with an empty alt`);
+}
+
+/*
+ * 2026-09-12, owner: eleven dishes must not be eleven identical full-width picture
+ * blocks. Three or four carry a photograph worth stopping at; the rest are compact.
+ */
+/*
+ * The Mid-Autumn holiday falls inside this trip (25–27 September 2026). A claim about
+ * public holidays has to carry the notice it comes from, and the links sit folded at the
+ * end of the chapter like every other source in the guide.
+ */
+const midAutumn = data.CULTURE_NOTES.find((note) => note.id === 'mid-autumn');
+assert(midAutumn, 'The culture chapter tells her the week falls on Mid-Autumn');
+assert(midAutumn.sources?.length >= 1, 'The holiday dates carry the notice they come from');
+assert(JSON.stringify(midAutumn.sources).includes('beijing.gov.cn'), 'The State Council holiday schedule is cited');
+assert(guideView.includes('cultureSources'), 'Culture sources are folded in at the end of the chapter');
+assert.equal(data.CULTURE_NOTES.length, 9, `The culture chapter keeps nine notes, found ${data.CULTURE_NOTES.length}`);
+
+const heroes = data.FOOD_NOTES.filter((note) => note.hero);
+assert(heroes.length >= 3 && heroes.length <= 4, `Three or four hero dishes, found ${heroes.length}`);
+assert(guideView.includes('note.hero'), 'The food chapter must render heroes and compact rows differently');
+for (const hero of heroes) assert(hero.imageKey, `${hero.id} is a hero dish and needs its photograph`);
 
 /*
  * 2026-09-12: the guide was rewritten to be readable. These are the load-bearing pieces
@@ -101,6 +234,10 @@ for (const url of [
   'tjj.gz.gov.cn/zzfwzq/tjkx/content/post_10804061.html',
   'ir.weride.ai/news-releases',
   'zaha-hadid.com',
+  // 2026-09-12 verification pass: each of these carries a fact the text now states.
+  'weride.ai/posts/', // the GXR product page — no front passenger seat
+  'haizhu.gov.cn', // the Pazhou low-altitude delivery report of 5 February 2026
+  'ehang.com/cn/news/1195', // the operator certificates went to operating companies
 ]) assert(allSources.includes(url), `Missing the source behind a new story: ${url}`);
 // This edit must not silently change travellers, flights, baggage or hotel facts.
 for (const key of Object.keys(original)) {
@@ -166,6 +303,15 @@ const i18n = fs.readFileSync('lib/trip-i18n.ts', 'utf8');
 for (const banned of ['guideGroups', 'prepChecklist', 'prepCountLabel']) {
   assert(!i18n.includes(banned), `Retired interface copy must go too: ${banned}`);
 }
+/*
+ * The number of brands in the collapsed hint comes from the data. It was typed out as 21
+ * and stayed 21 after the list was cut to 14 — the first number a guest reads was wrong.
+ */
+const { UI } = await evaluate(i18n);
+for (const lang of ['zh', 'en', 'ar']) {
+  assert(UI.guideHints.foodCulture[lang].includes('{n}'), `The ${lang} food hint counts the brands from the data`);
+}
+assert(view.includes('DINING_BRANDS.length'), 'The chapter hint fills that count in from the brand list');
 // Preparation is read, not ticked: every traveller's own PREP text is rendered in full.
 assert(/PREP\.filter/.test(view), 'Preparation must render the per-person PREP text');
 assert(view.includes('items={item.lines}'), 'Preparation must show the full instructions, not a summary');
@@ -196,7 +342,7 @@ for (const dropped of ['cbd', 'tianhe']) assert(!usedImages.has(dropped), `${dro
 for (const kept of ['opera', 'taikoo']) assert(usedImages.has(kept), `${kept}.jpg should carry a route`);
 
 /*
- * Dining brands: 21 brands, a brand appearing once however many branches it runs.
+ * Dining brands: 14 brands, a brand appearing once however many branches it runs.
  * They are recommendations of a *brand*, so no branch address, phone or opening hours,
  * no "we ate here", no score, and nothing claiming a restaurant is halal — the guest
  * asks at the door, and the section says so exactly once.
@@ -218,9 +364,24 @@ assert.equal(
 for (const theme of dining.DINING_THEMES) {
   assert(theme.brands.length >= 2 && theme.brands.length <= 3, `${theme.id}: two or three brands, found ${theme.brands.length}`);
 }
+/*
+ * 2026-09-12, second pass: one photograph per theme, not one per brand. Fourteen
+ * full-width dish photos turned the section into a corridor, and a stock photo of the
+ * dish sitting directly under a brand name reads as a photograph of that brand's
+ * kitchen — which none of them is. The theme photo is captioned as an example instead.
+ */
 for (const brand of brands) {
-  assert(brand.imageKey, `${brand.id} needs a photograph of its signature dish`);
+  assert(!brand.imageKey, `${brand.id}: photographs belong to the theme, not to each brand`);
 }
+const themePhotos = dining.DINING_THEMES.filter((theme) => theme.imageKey);
+assert(themePhotos.length >= 4, `Most themes carry a dish photo, found ${themePhotos.length}`);
+for (const theme of themePhotos) {
+  assert(theme.imageAlt, `${theme.id}: the theme photo needs three-language alt text`);
+}
+assert(
+  !dining.DINING_THEMES.some((theme) => theme.imageKey === 'bubbletea'),
+  'bubbletea.jpg is a Mixue cup — it cannot stand in for A-Ma or HEYTEA',
+);
 for (const key of ['DINING_THEMES', 'DINING_INTRO']) checkLocales(dining[key]);
 const brandIds = brands.map((brand) => brand.id);
 assert.equal(new Set(brandIds).size, brandIds.length, 'Brand ids must be unique');
@@ -264,12 +425,31 @@ assert(/机上.*特殊餐|special meal on board/.test(JSON.stringify(data.PREP))
 for (const kept of ['清真', '过敏']) {
   assert(dining.DINING_INTRO.halal.zh.includes(kept), `The one dietary line keeps ${kept}`);
 }
-// The unit is said once in the intro, not on all 21 rows.
+// The unit is said once in the intro, not on every row.
 assert(dining.DINING_INTRO.how.zh.includes('人民币') && dining.DINING_INTRO.how.en.includes('CNY'), 'The intro names the currency');
 assert(!diningView.includes('元人民币'), 'The per-person line does not repeat the currency on every row');
-// 21 copy buttons that all read "copy Chinese name" are indistinguishable to a screen reader.
+/*
+ * The dollar figure is arithmetic done here at a fixed rate, not a quoted price. The
+ * rate belongs to the code that does the sum (and to the documentation) — spelling it
+ * out in the intro turned two useful sentences into a paragraph of hedging, which the
+ * owner cut on 2026-09-12. What the reader needs is "yuan is the real price, the dollar
+ * is approximate, the branch menu decides".
+ */
+const rate = /CNY_PER_USD = ([\d.]+)/.exec(diningView);
+assert(rate, 'The conversion rate is a named constant in the component');
+assert(!JSON.stringify(dining.DINING_INTRO).includes(rate[1]), 'The rate is arithmetic, not a sentence in the intro');
+for (const [lang, approximately] of [['zh', '约合美元'], ['en', 'approximate US dollar'], ['ar', 'تقريبًا بالدولار']]) {
+  assert(dining.DINING_INTRO.how[lang].includes(approximately), `The ${lang} intro marks the dollar figure as approximate`);
+}
+assert(dining.DINING_INTRO.how.zh.length <= 60, `The intro is two short sentences, found ${dining.DINING_INTRO.how.zh.length} characters`);
+// Copy buttons that all read "copy Chinese name" are indistinguishable to a screen reader.
 assert(/label: {\s*zh: `\$\{brand\.chinese\}/.test(diningView), 'Each copy button names its own brand');
 assert.equal((diningView.match(/<details/g) ?? []).length, 1, 'Sources sit in one folded list, not one per brand');
+// The theme photograph is captioned, so an outside photo of a dish is never taken for a
+// photograph of the restaurant itself.
+assert(diningView.includes('菜式示意'), 'The theme photo is labelled as an example of the dish');
+assert(/caption=\{LABELS\.sample\}/.test(diningView), 'The label is the picture caption, not a stray line of text');
+assert(/<figcaption/.test(fs.readFileSync('components/trip/ui.tsx', 'utf8')), 'Figure renders its caption as a caption');
 assert(diningView.includes('inline'), 'The brand copy button uses the inline variant, not the big address panel');
 assert(fs.readFileSync('components/trip/ui.tsx', 'utf8').includes('inline = false'), 'The inline variant must stay opt-in');
 /*
@@ -280,13 +460,15 @@ assert(fs.readFileSync('components/trip/ui.tsx', 'utf8').includes('inline = fals
 assert(view.indexOf('UI.foodIdeas') < view.indexOf('UI.diningBrands'), 'The dishes are introduced before the brands that serve them');
 
 /*
- * robotaxi.jpg used to be Ferrari World in Abu Dhabi, Arabic road signs and all. That
- * file is gone: the key now holds a Guangqi robotaxi photographed in Guangzhou, on a
- * Guangdong plate. The rule behind the old assertion stands — a picture must show the
- * place the text describes — so the credit is checked instead of the key banned.
+ * The rule behind this one: a picture must show the thing the text describes. The old
+ * robotaxi.jpg was Ferrari World in Abu Dhabi; its replacement was a different operator's
+ * car from the app the text tells you to use. The driverless ride now shows WeRide's own
+ * GXR on a Guangzhou street, credited to the page it came from.
  */
 const credits = fs.readFileSync('lib/image-credits.ts', 'utf8');
-assert(/"key": "robotaxi",[\s\S]{0,200}?Guangqi/.test(credits), 'The robotaxi photo must be the Guangzhou one');
+const gxr = photoByKey.get('gxr-guangzhou');
+assert(gxr.page.includes('weride.ai'), 'The GXR photo is credited to WeRide');
+assert(/WeRide|文远知行/.test(gxr.artist), 'The GXR photo names its provider');
 for (const retired of ['pigeon', 'soup']) {
   assert(!credits.includes(`"key": "${retired}"`), `${retired}.jpg was retired, not left in the credits`);
 }

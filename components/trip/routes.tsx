@@ -5,7 +5,7 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 import { ROUTES, type Lang } from "@/lib/trip-data";
-import { IMG } from "@/lib/image-credits";
+import { IMG } from "@/lib/photos";
 import { UI, t } from "@/lib/trip-i18n";
 import {
   Accordion,
@@ -13,13 +13,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { CopyChinese, GUIDE, SourceLink } from "./ui";
-
-/**
- * 竖构图的照片：小图框里按比例放全，不裁。
- * 广州塔那张是 800×1200 —— 按 96×72 裁出来只剩一截塔腰，看不出是塔。
- */
-const PORTRAIT_IMAGES = new Set(["tower"]);
+import { CopyChinese, GUIDE, SourceLink, TALL_PHOTOS } from "./ui";
 
 /**
  * 半日建议路线。全部未预订，时长是规划参考。
@@ -59,13 +53,13 @@ export function RouteList({
               {route.imageKey && IMG[route.imageKey] ? (
                 <img
                   src={IMG[route.imageKey]}
-                  alt=""
+                  alt={route.imageAlt ? t(route.imageAlt, lang) : ""}
                   loading="lazy"
                   className={cn(
                     "trip-photo w-full",
-                    // 广州塔那张是 800×1200 的竖图：按 16/9 裁会切掉塔顶塔底，
-                    // 所以竖图限高按比例放全，不裁。
-                    PORTRAIT_IMAGES.has(route.imageKey)
+                    // 广州塔那两张是竖图：按 16/9 裁会切掉塔顶塔底，
+                    // 所以竖图限高按比例放全，不裁（名单在 ui.tsx）。
+                    TALL_PHOTOS.has(route.imageKey)
                       ? "max-h-[22rem] object-contain"
                       : "aspect-[16/9] object-cover",
                   )}

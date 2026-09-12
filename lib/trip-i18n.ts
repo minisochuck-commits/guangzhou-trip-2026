@@ -436,9 +436,9 @@ export const UI = {
       "ar": "قبل أربعة قرون كان برج هنا يستقبل السفن"
     },
     "foodCulture": {
-      "zh": "早茶怎么叹、菜怎么点、21 个特色餐饮品牌",
-      "en": "How yum cha works, how to order, and 21 restaurant brands",
-      "ar": "كيف يكون اليوم تشا وكيف تطلبون، و21 علامة مطاعم"
+      "zh": "早茶怎么点、菜怎么选、{n} 个特色餐饮品牌",
+      "en": "How yum cha works, how to order, and {n} restaurant brands",
+      "ar": "كيف يكون اليوم تشا وكيف تطلبون، و{n} علامة مطاعم"
     },
     "tech": {
       "zh": "驾驶位上没有人，送餐的是一台会乘电梯的小车",

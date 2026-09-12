@@ -22,6 +22,9 @@ import { GuideTab } from "@/components/trip/guide-tab";
 import { DayTab } from "@/components/trip/day-tab";
 import { RouteList } from "@/components/trip/routes";
 import { datesForPerson } from "@/lib/person-day-plan";
+import { DINING_BRANDS } from "@/lib/dining-brands";
+
+export const brandCount = DINING_BRANDS.length;
 
 export function render(lang, person) {
   const dates = datesForPerson(person);
@@ -81,7 +84,23 @@ const REJECTED = [
   'role="checkbox"',
   "已完成 0 /",
   "of 5 done",
+  // 每张照片都要说清自己是什么：读屏的人听到的就是这一串。
+  'alt=""',
+  // 章提示里的数字是从餐饮数据算出来的，占位符没被替换就是算漏了。
+  "{n}",
 ];
+
+/**
+ * 品牌数只有一个来源：`DINING_THEMES`。文案里一度写死 21，数据早已精选成 14，
+ * 收起来的那行提示第一个数字就对不上。这里按渲染出来的页面对，不按文案对。
+ */
+const brandCount = mod.brandCount;
+const hintWithCount = (lang) =>
+  lang === "zh"
+    ? `${brandCount} 个特色餐饮品牌`
+    : lang === "en"
+      ? `${brandCount} restaurant brands`
+      : `${brandCount} علامة مطاعم`;
 
 /**
  * 借来的中国卡与备用金只属于 Ahmed / Mohamed，别人的页面上不能出现。
@@ -102,7 +121,9 @@ for (const lang of ["zh", "en", "ar"]) {
       console.log(`FAIL  ${view} 渲染抛错 — ${error.message}`);
       continue;
     }
-    const missing = mustContain(lang).filter((text) => !html.includes(text));
+    const missing = [...mustContain(lang), hintWithCount(lang)].filter(
+      (text) => !html.includes(text),
+    );
     if (missing.length > 0) {
       failed += 1;
       console.log(`FAIL  ${view} 缺少：${missing.join(" / ")}`);

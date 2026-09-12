@@ -61,7 +61,7 @@ README 顶部原来堆着历次「本轮待 owner 验收」的流水账，已经
 | Tab | 内容 |
 | --- | --- |
 | 全部行程 Itinerary | 日期跳转条 → 三列行程表（18 天 · 45 条记录合并后 42 行；默认 Reham 视图 9 行） |
-| 来华指南 | 顶上是**默认可见的欢迎开篇**（珠江城市全景 `skyline.jpg`，按 1200×492 自然比例显示、不裁建筑；加「欢迎来到广州」和两句话，不折叠），下面按一次旅行读下来的顺序排：出发前准备 → 酒店与联系 → 机场中文地址 → 琶洲 → 广州与你们 → 这座城有多大 → 科技就在身边 → 礼拜与清真餐 → 食在广州（含 21 个特色餐饮品牌推荐）→ 商圈 → 半日路线 → 文化差异 → 中文短句 → 免费行李额 → 官方来源。一章一张卡，默认全部收起，点开整章连着读完。**没有分组标题、没有勾选清单、没有目录式导航** |
+| 来华指南 | 顶上是**默认可见的欢迎开篇**（珠江城市全景 `skyline.jpg`，按 1200×492 自然比例显示、不裁建筑；加「欢迎来到广州」和两句话，不折叠），下面按一次旅行读下来的顺序排：出发前准备 → 酒店与联系 → 机场中文地址 → 琶洲 → 广州与你们 → 这座城有多大 → 科技就在身边 → 礼拜与清真餐 → 食在广州（含 14 个特色餐饮品牌推荐）→ 商圈 → 半日路线 → 文化差异 → 中文短句 → 免费行李额 → 官方来源。一章一张卡，默认全部收起，点开整章连着读完。**没有分组标题、没有勾选清单、没有目录式导航** |
 
 页尾：一行页脚。**没有「人员详情」，也没有「参考：总部通知」** —— 两块都已删除。
 
@@ -211,9 +211,13 @@ Li/Qiuting、Rahma、Reham 各自一行。选中单人时首列只写那一个�
 | 展示 | `lib/journeys.ts` | 航段 → 完整旅程（到机场 / 各段 / 中转 / 抵达）；中转航站楼与停留时长由票面算出 |
 | 展示 | `lib/merge-rows.ts` | 同一天内容逐字一致的人合成一行；`displayedPeople()` 决定首列写谁 |
 | 自检 | `lib/merge-rows.test.ts` | 合并 / 不合并 / 筛人的断言，见下面「怎么跑」 |
-| 事实 | `lib/dining-brands.ts` | 餐饮品牌推荐：21 个品牌按 6 个主题分组，人均参考、可试的菜与来源；推荐的是品牌不是分店，单位与饮食提示只在导语说一次，边界写在文件开头 |
+| 事实 | `lib/dining-brands.ts` | 餐饮品牌推荐：14 个品牌按 6 个主题分组，人均参考、可试的菜与来源；推荐的是品牌不是分店，配图按主题给一张代表菜并标「菜式示意」，单位、汇率与饮食提示只在导语说一次，边界写在文件开头 |
 | 文案 | `lib/trip-i18n.ts` | 界面文案与日期格式化 |
 | 排版 | `components/trip/ui.tsx` 的 `GUIDE` | 指南的字号尺度，唯一一处；改字号改这里，别在段落上各写一串 |
+| 排版 | `components/trip/ui.tsx` 的 `TALL_PHOTOS` / `photoFit()` | 竖图与近方图按比例放全、不裁；横图才按给定比例裁（只剩小缩略图在用） |
+| 排版 | `components/trip/ui.tsx` 的 `Figure` | 成幅照片都走它：按原比例放全、永不 `object-cover`，手机限高约 240px、桌面 320px，带三语图说 |
+| 图片 | `scripts/guide-photos.json` → `scripts/build-guide-photos.mjs` → `lib/guide-photos.ts` | 第二批照片的清单（来源页、作者、授权、三语 alt 与图说）、压缩脚本（最长边 1400、不放大不裁切）与生成物。**只手写清单那一份** |
+| 图片 | `lib/photos.ts` | 把 `lib/image-credits.ts`（老脚本生成）与 `lib/guide-photos.ts` 合成一张表：`IMG`、尺寸、alt、图说、授权。组件只 import 这一份 |
 
 组件：`components/trip/`
 （`trip-view.tsx` 壳 + 页头（印章 / 人员下拉 / 语言）+ 页头高度测量 + 默认人选 ·
@@ -221,7 +225,8 @@ Li/Qiuting、Rahma、Reham 各自一行。选中单人时首列只写那一个�
 内容化弹窗 · `flight-details.tsx` 完整旅程时间轴 + 行李额 · `routes.tsx` 半日路线
 （折叠态只有路线名与时长，照片在展开里）·
 `guide-tab.tsx` 指南（欢迎开篇 + 一列介绍章节，章节顺序见上面的 Tab 表）·
-`dining-brands.tsx` 食在广州里的品牌推荐（主题 + 品牌行 + 章尾来源折叠）·
+`dining-brands.tsx` 食在广州里的品牌推荐（主题 + 一张「菜式示意」代表菜 + 品牌行 +
+章尾来源折叠）·
 `ui.tsx` 公共件与 `GUIDE` 排版尺度（正文 15px / 章标题 17px / 小标题 15px / 副说明 13px，
 **整份指南的字号只在这里定**））。
 
@@ -310,7 +315,13 @@ node scripts/check-guest-guide.mjs      # 分人可见性、三语齐全、禁�
 node scripts/check-journeys.mjs         # 航段接得上、中转时长为正
 node scripts/check-noise.mjs            # 弹窗降噪与交通 / 住宿口径
 node scripts/check-render.mjs           # 三语 × 六视图服务端渲染冒烟（不起服务）
+
+node scripts/build-guide-photos.mjs [输入目录]   # 压第二批照片并重生成 lib/guide-photos.ts
 ```
+
+照片重生成：原图不入仓，按 `scripts/guide-photos.json` 里每条的 `assetUrl` 取回同名文件
+放进输入目录（默认 `/tmp/guangzhou-polish-photos`），再跑上面那条。缺文件的会跳过并提示，
+已生成的 jpg 不动。
 
 检查器能证明内容没掉、口径没跑，**证明不了好不好看** —— 视觉与交互仍要在真机
 390px 上过一遍中文 / English / العربية。
@@ -320,4 +331,4 @@ node scripts/check-render.mjs           # 三语 × 六视图服务端渲染冒�
 ## 访问
 
 页面公开：无登录、无密码、无 session。不放 PNR、票号、原始行程单 PDF 或个人电话。
-Sites 的注册、发布与生产验收由站点 owner 负责。
+当前对外站点使用 GitHub Pages；源码分支 `codex/guangzhou-guest-source`，静态产物分支 `main`。发布与生产验收按 `docs/GUEST_GUIDE.md` 执行。

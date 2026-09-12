@@ -9,6 +9,8 @@
 //   4. 不写「谁吃过」「几分」「最好吃」「保证正宗」，也不声称哪家是清真 ——
 //      有清真要求，由客人到店自己确认（整节只提醒一次）。
 //   5. 不推荐明显含猪肉或酒的菜。
+//   6. 照片按主题配一张代表菜，页面上标明是「菜式示意」；不给每个品牌配图 ——
+//      十四张满宽图既把这一节拖得很长，也容易被当成门店实拍。
 //
 // 文案在这里，排版在 components/trip/dining-brands.tsx。
 
@@ -16,9 +18,6 @@ import type { L10n } from "./trip-data";
 
 export type DiningBrand = {
   id: string;
-  /** 招牌菜照片，对应 public/images/<imageKey>.jpg，见 lib/image-credits.ts。
-      拍的是这一味，不是门脸 —— 本地品牌的门店照片没有可以合法使用的。 */
-  imageKey?: string;
   /** 显示名：中文视图就是中文店名；英文、阿语给译名或音译。 */
   name: L10n;
   /** 中文检索名：复制这一串去搜附近门店。 */
@@ -38,6 +37,11 @@ export type DiningTheme = {
   title: L10n;
   /** 一句话帮人选：什么场合适合这一组。 */
   lead: L10n;
+  /** 这一组的代表菜照片，对应 public/images/<imageKey>.jpg，见 lib/image-credits.ts。
+      拍的是这一味，不是哪一家的门店 —— 页面会把它标成「菜式示意」。 */
+  imageKey?: string;
+  /** 照片里看得见什么，三语；读屏要用，不留空 alt。 */
+  imageAlt?: L10n;
   brands: DiningBrand[];
 };
 
@@ -49,9 +53,9 @@ export type DiningTheme = {
  */
 export const DINING_INTRO: { how: L10n; halal: L10n } = {
   how: {
-    zh: "复制中文品牌名，在高德或大众点评搜附近门店。人均按人民币给，括号里是约合美元，菜品与价格以门店为准。",
-    en: "Copy the Chinese brand name to find a nearby branch in Amap or Dianping. Prices are per-person estimates in CNY; check the branch’s menu.",
-    ar: "انسخوا اسم العلامة بالصينية للبحث عن فرع قريب في Amap أو Dianping. الأسعار تقديرية للفرد باليوان؛ راجعوا قائمة الفرع.",
+    zh: "复制中文品牌名，在高德或大众点评找附近门店。人均为人民币参考价，附约合美元；以门店菜单为准。",
+    en: "Copy the Chinese brand name to find a nearby branch in Amap or Dianping. The per-person figure is a reference in CNY, with an approximate US dollar amount beside it; the branch's own menu is what counts.",
+    ar: "انسخوا اسم العلامة بالصينية للبحث عن فرع قريب في Amap أو Dianping. الرقم للفرد تقديري باليوان، وبجانبه ما يعادله تقريبًا بالدولار؛ والمعتمد قائمة الفرع نفسه.",
   },
   halal: {
     zh: "需清真餐或有过敏、忌口，请向店员确认食材、汤底及烹调用酒。",
@@ -73,10 +77,11 @@ export const DINING_THEMES: DiningTheme[] = [
       en: "Start with the local table.",
       ar: "ابدؤوا من المائدة المحلية.",
     },
+    imageKey: "squab",
+    imageAlt: { zh: "斩成几块的脆皮乳鸽，皮色红亮，摆在白瓷盘里", en: "Crisp-skinned squab, chopped into pieces and glossy dark red, on a white plate", ar: "حمام مقرمش الجلد مقطّع إلى قطع لامعة داكنة الحمرة في طبق أبيض" },
     brands: [
       {
         id: "dagefan",
-        imageKey: "squab",
         name: { zh: "大鸽饭", en: "Da Ge Fan", ar: "دا قه فان" },
         chinese: "大鸽饭",
         budget: 96,
@@ -94,7 +99,6 @@ export const DINING_THEMES: DiningTheme[] = [
       },
       {
         id: "taotaoju",
-        imageKey: "dimsum",
         name: { zh: "陶陶居酒家", en: "Tao Tao Ju", ar: "تاو تاو جيو" },
         chinese: "陶陶居酒家",
         budget: 101,
@@ -112,7 +116,6 @@ export const DINING_THEMES: DiningTheme[] = [
       },
       {
         id: "leigarden",
-        imageKey: "leigarden",
         name: { zh: "利苑酒家", en: "Lei Garden", ar: "لي غاردن" },
         chinese: "利苑酒家",
         budget: 230,
@@ -142,10 +145,11 @@ export const DINING_THEMES: DiningTheme[] = [
       en: "The clay pot is still sizzling when it lands — taste it while the heat is still in it.",
       ar: "يصل القدر الفخاري وهو يُصدر أزيزًا — تذوّقوه وهو ساخن.",
     },
+    imageKey: "zhezhe",
+    imageAlt: { zh: "砂煲里的啫啫鸡，盖子刚揭开，鸡块上铺着葱段和香菜", en: "A clay pot of sizzling chicken, the lid just off, spring onion and coriander over the top", ar: "قدر فخاري من الدجاج وقد رُفع غطاؤه للتو، وفوقه بصل أخضر وكزبرة" },
     brands: [
       {
         id: "zheba",
-        imageKey: "zhezhe",
         name: { zh: "啫八", en: "Zhe Ba", ar: "تشيه با" },
         chinese: "啫八",
         budget: 120,
@@ -163,7 +167,6 @@ export const DINING_THEMES: DiningTheme[] = [
       },
       {
         id: "huishijia",
-        imageKey: "zhezhe",
         name: { zh: "惠食佳", en: "Hui Shi Jia", ar: "هوي شي جيا" },
         chinese: "惠食佳",
         budget: 179,
@@ -189,10 +192,11 @@ export const DINING_THEMES: DiningTheme[] = [
       en: "For the day you want some heat.",
       ar: "لليوم الذي ترغبون فيه بشيء حار.",
     },
+    imageKey: "suancai",
+    imageAlt: { zh: "一大盆酸菜鱼，鱼片和酸菜泡在汤里，撒着葱花和红椒", en: "A big bowl of pickled-cabbage fish: fish slices and pickled greens in the broth, with spring onion and red chilli", ar: "وعاء كبير من السمك مع الملفوف المخلّل: شرائح السمك والخضار المخلّلة في المرق، مع بصل أخضر وفلفل أحمر" },
     brands: [
       {
         id: "tiancheng",
-        imageKey: "suancai",
         name: {
           zh: "天成川小馆",
           en: "Tiancheng Sichuan Kitchen",
@@ -214,7 +218,6 @@ export const DINING_THEMES: DiningTheme[] = [
       },
       {
         id: "song-sichuan",
-        imageKey: "sichuanfish",
         name: { zh: "宋·川菜", en: "Song Sichuan", ar: "سونغ للمطبخ السيتشواني" },
         chinese: "宋川菜",
         budget: 230,
@@ -245,10 +248,11 @@ export const DINING_THEMES: DiningTheme[] = [
       en: "The kind of meal a table cooks and talks its way through.",
       ar: "الوجبة التي تُطهى على المائدة ويدور حولها الحديث.",
     },
+    imageKey: "seafood",
+    imageAlt: { zh: "整条清蒸的石斑鱼，浇了豉油，鱼身上堆着葱丝", en: "A whole grouper steamed and dressed in soy, shredded spring onion piled on top", ar: "سمكة هامور كاملة مطهوّة على البخار مع صلصة الصويا وفوقها بصل أخضر مقطّع" },
     brands: [
       {
         id: "chaofa",
-        imageKey: "beef",
         name: {
           zh: "潮发潮汕牛肉店",
           en: "Chaofa Chaoshan Beef",
@@ -257,9 +261,9 @@ export const DINING_THEMES: DiningTheme[] = [
         chinese: "潮发潮汕牛肉店",
         budget: 89,
         note: {
-          zh: "潮汕牛肉火锅按部位分盘，每盘涮多少秒不一样。",
-          en: "Chaoshan beef hotpot: each cut comes on its own plate, each with its own dip time.",
-          ar: "قدر اللحم على طريقة تشاوشان: كل قطعة في طبقها، ولكل منها زمن سلق خاص.",
+          zh: "潮汕牛肉火锅按部位分盘，先点两三样，吃完再加。",
+          en: "Chaoshan beef hotpot: each cut comes on its own plate. Order two or three to start and add more as you go.",
+          ar: "قدر اللحم على طريقة تشاوشان: كل قطعة في طبقها. اطلبوا نوعين أو ثلاثة في البداية وزيدوا بعدها.",
         },
         dishes: {
           zh: "吊龙肉、鲜牛肉丸",
@@ -271,7 +275,6 @@ export const DINING_THEMES: DiningTheme[] = [
       },
       {
         id: "yelin",
-        imageKey: "seafood",
         name: {
           zh: "椰林海鲜码头",
           en: "Yelin Seafood Wharf",
@@ -305,10 +308,11 @@ export const DINING_THEMES: DiningTheme[] = [
       en: "When you feel like another country's kitchen.",
       ar: "حين تودّون مطبخ بلد آخر.",
     },
+    imageKey: "pho",
+    imageAlt: { zh: "一碗越式牛肉粉，清汤里铺着牛肉片、芽菜、九层塔和红椒圈", en: "A bowl of Vietnamese beef pho: clear broth with sliced beef, bean sprouts, basil and rings of red chilli", ar: "وعاء فو فيتنامية بلحم البقر: مرق صافٍ مع شرائح اللحم وبراعم الفول والريحان وحلقات الفلفل الأحمر" },
     brands: [
       {
         id: "antalya",
-        imageKey: "turkish",
         name: {
           zh: "安塔利亚土耳其餐厅",
           en: "Antalya Turkish restaurant",
@@ -330,7 +334,6 @@ export const DINING_THEMES: DiningTheme[] = [
       },
       {
         id: "helanzheng",
-        imageKey: "pho",
         name: {
           zh: "何蘭正·PHO·越泰餐室",
           en: "He Lan Zheng PHO",
@@ -352,7 +355,6 @@ export const DINING_THEMES: DiningTheme[] = [
       },
       {
         id: "mapo",
-        imageKey: "koreanbbq",
         name: {
           zh: "麻蒲碳烤肉",
           en: "Mapo charcoal barbecue",
@@ -385,7 +387,6 @@ export const DINING_THEMES: DiningTheme[] = [
     brands: [
       {
         id: "ama",
-        imageKey: "bubbletea",
         name: { zh: "阿嬷手作", en: "A-Ma handmade tea", ar: "آه ما للشاي اليدوي" },
         chinese: "阿嬷手作",
         budget: 26,
@@ -404,14 +405,13 @@ export const DINING_THEMES: DiningTheme[] = [
       },
       {
         id: "heytea",
-        imageKey: "heytea",
         name: { zh: "喜茶", en: "HEYTEA", ar: "هي تي" },
         chinese: "喜茶",
         budget: 27,
         note: {
-          zh: "以鲜果入茶的茶饮店。",
-          en: "A tea shop that blends fresh fruit into tea.",
-          ar: "محل شاي يمزج الفاكهة الطازجة بالشاي.",
+          zh: "鲜果打进茶里，甜度和冰量点单时可以说。",
+          en: "Fresh fruit blended into tea; you can ask for less sugar or less ice when you order.",
+          ar: "فاكهة طازجة تُمزج بالشاي؛ ويمكنكم طلب سكر أقل أو ثلج أقل عند الطلب.",
         },
         dishes: {
           zh: "多肉葡萄",
@@ -424,7 +424,7 @@ export const DINING_THEMES: DiningTheme[] = [
   },
 ];
 
-/** 21 个品牌。检查器按这个数对，别让同一个品牌的两家分店又变成两条。 */
+/** 14 个品牌。检查器按这个数对，别让同一个品牌的两家分店又变成两条。 */
 export const DINING_BRANDS: DiningBrand[] = DINING_THEMES.flatMap(
   (theme) => theme.brands,
 );
