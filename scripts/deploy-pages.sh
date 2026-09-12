@@ -11,6 +11,7 @@ SRC="static"
 [ -d "$SRC/_next" ] || { echo "没有 $SRC/_next，先跑 make-static.mjs"; exit 1; }
 [ -f "$SRC/index.html" ] || { echo "没有 $SRC/index.html"; exit 1; }
 
+SOURCE_SHA="$(git rev-parse --short HEAD)"
 TMP="$(mktemp -d)"
 cp -R "$SRC/." "$TMP/"
 touch "$TMP/.nojekyll"
@@ -20,8 +21,8 @@ git init -q -b main
 git config user.name minisochuck
 git config user.email minisochuck@gmail.com
 git add -A
-git commit -q -m "$(cat <<'MSG'
-Publish guide from source 80d3c7c
+git commit -q -m "$(cat <<MSG
+Publish guide from source $SOURCE_SHA
 
 Serves the same build from a host that opens inside mainland China;
 the OpenAI Sites deployment stays the primary one.
