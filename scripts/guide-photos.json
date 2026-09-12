@@ -170,6 +170,26 @@
         "en": "Outside Grandview Mall on the morning it opened.",
         "ar": "أمام غراندفيو مول صباح الافتتاح."
       }
+    },
+    {
+      "key": "miniso-tower",
+      "input": "miniso-tower-0.jpg",
+      "source": "official",
+      "title": "名创优品国际总部主体结构封顶",
+      "artist": "广州日报新花城记者 全杰",
+      "license": "来源页",
+      "assetUrl": "https://dayooimg.dayoo.com/www/202507/05/54844163_be67d2e7-7e27-482c-adb6-084da834bd1a.jpg",
+      "page": "https://news.dayoo.com/guangzhou/202507/05/139995_54844163.htm",
+      "alt": {
+        "zh": "从空中往下看名创优品国际总部：楼顶还是裸露的钢结构，架着两台塔吊，下面几十层的玻璃幕墙已经装好；四周是琶洲西区一栋挨一栋的玻璃高楼，中间夹着街道和绿地。",
+        "en": "Looking down on the MINISO International Headquarters from the air: the top floors are still bare steel with two tower cranes standing on them, while dozens of glazed floors are finished below; all around it stand the glass towers of Pazhou West, with streets and greenery between them.",
+        "ar": "نظرة من الجو إلى مقر «ميني سو» الدولي: الطوابق العليا ما زالت هيكلًا فولاذيًا مكشوفًا تعلوه رافعتان برجيتان، بينما اكتملت عشرات الطوابق الزجاجية تحتها؛ ومن حوله تقف أبراج بازو الغربية الزجاجية وبينها الشوارع والمساحات الخضراء."
+      },
+      "caption": {
+        "zh": "主体结构封顶时的名创优品国际总部，2025 年 7 月。",
+        "en": "The MINISO International Headquarters as its frame topped out, July 2025.",
+        "ar": "مقر «ميني سو» الدولي عند اكتمال هيكله، يوليو 2025."
+      }
     }
   ]
 }
