@@ -598,4 +598,33 @@ assert(header.includes('NativeSelect'), 'The person picker must be a compact sel
 assert(!header.includes('PersonChip') && !header.includes('trip-kapok'), 'Six-chip scroller and the header watermark are replaced');
 assert(!fs.readFileSync('app/globals.css', 'utf8').includes('overflow-x: clip'), 'Overflow must be fixed where it happens, not clipped away');
 
+/*
+ * 2026-09-13, the owner: the two tabs must never scroll away. The header and the tab bar
+ * sit in one sticky container inside the Tabs root, the panels stay in <main> below it,
+ * and the measured element is that container — the date bar in the day table parks itself
+ * under the whole stack via --trip-header-h. One sticky parent, not two.
+ */
+const stickyTops = header.match(/sticky top-0/g) ?? [];
+assert.equal(stickyTops.length, 1, `The shell has exactly one sticky container, found ${stickyTops.length}`);
+const shellSticky = header.indexOf('sticky top-0');
+const tabsRoot = header.indexOf('<Tabs');
+const tabsList = header.indexOf('<TabsList');
+const mainStart = header.indexOf('<main');
+const firstPanel = header.indexOf('<TabsContent');
+assert(tabsRoot < shellSticky, 'The Tabs root wraps the header, so the tab bar can stay in the sticky stack');
+assert(shellSticky < tabsList && tabsList < mainStart, 'The tab bar is inside the sticky container, above the scrolling content');
+assert(mainStart < firstPanel, 'The panels stay in <main>, below the sticky stack');
+assert(header.includes('defaultValue="day"'), 'The itinerary tab is still the default');
+const headerFn = header.slice(header.indexOf('function Header('));
+assert(!headerFn.includes('sticky'), 'The header itself is no longer a second sticky parent');
+assert(
+  /ref=\{headerRef\}[\s\S]{0,120}sticky top-0/.test(header),
+  '--trip-header-h must measure the whole sticky stack, not the header alone',
+);
+// 44px touch targets and the 16px select survive the tightening.
+assert(headerFn.includes('h-11'), 'The person select keeps its 44px height');
+assert(headerFn.includes('min-h-11'), 'The language buttons keep their 44px height');
+assert(headerFn.includes('text-base'), 'The select stays at 16px so iOS does not zoom on focus');
+assert(header.includes('min-h-11 flex-none'), 'The tab triggers keep their 44px height');
+
 console.log('PASS: five traveller views, complete three-language prep and routes, rejected copy and rejected layout, one column of chapters at the agreed type scale, compact header, unchanged flight/baggage/hotel facts.');
