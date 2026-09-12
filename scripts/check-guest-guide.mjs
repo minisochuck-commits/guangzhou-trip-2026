@@ -255,12 +255,49 @@ assert(!view.includes('UI.retailTakeaways'), 'Report instructions must not be re
 for (const reused of ['AccordionItem', 'CopyChinese', 'SourceLink']) assert(view.includes(reused), `Must reuse ${reused}`);
 
 /*
- * 2026-09-12, the owner: the welcome is followed by the four chapters that say what
- * this city is — Guangzhou and you, how big it is, the technology around you, MINISO
- * in Guangzhou — and then Pazhou, which hands over to the hotel block standing on it.
- * Only after that comes the administration: preparation, the hotel, the addresses.
- * Whoever opens the link for the first time should meet the city, not a to-do list.
- * This replaces the 2026-09-11 order, which put preparation and the hotel first.
+ * 2026-09-12, the owner: restaurants here set chopsticks, so the essentials line offers a
+ * compact cutlery set — and says what to do with a table knife, because EgyptAir does not
+ * allow one in the cabin. Everyone sees it (the essentials item has no audience), and the
+ * two airline pages sit with the other preparation sources rather than in the paragraph.
+ */
+const essentials = data.PREP.find((item) => item.id === 'essentials');
+assert(!essentials.audience, 'The essentials are for every traveller, not one of them');
+const cutlery = essentials.lines.find((line) => line.zh.includes('叉勺'));
+assert(cutlery, 'The essentials say what to do about cutlery');
+for (const [lang, needle] of [['zh', '托运行李'], ['en', 'checked baggage'], ['ar', 'المسجَّلة']]) {
+  assert(cutlery[lang].includes(needle), `The ${lang} cutlery line says where a knife travels`);
+}
+for (const person of ['reham', 'rahma', 'qiuting', 'ahmed', 'hassan']) {
+  assert(prepFor(person).some((item) => item.id === 'essentials'), `${person} must see the essentials`);
+}
+for (const url of [
+  'egyptair.com/en/Pages/Conditions-of-Carriage.aspx',
+  'egyptair.com/en/fly/baggage/Pages/baggage-allowance.aspx',
+]) assert(view.includes(url), `The cutlery advice keeps its source: ${url}`);
+assert(!JSON.stringify(data.PREP).includes('8.3.4'), 'The rule is applied, not quoted at the guest');
+
+/*
+ * Photographs sit next to the paragraph they belong to. The arcade picture used to open
+ * the culture chapter while the first note was about the Mid-Autumn holiday; it now hangs
+ * off the note that explains the arcades.
+ */
+const arcadeNote = data.CULTURE_NOTES.find((note) => note.id === 'arcade');
+assert.equal(arcadeNote.photoKey, 'arcade', 'The arcade photo belongs to the arcade note');
+assert(view.includes('<NotePhoto photoKey={note.photoKey}'), 'The culture photo is rendered inside its note');
+assert(
+  data.CULTURE_NOTES.filter((note) => note.photoKey).length === 1,
+  'Only the arcade note carries a photo; nothing else changed',
+);
+
+
+/*
+ * 2026-09-12, the owner approved this reading order, which replaces the earlier
+ * "city first, paperwork later" one: welcome → what to do before you fly → where you
+ * sleep and the ground it stands on → the city itself (Guangzhou and you, Guangzhou
+ * today, MINISO, the technology around you) → what you use once you are here (prayer
+ * and halal food, eating, local customs) → the shopping districts and the routes →
+ * the phrases and the sources. The airport addresses and the baggage allowances are
+ * folded inside preparation; they are lookup tables, not chapters.
  */
 const at = (needle) => {
   const index = view.indexOf(needle);
@@ -268,9 +305,8 @@ const at = (needle) => {
   return index;
 };
 const CHAPTERS = [
-  'guide-welcome', 'story', 'scale', 'tech', 'miniso', 'pazhou',
-  'prep', 'guide-hotel', 'addresses', 'halal',
-  'food', 'retail', 'routes', 'culture', 'phrases', 'baggage', 'sources',
+  'guide-welcome', 'prep', 'guide-hotel', 'pazhou', 'story', 'scale', 'miniso', 'tech',
+  'halal', 'food', 'culture', 'retail', 'routes', 'phrases', 'sources',
 ];
 let previous = -1;
 for (const id of CHAPTERS) {
@@ -278,8 +314,23 @@ for (const id of CHAPTERS) {
   assert(here > previous, `Chapter out of the agreed reading order: ${id}`);
   previous = here;
 }
-assert(at('id="story"') < at('id="prep"'), 'The city comes before the paperwork');
-assert(at('id="pazhou"') < at('id="guide-hotel"'), 'Pazhou hands over to the hotel standing on it');
+assert(at('id="prep"') < at('id="guide-hotel"'), 'Preparation is read before you land');
+assert(at('id="guide-hotel"') < at('id="pazhou"'), 'The hotel block hands over to the ground it stands on');
+
+/*
+ * The airport addresses and both airlines' allowances live inside preparation now, in
+ * folded detail — the owner did not want two large baggage cards sitting in the middle
+ * of the reading flow. The BaggageLines component itself is untouched.
+ */
+const prepSection = view.slice(at('id="prep"'), view.indexOf('</Section>', at('id="prep"')));
+assert(prepSection.includes('COPY_ADDRESSES.filter'), 'The airport addresses are inside preparation');
+assert(prepSection.includes('BaggageLines'), 'The baggage allowances are inside preparation');
+assert((prepSection.match(/<Fold/g) ?? []).length === 2, 'Both of them are folded, not laid out in the flow');
+assert(!view.includes('id="addresses"') && !view.includes('id="baggage"'), 'Neither is a chapter of its own any more');
+// `inline-flex` on a summary drops the native triangle, and then nothing tells the
+// reader the addresses and the allowances are there at all.
+const foldFn = view.slice(view.indexOf('function Fold('), view.indexOf('const PREP_FOLDS'));
+assert(!foldFn.includes('inline-flex'), 'The fold keeps its native disclosure marker');
 
 /*
  * The welcome itself: always visible, no button, and it carries the bright Pearl River
@@ -304,33 +355,55 @@ for (const repeated of ['photo="skyline"', 'photo="huaisheng"']) {
  */
 const miniso = JSON.stringify(data.MINISO_IN_GZ);
 for (const needed of [
-  // 2026-09-12, the owner: the new tower in Pazhou West is the thing she can see
-  // from the street, so it opens the chapter and stays there.
-  '287.5', '琶洲西区', '8 月 12 日',
-  '琶洲大道 109 号', '8,151', '正佳广场', 'MINISO LAND',
+  // The three things the chapter exists for: where the brand started, where the company
+  // sits in this district, and the store she can walk into on Tianhe Road.
+  '287.5', '琶洲西区', '琶洲大道 109 号', '8,151', '正佳广场', 'MINISO LAND',
 ]) {
   assert(miniso.includes(needed), `The MINISO chapter lost a checked fact: ${needed}`);
 }
-// The photograph sits between the two groups: the tower above it has no usable
-// public photograph, the store below it is what the picture shows.
-assert(view.includes('MINISO_IN_GZ.store'), 'The store paragraphs are rendered under the photo');
+/*
+ * 2026-09-12: three sections — the brand's start, the head office, the store — and each
+ * photograph sits in the section it belongs to. The tower picture was taken while the
+ * frame was topping out, so its caption has to say so; the store picture is the shop.
+ */
+assert(view.includes('MINISO_IN_GZ.sections'), 'The MINISO chapter is rendered as its sections');
+const minisoSections = data.MINISO_IN_GZ.sections.map((part) => part.id);
+assert.deepEqual(minisoSections, ['origin', 'headquarters', 'store'], `MINISO sections out of order: ${minisoSections}`);
+const minisoPhotos = Object.fromEntries(data.MINISO_IN_GZ.sections.map((part) => [part.id, part.photoKey]));
+assert.equal(minisoPhotos.headquarters, 'miniso-tower', 'The tower photo belongs to the head-office section');
+assert.equal(minisoPhotos.store, 'miniso-land', 'The store photo belongs to the store section');
 assert(
-  view.indexOf('CHAPTER_PHOTOS.minisoStore') < view.indexOf('MINISO_IN_GZ.store'),
-  'The store photo comes before the paragraph that points at it',
+  view.indexOf('photoKey={part.photoKey}') < view.indexOf('part.paragraphs'),
+  'Each section shows its photo next to the paragraphs that describe it',
 );
 assert(
   photoByKey.get('miniso-tower')?.caption.zh.includes('2025 年 7 月'),
-  'The tower photo says when it was taken — the text says the building is finished now',
+  'The tower photo says which stage of construction it shows',
 );
 for (const unsourced of ['29.3', '近万人', '万人排队']) {
   assert(!miniso.includes(unsourced), `No source was ever found for this: ${unsourced}`);
+}
+/*
+ * 2026-09-12, the owner checked both of these against the sources:
+ *   the store is reported as "MINISO LAND 广州壹号店", which is its name, not a claim
+ *   that it is the first of its kind in the city (the brand's own timeline lists an
+ *   earlier MINISO LAND in Guangzhou);
+ *   the only page carrying the tower's completion-inspection date could not be read
+ *   again, and the date does nothing for a reader, so the chapter does not assert it.
+ */
+assert(miniso.includes('广州壹号店') && miniso.includes('Guangzhou No. 1'), 'The store is called by its reported name');
+for (const overreach of [
+  'first of its kind', '在广州的第一家', // the store name is not a ranking
+  '竣工验收', 'completion inspection', '8 月 12 日', // the unreadable progress date
+]) {
+  assert(!miniso.includes(overreach), `The MINISO chapter must not claim: ${overreach}`);
 }
 for (const url of [
   'https://www.miniso.cn/contact/',
   'https://xxsb.gz-cmc.com/pages/2026/01/30/afa451fb749c44af8dcef00ce3abdf5a.html',
   'https://news.dayoo.com/guangzhou/202507/05/139995_54844163.htm',
 ]) assert(miniso.includes(url), `The MINISO chapter must keep its source: ${url}`);
-assert(view.includes('MINISO_IN_GZ.paragraphs'), 'The MINISO chapter is rendered, not just written');
+assert(view.includes('MINISO_IN_GZ.lead'), 'The MINISO chapter is rendered, not just written');
 
 for (const kept of ['CITY_STORY.paragraphs', 'CITY_STORY.sources', 'CITY_SCALE.intro', 'CITY_SCALE.sources']) {
   assert(view.includes(kept), `The chapter text and sources stay: ${kept}`);
