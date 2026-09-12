@@ -131,10 +131,11 @@ export function TripView() {
       dates[dates.length - 1] ??
       FIRST_DATE);
 
-  // sticky 页头的高度写进 CSS 变量，日期条 + 列头就能粘在它正下方。
-  // 高度随语言、换行、人员 chip 变化，所以用 ResizeObserver 而不是写死。
+  // 固定栈（页头 + 标签条）的高度写进 CSS 变量，日期条 + 列头就能粘在它正下方。
+  // 量的是整条栈，不只是页头 —— 标签条现在也不滚走，它占的高度得算进去。
+  // 高度随语言、换行变化，所以用 ResizeObserver 而不是写死。
   const rootRef = React.useRef<HTMLDivElement | null>(null);
-  const headerRef = React.useRef<HTMLElement | null>(null);
+  const headerRef = React.useRef<HTMLDivElement | null>(null);
   React.useEffect(() => {
     const root = rootRef.current;
     const header = headerRef.current;
@@ -156,20 +157,32 @@ export function TripView() {
         lang={lang}
         className="trip-root mx-auto flex min-h-dvh w-full max-w-[42rem] flex-col bg-sheet md:my-6 md:min-h-[calc(100dvh-3rem)] md:max-w-[75rem] md:rounded-2xl md:shadow-[var(--shadow-raised)]"
       >
-        <Header
-          ref={headerRef}
-          lang={lang}
-          onLang={setLang}
-          person={person}
-          onPerson={setPerson}
-        />
+        {/*
+          Tabs 根包住页头和正文，标签条才能和页头一起留在固定栈里，
+          而内容仍然是同一个 Tabs 的 TabsContent —— 语义没变，默认还是「全部行程」。
+          整份页面只有这一个 sticky 容器：页头 + 标签条一起停在顶上，
+          两个标签在滚动中一直点得到；日期条与列头按 --trip-header-h 停在它下面。
+        */}
+        <Tabs
+          defaultValue="day"
+          className="flex min-h-0 flex-1 flex-col gap-0"
+        >
+          <div
+            ref={headerRef}
+            className="sticky top-0 z-20 bg-white md:rounded-t-2xl"
+          >
+            <Header
+              lang={lang}
+              onLang={setLang}
+              person={person}
+              onPerson={setPerson}
+            />
 
-        <main className="flex-1 px-4 pb-10 pt-3 md:px-8">
-          <Tabs defaultValue="day" className="gap-4">
-            {/* 下划线式标签：比灰底药丸克制，和衬线标题、印章是一路的 */}
+            {/* 下划线式标签：比灰底药丸克制，和衬线标题、印章是一路的。
+                下边框就是整条固定栈的底边，滚动的内容从这条线下面走过。 */}
             <TabsList
               variant="line"
-              className="h-auto w-full justify-start gap-7 rounded-none border-b border-card-line p-0 pb-2"
+              className="h-auto w-full justify-start gap-7 rounded-none border-b border-card-line p-0 pb-2 ps-4 md:ps-8"
             >
               <TabsTrigger
                 value="day"
@@ -184,7 +197,9 @@ export function TripView() {
                 {t(UI.tabs.guide, lang)}
               </TabsTrigger>
             </TabsList>
+          </div>
 
+          <main className="flex-1 px-4 pb-10 pt-3 md:px-8">
             <TabsContent value="day">
               <DayTab
                 lang={lang}
@@ -198,12 +213,12 @@ export function TripView() {
             <TabsContent value="guide">
               <GuideTab lang={lang} person={person} />
             </TabsContent>
-          </Tabs>
 
-          <p className="mt-6 text-sm leading-relaxed text-navy-soft">
-            {t(UI.footer, lang)}
-          </p>
-        </main>
+            <p className="mt-6 text-sm leading-relaxed text-navy-soft">
+              {t(UI.footer, lang)}
+            </p>
+          </main>
+        </Tabs>
       </div>
     </DirectionProvider>
   );
@@ -217,31 +232,30 @@ export function TripView() {
  * 「看谁」用一个原生下拉（六个横滑按钮是上一版，已替代）：默认显示 Reham 的名字，
  * 点开才列出其他人和「全部」。常驻六个按钮既占两行，又让人以为那是主要操作。
  * 日期区间和当前的人各写一次，不重复。没有背景花纹、没有投影、没有首屏大图。
+ *
+ * 它**自己不 sticky**：页头和标签条一起放在 trip-view 那一个固定容器里，
+ * 整页只有一处固定，高度也只量那一处。
+ * 纵向留白按「够呼吸就行」收紧；下拉 44px、语言按钮 44px 的触控高度不动。
  */
 function Header({
-  ref,
   lang,
   onLang,
   person,
   onPerson,
 }: {
-  ref: React.Ref<HTMLElement>;
   lang: Lang;
   onLang: (lang: Lang) => void;
   person: PersonId | null;
   onPerson: (person: PersonId | null) => void;
 }) {
   return (
-    <header
-      ref={ref}
-      className="sticky top-0 z-20 border-b border-card-line bg-white md:rounded-t-2xl"
-    >
+    <header>
       {/* 品牌红只占一条细带：这是行程单，不是营销页 */}
       <div
         aria-hidden="true"
         className="h-1 w-full bg-miniso-red md:rounded-t-2xl"
       />
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 px-4 pt-2.5">
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 px-4 pt-2 md:px-8">
         <span className="trip-seal" aria-hidden="true">
           穗
         </span>
@@ -253,7 +267,7 @@ function Header({
         </p>
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 px-4 pb-2.5 pt-2">
+      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 px-4 pb-1.5 pt-1.5 md:px-8">
         <label className="flex items-center">
           {/* 标签只给读屏：阿语的「العرض」加上下拉本身，会把语言按钮挤到下一行，
               页头从 111px 涨到 163px。名字就在下拉里，视觉上不需要再写一遍。 */}
