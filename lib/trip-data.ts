@@ -988,9 +988,9 @@ export const CULTURE_NOTES: CultureNote[] = [
     id: "mid-autumn",
     title: { zh: "这次，正好赶上中秋", en: "Your week falls on the Mid-Autumn Festival", ar: "أسبوعكم يصادف عيد منتصف الخريف" },
     body: {
-      zh: "这趟来华之行，正好赶上 9 月 25—27 日的中秋假期。月饼、赏月、与家人吃一顿团圆饭，是这个节日的几件大事。逛街看到月亮和玉兔的装饰，也就知道它们在迎接什么。\n假期想坐夜游船或去热门餐厅，可以提前预约；27 日去机场前也留意路况。周五的主麻仍按清真寺当天的时间安排。",
-      en: "This trip falls on the Mid-Autumn holiday, 25–27 September. Mooncakes, looking at the full moon and a family dinner are what the festival is about; when you see moons and jade rabbits in the shop displays, that is what they are for.\nIf you want an evening river cruise or a popular restaurant over the holiday, book ahead; and check the traffic before leaving for the airport on the 27th. Friday prayer still follows whatever time the mosque gives that day.",
-      ar: "تصادف هذه الرحلة عطلة منتصف الخريف، من 25 إلى 27 سبتمبر. كعك القمر والنظر إلى البدر وعشاء العائلة هي محاور هذا العيد؛ وحين ترون الأقمار والأرانب في واجهات المتاجر فتلك هي المناسبة.\nوإن أردتم جولة نهرية مسائية أو مطعمًا مطلوبًا في العطلة فاحجزوا مسبقًا؛ وتفقّدوا حركة السير قبل التوجّه إلى المطار يوم 27. أما صلاة الجمعة فتبقى بحسب الوقت الذي يحدّده المسجد في يومه.",
+      zh: "中秋是农历八月十五，2026 年落在 9 月 25 日，假期从 25 日放到 27 日 —— 正好是你们在广州的这几天。这一天对中国人的意思是团圆：月亮最圆的时候一家人聚在一起吃饭、分月饼；在外面的人抬头看同一轮月亮，想的是家里。所以这几天橱窗里的月亮和玉兔、同事互相送的月饼，讲的都是这一件事。\n广州有自己的过法，叫「树中秋」（也写作「竖中秋」）：把彩灯挂到高处，孩子提着灯笼上街，一家人在月下分月饼和柚子。节前老城的灯笼店会把各式各样的灯笼摆出来，路过可以看看；晚上到江边赏月也是本地人常做的事。假期里想坐夜游船或去热门餐厅，提前订；27 日去机场前留意路况。",
+      en: "Mid-Autumn falls on the fifteenth day of the eighth lunar month — 25 September in 2026 — and the holiday runs from the 25th to the 27th, which is exactly your week in Guangzhou. What the day means here is reunion: the moon is at its fullest, the family eats together and shares a mooncake, and whoever is away looks up at the same moon and thinks of home. That is what the moons and jade rabbits in the shop windows are about, and the mooncakes colleagues give one another.\nGuangzhou keeps it its own way, in a custom called shu zhongqiu, “raising the Mid-Autumn”: lanterns hung up high, children carrying lanterns through the streets, and the family sharing mooncakes and pomelo under the moon. In the run-up the lantern shops in the old city put their whole range out on display — worth a look if you pass one — and going down to the river to watch the moon is an ordinary local evening. If you want a river cruise or a popular restaurant over the holiday, book ahead; and check the traffic before leaving for the airport on the 27th.",
+      ar: "يقع عيد منتصف الخريف في اليوم الخامس عشر من الشهر القمري الثامن — أي 25 سبتمبر في 2026 — وتمتدّ العطلة من 25 إلى 27، وهي تمامًا أيامكم في قوانغتشو. ومعنى هذا اليوم هنا هو لَمّ الشمل: يكتمل القمر فتجتمع العائلة على الطعام وتتقاسم كعك القمر، ومن كان بعيدًا نظر إلى القمر نفسه وتذكّر أهله. وهذا ما تعنيه الأقمار والأرانب في واجهات المتاجر، وكعك القمر الذي يتبادله الزملاء.\nولقوانغتشو طريقتها الخاصة، وتسمّى «شو تشونغتشيو» أي «رفع منتصف الخريف»: فوانيس ملوّنة تُعلَّق عاليًا، وأطفال يحملون الفوانيس في الشوارع، وعائلة تتقاسم كعك القمر والبوملي تحت ضوء القمر. وقبل العيد تعرض محال الفوانيس في المدينة القديمة تشكيلتها كاملة — تستحقّ نظرة إن مررتم بها — والنزول إلى النهر لمشاهدة القمر مساءٌ محلّي معتاد. وإن أردتم جولة نهرية أو مطعمًا مطلوبًا في العطلة فاحجزوا مسبقًا؛ وتفقّدوا حركة السير قبل التوجّه إلى المطار يوم 27.",
     },
     sources: [
       {
@@ -1003,11 +1003,19 @@ export const CULTURE_NOTES: CultureNote[] = [
       },
       {
         label: {
-          zh: "广州市政府：中秋节的传统习俗",
-          en: "Guangzhou government: the customs of Mid-Autumn",
-          ar: "حكومة قوانغتشو: عادات عيد منتصف الخريف",
+          zh: "广州市政府：广州人怎么过中秋（树中秋、灯笼与赏月）",
+          en: "Guangzhou government: how Mid-Autumn is kept in Guangzhou (raising the lanterns, moon-watching)",
+          ar: "حكومة قوانغتشو: كيف يُحتفى بمنتصف الخريف في قوانغتشو (رفع الفوانيس ومشاهدة القمر)",
         },
-        url: "https://www.gz.gov.cn/zt/jrshts/2021n/zqj/ctjr/content/post_7790667.html",
+        url: "https://www.gz.gov.cn/zt/jrshts/2024n/zqj/tszq/content/post_9870197.html",
+      },
+      {
+        label: {
+          zh: "广州市政府：特色中秋 —— 岭南的节俗",
+          en: "Guangzhou government: Mid-Autumn customs of this region",
+          ar: "حكومة قوانغتشو: عادات منتصف الخريف في هذه المنطقة",
+        },
+        url: "https://www.gz.gov.cn/zt/jrshts/2022n/zqj/tszq/content/post_8551078.html",
       },
     ],
   },
@@ -1603,6 +1611,8 @@ export const FOOD_NOTES: FoodNote[] = [
   },
   {
     "id": "squab",
+    "imageKey": "squab",
+    "imageAlt": { "zh": "斩成几块的脆皮乳鸽摆在白瓷盘里，皮色红亮", "en": "Crisp-skinned squab chopped into pieces on a white plate, the skin glossy red-brown", "ar": "حمام صغير مقرمش الجلد مقطّع إلى قطع في طبق أبيض، وجلده لامع بلون بنّي محمرّ" },
     "title": {
       "zh": "红烧乳鸽",
       "en": "Roast squab",
@@ -1617,6 +1627,8 @@ export const FOOD_NOTES: FoodNote[] = [
   },
   {
     "id": "seafood",
+    "imageKey": "seafood",
+    "imageAlt": { "zh": "一整条清蒸鱼装在长盘里，上面铺着姜丝和葱丝，淋了豉油", "en": "A whole steamed fish on an oval platter, topped with shredded ginger and spring onion and dressed with soy", "ar": "سمكة كاملة مطهوّة بالبخار في طبق بيضوي، تعلوها شرائح الزنجبيل والبصل الأخضر مع صلصة الصويا" },
     "title": {
       "zh": "海鲜：即捞即食",
       "en": "Seafood, netted and cooked on the spot",
@@ -1631,6 +1643,8 @@ export const FOOD_NOTES: FoodNote[] = [
   },
   {
     "id": "soup",
+    "imageKey": "cantonese-chicken-soup",
+    "imageAlt": { "zh": "白瓷汤盅里盛着清澈的鸡汤，汤里是一条带骨的鸡腿和几样配料", "en": "A clear chicken soup in a white porcelain pot, a chicken leg on the bone and a few other ingredients in the broth", "ar": "حساء دجاج صافٍ في وعاء خزفي أبيض، وفيه فخذ دجاج بعظمه وبعض المكوّنات" },
     "title": {
       "zh": "老火靓汤",
       "en": "Slow-fired soup",
@@ -2002,107 +2016,107 @@ export const CITY_TECH: {
   sources: { label: L10n; url: string }[];
 } = {
   lead: {
-    zh: "科技不只在展厅里，也在每天的出门、付款和收货之间。",
-    en: "Technology here is not only in the exhibition halls; it is in the everyday business of getting around, paying and taking delivery.",
-    ar: "التقنية هنا ليست في قاعات المعارض وحدها؛ بل في تفاصيل اليوم: التنقّل والدفع واستلام الطلبات.",
+    zh: "千年商都的另一面，是走进日常的科技。",
+    en: "The other side of a thousand-year trading city is technology that has moved into everyday life.",
+    ar: "الوجه الآخر لمدينة تجارية عمرها ألف عام هو تقنية دخلت الحياة اليومية.",
   },
   intro: {
-    zh: "叫到一辆电动车、扫码买杯茶，都可以是体验的起点。想走得更远，可以专门约一次无人驾驶出租车，或查一查琶洲的低空配送。",
-    en: "Hailing an electric car or scanning a code for a cup of tea is a place to start. To go further, you can book a driverless taxi on purpose, or look into the low-altitude deliveries in Pazhou.",
-    ar: "استيقاف سيارة كهربائية أو مسح رمز لشراء كوب شاي نقطة بداية جيدة. وللمضي أبعد، يمكنكم حجز سيارة أجرة بلا سائق قصدًا، أو الاطلاع على التوصيل المنخفض في بازو.",
+    zh: "老城的茶楼仍飘着茶香，广州的企业也在研发无人驾驶汽车和载人飞行器。传统生活与新技术在这里交织；新鲜感不只在天际线里，也藏在一段车程、一笔付款和一次送餐中。先从身边的三件小事看起，再认识无人驾驶和低空飞行带来的新场景。",
+    en: "The teahouses of the old city still smell of tea, and Guangzhou's companies are developing driverless cars and passenger aircraft. Traditional life and new technology are woven together here, and the novelty is not only in the skyline — it is in a car ride, a payment, a meal delivered. Start with three small things close at hand, then look at what driverless vehicles and low-altitude flight are opening up.",
+    ar: "ما زالت بيوت الشاي في المدينة القديمة تفوح برائحة الشاي، بينما تطوّر شركات قوانغتشو سيارات بلا سائق ومركبات ركاب طائرة. تتشابك هنا الحياة التقليدية والتقنية الجديدة؛ والجديد ليس في خطّ الأفق وحده، بل في رحلة بالسيارة ودفعةٍ واحدة ووجبة تصل إلى الباب. ابدؤوا بثلاثة أمور قريبة منكم، ثم تعرّفوا إلى ما تفتحه القيادة الذاتية والطيران المنخفض من مشاهد جديدة.",
   },
   items: [
     {
       id: "ev-taxi",
       imageKey: "evtaxi",
       imageAlt: { zh: "黄色的电动出租车停在充电桩前，挂着新能源绿牌", en: "A yellow electric taxi at a charging point, on the green plate that marks an electric vehicle", ar: "سيارة أجرة كهربائية صفراء عند شاحن، تحمل اللوحة الخضراء الخاصة بالسيارات الكهربائية" },
-      title: { zh: "安静得让人愣一下的出租车", en: "A taxi quiet enough to make you pause", ar: "سيارة أجرة هادئة إلى حدّ يوقفكم لحظة" },
+      title: { zh: "电动出租车：从声音里感受变化", en: "Electric taxis: you hear the change first", ar: "سيارات الأجرة الكهربائية: التغيير يُسمع أولًا" },
       where: {
-        zh: "在广州叫车，很容易遇见电动车。",
-        en: "Hail a car in Guangzhou and you will often get an electric one.",
-        ar: "استوقفوا سيارة في قوانغتشو وستصادفون سيارة كهربائية في الغالب.",
+        zh: "请酒店礼宾叫一辆巡游出租车，或到出租车候车点乘车。",
+        en: "Ask the hotel concierge for a street-hail taxi, or pick one up at a taxi rank.",
+        ar: "اطلبوا من كونسيرج الفندق سيارة أجرة من أسطول الشارع، أو اركبوا من موقف سيارات الأجرة.",
       },
       body: {
-        zh: "关上门的那一下可能会让你愣一秒：没有发动机的抖动，车厢里安静到能听见空调的风。起步是滑出去的。",
-        en: "The moment the door shuts may give you a second's pause: no engine shaking, quiet enough inside to hear the air conditioning. It slides away rather than pulls away.",
-        ar: "لحظة إغلاق الباب قد تمنحكم ثانية من الدهشة: لا ارتجاج محرّك، وهدوءٌ في الداخل يكفي لسماع المكيّف. تنساب السيارة بدل أن تندفع.",
+        zh: "坐进一辆电动出租车，起步时少了燃油发动机的轰鸣，这是认识现代广州很直接的方式。按广州市政府 2025 年 1 月公布的数据，全市营运巡游出租车已经 100% 纯电化，日常出行也成了电动车大规模应用的现场。",
+        en: "Get into an electric taxi and the roar of a combustion engine is missing as it pulls away — a very direct way to meet the modern city. According to figures published by the Guangzhou municipal government in January 2025, the city's street-hail taxi fleet in service is now 100% battery-electric, which makes an ordinary journey a working example of electric vehicles at scale.",
+        ar: "اركبوا سيارة أجرة كهربائية وستلاحظون غياب هدير محرّك الاحتراق عند الانطلاق — وهي طريقة مباشرة جدًّا للتعرّف إلى قوانغتشو الحديثة. ووفق أرقام نشرتها حكومة قوانغتشو في يناير 2025، صار أسطول سيارات الأجرة العامل في الشارع كهربائيًا بنسبة 100%، فتحوّلت الرحلة العادية إلى مثال عملي على استخدام السيارات الكهربائية على نطاق واسع.",
       },
     },
     {
       id: "cashless",
       imageKey: "cashless",
       imageAlt: { zh: "街边小店的柜台前，顾客举着手机扫码付款", en: "At a street-front counter, a customer holds up a phone to pay by QR code", ar: "عند واجهة متجر في الشارع، زبون يرفع هاتفه للدفع عبر رمز QR" },
-      title: { zh: "小摊也能用手机付款", en: "Even street stalls accept mobile payments", ar: "حتى البسطة الصغيرة تقبل الدفع بالهاتف" },
+      title: { zh: "手机付款：一张二维码，连起日常消费", en: "Paying by phone: one QR code across the day", ar: "الدفع بالهاتف: رمز واحد يصل مشترياتكم اليومية" },
       where: {
-        zh: "买水、喝茶、打车时，都能体验手机付款。",
-        en: "Buying water, stopping for tea, taking a taxi — all of them can be paid for with the phone.",
-        ar: "شراء الماء، وكوب الشاي، وسيارة الأجرة — كلها يمكن دفعها بالهاتف.",
+        zh: "落地后的第一瓶水、第一杯茶就能试；怎么绑卡写在「出发前准备」。",
+        en: "The first bottle of water or cup of tea after you land is enough to try it; how to set up a card is in “Before you fly”.",
+        ar: "أول زجاجة ماء أو كوب شاي بعد وصولكم يكفي للتجربة؛ وطريقة ربط البطاقة مشروحة في «قبل السفر».",
       },
       body: {
-        zh: "买一瓶水、点一杯茶，柜台上的二维码往往就能完成付款。打开支付宝扫码，核对金额后确认；有些店则由店员扫描你的付款码。不用找零钱，几笔小消费就能熟悉这种日常。",
-        en: "A bottle of water, a cup of tea — the QR code on the counter is usually all it takes. Open Alipay, scan it, check the amount and confirm; in some shops the assistant scans your payment code instead. No change to count, and a few small purchases are enough to get used to it.",
-        ar: "زجاجة ماء أو كوب شاي — غالبًا يكفي رمز QR على الطاولة. افتحوا «علي باي» وامسحوا الرمز، ثم تحقّقوا من المبلغ وأكّدوا؛ وفي بعض المتاجر يمسح العامل رمز الدفع الخاص بكم. لا فكّة تُحسب، وبضع مشتريات صغيرة تكفي لتعتادوا الأمر.",
+        zh: "茶楼结账、便利店买水、乘车付费，常常都能用同一部手机完成。央行 2024—2025 年报告显示，近九成受访者已使用数字支付。在广州，这种普及可以小到路边摊的一张收款码：金额确认后，交易就完成了。",
+        en: "Settling up at a teahouse, buying water at a convenience store, paying a fare — often all of them go through the same phone. A People's Bank of China report for 2024–2025 finds that nearly nine in ten respondents already use digital payments. In Guangzhou that reach goes all the way down to a single printed code at a street stall: confirm the amount, and the transaction is done.",
+        ar: "تسوية الحساب في بيت شاي، وشراء الماء من متجر صغير، ودفع أجرة الركوب — كثيرًا ما تتمّ كلها بالهاتف نفسه. ويُظهر تقرير لبنك الشعب الصيني للفترة 2024–2025 أن نحو تسعة من كل عشرة من المستطلَعين يستخدمون الدفع الرقمي بالفعل. وفي قوانغتشو يصل هذا الانتشار إلى رمز مطبوع واحد عند بسطة في الشارع: تؤكّدون المبلغ، فتتمّ المعاملة.",
       },
     },
     {
       id: "robot",
       imageKey: "hotel-lift-robot",
-      title: { zh: "会自己坐电梯的送物小车", en: "The trolley that takes the lift by itself", ar: "العربة التي تركب المصعد وحدها" },
+      title: { zh: "服务机器人：自己乘电梯的送物员", en: "Service robots: a courier that rides the lift", ar: "روبوتات الخدمة: ساعٍ يركب المصعد وحده" },
       where: {
         zh: "餐厅里推菜、酒店里送外卖和毛巾的都可能是它。入住时可以问一句前台有没有。",
         en: "It may be what brings dishes across a restaurant, or the takeaway and fresh towels to a hotel room. Worth asking at the front desk when you check in.",
         ar: "قد تكون هي ما ينقل الأطباق في المطعم، أو الطعام والمناشف إلى غرفة الفندق. ويستحقّ الأمر سؤالًا في الاستقبال عند الوصول.",
       },
       body: {
-        zh: "门铃响，门外站着一台一米来高的小车，盖子打开，里面是你点的东西。有意思的是它怎么上来的：它跟电梯是连着的，自己叫梯、自己进去、到楼层自己出来，中间要和人共用一部电梯。",
-        en: "The doorbell goes and a trolley about a metre high is standing outside; the lid opens and your order is inside. The interesting part is how it got up here: it talks to the lift, calls it, rides up and steps out at your floor — sharing that lift with people on the way.",
-        ar: "يرنّ جرس الباب فتجدون عربة بارتفاع متر تقريبًا واقفة في الخارج؛ ينفتح الغطاء وفي داخلها طلبكم. والمثير هو كيف وصلت إلى هنا: فهي متصلة بالمصعد، تستدعيه وتدخله وتخرج عند طابقكم — وتتشارك المصعد مع الناس في الطريق.",
+        zh: "有些酒店的送物机器人能联动电梯系统，自己叫梯、上楼，再通知客人取物。看它在走廊里绕过行人、找到房门，就能理解导航和楼宇系统如何配合。中国企业普渡披露，截至 2025 年全球累计出货已超过 12 万台商用服务机器人，应用包括配送与清洁。",
+        en: "In some hotels the delivery robot is linked to the lift system: it calls the lift itself, rides up, and then messages the guest to come and collect. Watching it steer around people in a corridor and find the right door makes plain how its navigation and the building's systems work together. Pudu, a Chinese manufacturer, reports cumulative global shipments of more than 120,000 commercial service robots by the end of 2025, used for tasks including delivery and cleaning.",
+        ar: "في بعض الفنادق يكون روبوت التوصيل موصولًا بنظام المصاعد: يستدعي المصعد بنفسه ويصعد، ثم يُشعر النزيل ليأخذ طلبه. ومشاهدته وهو يتفادى المارّة في الممرّ ويجد باب الغرفة الصحيح تُوضّح كيف يتكامل نظام ملاحته مع أنظمة المبنى. وتفيد شركة «بودو» الصينية بأن إجمالي شحناتها التراكمي عالميًّا تجاوز 120 ألف روبوت خدمة تجاري حتى نهاية 2025، تُستخدم في مهامّ منها التوصيل والتنظيف.",
       },
     },
     {
       id: "robotaxi",
       imageKey: "gxr-guangzhou",
-      title: { zh: "坐一次没有司机的车", en: "Ride in a car with no driver", ar: "اركبوا سيارة بلا سائق" },
+      title: { zh: "无人驾驶出租车：广州街头的 Robotaxi", en: "Robotaxi: driverless cars on Guangzhou streets", ar: "روبوتاكسي: سيارات بلا سائق في شوارع قوانغتشو" },
       where: {
         zh: "微信里搜小程序「WeRide Go」，能约的上下车点、价格与运营时间以应用当天显示为准。",
         en: "Search the WeChat mini-program “WeRide Go”; the pickup points, fares and hours it offers on the day are the ones that count.",
         ar: "ابحثوا في وي تشات عن تطبيق «WeRide Go» المصغّر؛ والمعتمد هو ما يعرضه التطبيق في يومه من نقاط ركوب وأسعار ومواعيد.",
       },
       body: {
-        zh: "方向盘自己转了半圈，转向灯亮起来，车汇进车流。GXR 这一款索性把前排的副驾驶座也取消了。\n做这件事的公司叫文远知行，总部就在广州，2025 年 9 月起在黄埔跑全无人的商业运营。",
-        en: "The wheel turns half a revolution, the indicator comes on, and the car slides into the traffic. On the GXR the front passenger seat has been left out altogether.\nThe company is WeRide, headquartered here in Guangzhou, running a fully driverless commercial service in Huangpu since September 2025.",
-        ar: "يدور المقود نصف دورة، ويُضاء ضوء الانعطاف، وتنساب السيارة إلى السير. وفي طراز GXR أُلغي مقعد الراكب الأمامي كذلك.\nالشركة هي «وي رايد» ومقرّها هنا في قوانغتشو، وتشغّل خدمة تجارية بلا سائق في هوانغبو منذ سبتمبر 2025.",
+        zh: "把驾驶位留空，让汽车自己完成一段城市道路行程，是 Robotaxi 最直观的不同。总部在广州的文远知行从 2019 年起在本地提供公开服务；2025 年 9 月又在黄埔推出全天 24 小时全无人商业运营，GXR 车型最多可坐 5 位乘客。",
+        en: "Leaving the driver's seat empty and letting the car complete a stretch of city road on its own is the most immediate difference a robotaxi makes. WeRide, headquartered in Guangzhou, has offered a public service here since 2019; in September 2025 it added a round-the-clock fully driverless commercial operation in Huangpu, with the GXR model seating up to five passengers.",
+        ar: "ترك مقعد السائق فارغًا وترك السيارة تُنهي مسارًا في شوارع المدينة بنفسها هو أوضح ما يميّز الروبوتاكسي. وتقدّم «وي رايد»، ومقرّها قوانغتشو، خدمة عامة هنا منذ 2019؛ وفي سبتمبر 2025 أضافت تشغيلًا تجاريًّا بلا سائق على مدار 24 ساعة في هوانغبو، ويتّسع طراز GXR لخمسة ركاب كحدّ أقصى.",
       },
     },
     {
       id: "drone-delivery",
       imageKey: "pazhou-drone",
-      title: { zh: "晚饭走的是另一条路", en: "Dinner takes the other route", ar: "العشاء يسلك طريقًا آخر" },
+      title: { zh: "无人机送餐：外卖飞过河涌", en: "Drone delivery: the takeaway flies over the water channel", ar: "التوصيل بالمسيّرات: الطلب يطير فوق القناة" },
       where: {
         zh: "想看看，可在地图中找华新中心一带的配送设施；能否下单体验，请查看现场的服务入口。",
         en: "To see it, look for the delivery facilities around Huaxin Centre on the map; whether you can order one yourself is a question for the service point on site.",
         ar: "لمشاهدتها، ابحثوا في الخريطة عن منشآت التوصيل قرب مركز هواشين؛ أما إمكانية الطلب بأنفسكم فيُسأل عنها عند نقطة الخدمة في الموقع.",
       },
       body: {
-        zh: "琶洲的外卖多了一条路线：保利广场、华新中心一带装了低空配送设施，无人机沿着河涌上方飞，避开地面的车流。海珠区 2026 年 2 月的报道里，送吧科技和淘宝闪购送的一单煲仔饭，八分钟到。\n你在地面散步时，晚饭可能正沿着身旁的河涌上空飞过。",
-        en: "Takeaway in Pazhou has a second route. Low-altitude delivery facilities have gone in around Poly Plaza and Huaxin Centre, and the drones fly above the water channels, clear of the traffic below. In a Haizhu district report from February 2026, an order of claypot rice flown by Songba Technology with Taobao Shangou arrived in eight minutes.\nWhile you are out walking, dinner may be flying along the channel beside you.",
-        ar: "لطلبات الطعام في بازو مسار ثانٍ. فقد رُكّبت منشآت للتوصيل المنخفض حول ساحة بولي ومركز هواشين، وتحلّق المسيّرات فوق القنوات المائية بعيدًا عن زحام الشارع. وفي تقرير لمنطقة هايتشو في فبراير 2026، وصل طلب أرز في قدر فخاري نفّذته «سونغبا» مع «تاوباو شانغو» في ثماني دقائق.\nوبينما تتمشّون، قد يكون العشاء يطير فوق القناة التي تسير بجانبكم.",
+        zh: "琶洲的外卖开始走「空中路线」：送吧科技与淘宝闪购在保利广场、华新中心一带布设配送设施，让无人机沿河涌上方运送餐食。海珠区 2026 年 2 月报道的一次配送中，一份煲仔饭 8 分钟抵达。楼下的取餐柜，把这段空中行程接回了日常生活。",
+        en: "Takeaway in Pazhou has started taking an air route: Songba Technology and Taobao Shangou have put delivery facilities in around Poly Plaza and Huaxin Centre so that drones can carry meals along the line of the water channels. In one delivery reported by Haizhu district in February 2026, an order of claypot rice arrived in eight minutes. The pick-up locker downstairs is where that flight rejoins ordinary life.",
+        ar: "بدأت طلبات الطعام في بازو تسلك «مسارًا جوّيًا»: فقد أقامت «سونغبا» و«تاوباو شانغو» منشآت توصيل حول ساحة بولي ومركز هواشين لتحمل المسيّرات الوجبات بمحاذاة القنوات المائية. وفي عملية توصيل نقلتها منطقة هايتشو في فبراير 2026، وصل طلب أرز في قدر فخاري خلال ثماني دقائق. وخزانة الاستلام في الأسفل هي حيث تعود تلك الرحلة الجوية إلى الحياة اليومية.",
       },
     },
     {
       id: "evtol",
       imageKey: "evtolair",
       imageAlt: { zh: "多旋翼的载人飞行器飞在江边公园上空，背后是成片的住宅楼", en: "A multirotor passenger aircraft over a riverside park, blocks of flats behind it", ar: "طائرة ركاب متعددة المراوح فوق حديقة على ضفة النهر، وخلفها مبانٍ سكنية" },
-      title: { zh: "两个座位，没有驾驶舱", en: "Two seats, no cockpit", ar: "مقعدان بلا قمرة قيادة" },
+      title: { zh: "载人飞行器：广州造的空中出租车", en: "The passenger aircraft: an air taxi built in Guangzhou", ar: "مركبة الركاب: تاكسي جوي صُنع في قوانغتشو" },
       where: {
-        zh: "黄埔有低空体验的场景；想去，先查亿航官方的场地与预约信息。这次行程里没有安排。",
+        zh: "黄埔有低空飞行体验的场景；想去，先查亿航官方的场地与预约信息。这次行程里没有安排。",
         en: "There are low-altitude flight experiences in Huangpu; if you want to go, start from EHang's own site and booking information. It is not part of this trip.",
         ar: "توجد تجارب طيران منخفض الارتفاع في هوانغبو؛ وإن أردتم الذهاب فابدؤوا من موقع «إي هانغ» الرسمي ومعلومات الحجز. وهي ليست ضمن هذه الرحلة.",
       },
       body: {
-        zh: "十六个旋翼一起转起来，机身离地，没有跑道，机上也没有飞行员 —— 舱里是两个乘客的位置，航线由地面设定。\n这架飞机叫 EH216-S，广州的亿航智能造的。",
-        en: "Sixteen rotors spin up together and the aircraft lifts off — no runway, and no pilot on board. Inside are two passenger seats, and the route is set from the ground.\nThe aircraft is the EH216-S, built by EHang in Guangzhou.",
-        ar: "تدور ستّ عشرة مروحة معًا فترتفع المركبة — بلا مدرج، وبلا طيّار على متنها. في الداخل مقعدان للركاب، والمسار يُحدَّد من الأرض.\nالطائرة هي EH216-S من إنتاج «إي هانغ» في قوانغتشو.",
+        zh: "广州企业亿航制造的 EH216-S，可以让两位乘客在没有机上驾驶员的情况下升空。它采用电动垂直起降，无需传统跑道；官网公布的最大设计速度为 130 公里/小时、最大航程 30 公里，面向短途空中出行。2025 年 3 月，其运营企业取得中国首批载人无人驾驶航空器运营合格证，这项技术也进入了获准商业运营的阶段。",
+        en: "The EH216-S, built by the Guangzhou company EHang, lifts two passengers with no pilot on board. It takes off and lands vertically on electric power, so it needs no conventional runway; EHang publishes a maximum design speed of 130 km/h and a maximum range of 30 km, which places it in short-distance air travel. In March 2025 its operators received China's first operator certificates for pilotless passenger aircraft, taking the technology into approved commercial service.",
+        ar: "مركبة EH216-S، التي تصنعها شركة «إي هانغ» في قوانغتشو، ترفع راكبَين دون طيّار على متنها. تقلع وتهبط عموديًّا بالطاقة الكهربائية فلا تحتاج إلى مدرج تقليدي؛ وتنشر الشركة سرعة تصميمية قصوى تبلغ 130 كم/س ومدى أقصى يبلغ 30 كم، وهو ما يضعها في نطاق التنقّل الجوي القصير. وفي مارس 2025 حصلت الشركات المشغّلة لها على أولى شهادات التشغيل في الصين لطائرات الركاب بلا طيّار، فدخلت هذه التقنية مرحلة التشغيل التجاري المعتمَد.",
       },
     },
   ],
@@ -2112,18 +2126,22 @@ export const CITY_TECH: {
     { label: { zh: "文远知行：GXR 产品页（取消前排副驾驶座）", en: "WeRide: the GXR product page (no front passenger seat)", ar: "وي رايد: صفحة طراز GXR (بلا مقعد راكب أمامي)" }, url: "https://www.weride.ai/posts/anh4opgkfdcl7ag4hurtm5ds" },
     { label: { zh: "广州市政府：全球首张载人 eVTOL 运营合格证落地广州黄埔", en: "Guangzhou government: the world's first passenger-eVTOL operator certificate, Huangpu", ar: "حكومة قوانغتشو: أول شهادة تشغيل لطائرة ركاب كهربائية في العالم، هوانغبو" }, url: "https://www.gz.gov.cn/ysgz/xwdt/ysdt/content/post_10193139.html" },
     { label: { zh: "亿航智能：运营合格证颁发给运营公司（2025-03-30）", en: "EHang: the operator certificates go to operating companies (30 March 2025)", ar: "إي هانغ: شهادات التشغيل تُمنح للشركات المشغّلة (30 مارس 2025)" }, url: "https://www.ehang.com/cn/news/1195.html" },
+    { label: { zh: "亿航智能：EH216-S 产品页（最大设计速度 130 km/h、最大航程 30 km）", en: "EHang: the EH216-S product page (130 km/h design speed, 30 km range)", ar: "إي هانغ: صفحة طراز EH216-S (سرعة تصميمية 130 كم/س، مدى 30 كم)" }, url: "https://www.ehang.com/ehang216s/" },
+    { label: { zh: "亿航智能：EH216-S 的适航与运营合格证（2025 年 3 月首批）", en: "EHang: EH216-S airworthiness and operator certification (first batch, March 2025)", ar: "إي هانغ: صلاحية EH216-S للطيران وشهادات التشغيل (الدفعة الأولى، مارس 2025)" }, url: "https://www.ehang.com/ehang216s/airworthiness/" },
     { label: { zh: "普渡：酒店配送机器人", en: "Pudu: hospitality delivery robots", ar: "بودو: روبوتات التوصيل الفندقية" }, url: "https://www.pudurobotics.com/en/solutions/hospitality" },
+    { label: { zh: "普渡：截至 2025 年全球累计出货超过 12 万台（2026-02-05）", en: "Pudu: cumulative global shipments passed 120,000 units by 2025 (5 February 2026)", ar: "بودو: تجاوز إجمالي الشحنات العالمية 120 ألف وحدة حتى 2025 (5 فبراير 2026)" }, url: "https://www.pudurobotics.com/news/pudu-robotics-scaled-120000-units-100-percent-growth-2025" },
     { label: { zh: "海珠区政府：琶洲的低空配送（2026-02-05）", en: "Haizhu district government: low-altitude delivery in Pazhou (5 February 2026)", ar: "حكومة منطقة هايتشو: التوصيل المنخفض في بازو (5 فبراير 2026)" }, url: "https://www.haizhu.gov.cn/hzdt/ztlm/dkjj/hhr/cjhx/content/post_10678783.html" },
     { label: { zh: "中国政府网：外籍人士在华支付指南", en: "gov.cn: paying in China as a foreign visitor", ar: "بوابة الحكومة الصينية: الدفع في الصين للزائر الأجنبي" }, url: "https://english.www.gov.cn/2025special/bizexpatsinchina2025" },
-    { label: { zh: "人民网广东：珠三角新增网约车须为新能源汽车", en: "People's Daily Guangdong: new ride-hailing cars in the Delta must be NEVs", ar: "صحيفة الشعب قوانغدونغ: سيارات النقل التشاركي الجديدة في الدلتا يجب أن تكون كهربائية" }, url: "http://gd.people.com.cn/n2/2024/1212/c123932-41073362.html" },
+    { label: { zh: "《广州市人民政府公报》2025 年第 1 期政策解读（第 42 页）：在营运巡游出租车 100% 纯电动", en: "Guangzhou municipal gazette, 2025 no. 1, policy notes (p. 42): the street-hail taxi fleet in service is 100% electric", ar: "الجريدة الرسمية لحكومة قوانغتشو، العدد الأول 2025، شرح السياسات (ص 42): أسطول سيارات الأجرة العامل كهربائي بنسبة 100%" }, url: "https://www.gz.gov.cn/attachment/7/7746/7746752/10065837.pdf" },
+    { label: { zh: "中国人民银行：《中国普惠金融指标分析报告（2024—2025）》", en: "People's Bank of China: Financial Inclusion Indicators report, 2024–2025", ar: "بنك الشعب الصيني: تقرير مؤشرات الشمول المالي 2024–2025" }, url: "https://www.pbc.gov.cn/xindaishichangsi/5443861/5443865/5443892/5957f8d15a824e9e88d01710873482d3/2025110711361912922.pdf" },
   ],
 };
 
 export const PAZHOU: { lead: L10n; paragraphs: L10n[]; sources: { label: L10n; url: string }[] } = {
   "lead": {
-    "zh": "先认识你住的琶洲：这里有广交会的展馆、沿江的办公楼，也有一座四百多年的古塔。",
-    "en": "First, the district you are staying in: Pazhou has the Canton Fair halls, office towers along the river, and a pagoda more than four hundred years old.",
-    "ar": "أولًا، الحيّ الذي تقيمون فيه: في بازو قاعات معرض كانتون، وأبراج مكاتب على النهر، وباغودا عمرها أكثر من أربعمئة عام."
+    "zh": "先认识你住的琶洲：这里有广交会的展馆、沿江的写字楼，江边还留着几座旧日的砖塔。",
+    "en": "First, the district you are staying in: Pazhou has the Canton Fair halls, office towers along the river, and a few old brick pagodas still standing on the bank.",
+    "ar": "أولًا، الحيّ الذي تقيمون فيه: في بازو قاعات معرض كانتون، وأبراج مكاتب على النهر، وعلى الضفة بضع باغودات قديمة من الآجر ما زالت قائمة."
   },
   "paragraphs": [
     {
@@ -2132,14 +2150,19 @@ export const PAZHOU: { lead: L10n; paragraphs: L10n[]; sources: { label: L10n; u
       "ar": "هذا هو الجزء من قوانغتشو الذي يستقبل المشترين الدوليين. فقاعات معرض كانتون تمتدّ على طريق يوى جيانغ الأوسط، وتضمّ الأبراج المحيطة بها شركات تجارة إلكترونية واقتصاد رقمي. نهارًا هو حيّ عصري مزدحم، وفي المساء يمكنكم النزول إلى النهر للتمشّي."
     },
     {
-      "zh": "这片江岸与贸易的联系，比眼前的高楼早得多。琶洲塔始建于 1597 年、1600 年落成，当年为溯珠江而来的商船指引方向。今天它仍立在树林间，像是现代城区里留下的一页旧航海图。",
-      "en": "This bank's connection with trade is much older than the towers in front of you. The Pazhou pagoda was begun in 1597 and finished in 1600, and it guided the merchant ships coming up the Pearl River. It still stands among the trees today, like a page of an old sea chart left inside a modern district.",
-      "ar": "صلة هذه الضفة بالتجارة أقدم بكثير من الأبراج التي أمامكم. فقد بُدئ بناء باغودا بازو عام 1597 واكتملت عام 1600، وكانت ترشد السفن التجارية الصاعدة في نهر اللؤلؤ. وما زالت قائمة اليوم بين الأشجار، كصفحة من خريطة بحرية قديمة بقيت داخل حيّ عصري."
+      "zh": "这片江岸与贸易的联系，比眼前的高楼早得多。琶洲塔始建于 1597 年、1600 年落成，当年为溯珠江而来的商船指引方向。今天它仍立在树林之间，四周已经换成了展馆和写字楼。",
+      "en": "This bank's connection with trade is much older than the towers in front of you. The Pazhou pagoda was begun in 1597 and finished in 1600, and it guided the merchant ships coming up the Pearl River. It still stands among the trees, with exhibition halls and offices now all around it.",
+      "ar": "صلة هذه الضفة بالتجارة أقدم بكثير من الأبراج التي أمامكم. فقد بُدئ بناء باغودا بازو عام 1597 واكتملت عام 1600، وكانت ترشد السفن التجارية الصاعدة في نهر اللؤلؤ. وما زالت قائمة بين الأشجار، وقد صارت حولها اليوم قاعات المعارض والمكاتب."
     },
     {
-      "zh": "想看看古塔，在地图里搜「琶洲塔」。如果对远来商人的故事感兴趣，老城的光塔路还有另一段与阿拉伯世界相连的历史。",
-      "en": "To see the pagoda, search 琶洲塔 in your map app. And if the story of the merchants who came from far away interests you, Guangta Road in the old city holds another chapter of it, one tied to the Arab world.",
-      "ar": "لرؤية الباغودا ابحثوا عن 琶洲塔 في تطبيق الخرائط. وإن شدّتكم قصة التجار القادمين من بعيد، ففي شارع قوانغتا بالمدينة القديمة فصل آخر منها، فصلٌ موصول بالعالم العربي."
+      "zh": "从琶洲沿江向西，同一段海珠江岸上还立着另一座老砖塔 —— 赤岗塔。上面那张照片拍的就是它：前面一层层出檐的是赤岗塔，正后方细腰收束的是广州塔，再往两边是珠江新城的玻璃高楼。古与今叠在一个画面里，这一段江岸就是这样。",
+      "en": "Follow the river west from Pazhou and another old brick pagoda stands on the same Haizhu bank: the Chigang pagoda. That is what the photograph above shows — the tiered pagoda in front is Chigang, the slender waisted tower directly behind it is the Canton Tower, and the glass towers of Zhujiang New Town spread out on either side. Old and new in one frame: that is what this stretch of riverbank looks like.",
+      "ar": "اتبعوا النهر غربًا من بازو تجدوا على ضفة هايتشو نفسها باغودا قديمة أخرى من الآجر: باغودا تشيغانغ. وهي ما تُظهره الصورة أعلاه — الباغودا المتدرّجة في المقدّمة هي تشيغانغ، والبرج النحيل المشدود الخصر خلفها مباشرةً هو برج كانتون، وعلى الجانبين أبراج تشوجيانغ الجديدة الزجاجية. القديم والحديث في إطار واحد: هكذا يبدو هذا الامتداد من الضفة."
+    },
+    {
+      "zh": "想看琶洲塔，在地图里搜「琶洲塔」。如果对远来商人的故事感兴趣，老城的光塔路还有另一段与阿拉伯世界相连的历史。",
+      "en": "To see the Pazhou pagoda itself, search 琶洲塔 in your map app. And if the story of the merchants who came from far away interests you, Guangta Road in the old city holds another chapter of it, one tied to the Arab world.",
+      "ar": "ولرؤية باغودا بازو نفسها ابحثوا عن 琶洲塔 في تطبيق الخرائط. وإن شدّتكم قصة التجار القادمين من بعيد، ففي شارع قوانغتا بالمدينة القديمة فصل آخر منها، فصلٌ موصول بالعالم العربي."
     }
   ],
   "sources": [
@@ -2180,25 +2203,25 @@ export const PAZHOU: { lead: L10n; paragraphs: L10n[]; sources: { label: L10n; u
 
 export const FOOD_CULTURE: { lead: L10n; paragraphs: L10n[]; sources: { label: L10n; url: string }[] } = {
   "lead": {
-    "zh": "在广州，吃是正经事：早茶慢慢坐，烧味看皮，甜品讲究一个滑。",
-    "en": "Eating is taken seriously in Guangzhou: a long morning over tea, roast meats judged by their skin, desserts by how smoothly they set.",
-    "ar": "الطعام في قوانغتشو شأن جادّ: صباح طويل مع الشاي، ومشاوٍ يُحكم عليها بجلدها، وحلويات بنعومة قوامها."
+    "zh": "食在广州：把鲜味、火候和慢时光端上桌。",
+    "en": "Eat in Guangzhou: freshness, the judgement of heat, and unhurried time, all brought to the table.",
+    "ar": "الأكل في قوانغتشو: طزاجة، وإتقان في النار، ووقت غير مستعجل — كلّها تُقدَّم على المائدة."
   },
   "paragraphs": [
     {
-      "zh": "掀开蒸笼盖，热气先扑到脸上。虾饺的皮是半透明的，隔着能看见里面那只粉红的虾；旁边一桌人边聊边夹，一顿早茶从九点吃到十一点也很平常。",
-      "en": "Lift the lid off a steamer and the heat reaches your face first. A prawn dumpling's skin is translucent enough to show the pink curl inside; at the next table people talk and pick at the same time, and a morning that runs from nine to eleven is nothing unusual.",
-      "ar": "ارفعوا غطاء السلة فيصل إليكم البخار أولًا. قشرة زلابية الروبيان شفّافة بما يكفي لتُظهر لونها الوردي في الداخل؛ وعلى الطاولة المجاورة يتحدث الناس ويأكلون في الوقت نفسه، وصباحٌ يمتدّ من التاسعة إلى الحادية عشرة أمر عادي."
+      "zh": "清蒸鱼用姜葱和豉油衬出鲜味，烧鹅靠火候做出脆皮与肉香，干炒牛河则追求热锅快炒带出的「镬气」。粤菜的讲究，往往藏在看似简单的一道菜里。",
+      "en": "A steamed fish uses ginger, spring onion and soy to set off its freshness; roast goose depends on judgement of heat for crisp skin and savoury meat; beef chow fun is after the wok hei that only a fast toss in a hot pan gives. What Cantonese cooking cares about is usually hidden inside a dish that looks simple.",
+      "ar": "السمك المطهوّ بالبخار يستعين بالزنجبيل والبصل الأخضر والصويا لإبراز طزاجته، والإوزّ المشوي يعتمد على إتقان النار ليجمع بين الجلد المقرمش ونكهة اللحم، وشعيرية اللحم المقلية تسعى إلى «ووك هي» الذي لا يمنحه سوى تقليب سريع في مقلاة حارّة. وما يهتمّ به المطبخ الكانتوني يختبئ عادةً داخل طبق يبدو بسيطًا."
     },
     {
-      "zh": "点菜可以按三路走：清蒸留鲜，一条鱼上桌，主味就是姜丝、葱丝和一勺豉油；烧味讲皮，烧鹅、乳鸽咬下去先是脆的；甜品讲滑，姜撞奶和双皮奶都凝成嫩滑的一碗。喜欢清淡、酥脆还是甜口，可以从这里找到起点。",
-      "en": "Ordering splits neatly three ways. Steamed, for freshness: a whole fish whose main flavours are shredded ginger, spring onion and a spoon of soy. Roasted, for the skin: goose and squab that crack before they give. And the milk desserts, for texture — softly set, smooth under the spoon. Whether you lean towards the clean-tasting, the crisp or the sweet, this is where to start.",
-      "ar": "يتوزّع الطلب في ثلاثة اتجاهات. المطهوّ بالبخار للطزاجة: سمكة كاملة نكهتها الأساسية شرائح الزنجبيل والبصل الأخضر وملعقة صويا. والمشويّ من أجل الجلد: إوزّ وحمام يتكسّر جلدهما قبل أن يلين. وحلويات الحليب من أجل القوام — متماسكة طريّة، ناعمة تحت الملعقة. وسواء ملتم إلى الطعم الصافي أو المقرمش أو الحلو، فمن هنا تبدؤون."
+      "zh": "早茶是另一种节奏。一壶茶配几笼点心，边吃边聊，广州人称为「叹早茶」，「叹」就是享受。蒸笼揭开，茶杯续满，一顿饭也是留给家人和朋友的相聚时光。",
+      "en": "Yum cha is a different rhythm. A pot of tea and a few steamers, eaten and talked over at the same time; the Cantonese call it taan jou cha, and taan means to enjoy. Lids come off the steamers, cups are refilled, and the meal doubles as time set aside for family and friends.",
+      "ar": "اليوم تشا إيقاع آخر. إبريق شاي وبضع سلال بخار، يُؤكل ويُتحدَّث في آن؛ ويسمّيه الكانتونيون «تان تشاو تشا»، و«تان» تعني الاستمتاع. تُرفع أغطية السلال، وتُملأ الأكواب، فتصير الوجبة أيضًا وقتًا مخصّصًا للعائلة والأصدقاء."
     },
     {
-      "zh": "先认识几道菜，再按喜欢的口味找餐厅，会比对着陌生菜单猜更轻松。点单前请店员确认肉类来源、猪油和料酒，清真餐厅另见「礼拜与清真餐」。",
-      "en": "Getting to know a few dishes first, then choosing a restaurant by the flavours you like, is easier than guessing at an unfamiliar menu. Before you order, ask the staff about the meat, about lard and about cooking wine; halal restaurants are listed under “Prayer and halal food”.",
-      "ar": "التعرّف إلى بضعة أطباق أولًا ثم اختيار المطعم حسب النكهات التي تحبّونها أسهل من التخمين أمام قائمة غريبة. وقبل الطلب اسألوا العاملين عن مصدر اللحم وعن شحم الخنزير ونبيذ الطهي؛ أما المطاعم الحلال فمذكورة في «الصلاة والطعام الحلال»."
+      "zh": "这座商贸城市也把各地口味留了下来：潮汕牛肉火锅、川菜和东南亚料理，都能在广州找到。从清鲜到香辣，从茶楼到火锅，一趟广州之行可以换着口味慢慢尝。",
+      "en": "A city built on trade has kept other places' flavours too: Chaoshan beef hotpot, Sichuan cooking and Southeast Asian food are all here. From the clean and fresh to the fragrant and fiery, from the teahouse to the hotpot, a trip to Guangzhou can move between tastes at its own pace.",
+      "ar": "ومدينةٌ قامت على التجارة احتفظت أيضًا بنكهات أماكن أخرى: قدر لحم تشاوشان، والمطبخ السيتشواني، وأطباق جنوب شرق آسيا، كلّها موجودة هنا. من الصافي الطازج إلى العطري الحارّ، ومن بيت الشاي إلى القدر الساخن، يمكن لرحلة إلى قوانغتشو أن تتنقّل بين المذاقات على مهلها."
     }
   ],
   "sources": [
@@ -2329,11 +2352,27 @@ export const MOSQUES: PlaceCard[] = [
   }
 ];
 
-/** 9/25 是 Reham 这一周在广州的周五。各寺主麻时间不同，实际以当天为准。 */
+/**
+ * 这一章的开场：先说清广州的穆斯林社区是现在还在的，不是史书里的一段；
+ * 再说安排一次礼拜和一顿饭大致是怎么回事。具体的街名、点菜怎么问在 HALAL_WHERE，
+ * 这一周的主麻在 JUMUAH_NOTE —— 三处各说一次，不重复。
+ */
+export const HALAL_INTRO: L10n[] = [
+  {
+    zh: "广州的穆斯林社区，有古老的来路，也有今天的日常。清真寺是礼拜和相聚的地方，清真馆子也发展出了牛肉烧麦等粤式风味。在这里，可以保留熟悉的生活方式，也尝到广州的本地味道。下面的清真寺与餐馆分布在不同街区，可按中文地址安排礼拜和用餐路线。",
+    en: "Guangzhou’s Muslim community has both a long history behind it and an everyday life today. The mosques are places of prayer and of gathering, and the halal restaurants have grown their own Cantonese repertoire — beef siumai among them. Here you can keep to familiar ways and still taste the food of the city. The mosques and restaurants below are in different neighbourhoods; use the Chinese addresses to plan a route for prayer and a meal.",
+    ar: "لمجتمع المسلمين في قوانغتشو تاريخ طويل خلفه، وحياة يومية اليوم. فالمساجد أماكن للصلاة واللقاء، والمطاعم الحلال طوّرت مذاقها الكانتوني الخاص — ومنه سيوماي اللحم البقري. وهنا يمكنكم الحفاظ على ما اعتدتموه وتذوّق طعام المدينة في الوقت نفسه. والمساجد والمطاعم أدناه في أحياء مختلفة؛ استعينوا بالعناوين الصينية لترتيب مسار الصلاة والطعام.",
+  },
+];
+
+/**
+ * 9/25（周五）落在这趟行程里。面向全体，不是写给某一个人的：
+ * 谁打算参加主麻，就按这条去确认时间。各寺主麻时间不同，实际以当天为准。
+ */
 export const JUMUAH_NOTE: L10n = {
-  zh: "9 月 25 日是 Reham 这一周在广州的周五。各寺的主麻时间不一样，前一天问一下清真寺当天的时间，再按路程留出往返的余量。",
-  en: "Friday 25 September falls inside Reham’s week in Guangzhou. Jumu‘ah times vary from mosque to mosque, so ask the mosque the day before and leave room in the schedule for the journey each way.",
-  ar: "تقع الجمعة 25 سبتمبر ضمن أسبوع Reham في قوانغتشو. وتختلف مواقيت صلاة الجمعة من مسجد إلى آخر، فاسألي المسجد في اليوم السابق واتركي في الجدول وقتًا للذهاب والعودة.",
+  zh: "这趟行程中的周五是 9 月 25 日。计划参加主麻的朋友，请提前向所选清真寺确认当天时间，并留出往返路程。",
+  en: "The Friday of this trip is 25 September. If you plan to attend Jumu‘ah, confirm the time in advance with the mosque you choose, and allow for the journey each way.",
+  ar: "الجمعة في هذه الرحلة هي 25 سبتمبر. ومن ينوي حضور صلاة الجمعة فليتأكّد مسبقًا من المسجد الذي يختاره بشأن وقتها في ذلك اليوم، وليحسب وقت الطريق ذهابًا وإيابًا.",
 };
 
 export const HALAL_DINING: PlaceCard[] = [

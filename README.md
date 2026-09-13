@@ -224,7 +224,8 @@ Li/Qiuting、Rahma、Reham 各自一行。选中单人时首列只写那一个�
 | 排版 | `components/trip/ui.tsx` 的 `TALL_PHOTOS` / `photoFit()` | 竖图与近方图按比例放全、不裁；横图才按给定比例裁（只剩小缩略图在用） |
 | 排版 | `components/trip/ui.tsx` 的 `Figure` | 成幅照片都走它：按原比例放全、永不 `object-cover`，手机限高约 240px、桌面 320px，带三语图说 |
 | 图片 | `scripts/guide-photos.json` → `scripts/build-guide-photos.mjs` → `lib/guide-photos.ts` | 第二批照片的清单（来源页、作者、授权、三语 alt 与图说）、压缩脚本（最长边 1400、不放大不裁切）与生成物。**只手写清单那一份** |
-| 图片 | `lib/photos.ts` | 把 `lib/image-credits.ts`（老脚本生成）与 `lib/guide-photos.ts` 合成一张表：`IMG`、尺寸、alt、图说、授权。组件只 import 这一份 |
+| 图片 | `lib/selected-photos.ts` | 第三批：**用户给的原图与不走压缩脚本的官网素材**，**这一份是手写的**。原图常规 copy 入仓（不重编码、不缩放、不裁剪、不抹画面里的水印），因此不受「最长边 1400」那条限制；`source: "owner"` 写「用户提供」且没有 `page`（「图片来源」里只写文字不挂链接），`source: "official"` 只写来源页与提供方，两种都不冒充 CC |
+| 图片 | `lib/photos.ts` | 把上面三份合成一张表：`IMG`、尺寸、alt、图说、授权。组件只 import 这一份 |
 
 组件：`components/trip/`
 （`trip-view.tsx` 壳 + 固定栈（页头：印章 / 人员下拉 / 语言，加两个标签）+
@@ -329,7 +330,8 @@ node scripts/build-guide-photos.mjs [输入目录]   # 压第二批照片并重�
 
 照片重生成：原图不入仓，按 `scripts/guide-photos.json` 里每条的 `assetUrl` 取回同名文件
 放进输入目录（默认 `/tmp/guangzhou-polish-photos`），再跑上面那条。缺文件的会跳过并提示，
-已生成的 jpg 不动。
+已生成的 jpg 不动。**这条脚本只管第二批** —— `lib/selected-photos.ts` 那一份是手写的，
+文件直接 copy 进 `public/images/`，不进压缩管线。
 
 检查器能证明内容没掉、口径没跑，**证明不了好不好看** —— 视觉与交互仍要在真机
 390px 上过一遍中文 / English / العربية。

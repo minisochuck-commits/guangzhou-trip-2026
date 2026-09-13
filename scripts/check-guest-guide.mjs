@@ -24,14 +24,14 @@ const checkLocales = (value) => {
 for (const key of [
   'PREP', 'CITY_STORY', 'CITY_SCALE', 'CITY_TECH', 'PAZHOU', 'RETAIL_STUDY',
   'FOOD_CULTURE', 'FOOD_NOTES', 'MOSQUES', 'ROUTES', 'CULTURE_NOTES',
-  'HALAL_WHERE', 'HALAL_DINING', 'JUMUAH_NOTE', 'OFFICIAL_LINKS', 'PHRASES',
-  'MINISO_IN_GZ',
+  'HALAL_INTRO', 'HALAL_WHERE', 'HALAL_DINING', 'JUMUAH_NOTE', 'OFFICIAL_LINKS',
+  'PHRASES', 'MINISO_IN_GZ',
 ]) checkLocales(data[key]);
 // Routes are guest-facing copy too: the rejected wording must not survive there either.
 const copy = JSON.stringify([
   data.CITY_STORY, data.CITY_SCALE, data.CITY_TECH, data.RETAIL_STUDY, data.FOOD_CULTURE,
-  data.FOOD_NOTES, data.ROUTES, data.CULTURE_NOTES, data.PAZHOU, data.HALAL_WHERE, data.MOSQUES,
-  data.MINISO_IN_GZ,
+  data.FOOD_NOTES, data.ROUTES, data.CULTURE_NOTES, data.PAZHOU, data.HALAL_INTRO,
+  data.HALAL_WHERE, data.JUMUAH_NOTE, data.MOSQUES, data.MINISO_IN_GZ,
 ]);
 for (const rejected of [
   '值得写进报告', '给做商场的人', '做商场的人', '超过埃及全国', '全球至今只有六',
@@ -80,6 +80,37 @@ for (const rejected of [
   '美团', 'Meituan',
   '几乎每一辆都是电动', '六车道', '江对岸那一座',
   '几乎不会错', 'rarely go wrong', '一个人吃半只',
+  /*
+   * 2026-09-13, the owner read the chapters end to end and named what was wrong:
+   *   a heading has to say what the thing IS before it tries to be interesting —
+   *   "dinner takes the other route" and "two seats, no cockpit" were teasers that
+   *   left the reader guessing, and the second one stated a gimmick with no premise;
+   *   the payment line must not be pushed back to "nobody takes cash" or to the old
+   *   86% with no year on it — the People's Bank figure is about digital payment as a
+   *   whole (mobile and online banking, UnionPay, Alipay, WeChat Pay), not QR codes;
+   *   the electric-taxi figure covers the street-hail fleet in service, and must never
+   *   be widened to every car, every ride-hailing car or "anyone can experience it";
+   *   the food chapter opened on a slogan ("eating is serious business here") that
+   *   answered nothing.
+   */
+  '晚饭走的是另一条路', 'Dinner takes the other route',
+  '两个座位，没有驾驶舱', 'Two seats, no cockpit',
+  '吃是正经事', '烧味看皮',
+  '不收现金', '只收码', 'nobody takes cash', 'no one carries cash',
+  '86%', '百分之八十六',
+  '全广州的车都是电动', '每一辆车都是电动', '所有出租车和网约车',
+  '人人都能体验', '谁都能坐上', 'anyone can ride one',
+  /*
+   * 2026-09-13 second pass, the owner on the technology draft: a fact should explain the
+   * life in front of the reader. What he struck out was the copy that overreached instead
+   * — absolutes ("every counter", "the cheapest one", "a whole city fleet"), telling a
+   * stranger what they will feel, editorial self-defence inside guest copy, and the food
+   * chapter's newly invented certainties.
+   */
+  '贴在每一个柜台', '最便宜的那一种', '把找零', '愣一秒', '一整座城市',
+  '难的从来不是', '这不是一场演示', '不是每一单的承诺', '真正的意思是',
+  '一块空地就能当起降点', '不是发给飞机',
+  '当天到', '差几秒就是另一个味道', '不设防', '从九点坐到十一点',
 ]) assert(!copy.includes(rejected), `Rejected wording: ${rejected}`);
 
 /*
@@ -139,7 +170,6 @@ for (const photo of GUIDE_PHOTOS) {
 // The pictures that carry a place: the city chapters, the tomb, Parc Central, and the
 // three technology items the owner verified.
 for (const [key, where] of [
-  ['pazhou-pagoda', guideView],
   ['huaisheng-minaret', guideView],
   // 2026-09-12, the owner: the tower going up is the picture he asked for, and the
   // store on opening day stays with the paragraph that points at it.
@@ -152,6 +182,57 @@ const techPhotos = Object.fromEntries(data.CITY_TECH.items.map((item) => [item.i
 assert.equal(techPhotos.robotaxi, 'gxr-guangzhou', 'The driverless ride shows the GXR photographed in Guangzhou');
 assert.equal(techPhotos.robot, 'hotel-lift-robot', 'The delivery robot shows the lift photo');
 assert.equal(techPhotos['drone-delivery'], 'pazhou-drone', 'The drone item shows the Pazhou flight, not a photo from another city');
+
+/*
+ * 2026-09-13: the owner sent his own photograph for the Pazhou chapter, so there is now a
+ * third photo list — lib/selected-photos.ts, and it is the only one written by hand. What it
+ * has to keep honest:
+ *   the file is copied in as delivered (no re-encode, no resize, no crop, and the
+ *   photographer's watermark in the frame is left alone), so the 1400px ceiling that the
+ *   compression script enforces does not apply here — the recorded size must simply match
+ *   the file that shipped;
+ *   the credit says "用户提供" and nothing else: no CC licence, no Wikimedia, and no
+ *   invented source page, which is why an owner photo carries no `page` at all;
+ *   the picture is NOT the Pazhou pagoda. It is the Chigang pagoda with the Canton Tower
+ *   behind it, so the caption names both towers and the chapter text says so in words.
+ */
+const { SELECTED_PHOTOS } = await evaluate(fs.readFileSync('lib/selected-photos.ts', 'utf8'));
+assert(SELECTED_PHOTOS.length >= 2, 'The hand-written photo list keeps the owner photo and the soup photo');
+for (const photo of SELECTED_PHOTOS) {
+  for (const field of ['alt', 'caption']) {
+    for (const lang of ['zh', 'en', 'ar']) {
+      assert(photo[field][lang]?.trim(), `${photo.key}: missing ${lang} ${field}`);
+    }
+  }
+  assert(fs.existsSync(`public/${photo.file}`), `${photo.key}: the file is missing`);
+  assert(photo.artist.trim(), `${photo.key} needs the provider`);
+  if (photo.source === 'owner') {
+    assert.equal(photo.artist, '用户提供', `${photo.key}: an owner photo is credited to the owner, not to an author we made up`);
+    assert(!photo.page, `${photo.key}: an owner photo has no source page — do not invent one`);
+  } else {
+    assert(/^https?:\/\//.test(photo.page ?? ''), `${photo.key} comes from a source page and must link it`);
+  }
+  assert(!photo.licenseUrl, `${photo.key}: a hand-registered photo must not link a licence it does not have`);
+  assert(!/creative ?commons|CC BY|CC0|wikimedia/i.test(`${photo.license} ${photo.artist}`), `${photo.key} must not be dressed up as CC or Wikimedia`);
+}
+assert(!fs.readFileSync('lib/selected-photos.ts', 'utf8').includes('自动生成'), 'lib/selected-photos.ts is hand-written; it must not claim to be generated');
+// The Pazhou chapter carries the owner's photo, and nothing renders the old aerial again.
+assert(guideView.includes('chigang-canton-tower'), "The Pazhou chapter carries the owner's photograph");
+assert(!/pazhou:\s*"pazhou-pagoda"/.test(guideView), 'The Pazhou chapter photo was replaced, not left behind');
+const chigang = SELECTED_PHOTOS.find((photo) => photo.key === 'chigang-canton-tower');
+assert(chigang, 'The Chigang photograph is registered in the owner list');
+for (const [lang, ...needles] of [['zh', '赤岗塔', '广州塔'], ['en', 'Chigang', 'Canton Tower'], ['ar', 'تشيغانغ', 'كانتون']]) {
+  for (const needle of needles) {
+    assert(chigang.caption[lang].includes(needle), `The ${lang} caption names both towers: ${needle}`);
+  }
+}
+// The text may not let the picture pass for the Pazhou pagoda, and it may not guess at a
+// walking distance between the two — nobody measured one.
+const pazhouCopy = JSON.stringify(data.PAZHOU);
+assert(pazhouCopy.includes('赤岗塔') && pazhouCopy.includes('Chigang'), 'The Pazhou chapter says in words which pagoda is in the photograph');
+for (const guessed of ['步行十分钟', '走过去几分钟', 'a short walk from', 'minutes on foot', '就在酒店门口']) {
+  assert(!pazhouCopy.includes(guessed), `No one measured this: ${guessed}`);
+}
 
 /*
  * Every photograph says what it shows, in all three languages. An empty alt tells a
@@ -245,6 +326,149 @@ for (const url of [
   'haizhu.gov.cn', // the Pazhou low-altitude delivery report of 5 February 2026
   'ehang.com/cn/news/1195', // the operator certificates went to operating companies
 ]) assert(allSources.includes(url), `Missing the source behind a new story: ${url}`);
+
+/*
+ * 2026-09-13, the owner: the technology chapter had been stripped of the figures that gave
+ * it weight, and what was left read as six disconnected teasers. Each item now carries a
+ * checked number, what the number means, and a way in — and each number is pinned to the
+ * source and the scope it actually came from. These assertions exist because the scope is
+ * exactly what a later rewrite tends to lose.
+ */
+const techSources = JSON.stringify(data.CITY_TECH.sources);
+for (const [url, why] of [
+  ['gz.gov.cn/attachment/7/7746/7746752/10065837.pdf', 'the municipal gazette behind the 100% electric street-hail fleet'],
+  ['pbc.gov.cn/xindaishichangsi/', "the People's Bank report behind the digital-payment figure"],
+  ['ir.weride.ai/news-releases', 'the WeRide announcement behind the round-the-clock driverless service'],
+  ['haizhu.gov.cn', 'the Haizhu report behind the eight-minute claypot rice'],
+  ['ehang.com/ehang216s/', "EHang's own EH216-S figures"],
+  ['pudurobotics.com/news/', "Pudu's own shipment figure"],
+]) assert(techSources.includes(url), `The technology chapter lost the source behind a number: ${why}`);
+const techById = Object.fromEntries(data.CITY_TECH.items.map((item) => [item.id, item]));
+assert.equal(data.CITY_TECH.items.length, 6, 'Six items: three you meet by walking around, three you go and look for');
+for (const [id, lang, needle, why] of [
+  ['ev-taxi', 'zh', '巡游出租车', 'the electric figure is about the street-hail fleet, not every car in the city'],
+  ['ev-taxi', 'zh', '2025 年 1 月', 'the gazette is dated, so nobody reads it as a claim about today by default'],
+  ['ev-taxi', 'en', 'street-hail', 'the English keeps the same scope as the Chinese'],
+  ['cashless', 'zh', '近九成', 'the payment figure is the one the report gives'],
+  ['cashless', 'zh', '数字支付', 'digital payment is the category measured — not QR codes alone'],
+  ['robot', 'zh', '12 万', "Pudu's cumulative shipments, the figure that gives the robots their scale"],
+  ['robot', 'zh', '截至 2025 年', 'cumulative to 2025, not one year of sales'],
+  ['cashless', 'en', 'digital payments', 'the English names the same category'],
+  ['robotaxi', 'zh', '2019', 'robotaxi service has been open to the public here since 2019'],
+  ['robotaxi', 'zh', '5 位乘客', 'the GXR carries up to five passengers'],
+  ['drone-delivery', 'zh', '2026 年 2 月', 'the eight minutes belong to one reported delivery'],
+  ['evtol', 'zh', '130', "EHang's maximum design speed"],
+  ['evtol', 'zh', '30 公里', "EHang's maximum range"],
+  ['evtol', 'zh', '运营企业', 'the certificate goes to the operating company, never to the aircraft'],
+  ['evtol', 'en', 'operator', 'the English says the same'],
+]) assert(techById[id]?.body[lang].includes(needle), `${id} (${lang}): ${why}`);
+// A heading names the thing before it tries to be interesting.
+for (const [id, needle] of [
+  ['ev-taxi', '出租车'], ['cashless', '手机付款'], ['robot', '机器人'],
+  ['robotaxi', '无人驾驶'], ['drone-delivery', '无人机'], ['evtol', '载人飞行器'],
+]) assert(techById[id]?.title.zh.includes(needle), `${id}: the heading must say what it is about (${needle})`);
+// Every item ends with a way in. Nothing promises this trip includes it.
+for (const item of data.CITY_TECH.items) {
+  for (const lang of ['zh', 'en', 'ar']) assert(item.where[lang].trim(), `${item.id}: missing the ${lang} way in`);
+}
+/*
+ * The robotaxi paragraph is the one written closest to a single source, so it stays short
+ * on purpose: roughly 150 Chinese characters and well inside 200 English words across all
+ * three languages together.
+ */
+const robotaxiBody = techById.robotaxi.body;
+assert(robotaxiBody.zh.length <= 160, `The robotaxi paragraph stays about 150 Chinese characters, found ${robotaxiBody.zh.length}`);
+const robotaxiWords = ['zh', 'en', 'ar']
+  .map((lang) => (lang === 'zh' ? Math.round(robotaxiBody.zh.length / 2) : robotaxiBody[lang].split(/\s+/).filter(Boolean).length))
+  .reduce((sum, count) => sum + count, 0);
+assert(robotaxiWords <= 200, `The three robotaxi paragraphs together stay inside 200 words, found ${robotaxiWords}`);
+// The chapter opens on the city it belongs to and hands the reader the six items.
+for (const [lang, needle] of [['zh', '茶楼'], ['en', 'teahouse'], ['ar', 'بيوت الشاي']]) {
+  assert(data.CITY_TECH.intro[lang].includes(needle), `The ${lang} introduction sets the new technology beside ordinary life, not beside a report`);
+}
+
+/*
+ * 2026-09-13, the owner: the prayer chapter opened straight onto a Friday box, so it read
+ * as logistics with no ground under it. The new introduction says the community is a
+ * present-tense one before anything is scheduled — and the Friday note is addressed to
+ * everybody travelling, not to one woman in the singular.
+ */
+assert(Array.isArray(data.HALAL_INTRO) && data.HALAL_INTRO.length >= 1, 'The prayer chapter opens with its own introduction');
+assert(guideView.includes('HALAL_INTRO'), 'The prayer introduction is rendered, not just written');
+assert(guideView.indexOf('HALAL_INTRO') < guideView.indexOf('JUMUAH_NOTE'), 'The introduction is read before the Friday box');
+const jumuah = JSON.stringify(data.JUMUAH_NOTE);
+assert(!/Reham/.test(jumuah), 'The Friday note is for everyone travelling, not addressed to one person');
+for (const singular of ['فاسألي', 'واتركي', 'أسبوعك']) {
+  assert(!jumuah.includes(singular), `The Arabic Friday note addresses the group, not one woman: ${singular}`);
+}
+for (const [lang, needle] of [['zh', '9 月 25 日'], ['en', '25 September'], ['ar', '25 سبتمبر']]) {
+  assert(data.JUMUAH_NOTE[lang].includes(needle), `The ${lang} Friday note still gives the date`);
+}
+// The Mid-Autumn note is where the holiday is explained; the Friday reminder belongs to
+// the prayer chapter and is not repeated inside it.
+assert(!/主麻|Jumu|الجمعة/.test(JSON.stringify(midAutumnBody())), 'The Friday reminder lives in the prayer chapter, said once');
+function midAutumnBody() {
+  return data.CULTURE_NOTES.find((note) => note.id === 'mid-autumn').body;
+}
+
+/*
+ * 2026-09-13, the owner: the festival note answered "when is the holiday and watch the
+ * traffic" and never said what the day means or what people here actually do. It now
+ * carries both — reunion and the lunar date, then Guangzhou's own custom of raising the
+ * lanterns — with the city government's pages behind the custom. What it must not do is
+ * invent this year's lantern events, which nobody has a source for.
+ */
+const festival = midAutumnBody();
+for (const [lang, ...needles] of [
+  ['zh', '农历八月十五', '9 月 25 日', '团圆', '树中秋', '灯笼'],
+  ['en', 'eighth lunar month', '25 September', 'reunion', 'lantern'],
+  ['ar', 'الشهر القمري الثامن', '25 سبتمبر', 'لَمّ الشمل', 'الفوانيس'],
+]) {
+  for (const needle of needles) {
+    assert(festival[lang].includes(needle), `The ${lang} festival note must keep: ${needle}`);
+  }
+}
+for (const invented of ['灯会将于', '今年的灯会', '灯光节门票', 'this year’s lantern festival runs', 'the lantern show opens']) {
+  assert(!festival.zh.includes(invented) && !festival.en.includes(invented), `No source exists for this year's programme: ${invented}`);
+}
+const festivalSources = JSON.stringify(data.CULTURE_NOTES.find((note) => note.id === 'mid-autumn').sources);
+for (const url of ['gz.gov.cn/zt/jrshts/2024n/zqj/tszq/content/post_9870197.html', 'gz.gov.cn/zt/jrshts/2022n/zqj/tszq/content/post_8551078.html']) {
+  assert(festivalSources.includes(url), `The Guangzhou custom carries the government page it comes from: ${url}`);
+}
+// The chapter opening does not name the festival a third time: the collapsed hint and the
+// first note's own heading already do.
+assert(!/中秋/.test(guideView.slice(guideView.indexOf('const CULTURE_INTRO'), guideView.indexOf('const cultureSources'))), 'The culture opening leaves the festival name to the note that explains it');
+
+/*
+ * 2026-09-13, the owner: the food chapter opened on a slogan. It now says what the claim
+ * "the best eating is in Guangzhou" is actually about — freshness, heat, the long morning
+ * over tea, and a port's habit of taking in other people's food — and then hands over to
+ * the dishes and the brands. The eleven dishes and fourteen brands are unchanged.
+ */
+for (const [lang, ...needles] of [
+  ['zh', '鲜', '火候', '早茶'],
+  ['en', 'fresh', 'heat', 'tea'],
+  ['ar', 'طزاج', 'النار', 'الشاي'],
+]) {
+  const chapter = [data.FOOD_CULTURE.lead[lang], ...data.FOOD_CULTURE.paragraphs.map((p) => p[lang])].join(' ');
+  for (const needle of needles) {
+    assert(chapter.includes(needle), `The ${lang} food opening must explain: ${needle}`);
+  }
+}
+assert(data.FOOD_NOTES.length === 11, `The eleven dishes stay, found ${data.FOOD_NOTES.length}`);
+
+/*
+ * 2026-09-13: all eleven dishes carry a photograph now. squab.jpg is the Cantonese crisp
+ * squab the owner re-checked, seafood.jpg is a whole steamed fish standing for the dish,
+ * and the slow-fired soup has a Cantonese chicken soup from the Guangzhou commerce bureau
+ * via lib/selected-photos.ts. The retired files must never come back to fill a row:
+ * leigarden.jpg is a dumpling, pigeon.jpg was a French plating, soup.jpg was pig lung.
+ */
+for (const note of data.FOOD_NOTES) {
+  assert(note.imageKey, `${note.id}: every dish carries its own photograph`);
+  assert(!['leigarden', 'pigeon', 'soup'].includes(note.imageKey), `${note.id}: ${note.imageKey}.jpg was rejected — it may not stand in for a dish`);
+  for (const lang of ['zh', 'en', 'ar']) assert(note.imageAlt?.[lang]?.trim(), `${note.id}: missing ${lang} alt text`);
+}
 // This edit must not silently change travellers, flights, baggage or hotel facts.
 for (const key of Object.keys(original)) {
   if (/FLIGHT|BAGGAGE|PEOPLE|INTERCONTINENTAL/.test(key)) assert.deepEqual(data[key], original[key], `${key} changed`);
