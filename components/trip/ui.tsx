@@ -79,6 +79,7 @@ export function Figure({
   width,
   height,
   className,
+  imageClassName,
 }: {
   src: string;
   alt: L10n;
@@ -87,6 +88,12 @@ export function Figure({
   width?: number;
   height?: number;
   className?: string;
+  /**
+   * 只有限高这一项可以按张覆盖。竖构图的大场景照片按默认限高会被压成一张邮票
+   * （1320×1957 那张在手机上只剩约 162px 宽），那一张单独传更高的限高，
+   * 仍然是按原比例放全、居中、不裁。不传就是默认的 15rem / 20rem。
+   */
+  imageClassName?: string;
 }) {
   return (
     <figure className={cn("my-3", className)}>
@@ -96,7 +103,10 @@ export function Figure({
         width={width}
         height={height}
         loading="lazy"
-        className="trip-photo mx-auto block h-auto max-h-[15rem] w-auto max-w-full md:max-h-[20rem]"
+        className={cn(
+          "trip-photo mx-auto block h-auto w-auto max-w-full",
+          imageClassName ?? "max-h-[15rem] md:max-h-[20rem]",
+        )}
       />
       {caption ? (
         <figcaption className={cn(GUIDE.note, "mt-1.5 text-center")}>

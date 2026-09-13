@@ -436,9 +436,9 @@ export const UI = {
       "ar": "المطار وقاعات المعارض وضفتا النهر"
     },
     "pazhou": {
-      "zh": "广交会展馆、沿江写字楼，和一座四百多年的古塔",
-      "en": "The Canton Fair halls, the towers along the river, and a pagoda over four centuries old",
-      "ar": "قاعات معرض كانتون، والأبراج على النهر، وباغودا عمرها أكثر من أربعة قرون"
+      "zh": "广交会展馆、沿江写字楼，和江边留下来的古塔",
+      "en": "The Canton Fair halls, the towers along the river, and the old pagodas left on its bank",
+      "ar": "قاعات معرض كانتون، والأبراج على النهر، والباغودات القديمة الباقية على ضفته"
     },
     "foodCulture": {
       "zh": "早茶怎么点、菜怎么选、{n} 个特色餐饮品牌",

@@ -13,6 +13,7 @@ import {
   FOOD_CULTURE,
   FOOD_NOTES,
   HALAL_DINING,
+  HALAL_INTRO,
   HALAL_WHERE,
   JUMUAH_NOTE,
   MINISO_IN_GZ,
@@ -78,11 +79,16 @@ const HOTEL_LABELS = {
 const HOTEL_PHONE = "+86 20 8922 8888";
 
 /**
- * 三章的主图：琶洲塔、怀圣寺的光塔、开业当天的正佳门口。照片的 alt 与图说在
- * lib/guide-photos.ts 里，跟着照片走 —— 这里只说哪一章配哪一张。
+ * 三章的主图：海珠江岸的赤岗塔与广州塔、怀圣寺的光塔、开业当天的正佳门口。
+ * 照片的 alt 与图说跟着照片走（lib/guide-photos.ts 与 lib/selected-photos.ts），
+ * 这里只说哪一章配哪一张。
+ *
+ * 琶洲那一章的主图换成了用户自己提供的那张（2026-09-13）：画面里前面是赤岗塔、
+ * 后面是广州塔，**不是琶洲塔**。正文里讲琶洲塔的那一段因此单独交代了照片拍的是谁，
+ * 免得读者把两座塔看成一座。原来那张 `pazhou-pagoda` 的航拍留在仓里，页面不再用。
  */
 const CHAPTER_PHOTOS = {
-  pazhou: "pazhou-pagoda",
+  pazhou: "chigang-canton-tower",
   story: "huaisheng-minaret",
   /** 名创优品那一章两张：章首是琶洲西区那栋新楼，中间是正佳门口开业那天。 */
   miniso: "miniso-tower",
@@ -201,12 +207,14 @@ function GuideFigure({
   alt,
   caption,
   className,
+  imageClassName,
 }: {
   photoKey?: string;
   lang: Lang;
   alt?: L10n;
   caption?: L10n;
   className?: string;
+  imageClassName?: string;
 }) {
   if (!photoKey || !IMG[photoKey]) return null;
   const text = photoAlt(photoKey) ?? alt;
@@ -221,6 +229,7 @@ function GuideFigure({
       width={size?.width}
       height={size?.height}
       className={className}
+      imageClassName={imageClassName}
     />
   );
 }
@@ -249,6 +258,7 @@ function Prose({
   sources,
   lang,
   photoKey,
+  photoImageClassName,
   children,
 }: {
   lead: L10n;
@@ -257,12 +267,14 @@ function Prose({
   lang: Lang;
   /** 一章的主图，放在开头那句话下面。 */
   photoKey?: string;
+  /** 只给竖构图大场景用的限高覆盖，见 `Figure` 的 `imageClassName`。 */
+  photoImageClassName?: string;
   children?: React.ReactNode;
 }) {
   return (
     <section className="max-w-[44rem]">
       <p className={GUIDE.lead}>{t(lead, lang)}</p>
-      <GuideFigure photoKey={photoKey} lang={lang} />
+      <GuideFigure photoKey={photoKey} lang={lang} imageClassName={photoImageClassName} />
       <div className="mt-2.5 space-y-2.5">
         {paragraphs.map((paragraph, index) => (
           <p key={index} className={GUIDE.body}>
@@ -499,11 +511,15 @@ const foodSources = [
 /**
  * 当地生活习惯那一章的开场一句：说清这一章为什么值得读，再进条目。
  * 用正文字号，不加标题控件。
+ *
+ * 不在这里点名「中秋」：紧跟着的第一条标题和正文就是中秋，开场再说一遍，
+ * 收起来的章提示、开场、标题会连着重复三次（2026-09-13 主窗口在实际页面上看到的）。
+ * 所以这里只说「一个正赶上的节日」，把名字留给它自己那一条。
  */
 const CULTURE_INTRO: L10n = {
-  zh: "吃饭、见面、在街上散步，都有一些初来时未必熟悉的小习惯。知道其中的缘由，旅途会自在不少。",
-  en: "Eating, meeting people, walking down a street — each comes with small habits you may not know on a first visit. Knowing the reason behind them makes the trip easier.",
-  ar: "الأكل ولقاء الناس والتمشّي في الشارع — لكلٍّ منها عادات صغيرة قد لا تكون مألوفة في زيارة أولى. ومعرفة سببها تجعل الرحلة أيسر.",
+  zh: "了解一座城市，也可以从人们怎样相聚开始：节日里赏月团圆，茶楼里围桌分享，日常交往中有自己的小礼节。这趟旅程正好赶上一场重视家人团聚的节日；知道它的来历，街头的灯笼和月饼就不只是装饰了。",
+  en: "One way to get to know a city is to start with how people come together: watching the moon and gathering as a family at a festival, sharing a table in a teahouse, the small courtesies of everyday dealings. This trip happens to fall on a festival built around family reunion — and once you know where it comes from, the lanterns and mooncakes on the street are more than decoration.",
+  ar: "من طرق التعرّف إلى مدينة أن تبدؤوا بكيفية اجتماع الناس: مشاهدة القمر ولَمّ شمل العائلة في العيد، ومشاركة المائدة في بيت الشاي، ومجاملات صغيرة في التعامل اليومي. وتصادف هذه الرحلة عيدًا محوره اجتماع العائلة — ومتى عرفتم أصله، صارت الفوانيس وكعك القمر في الشارع أكثر من زينة.",
 };
 
 /** 文化那一章里，个别条目（放假安排、民俗）带着自己的出处，章尾一起折叠。 */
@@ -681,6 +697,9 @@ export function GuideTab({
             sources={PAZHOU.sources}
             lang={lang}
             photoKey={CHAPTER_PHOTOS.pazhou}
+            /* 竖构图的大场景：按默认限高会缩成一张邮票，这一张单独放宽限高，
+               仍然按原比例放全、居中，塔尖与画面里的摄影署名都不裁。 */
+            photoImageClassName="max-h-[28rem] md:max-h-[32rem]"
           />
         </Section>
 
@@ -734,7 +753,7 @@ export function GuideTab({
 
         {/* 配图只用真在中国、最好在广州拍的：街上的 Robotaxi（粤A 牌）、扫码付款、
             黄色电动出租车，载人飞行器那张来自广州市政府。
-            送餐机器人与无人机送餐没有能用的中国实景，那两条宁可不配图。 */}
+            送物机器人用普渡官网的产品示例，无人机那张来自海珠区政府。 */}
         <Section id="tech" title={UI.cityTech} hint={UI.guideHints.tech} lang={lang}>
           <Prose
             lead={CITY_TECH.lead}
@@ -782,9 +801,17 @@ export function GuideTab({
           hint={UI.guideHints.halal}
           lang={lang}
         >
-          {/* 先是这一周真要用的：哪天的主麻、去哪一带、点菜怎么问。
+          {/* 开场两段先说清这一章讲的是一个还在的社区，以及安排一次礼拜和一顿饭
+              大致是怎么回事；然后才是这一周真要用的：哪天的主麻、去哪一带、点菜怎么问。
               三座寺各自的样子排在后面 —— 读到那里的人已经知道自己要去哪一带了。 */}
-          <p className={cn(GUIDE.body, "trip-card-accent max-w-[44rem] p-3 text-navy")}>
+          <div className="max-w-[44rem] space-y-2.5">
+            {HALAL_INTRO.map((paragraph, index) => (
+              <p key={index} className={GUIDE.body}>
+                {t(paragraph, lang)}
+              </p>
+            ))}
+          </div>
+          <p className={cn(GUIDE.body, "trip-card-accent mt-3 max-w-[44rem] p-3 text-navy")}>
             <span className="font-semibold">{t(UI.jumuah, lang)}：</span>
             {t(JUMUAH_NOTE, lang)}
           </p>
@@ -1011,21 +1038,26 @@ export function GuideTab({
             ))}
           </ul>
           {/* CC 授权的条件：作者与授权要列出来，授权名直接链到条款页。
-              维基来源写作者与 CC；政府或官网的图只写来源页与提供方，不冒充 CC。
+              维基来源写作者与 CC；政府或官网的图只写来源页与提供方，不冒充 CC；
+              用户自己给的原图没有来源页，就只写「用户提供」，不挂链接、不编一个出处。
               只列页面上真在用的那些 —— 仓里还留着弃用的旧素材，全表照搬会把它们
-              端到客人面前。两份清单文件都是脚本生成的，不手改。 */}
+              端到客人面前。三份清单里只有 lib/selected-photos.ts 是手写的。 */}
           <SubHeading>{t(UI.imageCredits, lang)}</SubHeading>
           <ul className={cn(GUIDE.note, "max-w-[44rem] space-y-1")}>
             {shownCredits.map((credit) => (
               <li key={credit.key}>
-                <a
-                  href={credit.page}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="font-medium text-navy underline underline-offset-4"
-                >
-                  {credit.title}
-                </a>
+                {credit.page ? (
+                  <a
+                    href={credit.page}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="font-medium text-navy underline underline-offset-4"
+                  >
+                    {credit.title}
+                  </a>
+                ) : (
+                  <span className="font-medium text-navy">{credit.title}</span>
+                )}
                 {" — "}
                 {credit.artist || "Wikimedia Commons"}
                 {", "}
