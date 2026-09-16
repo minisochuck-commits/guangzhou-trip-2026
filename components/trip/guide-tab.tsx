@@ -2,6 +2,7 @@
 /* eslint-disable @next/next/no-img-element -- 静态站、离线可用、相对路径：故意用原生 <img>，不走 next/image 的加载器 */
 
 import * as React from "react";
+import { EVENT_CONTACTS, MEETING_RULES, PRODUCT_PREVIEW } from "@/lib/meeting-guide";
 
 import {
   CITY_SCALE,
@@ -619,6 +620,10 @@ export function GuideTab({
               </div>
             ))}
 
+            <Fold title={{ zh: "参会须知", en: "Before entering the venue", ar: "قبل دخول قاعة الفعالية" }} lang={lang}>
+              <BulletList items={MEETING_RULES} lang={lang} />
+            </Fold>
+
             <Fold title={PREP_FOLDS.addresses} lang={lang}>
               {COPY_ADDRESSES.filter((entry) => entry.id !== "hotel").map((entry) => (
                 <CopyChinese key={entry.id} entry={entry} lang={lang} showBig />
@@ -676,6 +681,15 @@ export function GuideTab({
             {t(HOTEL_LABELS.transfer, lang)}
           </p>
         ) : null}
+        <div className="mt-3 border-t border-card-line pt-3">
+          <h3 className={GUIDE.subheading}>{t({ zh: "会务联系", en: "Event assistance", ar: "المساعدة في الفعالية" }, lang)}</h3>
+          {EVENT_CONTACTS.map((contact) => (
+            <p key={contact.phone} className={cn(GUIDE.note, "mt-1")}>
+              {t(contact.language, lang)} · <bdi>{contact.name}</bdi>{" · "}
+              <a href={`tel:${contact.phone.replace(/\s/g, "")}`} className="inline-flex min-h-11 items-center text-miniso-red-strong underline"><bdi dir="ltr">{contact.phone}</bdi></a>
+            </p>
+          ))}
+        </div>
       </section>
 
       {/*
@@ -734,6 +748,7 @@ export function GuideTab({
         >
           <section className="max-w-[44rem]">
             <p className={GUIDE.lead}>{t(MINISO_IN_GZ.lead, lang)}</p>
+            <p className={cn(GUIDE.body, "mt-2")}>{t(PRODUCT_PREVIEW, lang)}</p>
             {MINISO_IN_GZ.sections.map((part) => (
               <div key={part.id} className="mt-3">
                 <h3 className={GUIDE.subheading}>{t(part.title, lang)}</h3>
@@ -747,6 +762,12 @@ export function GuideTab({
                 </div>
               </div>
             ))}
+            <Fold title={{ zh: "参会指引推荐门店", en: "Stores highlighted in the event guide", ar: "متاجر يقترحها دليل الفعالية" }} lang={lang}>
+              <p className={GUIDE.note}>{t({ zh: "以下为指引推荐门店；9月24日的实际巡店路线以会务安排为准。", en: "These are the guide’s suggested stores. The organiser confirms the actual route for 24 September.", ar: "هذه متاجر يقترحها الدليل؛ ويحدد المنظم المسار الفعلي لجولة 24 سبتمبر." }, lang)}</p>
+              <CopyChinese entry={{ id: "event-teemall", label: { zh: "MINISO FRIENDS 天河城店", en: "MINISO FRIENDS · TeeMall", ar: "MINISO FRIENDS · TeeMall" }, chinese: "广州市天河区天河路208号天河城购物中心4楼，MINISO FRIENDS" }} lang={lang} />
+              <CopyChinese entry={{ id: "event-junchao", label: { zh: "SUPER MINISO 君超店", en: "SUPER MINISO · Junchao", ar: "SUPER MINISO · Junchao" }, chinese: "广州市天河区棠下二社涌边路1号君超中心F1，SUPER MINISO" }} lang={lang} />
+              <CopyChinese entry={{ id: "event-grandview", label: { zh: "MINISO LAND 正佳店", en: "MINISO LAND · Grandview", ar: "MINISO LAND · Grandview" }, chinese: "广州市天河区天河路228号正佳广场1楼北街，MINISO LAND" }} lang={lang} />
+            </Fold>
             <Sources sources={MINISO_IN_GZ.sources} lang={lang} />
           </section>
         </Section>
