@@ -20,6 +20,15 @@ async function main() {
   const raw = await res.text();
   if (!raw.includes("<html")) throw new Error("拿到的不是 HTML");
 
+  // 预览服务可能仍保留上一次构建的清单；拒绝把旧 HTML 与新脚本拼成坏包。
+  const assets = new Set([...raw.matchAll(/\/_next\/[A-Za-z0-9._/-]+\.(?:js|css)/g)].map((match) => match[0]));
+  if (assets.size === 0) throw new Error("首页没有构建资源引用");
+  for (const asset of assets) {
+    await stat(path.join("dist/client", asset.slice(1))).catch(() => {
+      throw new Error(`首页引用的资源不属于当前构建：${asset}；请重启生产预览后重新生成。`);
+    });
+  }
+
   // 绝对路径改成相对：这样放在任何子目录下都能开（GitHub Pages 的项目仓
   // 是 /<repo>/ 这种路径），也方便整个文件夹拷走。
   // JS 分包里没有任何绝对 /_next/ 引用，所以只需要改这一份 HTML。
