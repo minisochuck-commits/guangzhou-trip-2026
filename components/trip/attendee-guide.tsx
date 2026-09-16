@@ -16,7 +16,7 @@ const NOTE = {
 
 export function AttendeeGuide({ lang, cover = false }: { lang: Lang; cover?: boolean }) {
   const [open, setOpen] = React.useState(false);
-  const [version, setVersion] = React.useState<"original" | "ar">(lang === "ar" ? "ar" : "original");
+  const [version, setVersion] = React.useState<"original" | "ar">("ar");
   const [zoom, setZoom] = React.useState(false);
   const [imageFailed, setImageFailed] = React.useState(false);
   const viewport = React.useRef<HTMLDivElement>(null);
@@ -27,7 +27,7 @@ export function AttendeeGuide({ lang, cover = false }: { lang: Lang; cover?: boo
   }
 
   return <Dialog open={open} onOpenChange={next => {
-    if (next) { setVersion(lang === "ar" ? "ar" : "original"); setZoom(false); setImageFailed(false); }
+    if (next) { setVersion("ar"); setZoom(false); setImageFailed(false); }
     setOpen(next);
   }}>
     <DialogTrigger className={cover
@@ -35,7 +35,7 @@ export function AttendeeGuide({ lang, cover = false }: { lang: Lang; cover?: boo
       : "mt-1 inline-flex min-h-11 w-full items-center justify-start gap-1 rounded-lg border border-navy/25 px-2 py-1.5 text-start text-sm font-medium leading-5 text-navy hover:border-navy/50 md:w-auto md:px-2.5"}>
       {cover ? <>
         <img src="./reference/attendee-guide-cover.jpg" alt={t({ zh: "参会指引封面", en: "Attendee guide cover", ar: "غلاف دليل المشاركين" }, lang)} width={484} height={560} loading="lazy" className="h-24 w-20 shrink-0 rounded-md object-cover" />
-        <span><span className="block text-[15px] font-semibold">{t(TITLE, lang)}</span><span className="mt-1 block text-sm text-navy-soft">{t({ zh: "查看原图／阿语译文", en: "Original / Arabic translation", ar: "الترجمة العربية / الصورة الأصلية" }, lang)}</span></span>
+        <span><span className="block text-[15px] font-semibold">{t(TITLE, lang)}</span><span className="mt-1 block text-sm text-navy-soft">{t({ zh: "查看阿语译文／中英原图", en: "Arabic translation / CN/EN original", ar: "الترجمة العربية / الصورة الأصلية" }, lang)}</span></span>
       </> : <><FileImageIcon className="size-4 shrink-0" />{t(TITLE, lang)}</>}
     </DialogTrigger>
     <DialogContent showCloseButton={false} aria-describedby={undefined} dir={lang === "ar" ? "rtl" : "ltr"}
@@ -44,7 +44,7 @@ export function AttendeeGuide({ lang, cover = false }: { lang: Lang; cover?: boo
         <DialogTitle className="text-base leading-6">{t(TITLE, lang)}</DialogTitle>
         <DialogClose aria-label={t({ zh: "关闭参会指引", en: "Close attendee guide", ar: "إغلاق دليل المشاركين" }, lang)} className="absolute right-1 top-1 flex size-11 items-center justify-center rounded-lg text-navy hover:bg-slate-100"><XIcon className="size-5" /></DialogClose>
         <div className="mt-1 flex flex-wrap items-center gap-1 text-sm">
-          {(["original", "ar"] as const).map(value => <button type="button" key={value} aria-pressed={version === value} onClick={() => changeVersion(value)}
+          {(["ar", "original"] as const).map(value => <button type="button" key={value} aria-pressed={version === value} onClick={() => changeVersion(value)}
             className={`min-h-11 rounded-lg px-2 py-1 ${version === value ? "bg-navy text-white" : "bg-slate-100 text-navy"}`}>
             {value === "original" ? t({ zh: "中英原图", en: "CN/EN original", ar: "الأصل الصيني والإنجليزي" }, lang) : t({ zh: "阿语译文", en: "Arabic translation", ar: "الترجمة العربية" }, lang)}
           </button>)}
