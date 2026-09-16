@@ -3,6 +3,7 @@
 
 import * as React from "react";
 import { EVENT_CONTACTS, MEETING_RULES, PRODUCT_PREVIEW } from "@/lib/meeting-guide";
+import { AttendeeGuide } from "./attendee-guide";
 
 import {
   CITY_SCALE,
@@ -613,23 +614,7 @@ export function GuideTab({
           {/* 一件事一个小标题，下面直接是原来的说明 ——
               展开这一章就能从上网一路读到天气，不用再逐条点开。 */}
           <div className="max-w-[44rem] space-y-4">
-            <a
-              href="./reference/attendee-guide-2026.png"
-              className="flex items-center gap-3 rounded-xl border border-card-line p-3 text-navy transition-colors hover:border-navy/40"
-            >
-              <img
-                src="./reference/attendee-guide-cover.jpg"
-                alt={t({ zh: "参会指引封面", en: "Attendee guide cover", ar: "غلاف دليل المشاركين" }, lang)}
-                width={484}
-                height={560}
-                loading="lazy"
-                className="h-24 w-20 shrink-0 rounded-md object-cover"
-              />
-              <span className="min-w-0">
-                <span className={cn(GUIDE.subheading, "block")}>{t({ zh: "官方参会指引", en: "Official attendee guide", ar: "الدليل الرسمي للمشاركين" }, lang)}</span>
-                <span className={cn(GUIDE.note, "mt-1 block text-miniso-red-strong underline underline-offset-4")}>{t({ zh: "点击查看完整原图", en: "Open the full original image", ar: "عرض الصورة الأصلية كاملة" }, lang)}</span>
-              </span>
-            </a>
+            <AttendeeGuide lang={lang} cover />
             {prep.map((item) => (
               <div key={item.id}>
                 <h3 className={GUIDE.subheading}>{t(item.title, lang)}</h3>
