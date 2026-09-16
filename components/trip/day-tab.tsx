@@ -23,6 +23,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { PlanCell } from "./plan-cell";
+import { AttendeeGuide } from "./attendee-guide";
 import { Ltr } from "./ui";
 
 type MatrixRow = {
@@ -237,6 +238,7 @@ export function DayTab({
                           date={date}
                           people={people}
                         />
+                        {date === "2026-09-21" && <AttendeeGuide lang={lang} />}
                       </div>
                     </TableCell>
 
