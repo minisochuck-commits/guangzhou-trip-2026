@@ -56,7 +56,7 @@ export type CellView = {
 };
 
 function L(zh: string, en: string, ar: string): L10n {
-  return { zh, en, ar };
+  return { zh, en, ar: ar.replace(/\d{2}:\d{2}–\d{2}:\d{2}/g, "\u2066$&\u2069") };
 }
 
 export function groupKeyOf(card: PersonDayCard): GroupKey {
@@ -198,10 +198,21 @@ function lodgingView(date: string, group: GroupKey): CellView {
 /**
  * 行程表只写「当天安排是什么」。
  * 游玩路线、美食与文化介绍**只在来华指南里**，不再挂进日程格 ——
- * 那些是可选建议，不是当天的安排；真实排好的巡店（study 9/24–25、Reham 9/23 或 9/24）
+ * 那些是可选建议，不是当天的安排；真实排好的巡店（study 9/24–25、Reham 9/24）
  * 连同它的交通待定照旧保留。
  */
 const FREE_DAY = L("自由安排", "Free day", "يوم حر");
+
+function conferenceView(date: string, group: GroupKey): CellView {
+  if (date === "2026-09-22") return {
+    lines: [L("09:00签到 · 上午会议", "09:00 sign-in · morning sessions", "09:00 التسجيل · جلسات صباحية"), L("11:45–22:00 新品订货", "11:45–22:00 product ordering", "11:45–22:00 طلب المنتجات")],
+    entry: "sessions",
+  };
+  const last = date === "2026-09-24";
+  const lines = [last ? L("09:00–18:00 订货会", "09:00–18:00 order fair", "09:00–18:00 معرض الطلبات") : L("09:00–22:00 订货会", "09:00–22:00 order fair", "09:00–22:00 معرض الطلبات")];
+  if (group === "qiuting") lines.push(last ? L("18:00 最终订单截止", "18:00 final-order deadline", "18:00 آخر موعد للطلبات النهائية") : L("22:00 预订单截止", "22:00 pre-order deadline", "22:00 آخر موعد للطلبات المسبقة"));
+  return { lines, entry: null };
+}
 
 function activityView(date: string, group: GroupKey): CellView {
   if (date === "2026-09-20") {
@@ -222,20 +233,17 @@ function activityView(date: string, group: GroupKey): CellView {
 
   if (date === "2026-09-21") {
     return {
-      lines: [L("抵达广州，报到", "Arrive in Guangzhou, check in", "الوصول إلى قوانغتشو والتسجيل")],
+      lines: [L("抵达广州，报到", "Arrive in Guangzhou, check in", "الوصول إلى قوانغتشو والتسجيل"), L("14:00–24:00 办理入住", "Hotel check-in 14:00–24:00", "تسجيل الوصول 14:00–24:00")],
       entry: null,
     };
   }
 
   if (group === "qiuting") {
     if (date === "2026-09-22" || date === "2026-09-23") {
-      return { lines: [L("参加总部会议", "HQ sessions", "جلسات المقر")], entry: "sessions" };
+      return conferenceView(date, group);
     }
     if (date === "2026-09-24") {
-      return {
-        lines: [L("上午 总部订货会", "Morning: HQ order fair", "صباحًا: معرض الطلبيات")],
-        entry: null,
-      };
+      return conferenceView(date, group);
     }
     if (date === "2026-10-06") {
       return {
@@ -262,13 +270,10 @@ function activityView(date: string, group: GroupKey): CellView {
 
   if (group === "rahma") {
     if (date === "2026-09-22" || date === "2026-09-23") {
-      return { lines: [L("参加总部会议", "HQ sessions", "جلسات المقر")], entry: "sessions" };
+      return conferenceView(date, group);
     }
     if (date === "2026-09-24") {
-      return {
-        lines: [L("上午 总部订货会", "Morning: HQ order fair", "صباحًا: معرض الطلبيات")],
-        entry: null,
-      };
+      return conferenceView(date, group);
     }
     if (date === "2026-09-25" || date === "2026-09-26") {
       return {
@@ -284,7 +289,7 @@ function activityView(date: string, group: GroupKey): CellView {
 
   if (group === "study") {
     if (date === "2026-09-22" || date === "2026-09-23") {
-      return { lines: [L("参加总部会议", "HQ sessions", "جلسات المقر")], entry: "sessions" };
+      return conferenceView(date, group);
     }
     if (date === "2026-09-24" || date === "2026-09-25") {
       const day = date === "2026-09-24" ? 1 : 2;
@@ -308,24 +313,23 @@ function activityView(date: string, group: GroupKey): CellView {
   if (date === "2026-09-22") {
     return {
       lines: [
-        L("上午 总部会议", "Morning: HQ sessions", "صباحًا: جلسات المقر"),
+        L("09:00 签到", "09:00 sign-in", "09:00 التسجيل"),
+        L("09:30–11:45 总部会议", "09:30–11:45 HQ sessions", "09:30–11:45 جلسات المقر"),
         L("下午 自由", "Afternoon: free", "بعد الظهر: وقت حر"),
       ],
-      entry: null,
+      entry: "sessions",
     };
   }
-  if (date === "2026-09-23" || date === "2026-09-24") {
+  if (date === "2026-09-24") {
     return {
       lines: [
-        L("总部巡店 13:50–17:30", "HQ store visit 13:50–17:30", "جولة متاجر المقر 13:50–17:30"),
-        L("9/23 与 9/24 择一", "On either 23 or 24 Sep", "يوم 23 أو 24 سبتمبر"),
-        L("哪天待 Rahma 确认", "Rahma confirms which day", "تحدّد Rahma اليوم"),
+        L("13:50–17:30 国际巡店", "13:50–17:30 international tour", "13:50–17:30 الجولة الدولية"),
+        L("英语讲解 · 上午自由", "In English · morning free", "بالإنجليزية · الصباح حر"),
       ],
       entry: "storeVisit",
-      hidePending: true,
     };
   }
-  if (date === "2026-09-25" || date === "2026-09-26") {
+  if (["2026-09-23", "2026-09-25", "2026-09-26"].includes(date)) {
     return { lines: [FREE_DAY], entry: null };
   }
   // 9/27：夜航前不新增耗时安排
@@ -462,15 +466,7 @@ const HOTEL_VENUE_LINE = L(
   "الاجتماع داخل الفندق",
 );
 
-/**
- * 外出巡店的往返交通仍未安排 —— 这跟「酒店内参会」是两回事，
- * 不能因为会议在酒店里就把所有出行都说成不用车。
- */
-const OFFSITE_TOUR_TRANSPORT_TBD = L(
-  "外出巡店往返交通待定",
-  "Transport for the offsite store visit is not arranged",
-  "تنقل جولة المتاجر خارج الفندق لم يُرتَّب",
-);
+const OFFSITE_TOUR_TRANSPORT = L("MINISO 统一安排巡店交通", "MINISO arranges tour transport", "MINISO تنظم نقل الجولة");
 
 const CITY_SELF_LINE = L(
   "市内出行自理",
@@ -677,13 +673,8 @@ function transportView(date: string, group: GroupKey): CellView {
       hidePending: true,
     };
   }
-  // 9/23 与 9/24 择一的巡店在酒店外，往返交通仍未安排。
-  if (date === "2026-09-23" || date === "2026-09-24") {
-    return {
-      lines: [OFFSITE_TOUR_TRANSPORT_TBD],
-      entry: null,
-      hidePending: true,
-    };
+  if (date === "2026-09-24") {
+    return { lines: [OFFSITE_TOUR_TRANSPORT], entry: null };
   }
   return { lines: [CITY_SELF_LINE], entry: null };
 }
@@ -698,7 +689,12 @@ export function cellView(
   const group = groupKeyOf(card);
   switch (field) {
     case "lodging":
-      return lodgingView(date, group);
+      {
+        const view = lodgingView(date, group);
+        return date === "2026-09-25" && group !== "reham"
+          ? { ...view, lines: [L("12:00前洲际退房", "Leave InterContinental before 12:00", "مغادرة إنتركونتيننتال قبل 12:00"), ...view.lines] }
+          : view;
+      }
     case "activity":
       return activityView(date, group);
     case "dining":

@@ -11,6 +11,7 @@
 
 import type { CopyEntry, L10n, PersonId, Status } from "./trip-data";
 import { CHENGDU_TRANSFER, INTERCONTINENTAL } from "./trip-data";
+import { ARRIVAL_CHECKIN, EVENT_CHECKOUT, MORNING_22, ORDERING_22, PREORDER_DEADLINE, FINAL_ORDER_DEADLINE, TOUR_DETAIL } from "./meeting-guide";
 
 export type Row = {
   status: Status;
@@ -191,14 +192,11 @@ const HOTEL_VENUE: L10n = {
   ar: "يُعقد الاجتماع داخل الفندق الذي تقيم فيه؛ ولا حاجة إلى تنقل.",
 };
 
-/**
- * Reham 9/23 与 9/24 择一参加的巡店在酒店外，往返交通仍未安排。
- * 会议在酒店内，不代表这一趟外出也不用车。
- */
+/** 正式指引：MINISO 统一安排国际场巡店交通。 */
 const OFFSITE_TOUR_TRANSPORT: L10n = {
-  zh: "外出巡店的往返交通待安排。",
-  en: "Transport to and from the offsite store visit is still to be arranged.",
-  ar: "التنقل من وإلى جولة المتاجر خارج الفندق لم يُرتَّب بعد.",
+  zh: "国际场巡店交通由 MINISO 统一安排。",
+  en: "MINISO arranges transport for the international store tour.",
+  ar: "تنظم MINISO النقل لجولة المتاجر الدولية.",
 };
 
 const CITY_SELF: L10n = {
@@ -240,18 +238,10 @@ const STUDY_PLAN_TBD: L10n[] = [
 ];
 
 const REHAM_TOUR: L10n = {
-  zh: "总部 13:50–17:30 的巡店场次，9/23 与 9/24 择一参加，具体是哪一天待 Rahma 确认。其余时段自由安排。",
-  en: "One HQ store visit, 13:50–17:30, on either 23 or 24 Sep — which day is to be confirmed with Rahma. The rest of the time is free.",
-  ar: "جولة متاجر واحدة من المقر، من 13:50 إلى 17:30، يوم 23 أو 24 سبتمبر — واليوم يُحدَّد بالتنسيق مع Rahma. وبقية الوقت حرة.",
+  zh: "13:50–17:30 参加国际场巡店，英语讲解；上午自由活动。",
+  en: "13:50–17:30 international store tour in English; morning free.",
+  ar: "13:50–17:30 جولة المتاجر الدولية باللغة الإنجليزية؛ الصباح حر.",
 };
-
-const REHAM_TOUR_DETAIL: L10n[] = [
-  {
-    zh: "两天都先留出下午，等确定了哪一场再安排别的活动。",
-    en: "Keep both afternoons open and plan other activities only once the day is fixed.",
-    ar: "أبقِ فترتَي بعد الظهر متاحتين، ولا ترتّب أنشطة أخرى إلا بعد تحديد اليوم.",
-  },
-];
 
 /* ---------------- 小工具 ---------------- */
 
@@ -378,7 +368,7 @@ function arrivalDay21(): PersonDayCard[] {
         },
         { detail: HOTEL_DETAIL, copy: HOTEL_COPY },
       ),
-      activity: row("confirmed", arrive),
+      activity: row("confirmed", arrive, { detail: [ARRIVAL_CHECKIN] }),
       dining: row("pending", MEALS_ARRIVAL_UNKNOWN, { detail: [DIET_ASK] }),
       transport: sichuanTransport,
     },
@@ -394,7 +384,7 @@ function arrivalDay21(): PersonDayCard[] {
         },
         { detail: HOTEL_DETAIL, copy: HOTEL_COPY },
       ),
-      activity: row("confirmed", arrive),
+      activity: row("confirmed", arrive, { detail: [ARRIVAL_CHECKIN] }),
       dining: row("pending", MEALS_ARRIVAL_UNKNOWN, { detail: [DIET_ASK] }),
       transport: sichuanTransport,
     },
@@ -410,7 +400,7 @@ function arrivalDay21(): PersonDayCard[] {
         },
         { detail: HOTEL_DETAIL, copy: HOTEL_COPY },
       ),
-      activity: row("confirmed", arrive),
+      activity: row("confirmed", arrive, { detail: [ARRIVAL_CHECKIN] }),
       dining: row(
         "confirmed",
         {
@@ -443,7 +433,7 @@ function arrivalDay21(): PersonDayCard[] {
         },
         { detail: HOTEL_DETAIL, copy: HOTEL_COPY },
       ),
-      activity: row("confirmed", arrive),
+      activity: row("confirmed", arrive, { detail: [ARRIVAL_CHECKIN] }),
       dining: row("pending", MEALS_ARRIVAL_UNKNOWN, { detail: [DIET_ASK] }),
       transport: row(
         "pending",
@@ -504,19 +494,25 @@ function interconLodging(who: "qiuting" | "rahma" | "study" | "reham"): Row {
   );
 }
 
-const ATTEND_SESSIONS: L10n = {
-  zh: "参加总部会议。",
-  en: "Attending the HQ sessions.",
-  ar: "حضور جلسات المقر.",
-};
-
-const SESSIONS_DETAIL: L10n[] = [
-  {
-    zh: "具体议程、场地与起止时间以总部通知为准。",
-    en: "Agenda, venue and start / finish times follow the HQ notice.",
-    ar: "جدول الأعمال والمكان وأوقات البدء والانتهاء حسب إشعار المقر.",
-  },
-];
+function conferenceActivity(day: 22 | 23 | 24, orderingOwner = false): Row {
+  const text: L10n = day === 22 ? {
+    zh: "09:00签到，09:30–11:45会议；11:45–22:00新品订货。",
+    en: "09:00 sign-in, 09:30–11:45 sessions; 11:45–22:00 product ordering.",
+    ar: "09:00 التسجيل، 09:30–11:45 الجلسات؛ 11:45–22:00 طلب المنتجات.",
+  } : day === 23 ? {
+    zh: "09:00–22:00 新品订货会。",
+    en: "09:00–22:00 product-ordering fair.",
+    ar: "09:00–22:00 معرض طلب المنتجات.",
+  } : {
+    zh: "09:00–18:00 新品订货会。",
+    en: "09:00–18:00 product-ordering fair.",
+    ar: "09:00–18:00 معرض طلب المنتجات.",
+  };
+  const detail = day === 22 ? [...MORNING_22, ORDERING_22] : [];
+  if (orderingOwner && day === 23) detail.push(PREORDER_DEADLINE);
+  if (orderingOwner && day === 24) detail.push(FINAL_ORDER_DEADLINE);
+  return row("confirmed", text, { detail });
+}
 
 function sessionsDay(dayIndex: 22 | 23): PersonDayCard[] {
   const key = `09${dayIndex}`;
@@ -525,7 +521,7 @@ function sessionsDay(dayIndex: 22 | 23): PersonDayCard[] {
       id: `${key}-qiuting`,
       people: ["qiuting"],
       lodging: interconLodging("qiuting"),
-      activity: row("confirmed", ATTEND_SESSIONS, { detail: SESSIONS_DETAIL }),
+      activity: conferenceActivity(dayIndex, true),
       dining: row("confirmed", MEALS_COMPANY, { detail: [DIET_ASK] }),
       transport: row("confirmed", HOTEL_VENUE),
     },
@@ -533,7 +529,7 @@ function sessionsDay(dayIndex: 22 | 23): PersonDayCard[] {
       id: `${key}-rahma`,
       people: ["rahma"],
       lodging: interconLodging("rahma"),
-      activity: row("confirmed", ATTEND_SESSIONS, { detail: SESSIONS_DETAIL }),
+      activity: conferenceActivity(dayIndex),
       dining: row("confirmed", MEALS_COMPANY, { detail: [DIET_ASK] }),
       transport: row("confirmed", HOTEL_VENUE),
     },
@@ -541,7 +537,7 @@ function sessionsDay(dayIndex: 22 | 23): PersonDayCard[] {
       id: `${key}-study`,
       people: STUDY,
       lodging: interconLodging("study"),
-      activity: row("confirmed", ATTEND_SESSIONS, { detail: SESSIONS_DETAIL }),
+      activity: conferenceActivity(dayIndex),
       dining: row("confirmed", {
         zh: "参会期间的餐食由公司安排。",
         en: "Meals while attending the sessions are arranged by the company.",
@@ -555,10 +551,10 @@ function sessionsDay(dayIndex: 22 | 23): PersonDayCard[] {
           people: ["reham"],
           lodging: interconLodging("reham"),
           activity: row("confirmed", {
-            zh: "上午参加总部会议，下午自由安排。",
-            en: "HQ sessions in the morning; the afternoon is free.",
-            ar: "جلسات المقر صباحًا، وبعد الظهر وقت حر.",
-          }),
+            zh: "09:00签到，09:30–11:45参加总部会议；下午自由安排。",
+            en: "09:00 sign-in, 09:30–11:45 HQ sessions; afternoon free.",
+            ar: "09:00 التسجيل، 09:30–11:45 جلسات المقر؛ بعد الظهر حر.",
+          }, { detail: MORNING_22 }),
           dining: row("confirmed", {
             zh: "会议餐由公司安排；下午外出自由活动时可以不参加。",
             en: "Session meals are arranged by the company; you do not have to join them if you go out in the afternoon.",
@@ -578,14 +574,14 @@ function sessionsDay(dayIndex: 22 | 23): PersonDayCard[] {
           id: `${key}-reham`,
           people: ["reham"],
           lodging: interconLodging("reham"),
-          activity: row("pending", REHAM_TOUR, { detail: REHAM_TOUR_DETAIL }),
+          activity: row("confirmed", { zh: "全天自由活动。", en: "A free day.", ar: "يوم حر." }),
           dining: row("confirmed", {
             zh: "会议餐由公司安排；外出自由活动时可以不参加。",
             en: "Session meals are arranged by the company; you do not have to join them when you are out.",
             ar: "وجبات الجلسات ترتّبها الشركة؛ ولستِ مضطرة للانضمام عند الخروج.",
           }, { detail: [DIET_ASK] }),
-          // 9/23 与 9/24 择一的巡店在酒店外，往返交通仍未安排。
-          transport: row("pending", OFFSITE_TOUR_TRANSPORT),
+          transport: row("confirmed", CITY_SELF),
+          freeTime: true,
         },
   ];
 }
@@ -596,11 +592,7 @@ function day24(): PersonDayCard[] {
       id: "0924-qiuting",
       people: ["qiuting"],
       lodging: interconLodging("qiuting"),
-      activity: row("confirmed", {
-        zh: "上午参加总部订货会。",
-        en: "Attending the HQ order fair in the morning.",
-        ar: "حضور معرض الطلبيات في المقر صباحًا.",
-      }),
+      activity: conferenceActivity(24, true),
       dining: row("confirmed", MEALS_COMPANY, { detail: [DIET_ASK] }),
       // 会议在酒店内（已定）；返乡交通自理这条细节保留。
       transport: row("confirmed", HOTEL_VENUE, { detail: [QIUTING_TRAVEL_SELF] }),
@@ -609,11 +601,7 @@ function day24(): PersonDayCard[] {
       id: "0924-rahma",
       people: ["rahma"],
       lodging: interconLodging("rahma"),
-      activity: row("confirmed", {
-        zh: "上午参加总部订货会。",
-        en: "Attending the HQ order fair in the morning.",
-        ar: "حضور معرض الطلبيات في المقر صباحًا.",
-      }),
+      activity: conferenceActivity(24),
       dining: row("confirmed", MEALS_COMPANY, { detail: [DIET_ASK] }),
       transport: row("confirmed", HOTEL_VENUE),
     },
@@ -637,14 +625,13 @@ function day24(): PersonDayCard[] {
       id: "0924-reham",
       people: ["reham"],
       lodging: interconLodging("reham"),
-      activity: row("pending", REHAM_TOUR, { detail: REHAM_TOUR_DETAIL }),
+      activity: row("confirmed", REHAM_TOUR, { detail: TOUR_DETAIL }),
       dining: row("confirmed", {
         zh: "会议餐由公司安排；外出自由活动时可以不参加。",
         en: "Session meals are arranged by the company; you do not have to join them when you are out.",
         ar: "وجبات الجلسات ترتّبها الشركة؛ ولستِ مضطرة للانضمام عند الخروج.",
       }, { detail: [DIET_ASK] }),
-      // 择一的巡店在酒店外，往返交通仍未安排。
-      transport: row("pending", OFFSITE_TOUR_TRANSPORT),
+      transport: row("confirmed", OFFSITE_TOUR_TRANSPORT),
     },
   ];
 }
@@ -694,11 +681,11 @@ const FREE_IN_GZ: L10n = {
 
 function day25(): PersonDayCard[] {
   return [
-    qiutingHomeCard("0925-qiuting"),
+    { ...qiutingHomeCard("0925-qiuting"), lodging: { ...qiutingHomeCard("0925-qiuting").lodging, detail: [EVENT_CHECKOUT, ...HOME_DETAIL] } },
     {
       id: "0925-rahma",
       people: ["rahma"],
-      lodging: RAHMA_NEW_HOTEL,
+      lodging: { ...RAHMA_NEW_HOTEL, detail: [EVENT_CHECKOUT, ...NEW_HOTEL_DETAIL] },
       activity: row("confirmed", FREE_IN_GZ),
       dining: row("confirmed", MEALS_SELF, { detail: [DIET_ASK] }),
       transport: row("confirmed", CITY_SELF),
@@ -707,7 +694,7 @@ function day25(): PersonDayCard[] {
     {
       id: "0925-study",
       people: STUDY,
-      lodging: STUDY_NEW_HOTEL,
+      lodging: { ...STUDY_NEW_HOTEL, detail: [EVENT_CHECKOUT, ...NEW_HOTEL_DETAIL] },
       activity: row("pending", {
         zh: "由 MINISO 广州区域负责人带领巡店学习（第 2 天）。",
         en: "Store-visit training led by the MINISO Guangzhou regional lead (day 2).",

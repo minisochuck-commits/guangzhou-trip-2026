@@ -3,7 +3,7 @@
 // 覆盖本轮四条要求：
 //   1. 完整航程只挂出发日；抵达日不重复同一个航班弹窗，但保留抵达时刻与接机协调。
 //   2. 餐饮格没有弹窗按钮，日程里不出现游玩 / 美食建议。
-//   3. 9/22–24 参会日交通是「酒店内参会」；外出巡店的交通待定必须保留。
+//   3. 9/22–24 参会日交通是「酒店内参会」；国际巡店由 MINISO 统一交通；专项学习交通待确认。
 //   4. Reham 9/21–26 是双人标间；Rahma 9/25–26 仍是单间。
 
 import { cardsFor } from "./person-day-plan";
@@ -132,7 +132,6 @@ export function runNoiseChecks(): CheckResult[] {
   for (const [date, group] of [
     ["2026-09-24", "study"],
     ["2026-09-25", "study"],
-    ["2026-09-23", "reham"],
     ["2026-09-24", "reham"],
   ] as [string, GroupKey][]) {
     results.push(
@@ -228,8 +227,7 @@ export function runNoiseChecks(): CheckResult[] {
   for (const [date, group, must] of [
     ["2026-09-24", "study", "巡店交通"],
     ["2026-09-25", "study", "巡店交通"],
-    ["2026-09-23", "reham", "外出巡店往返交通待定"],
-    ["2026-09-24", "reham", "外出巡店往返交通待定"],
+
   ] as [string, GroupKey, string][]) {
     const lines = zhLines(date, group, "transport");
     results.push(
@@ -249,21 +247,28 @@ export function runNoiseChecks(): CheckResult[] {
     );
   }
 
-  // Reham 9/23、9/24 用的是外出巡店那条，不是学习组那条
-  for (const date of ["2026-09-23", "2026-09-24"]) {
-    const factRow = rowOf(date, "reham", "transport");
-    results.push(
-      check(
-        `${date} Reham 事实层写外出巡店往返交通`,
-        Boolean(
-          factRow?.text.zh.includes("外出巡店") &&
-            factRow.text.en.includes("offsite store visit") &&
-            factRow.text.ar.includes("خارج الفندق"),
-        ),
-        String(factRow?.text.zh),
-      ),
-    );
+  // 2026-09-16 正式指引 + 用户确认：23国内场、24国际英语场。
+  results.push(check("Reham 23日自由，无巡店入口",
+    viewOf("2026-09-23", "reham", "activity")?.entry === null &&
+    zhLines("2026-09-23", "reham", "activity").includes("自由") &&
+    zhLines("2026-09-23", "reham", "transport").includes("自理")));
+  const tour = rowOf("2026-09-24", "reham", "activity");
+  results.push(check("Reham 24日英语巡店已定、统一交通",
+    tour?.status === "confirmed" && tour.text.zh.includes("英语") &&
+    tour.text.en.includes("English") && tour.text.ar.includes("الإنجليزية") &&
+    rowOf("2026-09-24", "reham", "transport")?.status === "confirmed" &&
+    zhLines("2026-09-24", "reham", "transport").includes("MINISO")));
+  for (const group of ["qiuting", "rahma"] as GroupKey[]) {
+    results.push(check(`24日 ${group} 订货会不是仅上午`, zhLines("2026-09-24", group, "activity").includes("09:00–18:00")));
   }
+  results.push(check("仅商品负责人承担订单截止提醒",
+    zhLines("2026-09-23", "qiuting", "activity").includes("预订单截止") &&
+    zhLines("2026-09-24", "qiuting", "activity").includes("最终订单截止") &&
+    !zhLines("2026-09-23", "reham", "activity").includes("订单")));
+  results.push(check("25日退房不覆盖Reham续住",
+    zhLines("2026-09-25", "rahma", "lodging").includes("12:00") &&
+    zhLines("2026-09-25", "study", "lodging").includes("12:00") &&
+    !zhLines("2026-09-25", "reham", "lodging").includes("退房")));
 
   /* ---- 4. Reham 双人标间 ---- */
 

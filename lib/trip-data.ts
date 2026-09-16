@@ -386,9 +386,9 @@ export const INTERCONTINENTAL = {
   chineseAddress: "广州保利洲际酒店，广州市海珠区阅江中路828号",
   url: "https://www.ihg.com/intercontinental/hotels/cn/zh/guangzhou/canec/hoteldetail",
   checkInOut: {
-    zh: "官方入住时间 15:00、退房 12:00。9/21 上午到达不等于房间已经准备好。",
-    en: "Official check-in 15:00, check-out 12:00. Arriving on the morning of 21 Sep does not mean the room is ready.",
-    ar: "تسجيل الدخول الرسمي 15:00 والمغادرة 12:00. والوصول صباح 21 سبتمبر لا يعني أن الغرفة جاهزة.",
+    zh: "本次参会入住办理：9/21 14:00–24:00；一般退房时间为12:00。上午提前入住、Reham 9/27延迟退房需向酒店确认。",
+    en: "Event check-in: 21 Sep, 14:00–24:00; usual check-out is 12:00. Confirm early room access and Reham’s late check-out on 27 Sep with the hotel.",
+    ar: "تسجيل الوصول للفعالية يوم 21 سبتمبر من 14:00 إلى 24:00؛ والمغادرة المعتادة الساعة 12:00. يُرجى تأكيد الدخول المبكر وتمديد إقامة Reham يوم 27 سبتمبر مع الفندق.",
   } satisfies L10n,
 };
 

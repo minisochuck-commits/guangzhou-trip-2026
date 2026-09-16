@@ -469,10 +469,15 @@ for (const note of data.FOOD_NOTES) {
   assert(!['leigarden', 'pigeon', 'soup'].includes(note.imageKey), `${note.id}: ${note.imageKey}.jpg was rejected — it may not stand in for a dish`);
   for (const lang of ['zh', 'en', 'ar']) assert(note.imageAlt?.[lang]?.trim(), `${note.id}: missing ${lang} alt text`);
 }
-// This edit must not silently change travellers, flights, baggage or hotel facts.
+// Formal event guide updates the check-in window only; all other protected facts stay.
 for (const key of Object.keys(original)) {
-  if (/FLIGHT|BAGGAGE|PEOPLE|INTERCONTINENTAL/.test(key)) assert.deepEqual(data[key], original[key], `${key} changed`);
+  if (/FLIGHT|BAGGAGE|PEOPLE/.test(key)) assert.deepEqual(data[key], original[key], `${key} changed`);
 }
+const { checkInOut, ...hotelFacts } = data.INTERCONTINENTAL;
+const { checkInOut: previousCheckInOut, ...previousHotelFacts } = original.INTERCONTINENTAL;
+assert(previousCheckInOut);
+assert.deepEqual(hotelFacts, previousHotelFacts, 'Hotel identity/address changed');
+for (const lang of ['zh', 'en', 'ar']) assert(checkInOut[lang].includes('14:00') && checkInOut[lang].includes('24:00'), `${lang}: event check-in window missing`);
 const view = fs.readFileSync('components/trip/guide-tab.tsx', 'utf8');
 assert(view.includes('defaultValue={[]}'), 'Long stories must start collapsed');
 assert(!view.includes('UI.retailTakeaways'), 'Report instructions must not be rendered');
@@ -549,7 +554,8 @@ assert(at('id="guide-hotel"') < at('id="pazhou"'), 'The hotel block hands over t
 const prepSection = view.slice(at('id="prep"'), view.indexOf('</Section>', at('id="prep"')));
 assert(prepSection.includes('COPY_ADDRESSES.filter'), 'The airport addresses are inside preparation');
 assert(prepSection.includes('BaggageLines'), 'The baggage allowances are inside preparation');
-assert((prepSection.match(/<Fold/g) ?? []).length === 2, 'Both of them are folded, not laid out in the flow');
+assert(prepSection.includes('<Fold title={PREP_FOLDS.addresses}') && prepSection.includes('<Fold title={UI.baggage}'), 'Addresses and baggage stay folded');
+assert(prepSection.includes('MEETING_RULES'), 'Official entry requirements are in preparation');
 assert(!view.includes('id="addresses"') && !view.includes('id="baggage"'), 'Neither is a chapter of its own any more');
 // `inline-flex` on a summary drops the native triangle, and then nothing tells the
 // reader the addresses and the allowances are there at all.
