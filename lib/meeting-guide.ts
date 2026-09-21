@@ -16,7 +16,7 @@ export const ORDERING_22 = L("11:45–22:00 新品订货环节；订货流程注
 export const PREORDER_DEADLINE = L("22:00 前提交预订单。", "Submit pre-orders by 22:00.", "تقديم الطلبات المسبقة بحلول 22:00.");
 export const FINAL_ORDER_DEADLINE = L("18:00 前提交最终订单。", "Submit final orders by 18:00.", "تقديم الطلبات النهائية بحلول 18:00.");
 export const TOUR_DETAIL: L10n[] = [
-  L("9/24 13:50–17:30 国际场巡店，英语讲解；上午自由活动。MINISO 统一安排交通及参观，集合时间、地点向 Rahma 确认。", "24 Sep, 13:50–17:30: international store tour in English; morning free. MINISO arranges transport and visits. Confirm the meeting point and assembly time with Rahma.", "24 سبتمبر، 13:50–17:30: جولة المتاجر الدولية باللغة الإنجليزية؛ الصباح حر. تنظم MINISO النقل والزيارات. يُرجى تأكيد نقطة ووقت التجمع مع Rahma."),
+  L("大会巡店统一调整至9/23。MINISO统一安排交通及参观；具体时间、集合地点、路线及英语讲解安排待会务群通知，由Rahma对接。", "The event store tours have moved to 23 Sep. MINISO arranges transport and visits. Timing, meeting point, route and English-language arrangements await the event group notice; Rahma coordinates.", "تم نقل جولات متاجر الفعالية إلى 23 سبتمبر. تنظم MINISO النقل والزيارات؛ ويُعلن الوقت ونقطة التجمع والمسار وترتيبات الشرح بالإنجليزية لاحقًا في مجموعة الفعالية، بالتنسيق مع Rahma."),
   L("指引推荐天河城 MINISO FRIENDS、君超 SUPER MINISO、正佳 MINISO LAND 三家门店；当天实际路线以现场安排为准。", "The guide highlights MINISO FRIENDS at TeeMall, SUPER MINISO at Junchao and MINISO LAND at Grandview. The actual tour route follows the organiser’s arrangements.", "يعرض الدليل متاجر MINISO FRIENDS في TeeMall وSUPER MINISO في Junchao وMINISO LAND في Grandview؛ والمسار الفعلي حسب تنظيم الفعالية."),
 ];
 export const EVENT_CONTACTS = [

@@ -9,9 +9,9 @@ import { AttendeeGuideArabic } from "./attendee-guide-ar";
 
 const TITLE = { zh: "参会指引", en: "Attendee guide", ar: "دليل المشاركين" };
 const NOTE = {
-  zh: "本次接待补充：Reham参加9月24日13:50–17:30国际英语巡店；23日是国内中文场。原图的25日退房为大会通用安排，Reham仍按个人行程于27日退房。",
-  en: "For this visit: Reham joins the international English-language tour on 24 Sep, 13:50–17:30. The 23 Sep tour is domestic and in Chinese. The poster’s 25 Sep checkout is the general event arrangement; Reham checks out on 27 Sep as scheduled.",
-  ar: "توضيح خاص بهذه الزيارة: تشارك Reham في الجولة الدولية باللغة الإنجليزية يوم 24 سبتمبر، من \u206613:50–17:30\u2069. جولة 23 سبتمبر محلية وباللغة الصينية. المغادرة يوم 25 سبتمبر في الدليل هي الترتيب العام للفعالية؛ أمّا Reham فتغادر الفندق يوم 27 سبتمبر وفق جدولها الشخصي.",
+  zh: "最新调整：大会巡店统一改至9月23日，具体时间、集合地点、路线及英语讲解安排待通知。原图巡店日期已过时，以最新通知为准。24日18:00订单截止不变。Reham仍于27日退房。",
+  en: "Update: all event store tours move to 23 Sep. Timing, meeting point, route and English-language arrangements await notice. The original poster’s tour dates are outdated. The order deadline remains 24 Sep at 18:00; Reham checks out on 27 Sep.",
+  ar: "تحديث: نُقلت جميع جولات متاجر الفعالية إلى 23 سبتمبر. الوقت ونقطة التجمع والمسار وترتيبات الشرح بالإنجليزية بانتظار الإعلان. مواعيد الجولات في الصورة الأصلية قديمة؛ يُرجى اتباع التحديث. موعد الطلبات النهائي يظل 24 سبتمبر الساعة 18:00؛ وتغادر Reham الفندق يوم 27 سبتمبر.",
 };
 
 export function AttendeeGuide({ lang, cover = false }: { lang: Lang; cover?: boolean }) {
@@ -35,7 +35,7 @@ export function AttendeeGuide({ lang, cover = false }: { lang: Lang; cover?: boo
       : "mt-1 inline-flex min-h-11 w-full items-center justify-start gap-1 rounded-lg border border-navy/25 px-2 py-1.5 text-start text-sm font-medium leading-5 text-navy hover:border-navy/50 md:w-auto md:px-2.5"}>
       {cover ? <>
         <img src="./reference/attendee-guide-cover.jpg" alt={t({ zh: "参会指引封面", en: "Attendee guide cover", ar: "غلاف دليل المشاركين" }, lang)} width={484} height={560} loading="lazy" className="h-24 w-20 shrink-0 rounded-md object-cover" />
-        <span><span className="block text-[15px] font-semibold">{t(TITLE, lang)}</span><span className="mt-1 block text-sm text-navy-soft">{t({ zh: "查看阿语译文／中英原图", en: "Arabic translation / CN/EN original", ar: "الترجمة العربية / الصورة الأصلية" }, lang)}</span></span>
+        <span><span className="block text-[15px] font-semibold">{t(TITLE, lang)}</span><span className="mt-1 block text-sm text-navy-soft">{t({ zh: "巡店已改至23日 · 查看最新指引", en: "Tours moved to 23 Sep · Updated guide", ar: "الجولات نُقلت إلى 23 سبتمبر · الدليل المحدّث" }, lang)}</span></span>
       </> : <><FileImageIcon className="size-4 shrink-0" />{t(TITLE, lang)}</>}
     </DialogTrigger>
     <DialogContent showCloseButton={false} aria-describedby={undefined} dir={lang === "ar" ? "rtl" : "ltr"}

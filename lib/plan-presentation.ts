@@ -269,7 +269,8 @@ function activityView(date: string, group: GroupKey): CellView {
   }
 
   if (group === "rahma") {
-    if (date === "2026-09-22" || date === "2026-09-23") {
+    if (date === "2026-09-23") return { lines: [L("参会及陪同Reham巡店", "Event and accompanying Reham on the tour", "الفعالية ومرافقة Reham في الجولة"), L("巡店时间、集合地点待通知", "Tour time and meeting point await notice", "وقت الجولة ونقطة التجمع بانتظار الإعلان")], entry: "storeVisit", hidePending: true };
+    if (date === "2026-09-22") {
       return conferenceView(date, group);
     }
     if (date === "2026-09-24") {
@@ -320,16 +321,17 @@ function activityView(date: string, group: GroupKey): CellView {
       entry: "sessions",
     };
   }
-  if (date === "2026-09-24") {
+  if (date === "2026-09-23") {
     return {
       lines: [
-        L("13:50–17:30 国际巡店", "13:50–17:30 international tour", "13:50–17:30 الجولة الدولية"),
-        L("英语讲解 · 上午自由", "In English · morning free", "بالإنجليزية · الصباح حر"),
+        L("大会巡店（改至23日）", "Event store tour (moved to 23 Sep)", "جولة المتاجر (نُقلت إلى 23 سبتمبر)"),
+        L("时间、集合地点待通知", "Time and meeting point await notice", "الوقت ونقطة التجمع بانتظار الإعلان"),
       ],
       entry: "storeVisit",
+      hidePending: true,
     };
   }
-  if (["2026-09-23", "2026-09-25", "2026-09-26"].includes(date)) {
+  if (["2026-09-24", "2026-09-25", "2026-09-26"].includes(date)) {
     return { lines: [FREE_DAY], entry: null };
   }
   // 9/27：夜航前不新增耗时安排
@@ -655,6 +657,7 @@ function transportView(date: string, group: GroupKey): CellView {
   }
 
   if (group === "rahma") {
+    if (date === "2026-09-23") return { lines: [OFFSITE_TOUR_TRANSPORT], entry: null, hidePending: true };
     if (date <= "2026-09-24") {
       return { lines: [HOTEL_VENUE_LINE], entry: null, hidePending: true };
     }
@@ -673,7 +676,7 @@ function transportView(date: string, group: GroupKey): CellView {
       hidePending: true,
     };
   }
-  if (date === "2026-09-24") {
+  if (date === "2026-09-23") {
     return { lines: [OFFSITE_TOUR_TRANSPORT], entry: null };
   }
   return { lines: [CITY_SELF_LINE], entry: null };

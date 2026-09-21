@@ -17,11 +17,10 @@ const PROGRAMME = [
   ] },
   { day: "23 سبتمبر", rows: [
     ["09:00–22:00", "طلبات المنتجات الجديدة"],
-    ["13:50–17:30", "زيارة المتاجر المتميزة — الجولة الأولى"],
+    ["الوقت لاحقًا", "جولة المتاجر المتميزة — تم توحيد الجولات في 23 سبتمبر"],
   ] },
   { day: "24 سبتمبر", rows: [
     ["09:00–18:00", "طلبات المنتجات الجديدة"],
-    ["13:50–17:30", "زيارة المتاجر المتميزة — الجولة الثانية"],
   ] },
   { day: "25 سبتمبر", rows: [["12:00", "تسجيل المغادرة من الفندق قبل الساعة 12:00 ظهرًا"]] },
 ];
@@ -69,7 +68,7 @@ export function AttendeeGuideArabic() {
   return <article lang="ar" dir="rtl" className="mx-auto max-w-[46rem] space-y-6 bg-[#fff9f0] px-4 py-5 text-[15px] leading-7 text-[#513326] sm:px-8">
     <header className="space-y-3 text-center">
       <img src="./reference/attendee-guide-cover.jpg" alt="غلاف فعالية MINISO Growing & Blooming" width={484} height={560} className="mx-auto w-48 rounded-xl" />
-      <p className="text-xs font-semibold text-orange-800">ترجمة عربية للدليل الأصلي</p>
+      <p className="text-xs font-semibold text-orange-800">ترجمة عربية مع تحديث موعد الجولات</p>
       <h2 className="text-xl font-bold">دليل المشاركين</h2>
       <p dir="ltr" className="text-sm font-semibold">MINISO BLOOMING GALLERY TOUR 2027</p>
       <p>إبداع ينمو ويزدهر، وشخصيات أصلية تصل إلى العالم. أهلًا بكم في جولة MINISO: اكتشفوا 12 منطقة عرض مبتكرة وأكثر من 3,600 منتج جديد، في لقاء يجمع الشغف والإبداع والنمو.</p>

@@ -132,7 +132,7 @@ export function runNoiseChecks(): CheckResult[] {
   for (const [date, group] of [
     ["2026-09-24", "study"],
     ["2026-09-25", "study"],
-    ["2026-09-24", "reham"],
+    ["2026-09-23", "reham"],
   ] as [string, GroupKey][]) {
     results.push(
       check(
@@ -150,7 +150,6 @@ export function runNoiseChecks(): CheckResult[] {
     ["2026-09-23", "qiuting"],
     ["2026-09-24", "qiuting"],
     ["2026-09-22", "rahma"],
-    ["2026-09-23", "rahma"],
     ["2026-09-24", "rahma"],
     ["2026-09-22", "study"],
     ["2026-09-23", "study"],
@@ -247,17 +246,23 @@ export function runNoiseChecks(): CheckResult[] {
     );
   }
 
-  // 2026-09-16 正式指引 + 用户确认：23国内场、24国际英语场。
-  results.push(check("Reham 23日自由，无巡店入口",
-    viewOf("2026-09-23", "reham", "activity")?.entry === null &&
-    zhLines("2026-09-23", "reham", "activity").includes("自由") &&
-    zhLines("2026-09-23", "reham", "transport").includes("自理")));
-  const tour = rowOf("2026-09-24", "reham", "activity");
-  results.push(check("Reham 24日英语巡店已定、统一交通",
-    tour?.status === "confirmed" && tour.text.zh.includes("英语") &&
+  // 9/21调整通知：统一23日，时刻与语言安排待后续通知。
+  results.push(check("Reham 24日自由，无巡店入口",
+    viewOf("2026-09-24", "reham", "activity")?.entry === null &&
+    zhLines("2026-09-24", "reham", "activity").includes("自由") &&
+    zhLines("2026-09-24", "reham", "transport").includes("自理")));
+  const tour = rowOf("2026-09-23", "reham", "activity");
+  results.push(check("Reham 23日巡店，时间待定，统一交通",
+    tour?.status === "pending" && tour.text.zh.includes("待通知") && !tour.text.zh.includes("13:50") &&
     tour.text.en.includes("English") && tour.text.ar.includes("الإنجليزية") &&
-    rowOf("2026-09-24", "reham", "transport")?.status === "confirmed" &&
-    zhLines("2026-09-24", "reham", "transport").includes("MINISO")));
+    rowOf("2026-09-23", "reham", "transport")?.status === "confirmed" &&
+    zhLines("2026-09-23", "reham", "transport").includes("MINISO")));
+  results.push(check("Rahma 23日陪同并统一交通",
+    zhLines("2026-09-23", "rahma", "activity").includes("陪同Reham") &&
+    zhLines("2026-09-23", "rahma", "transport").includes("MINISO")));
+  results.push(check("Rahma 23日住宿不受巡店调整影响",
+    viewOf("2026-09-23", "rahma", "lodging")?.entry === "hotelAddress" &&
+    zhLines("2026-09-23", "rahma", "lodging") === zhLines("2026-09-22", "rahma", "lodging")));
   for (const group of ["qiuting", "rahma"] as GroupKey[]) {
     results.push(check(`24日 ${group} 订货会不是仅上午`, zhLines("2026-09-24", group, "activity").includes("09:00–18:00")));
   }

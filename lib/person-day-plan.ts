@@ -238,9 +238,9 @@ const STUDY_PLAN_TBD: L10n[] = [
 ];
 
 const REHAM_TOUR: L10n = {
-  zh: "13:50–17:30 参加国际场巡店，英语讲解；上午自由活动。",
-  en: "13:50–17:30 international store tour in English; morning free.",
-  ar: "13:50–17:30 جولة المتاجر الدولية باللغة الإنجليزية؛ الصباح حر.",
+  zh: "9/23参加大会巡店；具体时间及英语讲解安排待通知。",
+  en: "Event store tour on 23 Sep; timing and English-language arrangements await confirmation.",
+  ar: "جولة متاجر الفعالية يوم 23 سبتمبر؛ الوقت وترتيبات الشرح بالإنجليزية بانتظار الإعلان.",
 };
 
 /* ---------------- 小工具 ---------------- */
@@ -529,9 +529,9 @@ function sessionsDay(dayIndex: 22 | 23): PersonDayCard[] {
       id: `${key}-rahma`,
       people: ["rahma"],
       lodging: interconLodging("rahma"),
-      activity: conferenceActivity(dayIndex),
+      activity: dayIndex === 23 ? row("pending", { zh: "参会，并陪同Reham巡店；巡店时间待通知。", en: "Attend the event and accompany Reham on the store tour; tour timing awaits confirmation.", ar: "حضور الفعالية ومرافقة Reham في جولة المتاجر؛ وقت الجولة بانتظار الإعلان." }, { detail: TOUR_DETAIL }) : conferenceActivity(dayIndex),
       dining: row("confirmed", MEALS_COMPANY, { detail: [DIET_ASK] }),
-      transport: row("confirmed", HOTEL_VENUE),
+      transport: row("confirmed", dayIndex === 23 ? OFFSITE_TOUR_TRANSPORT : HOTEL_VENUE),
     },
     {
       id: `${key}-study`,
@@ -574,14 +574,13 @@ function sessionsDay(dayIndex: 22 | 23): PersonDayCard[] {
           id: `${key}-reham`,
           people: ["reham"],
           lodging: interconLodging("reham"),
-          activity: row("confirmed", { zh: "全天自由活动。", en: "A free day.", ar: "يوم حر." }),
+          activity: row("pending", REHAM_TOUR, { detail: TOUR_DETAIL }),
           dining: row("confirmed", {
             zh: "会议餐由公司安排；外出自由活动时可以不参加。",
             en: "Session meals are arranged by the company; you do not have to join them when you are out.",
             ar: "وجبات الجلسات ترتّبها الشركة؛ ولستِ مضطرة للانضمام عند الخروج.",
           }, { detail: [DIET_ASK] }),
-          transport: row("confirmed", CITY_SELF),
-          freeTime: true,
+          transport: row("confirmed", OFFSITE_TOUR_TRANSPORT),
         },
   ];
 }
@@ -625,13 +624,14 @@ function day24(): PersonDayCard[] {
       id: "0924-reham",
       people: ["reham"],
       lodging: interconLodging("reham"),
-      activity: row("confirmed", REHAM_TOUR, { detail: TOUR_DETAIL }),
+      activity: row("confirmed", { zh: "全天自由活动。", en: "A free day.", ar: "يوم حر." }),
       dining: row("confirmed", {
         zh: "会议餐由公司安排；外出自由活动时可以不参加。",
         en: "Session meals are arranged by the company; you do not have to join them when you are out.",
         ar: "وجبات الجلسات ترتّبها الشركة؛ ولستِ مضطرة للانضمام عند الخروج.",
       }, { detail: [DIET_ASK] }),
-      transport: row("confirmed", OFFSITE_TOUR_TRANSPORT),
+      transport: row("confirmed", CITY_SELF),
+      freeTime: true,
     },
   ];
 }
