@@ -765,7 +765,7 @@ export function GuideTab({
               </div>
             ))}
             <Fold title={{ zh: "参会指引推荐门店", en: "Stores highlighted in the event guide", ar: "متاجر يقترحها دليل الفعالية" }} lang={lang}>
-              <p className={GUIDE.note}>{t({ zh: "以下为指引推荐门店；9月24日的实际巡店路线以会务安排为准。", en: "These are the guide’s suggested stores. The organiser confirms the actual route for 24 September.", ar: "هذه متاجر يقترحها الدليل؛ ويحدد المنظم المسار الفعلي لجولة 24 سبتمبر." }, lang)}</p>
+              <p className={GUIDE.note}>{t({ zh: "以下为指引推荐门店；9月23日的实际巡店路线以会务安排为准。", en: "These are the guide’s suggested stores. The organiser confirms the actual route for 23 September.", ar: "هذه متاجر يقترحها الدليل؛ ويحدد المنظم المسار الفعلي لجولة 23 سبتمبر." }, lang)}</p>
               <CopyChinese entry={{ id: "event-teemall", label: { zh: "MINISO FRIENDS 天河城店", en: "MINISO FRIENDS · TeeMall", ar: "MINISO FRIENDS · TeeMall" }, chinese: "广州市天河区天河路208号天河城购物中心4楼，MINISO FRIENDS" }} lang={lang} />
               <CopyChinese entry={{ id: "event-junchao", label: { zh: "SUPER MINISO 君超店", en: "SUPER MINISO · Junchao", ar: "SUPER MINISO · Junchao" }, chinese: "广州市天河区棠下二社涌边路1号君超中心F1，SUPER MINISO" }} lang={lang} />
               <CopyChinese entry={{ id: "event-grandview", label: { zh: "MINISO LAND 正佳店", en: "MINISO LAND · Grandview", ar: "MINISO LAND · Grandview" }, chinese: "广州市天河区天河路228号正佳广场1楼北街，MINISO LAND" }} lang={lang} />
