@@ -53,4 +53,4 @@ npm run start -- --port 8797
 
 ## 源码与在线演示
 
-在线演示：https://minisochuck-commits.github.io/guangzhou-trip-2026/ 。本仓 `codex/guangzhou-guest-source` 分支是源码，`main` 是静态构建产物。更新只做普通快进推送，不强推或重建历史。历史版本和旧 Sites 网址不随本次最新版本的脱敏更新；本次没有清除历史或改变仓库访问权限。
+在线演示：https://minisochuck-commits.github.io/guangzhou-trip-2026/ 。本仓 `codex/guangzhou-guest-source` 分支是源码，`main` 是静态构建产物。日常更新采用普通快进推送。2026-10-21 应所有者要求对原仓两个分支的既有历史做一次个人信息清理，保留维护顺序与记录；含个人信息的历史参考图片换成演示图。清理历史后请重新克隆；不要合并或强推旧克隆、旧分支及旧静态构建产物，否则会重新引入原资料。旧提交直链与旧 Sites 的撤下需要各托管方分别确认，分支更新不代表缓存已经清除。
