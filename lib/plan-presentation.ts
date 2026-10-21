@@ -3,7 +3,7 @@
 // 事实正本是 `lib/trip-data.ts` 和 `lib/person-day-plan.ts`，**这里不改它们**。
 // 每个格子的完整原文、细节、航班、地址仍然在弹窗里原样显示。
 //
-// 为什么要有这一层：390px 手机上，交通格的整句原文会把 Guest5 9/27 那一行撑到
+// 为什么要有这一层：390px 手机上，交通格的整句原文会把 Guest 5 9/27 那一行撑到
 // 两百多像素高，同一行其它三格却大片空白。这里按 (日期 × 人员 × 字段) 手写短句，
 // **不做截断、不用正则剪、也不用 line-clamp** —— 关键事实（到机场时刻、航站楼、
 // 谁负责、公司管不管）一个都不能掉。
@@ -17,7 +17,7 @@ import type { PersonDayCard } from "./person-day-plan";
 
 export type Field = "lodging" | "activity" | "dining" | "transport";
 
-/** 表里的一行属于谁。Guest3 + Guest4 是同一条记录。 */
+/** 表里的一行属于谁。Guest 3 + Guest 4 是同一条记录。 */
 export type GroupKey = "guest1" | "guest2" | "study" | "guest5";
 
 /** 弹窗入口的类型 —— 按钮和弹窗标题都用它，不再统称「详情」。 */
@@ -76,18 +76,18 @@ function isGuest1Personal(date: string, group: GroupKey): boolean {
 
 const HOTEL_NAME_SHORT = L("保利洲际", "InterContinental", "إنتركونتيننتال");
 
-const ROOM_WITH_GUEST2 = L("与 Guest2 同房", "Sharing with Guest2", "غرفة مشتركة مع Guest2");
+const ROOM_WITH_GUEST2 = L("与 Guest 2 同房", "Sharing with Guest 2", "غرفة مشتركة مع Guest 2");
 const ROOM_WITH_GUEST1 = L(
   "与 Guest 1 同房",
   "Sharing with Guest 1",
   "غرفة مشتركة مع Guest 1",
 );
 const ROOM_STUDY = L(
-  "Guest3 与 Guest4 同房",
-  "Guest3 and Guest4 share",
-  "Guest3 و Guest4 في غرفة واحدة",
+  "Guest 3 与 Guest 4 同房",
+  "Guest 3 and Guest 4 share",
+  "Guest 3 و Guest 4 في غرفة واحدة",
 );
-/** Guest5 9/21–26 是双人标间，不是单间。Guest2 9/25–26 的公司另订仍是单间。 */
+/** Guest 5 9/21–26 是双人标间，不是单间。Guest 2 9/25–26 的公司另订仍是单间。 */
 const ROOM_TWIN = L("双人标间", "Twin room", "غرفة مزدوجة بسريرين");
 
 const HOTEL_NAME_TBD = L("酒店名待定", "Hotel name to be set", "اسم الفندق لم يُحدَّد");
@@ -198,7 +198,7 @@ function lodgingView(date: string, group: GroupKey): CellView {
 /**
  * 行程表只写「当天安排是什么」。
  * 游玩路线、美食与文化介绍**只在来华指南里**，不再挂进日程格 ——
- * 那些是可选建议，不是当天的安排；真实排好的巡店（study 9/24–25、Guest5 9/24）
+ * 那些是可选建议，不是当天的安排；真实排好的巡店（study 9/24–25、Guest 5 9/24）
  * 连同它的交通待定照旧保留。
  */
 const FREE_DAY = L("自由安排", "Free day", "يوم حر");
@@ -269,7 +269,7 @@ function activityView(date: string, group: GroupKey): CellView {
   }
 
   if (group === "guest2") {
-    if (date === "2026-09-23") return { lines: [L("参会及陪同Guest5巡店", "Event and accompanying Guest5 on the tour", "الفعالية ومرافقة Guest5 في الجولة"), L("巡店时间、集合地点待通知", "Tour time and meeting point await notice", "وقت الجولة ونقطة التجمع بانتظار الإعلان")], entry: "storeVisit", hidePending: true };
+    if (date === "2026-09-23") return { lines: [L("参会及陪同Guest 5巡店", "Event and accompanying Guest 5 on the tour", "الفعالية ومرافقة Guest 5 في الجولة"), L("巡店时间、集合地点待通知", "Tour time and meeting point await notice", "وقت الجولة ونقطة التجمع بانتظار الإعلان")], entry: "storeVisit", hidePending: true };
     if (date === "2026-09-22") {
       return conferenceView(date, group);
     }
@@ -514,7 +514,7 @@ function transportView(date: string, group: GroupKey): CellView {
       return {
         lines: [
           L("15:30 抵白云 T3", "15:30 at Baiyun T3", "15:30 في بايون صالة 3"),
-          L("公司接机 · Guest2 对接", "Company pickup · via Guest2", "استقبال من الشركة · عبر Guest2"),
+          L("公司接机 · Guest 2 对接", "Company pickup · via Guest 2", "استقبال من الشركة · عبر Guest 2"),
           L("车辆与时间待定", "Vehicle and time to be set", "المركبة والوقت لم يُحدَّدا"),
         ],
         entry: "transfer",
@@ -573,16 +573,16 @@ function transportView(date: string, group: GroupKey): CellView {
       return {
         lines: [
           L("20:20 到白云 T3", "20:20 · Baiyun T3", "20:20 · بايون صالة 3"),
-          L("公司送机｜Guest2", "Company · Guest2", "الشركة · Guest2"),
+          L("公司送机｜Guest 2", "Company · Guest 2", "الشركة · Guest 2"),
           L("车与出发时间待定", "Pickup time: TBC", "وقت الانطلاق: بانتظار"),
         ],
         entry: "flights",
         hidePending: true,
         coordination: [
           L(
-            "送机由公司安排，Guest2 提前协调；具体车辆与出发时间待定。",
-            "The company arranges the ride and Guest2 coordinates it in advance; the vehicle and departure time are still to be set.",
-            "ترتّب الشركة التوصيل وتنسّقه Guest2 مسبقًا؛ والمركبة ووقت الانطلاق لم يُحدَّدا بعد.",
+            "送机由公司安排，Guest 2 提前协调；具体车辆与出发时间待定。",
+            "The company arranges the ride and Guest 2 coordinates it in advance; the vehicle and departure time are still to be set.",
+            "ترتّب الشركة التوصيل وتنسّقه Guest 2 مسبقًا؛ والمركبة ووقت الانطلاق لم يُحدَّدا بعد.",
           ),
         ],
       };
@@ -591,15 +591,15 @@ function transportView(date: string, group: GroupKey): CellView {
       return {
         lines: [
           L("14:25 到白云 T2", "14:25 at Baiyun T2", "14:25 في بايون صالة 2"),
-          L("用车 Guest2 与董事长确认", "Guest2 confirms the ride with the chairman", "تؤكّد Guest2 التوصيل مع رئيس المجلس"),
+          L("用车 Guest 2 与董事长确认", "Guest 2 confirms the ride with the chairman", "تؤكّد Guest 2 التوصيل مع رئيس المجلس"),
         ],
         entry: "flights",
         hidePending: true,
         coordination: [
           L(
-            "去机场的交通由 Guest2 向董事长确认，安排待定。",
-            "Guest2 confirms airport transport with the chairman; the arrangement is pending.",
-            "تؤكّد Guest2 تنقل المطار مع رئيس مجلس الإدارة؛ والترتيب لم يُحسم بعد.",
+            "去机场的交通由 Guest 2 向董事长确认，安排待定。",
+            "Guest 2 confirms airport transport with the chairman; the arrangement is pending.",
+            "تؤكّد Guest 2 تنقل المطار مع رئيس مجلس الإدارة؛ والترتيب لم يُحسم بعد.",
           ),
         ],
       };
@@ -608,15 +608,15 @@ function transportView(date: string, group: GroupKey): CellView {
       return {
         lines: [
           L("14:25 到白云 T2", "14:25 at Baiyun T2", "14:25 في بايون صالة 2"),
-          L("机场交通向 Guest2 确认", "Confirm airport transport with Guest2", "أكّد تنقل المطار مع Guest2"),
+          L("机场交通向 Guest 2 确认", "Confirm airport transport with Guest 2", "أكّد تنقل المطار مع Guest 2"),
         ],
         entry: "flights",
         hidePending: true,
         coordination: [
           L(
-            "同日的机场交通向 Guest2 确认，安排待定。",
-            "Confirm the same-day airport transport with Guest2; the arrangement is pending.",
-            "أكّد تنقل المطار في اليوم نفسه مع Guest2؛ والترتيب لم يُحسم بعد.",
+            "同日的机场交通向 Guest 2 确认，安排待定。",
+            "Confirm the same-day airport transport with Guest 2; the arrangement is pending.",
+            "أكّد تنقل المطار في اليوم نفسه مع Guest 2؛ والترتيب لم يُحسم بعد.",
           ),
         ],
       };

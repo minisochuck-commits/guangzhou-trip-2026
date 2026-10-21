@@ -1,11 +1,9 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import { execFileSync } from 'node:child_process';
 import ts from 'typescript';
 
 const evaluate = async (source) => import('data:text/javascript;base64,' + Buffer.from(ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 } }).outputText).toString('base64'));
 const data = await evaluate(fs.readFileSync('lib/trip-data.ts', 'utf8'));
-const original = await evaluate(execFileSync('git', ['show', '83193d0:lib/trip-data.ts'], { encoding: 'utf8' }));
 const prepFor = (person) => data.PREP.filter((item) => !item.audience || person === null || item.audience.includes(person));
 for (const person of ['guest5', 'guest2', 'guest1', 'guest3', 'guest4']) {
   const ids = prepFor(person).map((item) => item.id);
@@ -70,7 +68,7 @@ for (const rejected of [
    *   siu mai is usually pork, so no dim sum order is one that "can hardly go wrong".
    */
   /*
-   * 25–27 September 2026 is the Mid-Autumn holiday and Guest5 is in Guangzhou for it, so
+   * 25–27 September 2026 is the Mid-Autumn holiday and Guest 5 is in Guangzhou for it, so
    * "Friday is an ordinary working day" is wrong for this trip. The culture chapter says
    * so with the State Council holiday schedule behind it.
    */
@@ -397,7 +395,7 @@ assert(Array.isArray(data.HALAL_INTRO) && data.HALAL_INTRO.length >= 1, 'The pra
 assert(guideView.includes('HALAL_INTRO'), 'The prayer introduction is rendered, not just written');
 assert(guideView.indexOf('HALAL_INTRO') < guideView.indexOf('JUMUAH_NOTE'), 'The introduction is read before the Friday box');
 const jumuah = JSON.stringify(data.JUMUAH_NOTE);
-assert(!/Guest5/.test(jumuah), 'The Friday note is for everyone travelling, not addressed to one person');
+assert(!/Guest 5/.test(jumuah), 'The Friday note is for everyone travelling, not addressed to one person');
 for (const singular of ['فاسألي', 'واتركي', 'أسبوعك']) {
   assert(!jumuah.includes(singular), `The Arabic Friday note addresses the group, not one woman: ${singular}`);
 }
@@ -470,13 +468,11 @@ for (const note of data.FOOD_NOTES) {
   for (const lang of ['zh', 'en', 'ar']) assert(note.imageAlt?.[lang]?.trim(), `${note.id}: missing ${lang} alt text`);
 }
 // Formal event guide updates the check-in window only; all other protected facts stay.
-for (const key of Object.keys(original)) {
-  if (/FLIGHT|BAGGAGE|PEOPLE/.test(key)) assert.deepEqual(data[key], original[key], `${key} changed`);
-}
-const { checkInOut, ...hotelFacts } = data.INTERCONTINENTAL;
-const { checkInOut: previousCheckInOut, ...previousHotelFacts } = original.INTERCONTINENTAL;
-assert(previousCheckInOut);
-assert.deepEqual(hotelFacts, previousHotelFacts, 'Hotel identity/address changed');
+// Public fixtures must remain synthetic and must not depend on private Git history.
+assert.deepEqual(data.PEOPLE.map(p => p.id), ['guest1','guest2','guest3','guest4','guest5']);
+for (const person of data.PEOPLE) assert(!('ticketName' in person));
+for (const flight of data.FLIGHTS) assert(flight.from.date.startsWith('2026-'));
+const { checkInOut } = data.INTERCONTINENTAL;
 for (const lang of ['zh', 'en', 'ar']) assert(checkInOut[lang].includes('14:00') && checkInOut[lang].includes('24:00'), `${lang}: event check-in window missing`);
 const view = fs.readFileSync('components/trip/guide-tab.tsx', 'utf8');
 assert(view.includes('defaultValue={[]}'), 'Long stories must start collapsed');
@@ -698,7 +694,7 @@ for (const kept of ['opera', 'taikoo']) assert(usedImages.has(kept), `${kept}.jp
 const dining = await evaluate(fs.readFileSync('lib/dining-brands.ts', 'utf8'));
 const brands = dining.DINING_BRANDS;
 /*
- * 2026-09-12, owner: cut 21 down to two or three per cuisine. His words: what Guest5
+ * 2026-09-12, owner: cut 21 down to two or three per cuisine. His words: what Guest 5
  * gets is "I picked for you", not "choose your own from twenty-one". Seven brands were
  * dropped (Xiao Bingsheng, Yue Chen Ji, Shi Shi Jiu, Mango Tree, Da Tou Xia, Mo Da,
  * Sushiro); every remaining brand carries a photograph of the dish it is known for.

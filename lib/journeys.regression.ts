@@ -3,7 +3,7 @@
 // 覆盖：
 //   1. 去程任意一天进来（9/20 / 9/21）拿到的是同一条完整旅程，两段航班。
 //   2. 航段数、时刻、航站楼与票面一致；回程跨零点的中转算得对。
-//   3. Guest5 直飞不被拼上川航航段。
+//   3. Guest 5 直飞不被拼上川航航段。
 //   4. 事实没被改：FLIGHTS 的时刻 / 航站楼 / 人员与基线一致。
 
 import { FLIGHT_MAP, FLIGHTS } from "./trip-data";
@@ -140,7 +140,7 @@ export function runJourneyChecks(): CheckResult[] {
     ),
   );
 
-  /* ---- 3. Guest5 直飞不被拼段 ---- */
+  /* ---- 3. Guest 5 直飞不被拼段 ---- */
 
   for (const [flightId, report] of [
     ["MS958", { date: "2026-09-20", time: "21:20", iata: "CAI", terminal: "T3" }],
@@ -174,7 +174,7 @@ export function runJourneyChecks(): CheckResult[] {
 
   results.push(
     check(
-      "Guest5 的旅程里没有任何川航航段",
+      "Guest 5 的旅程里没有任何川航航段",
       journeysForFlights(["MS958", "MS959"])
         .flatMap(legsOf)
         .every((leg) => leg.baggage === "egyptairBusiness"),

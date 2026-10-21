@@ -18,12 +18,12 @@ import { OfflineReady } from "./offline-ready";
 import { Ltr } from "./ui";
 
 const FIRST_DATE = "2026-09-20";
-/** 默认看 Guest5 的行程（用户拍板），不是全员。 */
+/** 默认看 Guest 5 的行程（用户拍板），不是全员。 */
 const DEFAULT_PERSON: PersonId = "guest5";
 
 /**
  * 每个人一条自己的链接，中国同事另有一条看全员的：
- *   ?p=guest5&lang=ar   打开就是 Guest5 的行程、阿拉伯语
+ *   ?p=guest5&lang=ar   打开就是 Guest 5 的行程、阿拉伯语
  *   ?p=all             统筹用，看全部人
  * `guest4` 是 `guest4` 的别名 —— 代码里的 id 沿用票面首字段，
  * 但发出去的链接得让本人认得出自己。
@@ -33,7 +33,6 @@ const PERSON_PARAM: Record<string, PersonId | null> = {
   guest1: "guest1",
   guest2: "guest2",
   guest3: "guest3",
-  guest4: "guest4",
   guest4: "guest4",
   guest5: "guest5",
 };
@@ -229,7 +228,7 @@ export function TripView() {
 /**
  * 页头只放三件事：这是什么、看谁、什么语言。
  *
- * 「看谁」用一个原生下拉（六个横滑按钮是上一版，已替代）：默认显示 Guest5 的名字，
+ * 「看谁」用一个原生下拉（六个横滑按钮是上一版，已替代）：默认显示 Guest 5 的名字，
  * 点开才列出其他人和「全部」。常驻六个按钮既占两行，又让人以为那是主要操作。
  * 日期区间和当前的人各写一次，不重复。没有背景花纹、没有投影、没有首屏大图。
  *

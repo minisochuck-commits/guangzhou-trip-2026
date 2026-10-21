@@ -5,7 +5,7 @@
 // 所以 `mergeRows` / `cardsForPerson` 的签名一变，这个文件就会先报错。
 //
 // 覆盖三件事：
-//   1. 9/20 出发日 —— Guest 1、Guest2、Guest3、Guest4 四个人安排逐字一致，合成一行。
+//   1. 9/20 出发日 —— Guest 1、Guest 2、Guest 3、Guest 4 四个人安排逐字一致，合成一行。
 //   2. 住宿 / 活动不同的日子不能因为摘要像就合并。
 //   3. 筛单人时只返回他自己那一行，不带出同行的名字。
 
@@ -31,14 +31,14 @@ export function runMergeChecks(): CheckResult[] {
   const sep20 = peopleOfRows("2026-09-20", null);
   results.push(
     check(
-      "9/20 全员视图合并成 2 行（4 人一行 + Guest5 一行）",
+      "9/20 全员视图合并成 2 行（4 人一行 + Guest 5 一行）",
       sep20.length === 2,
       `实际 ${sep20.length} 行：${JSON.stringify(sep20)}`,
     ),
   );
   results.push(
     check(
-      "9/20 第一行是 Guest 1 + Guest2 + Guest3 + Guest4",
+      "9/20 第一行是 Guest 1 + Guest 2 + Guest 3 + Guest 4",
       JSON.stringify(sep20[0]) ===
         JSON.stringify(["guest1", "guest2", "guest3", "guest4"]),
       JSON.stringify(sep20[0]),
@@ -46,7 +46,7 @@ export function runMergeChecks(): CheckResult[] {
   );
   results.push(
     check(
-      "9/20 Guest5 单独一行（活动与交通都不同）",
+      "9/20 Guest 5 单独一行（活动与交通都不同）",
       JSON.stringify(sep20[1]) === JSON.stringify(["guest5"]),
       JSON.stringify(sep20[1]),
     ),
@@ -66,7 +66,7 @@ export function runMergeChecks(): CheckResult[] {
   const sep25 = peopleOfRows("2026-09-25", null);
   results.push(
     check(
-      "9/25 不合并：Guest 1 在中国、Guest2 自由、学习组巡店、Guest5 自由",
+      "9/25 不合并：Guest 1 在中国、Guest 2 自由、学习组巡店、Guest 5 自由",
       sep25.length === 4,
       `实际 ${sep25.length} 行：${JSON.stringify(sep25)}`,
     ),
@@ -75,7 +75,7 @@ export function runMergeChecks(): CheckResult[] {
   const sep27 = peopleOfRows("2026-09-27", null);
   results.push(
     check(
-      "9/27 不合并：Guest2 与学习组的机场对接人不同",
+      "9/27 不合并：Guest 2 与学习组的机场对接人不同",
       sep27.length === 4,
       `实际 ${sep27.length} 行：${JSON.stringify(sep27)}`,
     ),
@@ -86,7 +86,7 @@ export function runMergeChecks(): CheckResult[] {
   const [guest327] = cardsForPerson("guest3", "2026-09-27");
   results.push(
     check(
-      "9/27 Guest2 与学习组签名不同（交通对接人不同）",
+      "9/27 Guest 2 与学习组签名不同（交通对接人不同）",
       cardSignature("2026-09-27", guest227) !==
         cardSignature("2026-09-27", guest327),
       "签名相同就说明合并规则太松",
@@ -96,7 +96,7 @@ export function runMergeChecks(): CheckResult[] {
   const sep28 = peopleOfRows("2026-09-28", null);
   results.push(
     check(
-      "9/28 合并成 3 行：Guest 1 在中国、Guest2+学习组同一班机、Guest5 走 MS959",
+      "9/28 合并成 3 行：Guest 1 在中国、Guest 2+学习组同一班机、Guest 5 走 MS959",
       sep28.length === 3 &&
         JSON.stringify(sep28[1]) ===
           JSON.stringify(["guest2", "guest3", "guest4"]),

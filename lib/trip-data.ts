@@ -1,4 +1,4 @@
-// 广州行程 · 事实数据正本
+// 广州行程 · 虚构演示数据（不代表真实人员、预订或活动）
 //
 // 只放「事实」：人员、航班、行李、酒店、指南、路线、来源链接。
 // 每天每人的四行安排（住宿 / 活动 / 餐饮 / 交通）由 `lib/person-day-plan.ts`
@@ -7,7 +7,7 @@
 // 纪律：
 //   - 未定的写「待定 / 待确认」，绝不写成已预订、已安排。
 //   - 航班的日期、时刻、航站楼一律按票面，不改。所有时间标注所属机场当地时区。
-//   - 姓名正文统一用正常大小写显示名；票面全名只出现在人员详情里。
+//   - 姓名正文统一用正常大小写显示名；不存储票面全名。
 //   - 航班号、机场三字码保持大写。
 
 export type Lang = "zh" | "en" | "ar";
@@ -25,55 +25,15 @@ export type Person = {
   id: PersonId;
   /** 正文里显示的名字，正常大小写。 */
   name: string;
-  /** 票面全名，只在人员详情里出现。 */
-  ticketName: string;
   role: L10n;
 };
 
-export const PEOPLE: Person[] = [
-  {
-    id: "guest1",
-    name: "Guest 1",
-    ticketName: "EXAMPLE/GUEST1",
-    role: { zh: "商品负责人", en: "Merchandise Lead", ar: "مسؤولة السلع" },
-  },
-  {
-    id: "guest2",
-    name: "Guest2",
-    ticketName: "EXAMPLE/GUEST2",
-    role: {
-      zh: "董事长助理",
-      en: "Chairman's Assistant",
-      ar: "مساعدة رئيس مجلس الإدارة",
-    },
-  },
-  {
-    id: "guest3",
-    name: "Guest3",
-    ticketName: "EXAMPLE/GUEST3",
-    role: { zh: "区域经理", en: "Area Manager", ar: "مدير المنطقة" },
-  },
-  {
-    id: "guest4",
-    name: "Guest4",
-    ticketName: "EXAMPLE/GUEST4",
-    role: {
-      zh: "防损负责人",
-      en: "Loss Prevention Lead",
-      ar: "مسؤول منع الخسائر",
-    },
-  },
-  {
-    id: "guest5",
-    name: "Guest5",
-    ticketName: "EXAMPLE/GUEST5",
-    role: {
-      zh: "商场招商负责人",
-      en: "Mall Leasing Lead",
-      ar: "مسؤولة تأجير المراكز التجارية",
-    },
-  },
-];
+/** Fictional visitors only; no ticket names or actual staff roles. */
+export const PEOPLE: Person[] = Array.from({ length: 5 }, (_, i) => ({
+  id: `guest${i + 1}` as PersonId,
+  name: `Guest ${i + 1}`,
+  role: { zh: "示例访客", en: "Demo visitor", ar: "زائر تجريبي" },
+}));
 
 export const PERSON_MAP: Record<PersonId, Person> = PEOPLE.reduce(
   (acc, person) => {
@@ -386,9 +346,9 @@ export const INTERCONTINENTAL = {
   chineseAddress: "广州保利洲际酒店，广州市海珠区阅江中路828号",
   url: "https://www.ihg.com/intercontinental/hotels/cn/zh/guangzhou/canec/hoteldetail",
   checkInOut: {
-    zh: "本次参会入住办理：9/21 14:00–24:00；一般退房时间为12:00。上午提前入住、Guest5 9/27延迟退房需向酒店确认。",
-    en: "Event check-in: 21 Sep, 14:00–24:00; usual check-out is 12:00. Confirm early room access and Guest5’s late check-out on 27 Sep with the hotel.",
-    ar: "تسجيل الوصول للفعالية يوم 21 سبتمبر من 14:00 إلى 24:00؛ والمغادرة المعتادة الساعة 12:00. يُرجى تأكيد الدخول المبكر وتمديد إقامة Guest5 يوم 27 سبتمبر مع الفندق.",
+    zh: "本次参会入住办理：9/21 14:00–24:00；一般退房时间为12:00。上午提前入住、Guest 5 9/27延迟退房需向酒店确认。",
+    en: "Event check-in: 21 Sep, 14:00–24:00; usual check-out is 12:00. Confirm early room access and Guest 5’s late check-out on 27 Sep with the hotel.",
+    ar: "تسجيل الوصول للفعالية يوم 21 سبتمبر من 14:00 إلى 24:00؛ والمغادرة المعتادة الساعة 12:00. يُرجى تأكيد الدخول المبكر وتمديد إقامة Guest 5 يوم 27 سبتمبر مع الفندق.",
   } satisfies L10n,
 };
 
@@ -523,9 +483,9 @@ export const PREP: PrepItem[] = [
         "ar": "ثلاث طرق للاتصال، اختاري واحدة قبل السفر: اسألي مشغّلك عن التجوال في البرّ الرئيسي للصين؛ أو اشتري شريحة eSIM للسفر يدعمها هاتفك؛ أو خذي جواز سفرك بعد الوصول إلى فرع شركة اتصالات للحصول على شريحة صينية (الجواز مطلوب). واسألي قبل الشراء عن التغطية وطريقة التفعيل، وهل الباقة بيانات فقط بلا رقم يستقبل الرسائل."
       },
       {
-        "zh": "原来的号码留着收验证短信。出发前把 Guest2 加上微信、试着发一条消息；到酒店先连 Wi-Fi，出门前确认移动数据和地图都能用。",
-        "en": "Keep your existing number for verification texts. Add Guest2 on WeChat before you leave and send a test message; connect to the hotel Wi-Fi on arrival, and check that mobile data and maps work before you head out.",
-        "ar": "أبقي رقمك الحالي لاستقبال رسائل التحقق. وأضيفي Guest2 على وي تشات قبل السفر وجرّبي إرسال رسالة؛ واتصلي بواي فاي الفندق عند الوصول، وتأكّدي من عمل البيانات والخرائط قبل الخروج."
+        "zh": "原来的号码留着收验证短信。出发前把 Guest 2 加上微信、试着发一条消息；到酒店先连 Wi-Fi，出门前确认移动数据和地图都能用。",
+        "en": "Keep your existing number for verification texts. Add Guest 2 on WeChat before you leave and send a test message; connect to the hotel Wi-Fi on arrival, and check that mobile data and maps work before you head out.",
+        "ar": "أبقي رقمك الحالي لاستقبال رسائل التحقق. وأضيفي Guest 2 على وي تشات قبل السفر وجرّبي إرسال رسالة؛ واتصلي بواي فاي الفندق عند الوصول، وتأكّدي من عمل البيانات والخرائط قبل الخروج."
       },
       {
         "zh": "不同网络下，WhatsApp、Google 等服务的可用性不同，不要只依赖一种联系工具。如需 VPN，出发前安装并测试，仍准备好微信和离线翻译备用。",
@@ -547,9 +507,9 @@ export const PREP: PrepItem[] = [
     },
     "lines": [
       {
-        "zh": "Coordinator 会给 Guest4 一张中国卡，返程后归还。出发前检查手机可用，抵达后插卡并测试上网；两人同行时可通过热点共享给 Guest3。",
-        "en": "Coordinator will lend Guest4 one Chinese SIM, to return after the trip. Check phone compatibility before travel and test data on arrival. Guest3 can share Guest4’s hotspot while travelling together.",
-        "ar": "يعير Coordinator شريحة صينية واحدة لـ Guest4 تُعاد بعد الرحلة. افحصا توافق الهاتف قبل السفر واختبرا البيانات عند الوصول. يمكن لـ Guest3 استخدام نقطة اتصال Guest4 أثناء وجودكما معًا."
+        "zh": "Coordinator 会给 Guest 4 一张中国卡，返程后归还。出发前检查手机可用，抵达后插卡并测试上网；两人同行时可通过热点共享给 Guest 3。",
+        "en": "Coordinator will lend Guest 4 one Chinese SIM, to return after the trip. Check phone compatibility before travel and test data on arrival. Guest 3 can share Guest 4’s hotspot while travelling together.",
+        "ar": "يعير Coordinator شريحة صينية واحدة لـ Guest 4 تُعاد بعد الرحلة. افحصا توافق الهاتف قبل السفر واختبرا البيانات عند الوصول. يمكن لـ Guest 3 استخدام نقطة اتصال Guest 4 أثناء وجودكما معًا."
       },
       {
         "zh": "出发前协助安装并测试 VPN 和 ChatGPT，用于问路与翻译；可用性受网络及服务支持范围影响。同时准备离线翻译，保存本页中文地址和短句。",
@@ -610,9 +570,9 @@ export const COPY_ADDRESSES: CopyEntry[] = [
   {
     id: "hotel",
     label: {
-      zh: "酒店（9/21–9/24 全员；Guest5 至 9/26）",
-      en: "Hotel (21–24 Sep everyone; Guest5 through 26 Sep)",
-      ar: "الفندق (21–24 سبتمبر للجميع؛ و Guest5 حتى 26 سبتمبر)",
+      zh: "酒店（9/21–9/24 全员；Guest 5 至 9/26）",
+      en: "Hotel (21–24 Sep everyone; Guest 5 through 26 Sep)",
+      ar: "الفندق (21–24 سبتمبر للجميع؛ و Guest 5 حتى 26 سبتمبر)",
     },
     chinese: "广州保利洲际酒店，广州市海珠区阅江中路828号",
   },
@@ -628,9 +588,9 @@ export const COPY_ADDRESSES: CopyEntry[] = [
   {
     id: "can-t3",
     label: {
-      zh: "白云机场 T3（Guest5 9/21 到达、9/27 出发）",
-      en: "Baiyun Airport T3 (Guest5: arrive 21 Sep, depart 27 Sep)",
-      ar: "مطار بايون الصالة 3 (Guest5: الوصول 21 سبتمبر والمغادرة 27 سبتمبر)",
+      zh: "白云机场 T3（Guest 5 9/21 到达、9/27 出发）",
+      en: "Baiyun Airport T3 (Guest 5: arrive 21 Sep, depart 27 Sep)",
+      ar: "مطار بايون الصالة 3 (Guest 5: الوصول 21 سبتمبر والمغادرة 27 سبتمبر)",
     },
     chinese: "广州白云国际机场 T3 航站楼",
   },
@@ -988,9 +948,9 @@ export const CULTURE_NOTES: CultureNote[] = [
     id: "mid-autumn",
     title: { zh: "这次，正好赶上中秋", en: "Your week falls on the Mid-Autumn Festival", ar: "أسبوعكم يصادف عيد منتصف الخريف" },
     body: {
-      zh: "中秋是农历八月十五，2026 年落在 9 月 25 日，假期从 25 日放到 27 日 —— 正好是你们在广州的这几天。这一天对中国人的意思是团圆：月亮最圆的时候一家人聚在一起吃饭、分月饼；在外面的人抬头看同一轮月亮，想的是家里。所以这几天橱窗里的月亮和玉兔、同事互相送的月饼，讲的都是这一件事。\n广州有自己的过法，叫「树中秋」（也写作「竖中秋」）：把彩灯挂到高处，孩子提着灯笼上街，一家人在月下分月饼和柚子。节前老城的灯笼店会把各式各样的灯笼摆出来，路过可以看看；晚上到江边赏月也是本地人常做的事。假期里想坐夜游船或去热门餐厅，提前订；27 日去机场前留意路况。",
-      en: "Mid-Autumn falls on the fifteenth day of the eighth lunar month — 25 September in 2026 — and the holiday runs from the 25th to the 27th, which is exactly your week in Guangzhou. What the day means here is reunion: the moon is at its fullest, the family eats together and shares a mooncake, and whoever is away looks up at the same moon and thinks of home. That is what the moons and jade rabbits in the shop windows are about, and the mooncakes colleagues give one another.\nGuangzhou keeps it its own way, in a custom called shu zhongqiu, “raising the Mid-Autumn”: lanterns hung up high, children carrying lanterns through the streets, and the family sharing mooncakes and pomelo under the moon. In the run-up the lantern shops in the old city put their whole range out on display — worth a look if you pass one — and going down to the river to watch the moon is an ordinary local evening. If you want a river cruise or a popular restaurant over the holiday, book ahead; and check the traffic before leaving for the airport on the 27th.",
-      ar: "يقع عيد منتصف الخريف في اليوم الخامس عشر من الشهر القمري الثامن — أي 25 سبتمبر في 2026 — وتمتدّ العطلة من 25 إلى 27، وهي تمامًا أيامكم في قوانغتشو. ومعنى هذا اليوم هنا هو لَمّ الشمل: يكتمل القمر فتجتمع العائلة على الطعام وتتقاسم كعك القمر، ومن كان بعيدًا نظر إلى القمر نفسه وتذكّر أهله. وهذا ما تعنيه الأقمار والأرانب في واجهات المتاجر، وكعك القمر الذي يتبادله الزملاء.\nولقوانغتشو طريقتها الخاصة، وتسمّى «شو تشونغتشيو» أي «رفع منتصف الخريف»: فوانيس ملوّنة تُعلَّق عاليًا، وأطفال يحملون الفوانيس في الشوارع، وعائلة تتقاسم كعك القمر والبوملي تحت ضوء القمر. وقبل العيد تعرض محال الفوانيس في المدينة القديمة تشكيلتها كاملة — تستحقّ نظرة إن مررتم بها — والنزول إلى النهر لمشاهدة القمر مساءٌ محلّي معتاد. وإن أردتم جولة نهرية أو مطعمًا مطلوبًا في العطلة فاحجزوا مسبقًا؛ وتفقّدوا حركة السير قبل التوجّه إلى المطار يوم 27.",
+      zh: "中秋是农历八月十五，2026 年落在 9 月 25 日，假期从 25 日放到 27 日 。演示行程不对应真实节假日，请查实际出行年份。这一天对中国人的意思是团圆：月亮最圆的时候一家人聚在一起吃饭、分月饼；在外面的人抬头看同一轮月亮，想的是家里。所以这几天橱窗里的月亮和玉兔、同事互相送的月饼，讲的都是这一件事。\n广州有自己的过法，叫「树中秋」（也写作「竖中秋」）：把彩灯挂到高处，孩子提着灯笼上街，一家人在月下分月饼和柚子。节前老城的灯笼店会把各式各样的灯笼摆出来，路过可以看看；晚上到江边赏月也是本地人常做的事。假期里想坐夜游船或去热门餐厅，提前订；27 日去机场前留意路况。",
+      en: "Mid-Autumn falls on the fifteenth day of the eighth lunar month — 25 September in 2026 — and the holiday runs from the 25th to the 27th. This demo does not represent the holiday calendar of your actual travel year. What the day means here is reunion: the moon is at its fullest, the family eats together and shares a mooncake, and whoever is away looks up at the same moon and thinks of home. That is what the moons and jade rabbits in the shop windows are about, and the mooncakes colleagues give one another.\nGuangzhou keeps it its own way, in a custom called shu zhongqiu, “raising the Mid-Autumn”: lanterns hung up high, children carrying lanterns through the streets, and the family sharing mooncakes and pomelo under the moon. In the run-up the lantern shops in the old city put their whole range out on display — worth a look if you pass one — and going down to the river to watch the moon is an ordinary local evening. If you want a river cruise or a popular restaurant over the holiday, book ahead; and check the traffic before leaving for the airport on the 27th.",
+      ar: "يقع عيد منتصف الخريف في اليوم الخامس عشر من الشهر القمري الثامن — أي 25 سبتمبر في 2026 — وتمتدّ العطلة من 25 إلى 27؛ ولا يمثّل الجدول التجريبي تقويم عطلات سنة السفر الفعلية. ومعنى هذا اليوم هنا هو لَمّ الشمل: يكتمل القمر فتجتمع العائلة على الطعام وتتقاسم كعك القمر، ومن كان بعيدًا نظر إلى القمر نفسه وتذكّر أهله. وهذا ما تعنيه الأقمار والأرانب في واجهات المتاجر، وكعك القمر الذي يتبادله الزملاء.\nولقوانغتشو طريقتها الخاصة، وتسمّى «شو تشونغتشيو» أي «رفع منتصف الخريف»: فوانيس ملوّنة تُعلَّق عاليًا، وأطفال يحملون الفوانيس في الشوارع، وعائلة تتقاسم كعك القمر والبوملي تحت ضوء القمر. وقبل العيد تعرض محال الفوانيس في المدينة القديمة تشكيلتها كاملة — تستحقّ نظرة إن مررتم بها — والنزول إلى النهر لمشاهدة القمر مساءٌ محلّي معتاد. وإن أردتم جولة نهرية أو مطعمًا مطلوبًا في العطلة فاحجزوا مسبقًا؛ وتفقّدوا حركة السير قبل التوجّه إلى المطار يوم 27.",
     },
     sources: [
       {
@@ -1708,7 +1668,7 @@ export const FOOD_NOTES: FoodNote[] = [
 /* ------------------------------------------------------------------ */
 /* 清真与礼拜                                                          */
 /*                                                                     */
-/* 五人里四位是穆斯林，这是这趟最实际的一项生活需求。                   */
+/* 公开的礼拜与清真餐指南，不记录访客宗教身份。                   */
 /* 纪律：清真寺按政府门户的地址与说明写；餐厅只写「是清真馆子」这个     */
 /* 事实，不替任何一家做清真认证，营业时间标明来源与未核实。             */
 /* ------------------------------------------------------------------ */
@@ -2495,14 +2455,4 @@ export const OFFICIAL_LINKS: OfficialLink[] = [
 
 export type ReferenceImage = { id: string; src: string; caption: L10n };
 
-export const REFERENCE_IMAGES: ReferenceImage[] = [
-  {
-    id: "hq-notice",
-    src: "/reference/hq-notice.png",
-    caption: {
-      zh: "总部总通知原件。本团实际安排以本页每天的表格为准。",
-      en: "The original HQ general notice. This delegation's actual plan is the per-day table on this page.",
-      ar: "الإشعار العام الأصلي من المقر. أما خطة هذا الوفد الفعلية فهي جدول كل يوم في هذه الصفحة.",
-    },
-  },
-];
+export const REFERENCE_IMAGES: ReferenceImage[] = [];

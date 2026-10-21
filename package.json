@@ -1,5 +1,5 @@
 {
-  "name": "site-creator-vinext-starter",
+  "name": "guangzhou-trip-2026",
   "version": "0.1.0",
   "private": true,
   "engines": {
@@ -11,7 +11,8 @@
     "build": "vinext build",
     "start": "node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js dev --config dist/server/wrangler.json --local --persist-to .wrangler/state --ip 127.0.0.1 --inspector-port 0",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next --ignore-pattern static",
-    "db:generate": "drizzle-kit generate"
+    "db:generate": "drizzle-kit generate",
+    "check": "tsc --noEmit && npm run lint && node scripts/check-public-demo.mjs && node scripts/check-guest-guide.mjs && node scripts/check-journeys.mjs && node scripts/check-noise.mjs && node scripts/check-render.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
@@ -59,5 +60,6 @@
     "vite": "8.0.13",
     "wrangler": "4.92.0"
   },
-  "type": "module"
+  "type": "module",
+  "license": "MIT"
 }

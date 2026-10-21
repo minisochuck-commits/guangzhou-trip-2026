@@ -1,8 +1,8 @@
 // 每人每天的四行安排：住宿 / 活动 / 餐饮 / 交通。
 //
 // 这是页面主体的唯一派生入口：给一个日期，返回若干张「人员小表」。
-// Guest3 与 Guest4 同房同活动，合并成一张表；其余各自一张。
-// Guest2 与 Guest5 不是全程同行组，各走各的。
+// Guest 3 与 Guest 4 同房同活动，合并成一张表；其余各自一张。
+// Guest 2 与 Guest 5 不是全程同行组，各走各的。
 //
 // 纪律：
 //   - 未定就写「待定 / 待确认」，不写成已预订。
@@ -212,9 +212,9 @@ const STUDY_TRANSPORT: L10n = {
 };
 
 const GUEST5_AIRPORT: L10n = {
-  zh: "往返广州机场由公司安排，对接 Guest2；具体车辆与出发时间待定。",
-  en: "Transfers to and from Guangzhou airport are arranged by the company and coordinated with Guest2; the vehicle and departure time are still to be set.",
-  ar: "تُرتِّب الشركة التنقل من وإلى مطار قوانغتشو بالتنسيق مع Guest2؛ والمركبة ووقت الانطلاق لم يُحدَّدا بعد.",
+  zh: "往返广州机场由公司安排，对接 Guest 2；具体车辆与出发时间待定。",
+  en: "Transfers to and from Guangzhou airport are arranged by the company and coordinated with Guest 2; the vehicle and departure time are still to be set.",
+  ar: "تُرتِّب الشركة التنقل من وإلى مطار قوانغتشو بالتنسيق مع Guest 2؛ والمركبة ووقت الانطلاق لم يُحدَّدا بعد.",
 };
 
 const GUEST1_TRAVEL_SELF: L10n = {
@@ -362,9 +362,9 @@ function arrivalDay21(): PersonDayCard[] {
       lodging: row(
         "confirmed",
         {
-          zh: "广州保利洲际酒店，与 Guest2 同一间。",
-          en: "InterContinental Guangzhou Exhibition Center, sharing a room with Guest2.",
-          ar: "فندق إنتركونتيننتال قوانغتشو، في غرفة مشتركة مع Guest2.",
+          zh: "广州保利洲际酒店，与 Guest 2 同一间。",
+          en: "InterContinental Guangzhou Exhibition Center, sharing a room with Guest 2.",
+          ar: "فندق إنتركونتيننتال قوانغتشو، في غرفة مشتركة مع Guest 2.",
         },
         { detail: HOTEL_DETAIL, copy: HOTEL_COPY },
       ),
@@ -394,9 +394,9 @@ function arrivalDay21(): PersonDayCard[] {
       lodging: row(
         "confirmed",
         {
-          zh: "广州保利洲际酒店，Guest3 与 Guest4 同一间。",
-          en: "InterContinental Guangzhou Exhibition Center, Guest3 and Guest4 share a room.",
-          ar: "فندق إنتركونتيننتال قوانغتشو، Guest3 و Guest4 في غرفة واحدة.",
+          zh: "广州保利洲际酒店，Guest 3 与 Guest 4 同一间。",
+          en: "InterContinental Guangzhou Exhibition Center, Guest 3 and Guest 4 share a room.",
+          ar: "فندق إنتركونتيننتال قوانغتشو، Guest 3 و Guest 4 في غرفة واحدة.",
         },
         { detail: HOTEL_DETAIL, copy: HOTEL_COPY },
       ),
@@ -438,9 +438,9 @@ function arrivalDay21(): PersonDayCard[] {
       transport: row(
         "pending",
         {
-          zh: "MS958 于 15:30 抵达广州白云 T3。接机由公司安排，对接 Guest2；具体车辆与时间待定。",
-          en: "MS958 lands at Guangzhou Baiyun T3 at 15:30. The pickup is arranged by the company and coordinated with Guest2; the vehicle and time are still to be set.",
-          ar: "تهبط MS958 في قوانغتشو بايون الصالة 3 عند 15:30. والاستقبال ترتّبه الشركة بالتنسيق مع Guest2؛ والمركبة والوقت لم يُحدَّدا بعد.",
+          zh: "MS958 于 15:30 抵达广州白云 T3。接机由公司安排，对接 Guest 2；具体车辆与时间待定。",
+          en: "MS958 lands at Guangzhou Baiyun T3 at 15:30. The pickup is arranged by the company and coordinated with Guest 2; the vehicle and time are still to be set.",
+          ar: "تهبط MS958 في قوانغتشو بايون الصالة 3 عند 15:30. والاستقبال ترتّبه الشركة بالتنسيق مع Guest 2؛ والمركبة والوقت لم يُحدَّدا بعد.",
         },
         { flights: ["MS958"], detail: [GUEST5_AIRPORT] },
       ),
@@ -454,9 +454,9 @@ function interconLodging(who: "guest1" | "guest2" | "study" | "guest5"): Row {
     return row(
       "confirmed",
       {
-        zh: "广州保利洲际酒店，与 Guest2 同一间。",
-        en: "InterContinental Guangzhou Exhibition Center, sharing a room with Guest2.",
-        ar: "فندق إنتركونتيننتال قوانغتشو، في غرفة مشتركة مع Guest2.",
+        zh: "广州保利洲际酒店，与 Guest 2 同一间。",
+        en: "InterContinental Guangzhou Exhibition Center, sharing a room with Guest 2.",
+        ar: "فندق إنتركونتيننتال قوانغتشو، في غرفة مشتركة مع Guest 2.",
       },
       { detail: HOTEL_DETAIL, copy: HOTEL_COPY },
     );
@@ -476,9 +476,9 @@ function interconLodging(who: "guest1" | "guest2" | "study" | "guest5"): Row {
     return row(
       "confirmed",
       {
-        zh: "广州保利洲际酒店，Guest3 与 Guest4 同一间。",
-        en: "InterContinental Guangzhou Exhibition Center, Guest3 and Guest4 share a room.",
-        ar: "فندق إنتركونتيننتال قوانغتشو، Guest3 و Guest4 في غرفة واحدة.",
+        zh: "广州保利洲际酒店，Guest 3 与 Guest 4 同一间。",
+        en: "InterContinental Guangzhou Exhibition Center, Guest 3 and Guest 4 share a room.",
+        ar: "فندق إنتركونتيننتال قوانغتشو، Guest 3 و Guest 4 في غرفة واحدة.",
       },
       { detail: HOTEL_DETAIL, copy: HOTEL_COPY },
     );
@@ -529,7 +529,7 @@ function sessionsDay(dayIndex: 22 | 23): PersonDayCard[] {
       id: `${key}-guest2`,
       people: ["guest2"],
       lodging: interconLodging("guest2"),
-      activity: dayIndex === 23 ? row("pending", { zh: "参会，并陪同Guest5巡店；巡店时间待通知。", en: "Attend the event and accompany Guest5 on the store tour; tour timing awaits confirmation.", ar: "حضور الفعالية ومرافقة Guest5 في جولة المتاجر؛ وقت الجولة بانتظار الإعلان." }, { detail: TOUR_DETAIL }) : conferenceActivity(dayIndex),
+      activity: dayIndex === 23 ? row("pending", { zh: "参会，并陪同Guest 5巡店；巡店时间待通知。", en: "Attend the event and accompany Guest 5 on the store tour; tour timing awaits confirmation.", ar: "حضور الفعالية ومرافقة Guest 5 في جولة المتاجر؛ وقت الجولة بانتظار الإعلان." }, { detail: TOUR_DETAIL }) : conferenceActivity(dayIndex),
       dining: row("confirmed", MEALS_COMPANY, { detail: [DIET_ASK] }),
       transport: row("confirmed", dayIndex === 23 ? OFFSITE_TOUR_TRANSPORT : HOTEL_VENUE),
     },
@@ -666,9 +666,9 @@ const GUEST2_NEW_HOTEL: Row = {
 const STUDY_NEW_HOTEL: Row = {
   status: "pending",
   text: {
-    zh: "公司另订学习地点附近的酒店，Guest3 与 Guest4 同一间；酒店名称与地址待定。",
-    en: "The company books a hotel near the training location; Guest3 and Guest4 share a room. Name and address are still to be set.",
-    ar: "تحجز الشركة فندقًا قرب مكان التدريب؛ و Guest3 و Guest4 في غرفة واحدة. والاسم والعنوان لم يُحدَّدا بعد.",
+    zh: "公司另订学习地点附近的酒店，Guest 3 与 Guest 4 同一间；酒店名称与地址待定。",
+    en: "The company books a hotel near the training location; Guest 3 and Guest 4 share a room. Name and address are still to be set.",
+    ar: "تحجز الشركة فندقًا قرب مكان التدريب؛ و Guest 3 و Guest 4 في غرفة واحدة. والاسم والعنوان لم يُحدَّدا بعد.",
   },
   detail: NEW_HOTEL_DETAIL,
 };
@@ -777,9 +777,9 @@ function day27(): PersonDayCard[] {
       activity: row("confirmed", backToEgypt),
       dining: row("confirmed", MEALS_SELF),
       transport: row("pending", {
-        zh: "建议 14:25 前抵达广州白云 T2（3U6704 17:25 起飞，按提前 3 小时安排）。去机场的交通由 Guest2 向董事长确认，安排待定。",
-        en: "Be at Guangzhou Baiyun T2 by 14:25 (3U6704 departs 17:25; three hours ahead, as agreed). Guest2 confirms airport transport with the chairman; the arrangement is pending.",
-        ar: "يُنصح بالوصول إلى قوانغتشو بايون الصالة 2 قبل 14:25 (تقلع 3U6704 الساعة 17:25؛ بثلاث ساعات مسبقة حسب الاتفاق). وتؤكّد Guest2 تنقل المطار مع رئيس مجلس الإدارة؛ والترتيب لم يُحسم بعد.",
+        zh: "建议 14:25 前抵达广州白云 T2（3U6704 17:25 起飞，按提前 3 小时安排）。去机场的交通由 Guest 2 向董事长确认，安排待定。",
+        en: "Be at Guangzhou Baiyun T2 by 14:25 (3U6704 departs 17:25; three hours ahead, as agreed). Guest 2 confirms airport transport with the chairman; the arrangement is pending.",
+        ar: "يُنصح بالوصول إلى قوانغتشو بايون الصالة 2 قبل 14:25 (تقلع 3U6704 الساعة 17:25؛ بثلاث ساعات مسبقة حسب الاتفاق). وتؤكّد Guest 2 تنقل المطار مع رئيس مجلس الإدارة؛ والترتيب لم يُحسم بعد.",
       }, {
         flights: returnFlights,
         detail: [CHENGDU_TRANSFER],
@@ -792,9 +792,9 @@ function day27(): PersonDayCard[] {
       activity: row("confirmed", backToEgypt),
       dining: row("confirmed", MEALS_SELF),
       transport: row("pending", {
-        zh: "建议 14:25 前抵达广州白云 T2（3U6704 17:25 起飞，按提前 3 小时安排）。同日的机场交通向 Guest2 确认，安排待定。",
-        en: "Be at Guangzhou Baiyun T2 by 14:25 (3U6704 departs 17:25; three hours ahead, as agreed). Confirm the same-day airport transport with Guest2; the arrangement is pending.",
-        ar: "يُنصح بالوصول إلى قوانغتشو بايون الصالة 2 قبل 14:25 (تقلع 3U6704 الساعة 17:25؛ بثلاث ساعات مسبقة حسب الاتفاق). وأكّد تنقل المطار في اليوم نفسه مع Guest2؛ والترتيب لم يُحسم بعد.",
+        zh: "建议 14:25 前抵达广州白云 T2（3U6704 17:25 起飞，按提前 3 小时安排）。同日的机场交通向 Guest 2 确认，安排待定。",
+        en: "Be at Guangzhou Baiyun T2 by 14:25 (3U6704 departs 17:25; three hours ahead, as agreed). Confirm the same-day airport transport with Guest 2; the arrangement is pending.",
+        ar: "يُنصح بالوصول إلى قوانغتشو بايون الصالة 2 قبل 14:25 (تقلع 3U6704 الساعة 17:25؛ بثلاث ساعات مسبقة حسب الاتفاق). وأكّد تنقل المطار في اليوم نفسه مع Guest 2؛ والترتيب لم يُحسم بعد.",
       }, {
         flights: returnFlights,
         detail: [CHENGDU_TRANSFER],
@@ -831,9 +831,9 @@ function day27(): PersonDayCard[] {
       }),
       dining: row("confirmed", MEALS_SELF),
       transport: row("pending", {
-        zh: "建议 20:20 前抵达广州白云 T3（MS959 23:20 起飞，按提前 3 小时安排）。送机由公司安排，Guest2 提前协调；具体车辆与出发时间待定。",
-        en: "Be at Guangzhou Baiyun T3 by 20:20 (MS959 departs 23:20; three hours ahead, as agreed). The company arranges the ride and Guest2 coordinates it in advance; the vehicle and departure time are still to be set.",
-        ar: "يُنصح بالوصول إلى قوانغتشو بايون الصالة 3 قبل 20:20 (تقلع MS959 الساعة 23:20؛ بثلاث ساعات مسبقة حسب الاتفاق). وترتّب الشركة التوصيل وتنسّقه Guest2 مسبقًا؛ والمركبة ووقت الانطلاق لم يُحدَّدا بعد.",
+        zh: "建议 20:20 前抵达广州白云 T3（MS959 23:20 起飞，按提前 3 小时安排）。送机由公司安排，Guest 2 提前协调；具体车辆与出发时间待定。",
+        en: "Be at Guangzhou Baiyun T3 by 20:20 (MS959 departs 23:20; three hours ahead, as agreed). The company arranges the ride and Guest 2 coordinates it in advance; the vehicle and departure time are still to be set.",
+        ar: "يُنصح بالوصول إلى قوانغتشو بايون الصالة 3 قبل 20:20 (تقلع MS959 الساعة 23:20؛ بثلاث ساعات مسبقة حسب الاتفاق). وترتّب الشركة التوصيل وتنسّقه Guest 2 مسبقًا؛ والمركبة ووقت الانطلاق لم يُحدَّدا بعد.",
       }, {
         flights: ["MS959"],
       }),

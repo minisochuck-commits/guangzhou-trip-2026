@@ -11,7 +11,7 @@ import json, pathlib, re, sys, time, urllib.parse, urllib.request
 OUT = pathlib.Path(".images/candidates")
 OUT.mkdir(parents=True, exist_ok=True)
 API = "https://commons.wikimedia.org/w/api.php"
-UA = {"User-Agent": "guangzhou-trip-guide/1.0 (image sourcing; contact: minisochuck@gmail.com)"}
+UA = {"User-Agent": "guangzhou-trip-guide/1.0 (image sourcing; contact: minisochuck-commits@users.noreply.github.com)"}
 
 SUBJECTS = {
     "tower":     ["Canton Tower night", "Canton Tower Guangzhou"],

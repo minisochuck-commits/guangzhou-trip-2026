@@ -72,9 +72,9 @@ const HOTEL_LABELS = {
     ar: "استقبال الفندق",
   },
   transfer: {
-    zh: "Guest5 的广州机场接送：公司安排，联系 Guest2 确认车辆与出发时间。",
-    en: "Guest5’s Guangzhou airport transfers are arranged by the company. Confirm the vehicle and departure time with Guest2.",
-    ar: "ترتّب الشركة انتقالات Guest5 من مطار قوانغتشو وإليه. أكّدي السيارة ووقت الانطلاق مع Guest2.",
+    zh: "Guest 5 的广州机场接送：公司安排，联系 Guest 2 确认车辆与出发时间。",
+    en: "Guest 5’s Guangzhou airport transfers are arranged by the company. Confirm the vehicle and departure time with Guest 2.",
+    ar: "ترتّب الشركة انتقالات Guest 5 من مطار قوانغتشو وإليه. أكّدي السيارة ووقت الانطلاق مع Guest 2.",
   },
 } satisfies Record<string, L10n>;
 
@@ -686,9 +686,9 @@ export function GuideTab({
         <div className="mt-3 border-t border-card-line pt-3">
           <h3 className={GUIDE.subheading}>{t({ zh: "会务联系", en: "Event assistance", ar: "المساعدة في الفعالية" }, lang)}</h3>
           {EVENT_CONTACTS.map((contact) => (
-            <p key={contact.phone} className={cn(GUIDE.note, "mt-1")}>
+            <p key={contact.name} className={cn(GUIDE.note, "mt-1")}>
               {t(contact.language, lang)} · <bdi>{contact.name}</bdi>{" · "}
-              <a href={`tel:${contact.phone.replace(/\s/g, "")}`} className="inline-flex min-h-11 items-center text-miniso-red-strong underline"><bdi dir="ltr">{contact.phone}</bdi></a>
+              {contact.phone ? <a href={`tel:${contact.phone.replace(/\s/g, "")}`} className="inline-flex min-h-11 items-center text-miniso-red-strong underline"><bdi dir="ltr">{contact.phone}</bdi></a> : t({ zh: "演示版不提供个人电话", en: "No personal phone in this demo", ar: "لا توجد أرقام شخصية في النسخة التجريبية" }, lang)}
             </p>
           ))}
         </div>

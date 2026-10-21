@@ -167,7 +167,7 @@ export function DayTab({
                 // 同一天的几行之间只有一条淡线；换一天才用深一点的那条分组。
                 const topLine = firstOfDate ? "border-t border-t-navy/20" : "";
                 // 筛了人就只认那一个人：合并行里同卡的其他人不该出现在弹窗标题里
-                // （筛 Guest3 时不能带出 Guest4）。
+                // （筛 Guest 3 时不能带出 Guest 4）。
                 const people = displayedPeople(row, person);
                 // 单人视图首列不重复写名字（顶部已经显示在看谁）；全员视图才列名字。
                 const shown = person ? [] : people;

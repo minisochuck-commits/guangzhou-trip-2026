@@ -6,7 +6,7 @@
  * 静态资源走「缓存优先」，因为文件名带哈希，内容变了文件名就变。
  */
 const OFFLINE_URL = new URL("./", self.location.href).href;
-const CACHE = `guangzhou-trip-${new URL(OFFLINE_URL).pathname}-guest-guide-20260911`;
+const CACHE = `guangzhou-trip-${new URL(OFFLINE_URL).pathname}-public-demo-20261021`;
 
 self.addEventListener("install", (event) => {
   event.waitUntil(

@@ -1,26 +1,16 @@
-// 来源：用户提供的《参会指引.png》；巡店语言与参加日期由用户于 2026-09-16 确认。
+// Fictional workshop fixture, unrelated to any real company event.
 import type { L10n } from "./trip-data";
-const L = (zh: string, en: string, ar: string): L10n => ({ zh, en, ar: ar.replace(/\d{2}:\d{2}–\d{2}:\d{2}/g, "\u2066$&\u2069") });
-
-export const ARRIVAL_CHECKIN = L("酒店入住办理：9/21 14:00–24:00。上午抵达可先向前台寄存行李，提前入住需现场确认。", "Hotel check-in: 21 Sep, 14:00–24:00. Morning arrivals can ask reception to store luggage; early room access depends on availability.", "تسجيل الوصول بالفندق يوم 21 سبتمبر من 14:00 إلى 24:00. يمكن للقادمين صباحًا طلب حفظ الأمتعة لدى الاستقبال؛ والدخول المبكر للغرفة حسب التوافر.");
-export const EVENT_CHECKOUT = L("9/25 中午12:00前从洲际退房。", "Check out of the InterContinental before 12:00 on 25 Sep.", "تسجيل المغادرة من إنتركونتيننتال قبل 12:00 يوم 25 سبتمبر.");
-export const MEETING_RULES: L10n[] = [
-  L("入场通过人脸识别，请全程携带嘉宾证。手机须在内场入口完成防拍摄设置；可带工作电脑，iPad、相机等可拍摄设备不可带入内场。", "Entry uses facial recognition; keep your guest badge with you. Phones need the anti-photography setup at the inner-hall entrance. Work laptops are allowed; iPads, cameras and other recording devices are not.", "الدخول بالتعرّف على الوجه؛ يرجى حمل بطاقة الضيف طوال الوقت. تُجهّز الهواتف لمنع التصوير عند مدخل القاعة الداخلية. يُسمح بحواسيب العمل، ولا يُسمح بأجهزة iPad والكاميرات وأجهزة التسجيل الأخرى."),
-  L("大会提供 MINISO 定制T恤。会场就在保利洲际酒店内。", "A custom MINISO T-shirt is provided. The venue is inside the InterContinental hotel.", "توفّر الفعالية قميص MINISO مخصصًا. تُقام الجلسات داخل فندق إنتركونتيننتال."),
+const L = (zh: string, en: string, ar: string): L10n => ({ zh, en, ar });
+export const ARRIVAL_CHECKIN = L("演示入住：9/21 14:00后；提前入住待确认。", "Demo check-in: 21 Sep after 14:00; early access to confirm.", "وصول تجريبي: 21 سبتمبر بعد 14:00؛ الدخول المبكر بانتظار التأكيد.");
+export const EVENT_CHECKOUT = L("演示退房：9/25 12:00前。", "Demo check-out: 25 Sep before 12:00.", "مغادرة تجريبية: 25 سبتمبر قبل 12:00.");
+export const MEETING_RULES: L10n[] = [L("演示活动：请按示例日程到场。", "Demo event: follow the sample schedule.", "فعالية تجريبية: اتبعوا الجدول النموذجي.")];
+export const MORNING_22: L10n[] = [L("09:00–09:30 签到；09:30–11:45 团队交流工作坊。", "09:00–09:30 check-in; 09:30–11:45 team workshop.", "09:00–09:30 تسجيل الحضور؛ 09:30–11:45 ورشة تبادل خبرات.")];
+export const ORDERING_22 = L("下午为演示研讨环节。", "Afternoon demo workshop.", "ورشة تجريبية بعد الظهر.");
+export const PREORDER_DEADLINE = L("22:00前整理研讨笔记（演示）。", "Complete workshop notes by 22:00 (demo).", "إعداد ملاحظات الورشة بحلول 22:00 (تجريبي).");
+export const FINAL_ORDER_DEADLINE = L("18:00前提交交流总结（演示）。", "Share the workshop summary by 18:00 (demo).", "تقديم ملخص الورشة بحلول 18:00 (تجريبي).");
+export const TOUR_DETAIL: L10n[] = [L("示例城市参访安排在9/23，时间和集合地点待确认。", "Sample city visit on 23 Sep; time and meeting point to confirm.", "زيارة نموذجية للمدينة يوم 23 سبتمبر؛ الوقت ونقطة التجمع بانتظار التأكيد.")];
+export const EVENT_CONTACTS: {name: string; phone: string | null; language: L10n}[] = [
+  {name: "Demo contact 1", phone: null, language: L("中文", "Chinese", "الصينية")},
+  {name: "Demo contact 2", phone: null, language: L("英语", "English", "الإنجليزية")},
 ];
-export const MORNING_22: L10n[] = [
-  L("09:00–09:30 签到；09:30–10:00 运营策略；10:00–10:30 营销策略。", "09:00–09:30 sign-in; 09:30–10:00 operations strategy; 10:00–10:30 marketing strategy.", "09:00–09:30 التسجيل؛ 09:30–10:00 استراتيجية التشغيل؛ 10:00–10:30 استراتيجية التسويق."),
-  L("10:30–11:30 商品策略；11:30–11:40 授权典礼；11:40–11:45 展馆揭幕仪式。", "10:30–11:30 product strategy; 11:30–11:40 signing ceremony; 11:40–11:45 new-product launch ceremony.", "10:30–11:30 استراتيجية المنتجات؛ 11:30–11:40 حفل التوقيع؛ 11:40–11:45 افتتاح معرض المنتجات الجديدة."),
-];
-export const ORDERING_22 = L("11:45–22:00 新品订货环节；订货流程注明12:00开放订货。", "11:45–22:00 product-ordering programme; the ordering-process notice lists orders opening at 12:00.", "11:45–22:00 برنامج طلب المنتجات؛ ويحدّد إشعار إجراءات الطلب الساعة 12:00 لفتح الطلبات.");
-export const PREORDER_DEADLINE = L("22:00 前提交预订单。", "Submit pre-orders by 22:00.", "تقديم الطلبات المسبقة بحلول 22:00.");
-export const FINAL_ORDER_DEADLINE = L("18:00 前提交最终订单。", "Submit final orders by 18:00.", "تقديم الطلبات النهائية بحلول 18:00.");
-export const TOUR_DETAIL: L10n[] = [
-  L("大会巡店统一调整至9/23。MINISO统一安排交通及参观；具体时间、集合地点、路线及英语讲解安排待会务群通知，由Guest2对接。", "The event store tours have moved to 23 Sep. MINISO arranges transport and visits. Timing, meeting point, route and English-language arrangements await the event group notice; Guest2 coordinates.", "تم نقل جولات متاجر الفعالية إلى 23 سبتمبر. تنظم MINISO النقل والزيارات؛ ويُعلن الوقت ونقطة التجمع والمسار وترتيبات الشرح بالإنجليزية لاحقًا في مجموعة الفعالية، بالتنسيق مع Guest2."),
-  L("指引推荐天河城 MINISO FRIENDS、君超 SUPER MINISO、正佳 MINISO LAND 三家门店；当天实际路线以现场安排为准。", "The guide highlights MINISO FRIENDS at TeeMall, SUPER MINISO at Junchao and MINISO LAND at Grandview. The actual tour route follows the organiser’s arrangements.", "يعرض الدليل متاجر MINISO FRIENDS في TeeMall وSUPER MINISO في Junchao وMINISO LAND في Grandview؛ والمسار الفعلي حسب تنظيم الفعالية."),
-];
-export const EVENT_CONTACTS = [
-  { name: "Demo contact 1", phone: "", language: L("中文", "Chinese", "الصينية") },
-  { name: "Demo contact 2", phone: "", language: L("英语", "English", "الإنجليزية") },
-];
-export const PRODUCT_PREVIEW = L("这次新品展把3,600多款新品放进12个主题展区：从原创IP、联名系列，到香氛、数码与生活用品。会议听完策略，也可以到展区看看它们如何变成具体的商品。", "The new-product showcase brings more than 3,600 products into 12 themed zones, from original IP and collaborations to fragrances, digital accessories and everyday essentials. After hearing the strategy, the displays show how it takes shape in the products.", "يجمع معرض المنتجات الجديدة أكثر من 3,600 منتج في 12 منطقة موضوعية، من الشخصيات الأصلية والتعاونات إلى العطور والإكسسوارات الرقمية ومستلزمات الحياة اليومية. بعد الاستماع إلى الاستراتيجية، تتيح المعروضات رؤية تطبيقها في المنتجات.");
+export const PRODUCT_PREVIEW = L("演示工作坊包含团队交流与城市参访。", "The demo workshop includes team discussions and a city visit.", "تشمل الورشة التجريبية تبادل الخبرات وزيارة للمدينة.");

@@ -21,9 +21,9 @@ export function t(value: L10n, lang: Lang): string {
 
 export const UI = {
   "title": {
-    "zh": "广州行程",
-    "en": "Guangzhou Visit",
-    "ar": "زيارة قوانغتشو"
+    "zh": "广州行程 · 演示",
+    "en": "Guangzhou Visit · Demo",
+    "ar": "زيارة قوانغتشو · تجريبي"
   },
   "language": {
     "zh": "语言",
@@ -547,9 +547,9 @@ export const UI = {
     "ar": "مصادر رسمية"
   },
   "footer": {
-    "zh": "航班按票面当地时间；标「待定」的还没落实。",
-    "en": "Flight times are the ticket's local times; anything marked “to confirm” is not settled.",
-    "ar": "أوقات الرحلات بالتوقيت المحلي كما في التذكرة؛ وكل ما هو «بانتظار التأكيد» غير محسوم."
+    "zh": "演示行程：人员、预订与活动均为虚构。",
+    "en": "Demo itinerary: fictional visitors, bookings and activities.",
+    "ar": "جدول تجريبي: الزوار والحجوزات والأنشطة خيالية."
   }
 };
 

@@ -4,7 +4,7 @@
 //   1. 完整航程只挂出发日；抵达日不重复同一个航班弹窗，但保留抵达时刻与接机协调。
 //   2. 餐饮格没有弹窗按钮，日程里不出现游玩 / 美食建议。
 //   3. 9/22–24 参会日交通是「酒店内参会」；国际巡店由 MINISO 统一交通；专项学习交通待确认。
-//   4. Guest5 9/21–26 是双人标间；Guest2 9/25–26 仍是单间。
+//   4. Guest 5 9/21–26 是双人标间；Guest 2 9/25–26 仍是单间。
 
 import { cardsFor } from "./person-day-plan";
 import { cellView, groupKeyOf, type Field, type GroupKey } from "./plan-presentation";
@@ -100,9 +100,9 @@ export function runNoiseChecks(): CheckResult[] {
   );
   results.push(
     check(
-      "9/21 Guest5 保留抵达时刻与公司接机对接",
+      "9/21 Guest 5 保留抵达时刻与公司接机对接",
       zhLines("2026-09-21", "guest5", "transport").includes("15:30 抵白云 T3") &&
-        zhLines("2026-09-21", "guest5", "transport").includes("Guest2"),
+        zhLines("2026-09-21", "guest5", "transport").includes("Guest 2"),
       zhLines("2026-09-21", "guest5", "transport"),
     ),
   );
@@ -201,12 +201,12 @@ export function runNoiseChecks(): CheckResult[] {
     ),
   );
 
-  // Guest5 9/22：上午酒店内参会 + 下午自理，且不再挂多余弹窗
+  // Guest 5 9/22：上午酒店内参会 + 下午自理，且不再挂多余弹窗
   {
     const factRow = rowOf("2026-09-22", "guest5", "transport");
     results.push(
       check(
-        "9/22 Guest5 事实层：酒店内参会 + 下午自理，且为 confirmed",
+        "9/22 Guest 5 事实层：酒店内参会 + 下午自理，且为 confirmed",
         factRow?.status === "confirmed" &&
           factRow.text.zh.includes("住宿酒店内") &&
           factRow.text.zh.includes("下午自由外出的交通自行安排"),
@@ -215,7 +215,7 @@ export function runNoiseChecks(): CheckResult[] {
     );
     results.push(
       check(
-        "9/22 Guest5 交通格不挂多余弹窗",
+        "9/22 Guest 5 交通格不挂多余弹窗",
         viewOf("2026-09-22", "guest5", "transport")?.entry === null,
         String(viewOf("2026-09-22", "guest5", "transport")?.entry),
       ),
@@ -247,20 +247,20 @@ export function runNoiseChecks(): CheckResult[] {
   }
 
   // 9/21调整通知：统一23日，时刻与语言安排待后续通知。
-  results.push(check("Guest5 24日自由，无巡店入口",
+  results.push(check("Guest 5 24日自由，无巡店入口",
     viewOf("2026-09-24", "guest5", "activity")?.entry === null &&
     zhLines("2026-09-24", "guest5", "activity").includes("自由") &&
     zhLines("2026-09-24", "guest5", "transport").includes("自理")));
   const tour = rowOf("2026-09-23", "guest5", "activity");
-  results.push(check("Guest5 23日巡店，时间待定，统一交通",
+  results.push(check("Guest 5 23日巡店，时间待定，统一交通",
     tour?.status === "pending" && tour.text.zh.includes("待通知") && !tour.text.zh.includes("13:50") &&
     tour.text.en.includes("English") && tour.text.ar.includes("الإنجليزية") &&
     rowOf("2026-09-23", "guest5", "transport")?.status === "confirmed" &&
     zhLines("2026-09-23", "guest5", "transport").includes("MINISO")));
-  results.push(check("Guest2 23日陪同并统一交通",
-    zhLines("2026-09-23", "guest2", "activity").includes("陪同Guest5") &&
+  results.push(check("Guest 2 23日陪同并统一交通",
+    zhLines("2026-09-23", "guest2", "activity").includes("陪同Guest 5") &&
     zhLines("2026-09-23", "guest2", "transport").includes("MINISO")));
-  results.push(check("Guest2 23日住宿不受巡店调整影响",
+  results.push(check("Guest 2 23日住宿不受巡店调整影响",
     viewOf("2026-09-23", "guest2", "lodging")?.entry === "hotelAddress" &&
     zhLines("2026-09-23", "guest2", "lodging") === zhLines("2026-09-22", "guest2", "lodging")));
   for (const group of ["guest1", "guest2"] as GroupKey[]) {
@@ -270,12 +270,12 @@ export function runNoiseChecks(): CheckResult[] {
     zhLines("2026-09-23", "guest1", "activity").includes("预订单截止") &&
     zhLines("2026-09-24", "guest1", "activity").includes("最终订单截止") &&
     !zhLines("2026-09-23", "guest5", "activity").includes("订单")));
-  results.push(check("25日退房不覆盖Guest5续住",
+  results.push(check("25日退房不覆盖Guest 5续住",
     zhLines("2026-09-25", "guest2", "lodging").includes("12:00") &&
     zhLines("2026-09-25", "study", "lodging").includes("12:00") &&
     !zhLines("2026-09-25", "guest5", "lodging").includes("退房")));
 
-  /* ---- 4. Guest5 双人标间 ---- */
+  /* ---- 4. Guest 5 双人标间 ---- */
 
   for (const date of [
     "2026-09-21", "2026-09-22", "2026-09-23",
@@ -283,7 +283,7 @@ export function runNoiseChecks(): CheckResult[] {
   ]) {
     results.push(
       check(
-        `${date} Guest5 住宿写双人标间`,
+        `${date} Guest 5 住宿写双人标间`,
         zhLines(date, "guest5", "lodging").includes("双人标间"),
         zhLines(date, "guest5", "lodging"),
       ),
@@ -292,7 +292,7 @@ export function runNoiseChecks(): CheckResult[] {
   for (const date of ["2026-09-25", "2026-09-26"]) {
     results.push(
       check(
-        `${date} Guest2 仍是公司另订单间`,
+        `${date} Guest 2 仍是公司另订单间`,
         zhLines(date, "guest2", "lodging").includes("单住"),
         zhLines(date, "guest2", "lodging"),
       ),

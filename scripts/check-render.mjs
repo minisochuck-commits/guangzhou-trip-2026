@@ -133,11 +133,11 @@ const hintWithCount = (lang) =>
       : `${brandCount} علامة مطاعم`;
 
 /**
- * 借来的中国卡与备用金只属于 Guest3 / Guest4，别人的页面上不能出现。
+ * 借来的中国卡与备用金只属于 Guest 3 / Guest 4，别人的页面上不能出现。
  * 章节收起时 Accordion 不挂载内容，所以这里只能查「不该出现」那一半；
  * 「该出现」那一半由 check-guest-guide.mjs 直接对 PREP 的分人可见性断言。
  */
-const TEAM_ONLY = /给 Guest4 一张中国卡|lend Guest4 one Chinese SIM|شريحة صينية واحدة/;
+const TEAM_ONLY = /给 Guest 4 一张中国卡|lend Guest 4 one Chinese SIM|شريحة صينية واحدة/;
 
 let failed = 0;
 for (const lang of ["zh", "en", "ar"]) {
@@ -187,7 +187,7 @@ for (const lang of ["zh", "en", "ar"]) {
     const team = person === "guest3" || person === "guest4" || person === null;
     if (!team && TEAM_ONLY.test(html)) {
       failed += 1;
-      console.log(`FAIL  ${view} 出现了只属于 Guest3 / Guest4 的安排`);
+      console.log(`FAIL  ${view} 出现了只属于 Guest 3 / Guest 4 的安排`);
       continue;
     }
     console.log(`PASS  ${view}（${html.length.toLocaleString("en-US")} 字符）`);
