@@ -1,5 +1,6 @@
 {
-  "commit": "1dfae62de56a1b5adf042fb985bef8017188499d",
+  "commit": "1f5e76a401f6f2d23617049ce7d29d028c820446",
   "source_branch": "codex/guangzhou-guest-source",
-  "built_at": "2026-10-21T18:20:42.394222+00:00"
+  "built_at": "2026-10-21T18:20:42.394222+00:00",
+  "history_cleanup": "2026-10-21; app code and built assets unchanged; source documentation updated"
 }
